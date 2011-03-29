@@ -8,11 +8,19 @@ import static org.junit.Assert.fail;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.StringReader;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathExpression;
+import javax.xml.xpath.XPathFactory;
 
 import net.metadata.auselit.lorestore.access.DefaultOREAccessPolicy;
+import net.metadata.auselit.lorestore.exceptions.InvalidQueryParametersException;
+import net.metadata.auselit.lorestore.exceptions.NotFoundException;
 import net.metadata.auselit.lorestore.exceptions.OREException;
 import net.metadata.auselit.lorestore.triplestore.InMemoryTripleStoreConnectorFactory;
 import net.metadata.auselit.lorestore.util.UIDGenerator;
@@ -20,15 +28,24 @@ import net.metadata.auselit.lorestore.util.UIDGenerator;
 import org.junit.Before;
 import org.junit.Test;
 import org.ontoware.rdf2go.model.Model;
+import org.springframework.http.ResponseEntity;
+import org.w3c.dom.Document;
+import org.w3c.dom.NodeList;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
 import au.edu.diasb.chico.mvc.RequestFailureException;
 
 public class OREControllerTest {
 
 	private InMemoryTripleStoreConnectorFactory cf;
+	private OREController controller;
+	private XPath xPath;
 
 	@Before
 	public void setUp() throws Exception {
+		controller = getController();
+		xPath = XPathFactory.newInstance().newXPath();
 	}
 
 	private OREController getController() {
@@ -44,10 +61,10 @@ public class OREControllerTest {
 		return new OREController(occ);
 	}
 
-	@Test
-	public void constructor() {
-		getController();
-	}
+//	@Test
+//	public void constructor() {
+//		getController();
+//	}
 
 //	@Test
 //	public void getUnknown() throws Exception {
@@ -64,21 +81,14 @@ public class OREControllerTest {
 //		}
 //	}
 
-	@Test
-	public void deleteUnknown() {
-		OREController controller = getController();
+	@Test(expected = NotFoundException.class)
+	public void deleteUnknown() throws Exception {
+		controller.delete("13532");
 
-		try {
-			controller.delete("13532");
-			fail("should have thrown exception");
-		} catch (Exception e) {
-
-		}
 	}
 
 	@Test
 	public void postEmpty() throws RequestFailureException, IOException, OREException {
-		OREController controller = getController();
 		InputStream in = new ByteArrayInputStream("".getBytes());
 		try {
 			controller.post(in);
@@ -90,7 +100,6 @@ public class OREControllerTest {
 
 	@Test(expected = RequestFailureException.class)	
 	public void postBadCompoundObject() throws Exception {
-		OREController controller = getController();
 		ByteArrayInputStream in = new ByteArrayInputStream(CommonTestRecords.BAD_ORE_BROKEN_XML.getBytes());
 		controller.post(in);
 		// expect 400 - bad request
@@ -98,7 +107,6 @@ public class OREControllerTest {
 
 	@Test(expected = OREException.class)	
 	public void postBadCompoundObject2() throws Exception {
-		OREController controller = getController();
 		ByteArrayInputStream in = new ByteArrayInputStream(CommonTestRecords.BAD_ORE_NO_RESOURCEMAP.getBytes());
 		controller.post(in);
 		// expect 400 - bad request
@@ -106,8 +114,6 @@ public class OREControllerTest {
 
 	@Test
 	public void postCompoundObjectAndGet() throws Exception {
-		OREController controller = getController();
-
 		InputStream in = new ByteArrayInputStream(
 				CommonTestRecords.SIMPLE_ORE_EXAMPLE.getBytes());
 		String redirect = controller.post(in);
@@ -118,13 +124,7 @@ public class OREControllerTest {
 
 	@Test
 	public void postGetDeleteGet() throws Exception {
-		OREController controller = getController();
-
-		InputStream in = new ByteArrayInputStream(
-				CommonTestRecords.SIMPLE_ORE_EXAMPLE.getBytes());
-
-		String redirect = controller.post(in);
-		String createdId = findUIDFromRedirect(redirect);
+		String createdId = saveRecordToStore(CommonTestRecords.SIMPLE_ORE_EXAMPLE);
 
 		OREResponse oreResponse2 = controller.get(createdId);
 		assertNotNull(oreResponse2);
@@ -142,7 +142,7 @@ public class OREControllerTest {
 		try {
 			controller.get(createdId);
 			fail("Object should have been deleted, method should have thrown exception");
-		} catch (RuntimeException e) {
+		} catch (NotFoundException e) {
 			// Expected
 		}
 
@@ -160,7 +160,6 @@ public class OREControllerTest {
 	
 	@Test(expected = OREException.class)
 	public void putNonexistent() throws Exception {
-		OREController controller = getController();
 		InputStream in = new ByteArrayInputStream(
 				CommonTestRecords.SIMPLE_ORE_EXAMPLE.getBytes());
 
@@ -169,17 +168,63 @@ public class OREControllerTest {
 
 	@Test
 	public void postThenPut() throws Exception {
-		OREController controller = getController();
-
-		InputStream in = new ByteArrayInputStream(
-				CommonTestRecords.SIMPLE_ORE_EXAMPLE.getBytes());
-		String redirect = controller.post(in);
-		String id = findUIDFromRedirect(redirect);
+		String id = saveRecordToStore(CommonTestRecords.SIMPLE_ORE_EXAMPLE);
 		
-		in = new ByteArrayInputStream(
+		InputStream in = new ByteArrayInputStream(
 				CommonTestRecords.SIMPLE_ORE_EXAMPLE.getBytes());
 		controller.put(id, in);
 		
 	}
+
+	private String saveRecordToStore(String recordXML) throws RequestFailureException,
+			IOException, OREException {
+		InputStream in = new ByteArrayInputStream(
+				recordXML.getBytes());
+		String redirect = controller.post(in);
+		String id = findUIDFromRedirect(redirect);
+		return id;
+	}
 	
+	@Test(expected = InvalidQueryParametersException.class)
+	public void queryRefersToEmpty() throws Exception {
+		controller.refersToQuery("");
+	}
+	
+//	@Test(expected = InvalidQueryParametersException.class)
+//	public void queryRefersToInvalidURL() throws Exception {
+//		controller.refersToQuery("zxcv");
+//	}
+	
+	@Test
+	public void queryRefersToNonExistantURL() throws Exception {
+		String body = controller.refersToQuery("http://omad.net/").getBody();
+		assertNotNull(body);
+		
+		Document document = parseXmlToDocument(body);
+		NodeList results = document.getElementsByTagName("result");
+		assertEquals(0, results.getLength());
+	}
+	
+	@Test
+	public void queryRefersToExistingURL() throws Exception {
+		// save an object
+		String createdId = saveRecordToStore(CommonTestRecords.SIMPLE_ORE_EXAMPLE);
+		
+		// query for it
+		String body = controller.refersToQuery("http://omad.net/").getBody();
+
+		// check the results include the object
+		assertNotNull(body);
+		assertTrue(body.contains(createdId));
+		
+		
+		Document document = parseXmlToDocument(body);
+		assertEquals(1, document.getElementsByTagName("result").getLength());
+		
+		assertEquals("Damien Ayers", xPath.evaluate("//binding[@name='a']/literal", document));
+	}
+	
+	private Document parseXmlToDocument(String xml) throws Exception {
+		return DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(new InputSource(new StringReader(xml)));
+	}
 }

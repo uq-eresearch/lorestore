@@ -3,6 +3,8 @@ package net.metadata.auselit.lorestore.servlet;
 import java.io.IOException;
 import java.io.InputStream;
 
+import net.metadata.auselit.lorestore.exceptions.InvalidQueryParametersException;
+import net.metadata.auselit.lorestore.exceptions.NotFoundException;
 import net.metadata.auselit.lorestore.exceptions.OREException;
 
 import org.apache.log4j.Logger;
@@ -16,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.View;
-import org.springframework.web.servlet.mvc.multiaction.NoSuchRequestHandlingMethodException;
 import org.springframework.web.servlet.view.RedirectView;
 
 import au.edu.diasb.chico.mvc.RequestFailureException;
@@ -55,7 +56,7 @@ public class OREController {
 //	}
 	
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
-	public OREResponse get(@PathVariable("id") String oreId) {
+	public OREResponse get(@PathVariable("id") String oreId) throws NotFoundException {
 		return qh.getOreObject(oreId);
 	}
 	
@@ -66,6 +67,10 @@ public class OREController {
 
 	@RequestMapping(value = "/", params="refersTo", method = RequestMethod.GET)
 	public ResponseEntity<String> refersToQuery(@RequestParam("refersTo") String urlParam) throws Exception {
+		if (urlParam == null || urlParam.isEmpty()) {
+			throw new InvalidQueryParametersException("Missing or empty query parameters");
+		}
+		
 		return qh.browseQuery(urlParam);
 	}
 	
@@ -86,7 +91,7 @@ public class OREController {
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
 	public OREResponse delete(@PathVariable("id") String oreId)
-			throws NoSuchRequestHandlingMethodException {
+			throws NotFoundException {
 		return uh.delete(oreId);
 	}
 

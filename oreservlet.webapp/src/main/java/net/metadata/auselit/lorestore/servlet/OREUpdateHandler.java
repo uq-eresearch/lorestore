@@ -5,6 +5,7 @@ import java.io.InputStream;
 
 import javax.servlet.http.HttpServletResponse;
 
+import net.metadata.auselit.lorestore.exceptions.NotFoundException;
 import net.metadata.auselit.lorestore.exceptions.OREException;
 import net.metadata.auselit.lorestore.model.CompoundObjectImpl;
 import net.metadata.auselit.lorestore.triplestore.TripleStoreConnectorFactory;
@@ -16,7 +17,6 @@ import org.ontoware.rdf2go.model.Model;
 import org.ontoware.rdf2go.model.ModelSet;
 import org.ontoware.rdf2go.model.Syntax;
 import org.ontoware.rdf2go.model.node.URI;
-import org.springframework.web.servlet.mvc.multiaction.NoSuchRequestHandlingMethodException;
 
 import au.edu.diasb.chico.mvc.RequestFailureException;
 
@@ -82,11 +82,11 @@ public class OREUpdateHandler {
 	}
 
 	public OREResponse delete(String oreId)
-			throws NoSuchRequestHandlingMethodException {
+			throws NotFoundException {
 		ModelSet container = cf.retrieveConnection();
 		URI contextURI = container.createURI(occ.getBaseUri() + oreId);
 		if (!container.containsModel(contextURI)) {
-			throw new NoSuchRequestHandlingMethodException(null);
+			throw new NotFoundException("Cannot delete, object not found");
 		}
 		container.removeModel(contextURI);
 

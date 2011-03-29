@@ -4,6 +4,7 @@ import static net.metadata.auselit.lorestore.common.OREConstants.SPARQL_RESULTS_
 
 import java.io.ByteArrayOutputStream;
 
+import net.metadata.auselit.lorestore.exceptions.NotFoundException;
 import net.metadata.auselit.lorestore.triplestore.TripleStoreConnectorFactory;
 
 import org.apache.log4j.Logger;
@@ -39,30 +40,24 @@ public class OREQueryHandler {
 		this.cf = occ.getContainerFactory();
 	}
 
-//	public OREResponse plainGet(HttpServletRequest request)
-//			throws RepositoryException, RequestFailureException,
-//			ServletException {
-//		String stringURI = request.getRequestURI();
-//
-//		ModelSet container = cf.retrieveConnection();
-//
-//		URI uri = container.createURI(stringURI);
-//		Model model = container.getModel(uri);
-//
-//		if (model == null || model.isEmpty()) {
-//			LOG.debug("Requested object that doesn't exist");
-//			throw new NoSuchRequestHandlingMethodException(request);
-//			// throw new RequestFailureException(
-//			// HttpServletResponse.SC_NOT_FOUND,
-//			// "No resource for '" + uri + "'");
-//		}
-//		occ.getAccessPolicy().checkRead(request, model);
-//
-//		return new OREResponse(model);
-//
-//	}
+	public OREResponse getOreObject(String oreId) throws NotFoundException {
+		ModelSet container = cf.retrieveConnection();
 
-	public ResponseEntity<String> browseQuery(String url) throws RepositoryException, MalformedQueryException, QueryEvaluationException, TupleQueryResultHandlerException {
+		URI uri = container.createURI(occ.getBaseUri() + oreId);
+		Model model = container.getModel(uri);
+		if (model == null || model.isEmpty()) {
+			LOG.debug("Cannot find requested resource: " + oreId);
+			throw new NotFoundException("Cannot find resource: " + oreId);
+		}
+		// occ.getAccessPolicy().checkRead(null, model);
+
+		return new OREResponse(model);
+
+	}
+	
+	public ResponseEntity<String> browseQuery(String url) 
+			throws RepositoryException, MalformedQueryException, 
+			QueryEvaluationException, TupleQueryResultHandlerException {
 		String queryString = generateBrowseQuery(url);
 		
 		HttpHeaders responseHeaders = new HttpHeaders();
@@ -70,7 +65,9 @@ public class OREQueryHandler {
 		return new ResponseEntity<String>(runSparqlQuery(queryString), responseHeaders, HttpStatus.OK);
 	}
 
-	public ResponseEntity<String> exploreQuery(String url) throws RepositoryException, MalformedQueryException, QueryEvaluationException, TupleQueryResultHandlerException {
+	public ResponseEntity<String> exploreQuery(String url) 
+			throws RepositoryException, MalformedQueryException, 
+			QueryEvaluationException, TupleQueryResultHandlerException {
 		String queryString = generateExploreQuery(url);
 
 		HttpHeaders responseHeaders = new HttpHeaders();
@@ -79,14 +76,15 @@ public class OREQueryHandler {
 	}
 	
 	
-	private String runSparqlQuery(String queryString) throws RepositoryException, MalformedQueryException, QueryEvaluationException, TupleQueryResultHandlerException  {
+	private String runSparqlQuery(String queryString) 
+			throws RepositoryException, MalformedQueryException, 
+			QueryEvaluationException, TupleQueryResultHandlerException  {
 		System.out.println("Query String: " + queryString);
 		ModelSet container = cf.retrieveConnection();
 		Repository rep = (Repository)container.getUnderlyingModelSetImplementation();
 		ByteArrayOutputStream stream = new ByteArrayOutputStream();
 		RepositoryConnection con = rep.getConnection();
 		try {
-//			queryString = "select * where { ?s ?p ?o. } ";
 			TupleQuery tupleQuery = con.prepareTupleQuery(QueryLanguage.SPARQL, queryString);
 			
 			SPARQLResultsXMLWriter resultsXMLWriter = new SPARQLResultsXMLWriter(stream);
@@ -98,6 +96,7 @@ public class OREQueryHandler {
 		
 		return stream.toString();
 	}
+	
 	/*
 select distinct ?g ?a ?m ?t
 where {
@@ -155,24 +154,6 @@ where {
 			fExpr = "FILTER regex(str(?v), \"" + matchVal + "\", \"i\")";
 		}
 		return fExpr;
-	}
-
-	public OREResponse getOreObject(String oreId) {
-		ModelSet container = cf.retrieveConnection();
-
-		URI uri = container.createURI(occ.getBaseUri() + oreId);
-		Model model = container.getModel(uri);
-		if (model == null || model.isEmpty()) {
-			LOG.debug("Cannot find requested resource: " + oreId);
-			throw new RuntimeException("Can't find resource: " + uri);
-			// throw new RequestFailureException(
-			// HttpServletResponse.SC_NOT_FOUND,
-			// "No resource for '" + uri + "'");
-		}
-		// occ.getAccessPolicy().checkRead(request, model);
-
-		return new OREResponse(model);
-
 	}
 	
 	protected String generateExploreQuery(String escapedURI) {
