@@ -1,6 +1,5 @@
 package oreservlet.common;
 
-import org.springframework.http.MediaType;
 
 public interface OREConstants {
 
@@ -25,6 +24,21 @@ public interface OREConstants {
     //
 
     String RDF_TYPE_PROPERTY = RDF_SYNTAX_URL + "type";
+    
+    
+    
+    String DCTERMS_NS_URL = "http://purl.org/dc/terms/";
+    String DCTERMS_CREATED = DCTERMS_NS_URL + "created";
+    String DCTERMS_MODIFIED = DCTERMS_NS_URL + "modified";
+    
+    
+    String DC_NS_URL = "http://purl.org/dc/elements/1.1/";
+    String DC_CREATOR = DC_NS_URL + "creator";
+    
+    
+    String AUSELIT_NS_URL = "";
+    String AUSELIT_USER = AUSELIT_NS_URL + "user";
+    
 
 	String SPARQL_RESULTS_XML = "application/sparql-results+xml";
 

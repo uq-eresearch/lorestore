@@ -182,7 +182,7 @@ where {
 		String query = "PREFIX dc:<http://purl.org/dc/elements/1.1/> " 
             + "PREFIX dcterms:<http://purl.org/dc/terms/>"
             + "PREFIX ore:<http://www.openarchives.org/ore/terms/> " 
-            + "PREFIX rdf:<http://www.w3.org/1999/02/22-rdf-syntax-ns%23>"
+            + "PREFIX rdf:<http://www.w3.org/1999/02/22-rdf-syntax-ns#>"
 		    + "SELECT DISTINCT ?something ?somerel ?sometitle ?sometype ?creator ?modified ?anotherrel ?somethingelse WHERE {"
             // Compound objects that contain this uri
 		    + "{?aggre ore:aggregates <" + escapedURI + "> . " 

@@ -1,9 +1,6 @@
 package oreservlet.model;
 
-import static oreservlet.common.OREConstants.AGGREGATION;
-import static oreservlet.common.OREConstants.ORE_DESCRIBES_PROPERTY;
-import static oreservlet.common.OREConstants.ORE_RESOURCEMAP_CLASS;
-import static oreservlet.common.OREConstants.RDF_TYPE_PROPERTY;
+import static oreservlet.common.OREConstants.*;
 import oreservlet.exceptions.OREException;
 
 import org.ontoware.aifbcommons.collection.ClosableIterator;
@@ -96,22 +93,23 @@ public class CompoundObjectImpl {
 	}
 
 	public Node getCreator() throws OREException {
-		return lookupResourceMapNode(model.createURI("dc:creator"));
+		return lookupResourceMapNode(model.createURI(DC_CREATOR));
 	}
-	
+
 	public Node getCreatedDate() throws OREException {
-		return lookupResourceMapNode(model.createURI("dc:created"));
+		return lookupResourceMapNode(model
+				.createURI(DCTERMS_CREATED));
 	}
-	
+
 	public Node getModifiedDate() throws OREException {
-		return lookupResourceMapNode(model.createURI("dc:modified"));
-	}	
-	
+		return lookupResourceMapNode(model
+				.createURI(DCTERMS_MODIFIED));
+	}
 
 	public Node getUser() throws OREException {
-		return lookupResourceMapNode(model.createURI("auselit:user"));
+		return lookupResourceMapNode(model.createURI(AUSELIT_USER));
 	}
-	
+
 	public Node lookupResourceMapNode(URI uri) throws OREException {
 		Resource findResourceMap = findResourceMap();
 
@@ -119,19 +117,19 @@ public class CompoundObjectImpl {
 				uri, Variable.ANY);
 		return lookupOneObject(it);
 	}
-	
-	
+
 	public void setUser(String newUser) throws OREException {
 		Node user = getUser();
 		if (user != null) {
 			throw new OREException("User already set, not allowed to update");
 		}
 		Resource findResourceMap = findResourceMap();
-		model.addStatement(findResourceMap, model.createURI("auselit:user"), model.createPlainLiteral(newUser));
+		model.addStatement(findResourceMap,
+				model.createURI(AUSELIT_USER),
+				model.createPlainLiteral(newUser));
 		model.commit();
 	}
-	
-	
+
 	private Node lookupOneObject(ClosableIterator<Statement> it)
 			throws OREException {
 		Statement s = lookupOneStatement(it);
