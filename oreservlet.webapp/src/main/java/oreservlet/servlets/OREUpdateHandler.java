@@ -78,15 +78,14 @@ public class OREUpdateHandler {
 
 	}
 
-	public OREResponse delete(MockHttpServletRequest request)
+	public OREResponse delete(MockHttpServletRequest request, String oreId)
 			throws NoSuchRequestHandlingMethodException {
-		ModelSet ms = cf.retrieveConnection();
-		String stringURI = request.getRequestURI();
-		URI contextURI = ms.createURI(stringURI);
-		if (!ms.containsModel(contextURI)) {
+		ModelSet container = cf.retrieveConnection();
+		URI contextURI = container.createURI(occ.getBaseUri() + oreId);
+		if (!container.containsModel(contextURI)) {
 			throw new NoSuchRequestHandlingMethodException(request);
 		}
-		ms.removeModel(contextURI);
+		container.removeModel(contextURI);
 
 		return new OREResponse(null);
 	}

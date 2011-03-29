@@ -1,11 +1,8 @@
 package oreservlet.servlets;
 
-import java.io.ByteArrayOutputStream;
-
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-
 import static oreservlet.common.OREConstants.SPARQL_RESULTS_XML;
+
+import java.io.ByteArrayOutputStream;
 
 import org.apache.log4j.Logger;
 import org.ontoware.rdf2go.model.Model;
@@ -24,9 +21,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.servlet.mvc.multiaction.NoSuchRequestHandlingMethodException;
-
-import au.edu.diasb.chico.mvc.RequestFailureException;
 
 /**
  * The OREQueryHandler class handles queries from the {@link OREController}.
@@ -43,28 +37,28 @@ public class OREQueryHandler {
 		this.cf = occ.getContainerFactory();
 	}
 
-	public OREResponse plainGet(HttpServletRequest request)
-			throws RepositoryException, RequestFailureException,
-			ServletException {
-		String stringURI = request.getRequestURI();
-
-		ModelSet container = cf.retrieveConnection();
-
-		URI uri = container.createURI(stringURI);
-		Model model = container.getModel(uri);
-
-		if (model == null || model.isEmpty()) {
-			LOG.debug("Requested object that doesn't exist");
-			throw new NoSuchRequestHandlingMethodException(request);
-			// throw new RequestFailureException(
-			// HttpServletResponse.SC_NOT_FOUND,
-			// "No resource for '" + uri + "'");
-		}
-		occ.getAccessPolicy().checkRead(request, model);
-
-		return new OREResponse(model);
-
-	}
+//	public OREResponse plainGet(HttpServletRequest request)
+//			throws RepositoryException, RequestFailureException,
+//			ServletException {
+//		String stringURI = request.getRequestURI();
+//
+//		ModelSet container = cf.retrieveConnection();
+//
+//		URI uri = container.createURI(stringURI);
+//		Model model = container.getModel(uri);
+//
+//		if (model == null || model.isEmpty()) {
+//			LOG.debug("Requested object that doesn't exist");
+//			throw new NoSuchRequestHandlingMethodException(request);
+//			// throw new RequestFailureException(
+//			// HttpServletResponse.SC_NOT_FOUND,
+//			// "No resource for '" + uri + "'");
+//		}
+//		occ.getAccessPolicy().checkRead(request, model);
+//
+//		return new OREResponse(model);
+//
+//	}
 
 	public ResponseEntity<String> browseQuery(String url) throws RepositoryException, MalformedQueryException, QueryEvaluationException, TupleQueryResultHandlerException {
 		String queryString = generateBrowseQuery(url);
@@ -167,6 +161,7 @@ where {
 		URI uri = container.createURI(occ.getBaseUri() + oreId);
 		Model model = container.getModel(uri);
 		if (model == null || model.isEmpty()) {
+			LOG.debug("Cannot find requested resource: " + oreId);
 			throw new RuntimeException("Can't find resource: " + uri);
 			// throw new RequestFailureException(
 			// HttpServletResponse.SC_NOT_FOUND,

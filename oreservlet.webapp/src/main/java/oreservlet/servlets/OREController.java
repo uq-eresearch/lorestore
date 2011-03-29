@@ -3,13 +3,9 @@ package oreservlet.servlets;
 import java.io.IOException;
 import java.io.InputStream;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-
 import oreservlet.exceptions.OREException;
 
 import org.apache.log4j.Logger;
-import org.openrdf.repository.RepositoryException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mock.web.MockHttpServletRequest;
@@ -47,17 +43,17 @@ public class OREController {
 		return uh.post(inputRDF);
 	}
 
-	@RequestMapping(method = RequestMethod.GET)
-	public OREResponse get(HttpServletRequest request)
-			throws RepositoryException, ServletException {
-		String pathInfo = request.getPathInfo();
-		if (pathInfo == null || pathInfo.equals("") || pathInfo.equals("/")) {
-			LOG.error("Incorrect path in GET request");
-			return null;
-		} else {
-			return qh.plainGet(request);
-		}
-	}
+//	@RequestMapping(method = RequestMethod.GET)
+//	public OREResponse get(HttpServletRequest request)
+//			throws RepositoryException, ServletException {
+//		String pathInfo = request.getPathInfo();
+//		if (pathInfo == null || pathInfo.equals("") || pathInfo.equals("/")) {
+//			LOG.error("Incorrect path in GET request");
+//			return null;
+//		} else {
+//			return qh.plainGet(request);
+//		}
+//	}
 	
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public OREResponse get(@PathVariable("id") String oreId) {
@@ -86,16 +82,16 @@ public class OREController {
 	@ResponseStatus(HttpStatus.NOT_FOUND)
 	@ExceptionHandler({ RequestFailureException.class })
 	public void return404() {
+		LOG.debug("Handling RequestFailureException, returning 404");
+	}
 
+	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+	public OREResponse delete(@PathVariable("id") String oreId, MockHttpServletRequest servletRequest)
+			throws NoSuchRequestHandlingMethodException {
+		return uh.delete(servletRequest, oreId);
 	}
 
 	public OREControllerConfig getControllerConfig() {
 		return occ;
 	}
-
-	public OREResponse delete(MockHttpServletRequest servletRequest)
-			throws NoSuchRequestHandlingMethodException {
-		return uh.delete(servletRequest);
-	}
-
 }
