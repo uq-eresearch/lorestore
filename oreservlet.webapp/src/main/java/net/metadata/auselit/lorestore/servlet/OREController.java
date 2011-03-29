@@ -37,7 +37,7 @@ public class OREController {
 	}
 
 	@RequestMapping(value = "/", method = RequestMethod.POST)
-	public String post(InputStream inputRDF) throws RequestFailureException,
+	public OREResponse post(InputStream inputRDF) throws RequestFailureException,
 			IOException, OREException, InterruptedException {
 
 		return uh.post(inputRDF);
@@ -50,7 +50,7 @@ public class OREController {
 	}
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
-	public String put(@PathVariable("id") String oreId, InputStream in)
+	public OREResponse put(@PathVariable("id") String oreId, InputStream in)
 			throws RequestFailureException, IOException, OREException,
 			InterruptedException {
 		return uh.put(oreId, in);

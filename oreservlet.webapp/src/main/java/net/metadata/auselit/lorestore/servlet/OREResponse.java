@@ -7,11 +7,28 @@ public class OREResponse extends ModelAndView {
 
 	public static final String RESPONSE_RDF_KEY = "responseRDF";
 	public static final String ORE_PROPS_KEY = "oreProperties";
+	public static final String LOCATION_HEADER = "locationHeader";
+	public static final String RETURN_STATUS = "returnStatus";
 	
 	public OREResponse(Model model) {
 		// The name of the view we will use
 		super("ore");
 		this.addObject(RESPONSE_RDF_KEY, model);
 	}
+	
+	public void setReturnStatus(int status) {
+		this.addObject(RETURN_STATUS, status);
+	}
 
+	public int getReturnStatus() {
+		return (Integer)this.getModelMap().get(RETURN_STATUS);
+	}
+	
+	public void setLocationHeaer(String locationHeader) {
+		this.addObject(LOCATION_HEADER, locationHeader);
+	}
+	
+	public String getLocationHeader() {
+		return (String)this.getModelMap().get(LOCATION_HEADER);
+	}
 }

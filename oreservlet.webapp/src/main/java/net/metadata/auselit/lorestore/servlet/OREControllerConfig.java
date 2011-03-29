@@ -45,7 +45,4 @@ public class OREControllerConfig {
 	public UIDGenerator getUidGenerator() {
 		return uidGenerator;
 	}
-	
-	
-
 }

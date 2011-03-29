@@ -20,16 +20,12 @@ import net.metadata.auselit.lorestore.exceptions.InvalidQueryParametersException
 import net.metadata.auselit.lorestore.exceptions.NotFoundException;
 import net.metadata.auselit.lorestore.exceptions.OREException;
 import net.metadata.auselit.lorestore.triplestore.InMemoryTripleStoreConnectorFactory;
-import net.metadata.auselit.lorestore.triplestore.PersistedMemoryTripleStoreConnectorFactory;
-import net.metadata.auselit.lorestore.triplestore.SimpleSesamePool;
 import net.metadata.auselit.lorestore.triplestore.TripleStoreConnectorFactory;
 import net.metadata.auselit.lorestore.util.UIDGenerator;
 
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.ontoware.rdf2go.model.Model;
-import org.ontoware.rdf2go.model.ModelSet;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
@@ -63,26 +59,6 @@ public class OREControllerTest {
 	}
 
 
-
-	// @Test
-	// public void constructor() {
-	// getController();
-	// }
-
-	// @Test
-	// public void getUnknown() throws Exception {
-	// OREController controller = getController();
-	// MockHttpServletRequest request = new MockHttpServletRequest();
-	// request.setRequestURI("http://doc.localhost/ore/rem/13532");
-	// request.setPathInfo("/rem/13532");
-	//
-	// try {
-	// controller.get(request);
-	// fail("should have thrown exception");
-	// } catch (NoSuchRequestHandlingMethodException e) {
-	//
-	// }
-	// }
 
 	@Test(expected = NotFoundException.class)
 	public void deleteUnknown() throws Exception {
@@ -121,8 +97,11 @@ public class OREControllerTest {
 	public void postCompoundObjectAndGet() throws Exception {
 		InputStream in = new ByteArrayInputStream(
 				CommonTestRecords.SIMPLE_ORE_EXAMPLE.getBytes());
-		String redirect = controller.post(in);
-		assertTrue(redirect.startsWith("redirect:"));
+		OREResponse response = controller.post(in);
+		
+		assertNotNull(response.getLocationHeader());
+		assertNotNull(response.getReturnStatus());
+		assertEquals(201, response.getReturnStatus());
 
 		// assertEquals(16, cf.size());
 	}
@@ -153,12 +132,6 @@ public class OREControllerTest {
 
 	}
 
-	private String findUIDFromRedirect(String redirect) {
-		assertTrue(redirect.startsWith("redirect:"));
-		String createdId = redirect.substring(redirect.lastIndexOf("/") + 1);
-		return createdId;
-	}
-
 	@Test(expected = OREException.class)
 	public void putNonexistent() throws Exception {
 		InputStream in = new ByteArrayInputStream(
@@ -179,9 +152,19 @@ public class OREControllerTest {
 
 	private String saveRecordToStore(String recordXML) throws Exception {
 		InputStream in = new ByteArrayInputStream(recordXML.getBytes());
-		String redirect = controller.post(in);
+		OREResponse response = controller.post(in);
+		
+		String redirect = response.getLocationHeader();
 		String id = findUIDFromRedirect(redirect);
+
 		return id;
+		
+	}
+
+	private String findUIDFromRedirect(String redirect) {
+//		assertTrue(redirect.startsWith("redirect:"));
+		String createdId = redirect.substring(redirect.lastIndexOf("/") + 1);
+		return createdId;
 	}
 
 	@Test(expected = InvalidQueryParametersException.class)

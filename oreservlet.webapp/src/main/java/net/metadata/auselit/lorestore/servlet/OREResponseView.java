@@ -2,7 +2,7 @@ package net.metadata.auselit.lorestore.servlet;
 
 import static net.metadata.auselit.lorestore.common.OREConstants.ORE_USE_STYLESHEET;
 import static net.metadata.auselit.lorestore.common.OREProperties.DEFAULT_RDF_STYLESHEET_PROP;
-import static net.metadata.auselit.lorestore.servlet.OREResponse.ORE_PROPS_KEY;
+import static net.metadata.auselit.lorestore.servlet.OREResponse.*;
 import static net.metadata.auselit.lorestore.servlet.OREResponse.RESPONSE_RDF_KEY;
 
 import java.io.IOException;
@@ -37,6 +37,8 @@ public class OREResponseView extends BaseView {
                 (stylesheetParam.length() == 0) ? props.getProperty(DEFAULT_RDF_STYLESHEET_PROP, null) :
                     stylesheetParam;
         
+        setResponseHeaders(map, response);
+        
         OutputStream os = null;
         // FIXME the mapping of 'accept' types to formats that we understand and hence
         // to the content types that we use needs to be soft, and a lot smarter.
@@ -70,7 +72,20 @@ public class OREResponseView extends BaseView {
         }
     }
     
-    private OutputStream outputProps(HttpServletResponse response, Properties props) 
+    private void setResponseHeaders(Map<String, Object> map,
+			HttpServletResponse response) {
+		Object loc = map.get(LOCATION_HEADER);
+		if (loc != null) {
+			response.setHeader("Location", (String)loc);
+		}
+		Object status = map.get(RETURN_STATUS);
+		if (status != null) {
+			response.setStatus((Integer)status);
+		}
+		
+	}
+
+	private OutputStream outputProps(HttpServletResponse response, Properties props) 
     throws IOException {
         response.setContentType("application/xml");
         OutputStream os = response.getOutputStream();

@@ -50,7 +50,7 @@ public class OREUpdateHandler {
 	 * @throws OREException
 	 * @throws InterruptedException
 	 */
-	public String post(InputStream inputRDF) throws RequestFailureException,
+	public OREResponse post(InputStream inputRDF) throws RequestFailureException,
 			IOException, OREException, InterruptedException {
 		
 		RepositoryModelFactory mf = new RepositoryModelFactory();
@@ -79,12 +79,14 @@ public class OREUpdateHandler {
 			ms = cf.retrieveConnection();
 			ms.addModel(model);
 			ms.commit();
-			model.close();
 		} finally {
 			cf.release(ms);
 		}
-		// return new OREResponse(model);
-		return "redirect:" + "/ore/" + uid;
+		OREResponse response = new OREResponse(model);
+		response.setLocationHeaer(occ.getBaseUri() + uid);
+		response.setReturnStatus(201);
+		return response;
+		//return "redirect:" + "/ore/" + uid;
 
 	}
 
@@ -105,16 +107,17 @@ public class OREUpdateHandler {
 		return new OREResponse(null);
 	}
 
-	public String put(String oreId, InputStream inputRDF)
+	public OREResponse put(String oreId, InputStream inputRDF)
 			throws RequestFailureException, IOException, OREException,
 			InterruptedException {
 		ModelFactory mf = RDF2Go.getModelFactory();
 		URI objURI = mf.createModel().createURI(occ.getBaseUri() + oreId);
 
 		ModelSet container = null;
+		Model model = null;
 		try {
 			container = cf.retrieveConnection();
-			Model model = container.getModel(objURI);
+			model = container.getModel(objURI);
 			if (model == null || model.isEmpty()) {
 				throw new OREException("Cannot update nonexistant object");
 			}
@@ -136,11 +139,10 @@ public class OREUpdateHandler {
 			container.removeModel(objURI);
 			container.addModel(model);
 			container.commit();
-			model.close();
 		} finally {
 			cf.release(container);
 		}
 
-		return "redirect:" + "/ore/" + oreId;
+		return new OREResponse(model);
 	}
 }

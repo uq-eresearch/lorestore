@@ -103,7 +103,6 @@ public class OREQueryHandler {
 			throws RepositoryException, MalformedQueryException,
 			QueryEvaluationException, TupleQueryResultHandlerException,
 			InterruptedException {
-		System.out.println("Query String: " + queryString);
 		ModelSet container = null;
 		RepositoryConnection con = null;
 		ByteArrayOutputStream stream;

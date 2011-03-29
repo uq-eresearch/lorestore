@@ -30,15 +30,12 @@ public class LocalStoreOREControllerTest extends OREControllerTest {
 
 	private static OREController getController() throws InterruptedException {
 		OREControllerConfig occ = new OREControllerConfig();
-		// cf = new InMemoryTripleStoreConnectorFactory();
+
 		PersistedMemoryTripleStoreConnectorFactory cf = new PersistedMemoryTripleStoreConnectorFactory();
 		cf.setDataDirPath("D:/temp/");
 		TripleStoreConnectorFactory pool = new SimpleSesamePool(cf);
 		occ.setContainerFactory(pool);
-		// HttpTripleStoreConnectorFactory cf = new
-		// HttpTripleStoreConnectorFactory();
-		// cf.setRepositoryURL("http://localhost:8080/openrdf-sesame/repositories/lore");
-		// occ.setContainerFactory(cf);
+
 		occ.setAccessPolicy(new DefaultOREAccessPolicy());
 		occ.setBaseUri("http://example.com/");
 		occ.setUidGenerator(new UIDGenerator());
