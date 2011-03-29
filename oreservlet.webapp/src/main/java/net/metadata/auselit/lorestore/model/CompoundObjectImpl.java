@@ -1,10 +1,19 @@
 package net.metadata.auselit.lorestore.model;
 
-import static net.metadata.auselit.lorestore.common.OREConstants.*;
+import static net.metadata.auselit.lorestore.common.OREConstants.AGGREGATION;
+import static net.metadata.auselit.lorestore.common.OREConstants.AUSELIT_USER;
+import static net.metadata.auselit.lorestore.common.OREConstants.DCTERMS_CREATED;
+import static net.metadata.auselit.lorestore.common.OREConstants.DCTERMS_MODIFIED;
+import static net.metadata.auselit.lorestore.common.OREConstants.DC_CREATOR;
+import static net.metadata.auselit.lorestore.common.OREConstants.ORE_AGGREGATION_CLASS;
+import static net.metadata.auselit.lorestore.common.OREConstants.ORE_DESCRIBES_PROPERTY;
+import static net.metadata.auselit.lorestore.common.OREConstants.RDF_TYPE_PROPERTY;
 import net.metadata.auselit.lorestore.exceptions.OREException;
 
 import org.ontoware.aifbcommons.collection.ClosableIterator;
 import org.ontoware.rdf2go.model.Model;
+import org.ontoware.rdf2go.model.QueryResultTable;
+import org.ontoware.rdf2go.model.QueryRow;
 import org.ontoware.rdf2go.model.Statement;
 import org.ontoware.rdf2go.model.Syntax;
 import org.ontoware.rdf2go.model.node.Node;
@@ -40,8 +49,8 @@ public class CompoundObjectImpl {
 	 * @throws OREException
 	 */
 	public void assignURI(String newUriString) throws OREException {
-		Resource oldUri = findResourceMap();
 		model.setAutocommit(false);
+		Resource oldUri = findResourceMap();
 		URI newURI = model.createURI(newUriString);
 		ClosableIterator<Statement> resourceMapStmts = model.findStatements(
 				oldUri, Variable.ANY, Variable.ANY);
@@ -85,11 +94,15 @@ public class CompoundObjectImpl {
 	}
 
 	private Resource findResourceMap() throws OREException {
-		ClosableIterator<Statement> it = model.findStatements(Variable.ANY,
-				model.createURI(RDF_TYPE_PROPERTY),
-				model.createURI(ORE_RESOURCEMAP_CLASS));
-		Statement s = lookupOneStatement(it);
-		return s.getSubject();
+		QueryResultTable resultTable = model.sparqlSelect(String.format(
+				"select ?rem WHERE {?aggre <%1$s> <%2$s>. ?rem <%3$s> ?aggre}",
+				RDF_TYPE_PROPERTY, ORE_AGGREGATION_CLASS, ORE_DESCRIBES_PROPERTY));
+
+		Resource res = null;
+		for (QueryRow row : resultTable) {
+			return row.getValue("rem").asResource();
+		}
+		return res;
 	}
 
 	public Node getCreator() throws OREException {
@@ -97,13 +110,11 @@ public class CompoundObjectImpl {
 	}
 
 	public Node getCreatedDate() throws OREException {
-		return lookupResourceMapNode(model
-				.createURI(DCTERMS_CREATED));
+		return lookupResourceMapNode(model.createURI(DCTERMS_CREATED));
 	}
 
 	public Node getModifiedDate() throws OREException {
-		return lookupResourceMapNode(model
-				.createURI(DCTERMS_MODIFIED));
+		return lookupResourceMapNode(model.createURI(DCTERMS_MODIFIED));
 	}
 
 	public Node getUser() throws OREException {
@@ -112,7 +123,6 @@ public class CompoundObjectImpl {
 
 	public Node lookupResourceMapNode(URI uri) throws OREException {
 		Resource findResourceMap = findResourceMap();
-
 		ClosableIterator<Statement> it = model.findStatements(findResourceMap,
 				uri, Variable.ANY);
 		return lookupOneObject(it);
@@ -124,8 +134,7 @@ public class CompoundObjectImpl {
 			throw new OREException("User already set, not allowed to update");
 		}
 		Resource findResourceMap = findResourceMap();
-		model.addStatement(findResourceMap,
-				model.createURI(AUSELIT_USER),
+		model.addStatement(findResourceMap, model.createURI(AUSELIT_USER),
 				model.createPlainLiteral(newUser));
 		model.commit();
 	}
