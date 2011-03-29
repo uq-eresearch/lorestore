@@ -16,7 +16,6 @@ import org.ontoware.rdf2go.model.Model;
 import org.ontoware.rdf2go.model.ModelSet;
 import org.ontoware.rdf2go.model.Syntax;
 import org.ontoware.rdf2go.model.node.URI;
-import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.web.servlet.mvc.multiaction.NoSuchRequestHandlingMethodException;
 
 import au.edu.diasb.chico.mvc.RequestFailureException;
@@ -82,12 +81,12 @@ public class OREUpdateHandler {
 
 	}
 
-	public OREResponse delete(MockHttpServletRequest request, String oreId)
+	public OREResponse delete(String oreId)
 			throws NoSuchRequestHandlingMethodException {
 		ModelSet container = cf.retrieveConnection();
 		URI contextURI = container.createURI(occ.getBaseUri() + oreId);
 		if (!container.containsModel(contextURI)) {
-			throw new NoSuchRequestHandlingMethodException(request);
+			throw new NoSuchRequestHandlingMethodException(null);
 		}
 		container.removeModel(contextURI);
 

@@ -8,7 +8,6 @@ import net.metadata.auselit.lorestore.exceptions.OREException;
 import org.apache.log4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -86,9 +85,9 @@ public class OREController {
 	}
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-	public OREResponse delete(@PathVariable("id") String oreId, MockHttpServletRequest servletRequest)
+	public OREResponse delete(@PathVariable("id") String oreId)
 			throws NoSuchRequestHandlingMethodException {
-		return uh.delete(servletRequest, oreId);
+		return uh.delete(oreId);
 	}
 
 	public OREControllerConfig getControllerConfig() {

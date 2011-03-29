@@ -20,7 +20,6 @@ import net.metadata.auselit.lorestore.util.UIDGenerator;
 import org.junit.Before;
 import org.junit.Test;
 import org.ontoware.rdf2go.model.Model;
-import org.springframework.mock.web.MockHttpServletRequest;
 
 import au.edu.diasb.chico.mvc.RequestFailureException;
 
@@ -68,12 +67,9 @@ public class OREControllerTest {
 	@Test
 	public void deleteUnknown() {
 		OREController controller = getController();
-		MockHttpServletRequest request = new MockHttpServletRequest();
-		request.setRequestURI("http://doc.localhost/ore/rem/13532");
-		request.setPathInfo("/rem/13532");
 
 		try {
-			controller.delete("13532", request);
+			controller.delete("13532");
 			fail("should have thrown exception");
 		} catch (Exception e) {
 
@@ -140,14 +136,9 @@ public class OREControllerTest {
 		Model rdf2 = (Model) model2.get(OREResponse.RESPONSE_RDF_KEY);
 		assertNotNull(rdf2);
 
-		MockHttpServletRequest servletRequest = new MockHttpServletRequest();
-		servletRequest.setRequestURI(createdId);
-		servletRequest.setPathInfo("fakepathinfo");
-		controller.delete(createdId, servletRequest);
 
-		servletRequest = new MockHttpServletRequest();
-		servletRequest.setRequestURI(createdId);
-		servletRequest.setPathInfo("fakepathinfo");
+		controller.delete(createdId);
+
 		try {
 			controller.get(createdId);
 			fail("Object should have been deleted, method should have thrown exception");

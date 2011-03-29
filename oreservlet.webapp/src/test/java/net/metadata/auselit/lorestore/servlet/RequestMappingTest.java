@@ -94,7 +94,7 @@ public class RequestMappingTest {
 	
 	@Test
 	public void delete() throws Exception {
-		EasyMock.expect(controller.delete(exampleID, request)).andReturn(null);
+		EasyMock.expect(controller.delete(exampleID)).andReturn(null);
 		EasyMock.replay(controller);
 		
 		request.setRequestURI("/" + exampleID);

@@ -13,7 +13,7 @@ import org.openrdf.repository.Repository;
 import org.openrdf.repository.RepositoryException;
 import org.openrdf.repository.http.HTTPRepository;
 
-public class TestUtilities {
+public abstract class TestUtilities {
 
 	/**
 	 * 
