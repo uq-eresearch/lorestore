@@ -8,25 +8,20 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.ontoware.rdf2go.model.Model;
 import org.ontoware.rdf2go.model.ModelSet;
-import org.ontoware.rdf2go.model.QueryResultTable;
-import org.ontoware.rdf2go.model.QueryRow;
-import org.ontoware.rdf2go.model.node.Node;
 import org.ontoware.rdf2go.model.node.URI;
-import org.ontoware.rdf2go.util.ModelUtils;
 import org.openrdf.query.MalformedQueryException;
-import org.openrdf.query.Query;
 import org.openrdf.query.QueryEvaluationException;
 import org.openrdf.query.QueryLanguage;
 import org.openrdf.query.TupleQuery;
-import org.openrdf.query.TupleQueryResult;
 import org.openrdf.query.TupleQueryResultHandlerException;
 import org.openrdf.query.resultio.sparqlxml.SPARQLResultsXMLWriter;
 import org.openrdf.repository.Repository;
 import org.openrdf.repository.RepositoryConnection;
 import org.openrdf.repository.RepositoryException;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.web.servlet.ModelAndView;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.servlet.mvc.multiaction.NoSuchRequestHandlingMethodException;
 
 import au.edu.diasb.chico.mvc.RequestFailureException;
@@ -76,12 +71,26 @@ public class OREQueryHandler {
 
 	}
 
-	public String browseQuery(String url) throws RepositoryException, MalformedQueryException, QueryEvaluationException, TupleQueryResultHandlerException {
-		ModelSet container = cf.retrieveConnection();
-		String queryString = browseSparql(url);
-
-		System.out.println("Query String: " + queryString);
+	public ResponseEntity<String> browseQuery(String url) throws RepositoryException, MalformedQueryException, QueryEvaluationException, TupleQueryResultHandlerException {
+		String queryString = browseSparqlQuery(url);
 		
+		HttpHeaders responseHeaders = new HttpHeaders();
+		responseHeaders.setContentType(MediaType.APPLICATION_XML);
+		return new ResponseEntity<String>(runSparqlQuery(queryString), responseHeaders, HttpStatus.OK);
+	}
+
+	public ResponseEntity<String> exploreQuery(String url) throws RepositoryException, MalformedQueryException, QueryEvaluationException, TupleQueryResultHandlerException {
+		String queryString = createExploreQuery(url);
+
+		HttpHeaders responseHeaders = new HttpHeaders();
+		responseHeaders.setContentType(MediaType.APPLICATION_XML);
+		return new ResponseEntity<String>(runSparqlQuery(queryString), responseHeaders, HttpStatus.OK);
+	}
+	
+	
+	private String runSparqlQuery(String queryString) throws RepositoryException, MalformedQueryException, QueryEvaluationException, TupleQueryResultHandlerException  {
+		System.out.println("Query String: " + queryString);
+		ModelSet container = cf.retrieveConnection();
 		Repository rep = (Repository)container.getUnderlyingModelSetImplementation();
 		ByteArrayOutputStream stream = new ByteArrayOutputStream();
 		RepositoryConnection con = rep.getConnection();
@@ -112,7 +121,7 @@ where {
   . OPTIONAL {?g <http://purl.org/dc/elements/1.1/title> ?t}
 };
 	 */
-	protected String browseSparql(String escapedURL) {
+	protected String browseSparqlQuery(String escapedURL) {
 		// Needs to match both www and non-www version of URL
 		String altURL = makeAltURL(escapedURL);
 		String query = "select distinct ?g ?a ?m ?t" + " where { graph ?g {"
@@ -173,4 +182,43 @@ where {
 		return new OREResponse(model);
 
 	}
+	
+	protected String createExploreQuery(String escapedURI) {
+		String query = "PREFIX dc:<http://purl.org/dc/elements/1.1/> " 
+            + "PREFIX dcterms:<http://purl.org/dc/terms/>"
+            + "PREFIX ore:<http://www.openarchives.org/ore/terms/> " 
+            + "PREFIX rdf:<http://www.w3.org/1999/02/22-rdf-syntax-ns%23>"
+		    + "SELECT DISTINCT ?something ?somerel ?sometitle ?sometype ?creator ?modified ?anotherrel ?somethingelse WHERE {"
+            // Compound objects that contain this uri
+		    + "{?aggre ore:aggregates <" + escapedURI + "> . " 
+                    + "?something ore:describes ?aggre . "
+		            + "?something a ?sometype . " 
+                    + "OPTIONAL {?something dc:creator ?creator .} "
+                    + "OPTIONAL {?something dcterms:modified ?modified .} "
+                    + "OPTIONAL {?something dc:title ?sometitle .}}"
+            // uris that have an asserted relationship to this uri
+		    +  "UNION { ?something ?somerel <" + escapedURI + "> . " 
+                    + "FILTER isURI(?something) ."
+		            + "FILTER (?somerel != ore:aggregates) . " 
+                    + "FILTER (?somerel != rdf:type) . " 
+                    + "OPTIONAL {?something a ?sometype} ."
+                    + "OPTIONAL {?something dc:title ?sometitle.} }"
+            // uris that have an asserted relationships from this uri
+		    + "UNION {<"+ escapedURI + "> ?somerel ?something . " 
+                    + "FILTER isURI(?something). " 
+                    + "FILTER (?somerel != rdf:type) . " 
+                    + "FILTER (?somerel != ore:describes) . "
+                    + "OPTIONAL {?something a ?sometype} ."
+                    + "OPTIONAL {?something dc:title ?sometitle.}}"
+            // if this is a compound object, uris contained
+		    + "UNION {<" + escapedURI + "> ore:describes ?aggre ."
+                    + "?aggre ?somerel ?something . " 
+                    + "FILTER isURI(?something) ."
+                    + "FILTER (?somerel != rdf:type) ." 
+                    + "OPTIONAL {?something dc:title ?sometitle . } . " 
+                    + "OPTIONAL {?something ?anotherrel ?somethingelse . FILTER isURI(?somethingelse)} . "
+                    + "OPTIONAL {?something a ?sometype}}}";
+		return query;
+	}
+	
 }

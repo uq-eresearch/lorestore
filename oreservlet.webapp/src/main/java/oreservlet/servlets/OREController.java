@@ -8,13 +8,8 @@ import javax.servlet.http.HttpServletRequest;
 
 import oreservlet.exceptions.OREException;
 
-import org.openrdf.query.MalformedQueryException;
-import org.openrdf.query.QueryEvaluationException;
-import org.openrdf.query.TupleQueryResultHandlerException;
 import org.openrdf.repository.RepositoryException;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.stereotype.Controller;
@@ -67,16 +62,18 @@ public class OREController {
 	}
 	
 	@RequestMapping(value = "/{id}", method = RequestMethod.POST)
-	public String put(@PathVariable("id") String oreId, InputStream in) {
-		return qh.put(oreId, in);
+	public String put(@PathVariable("id") String oreId, InputStream in) throws RequestFailureException, IOException {
+		return uh.put(oreId, in);
 	}
 
 	@RequestMapping(value = "/", params="refersTo", method = RequestMethod.GET)
-	public ResponseEntity<String> refersToQuery(@RequestParam("refersTo") String refersTo) throws Exception {
-		String body = qh.browseQuery(refersTo);
-		HttpHeaders responseHeaders = new HttpHeaders();
-		responseHeaders.setContentType(MediaType.APPLICATION_XML);
-		return new ResponseEntity<String>(body, responseHeaders, HttpStatus.OK);
+	public ResponseEntity<String> refersToQuery(@RequestParam("refersTo") String urlParam) throws Exception {
+		return qh.browseQuery(urlParam);
+	}
+	
+	@RequestMapping(value = "/", params="exploreFrom", method = RequestMethod.GET)
+	public ResponseEntity<String> exploreQuery(@RequestParam("exploreFrom") String urlParam) throws Exception {
+		return qh.exploreQuery(urlParam);
 	}
 	
 	public View saveORE() {
