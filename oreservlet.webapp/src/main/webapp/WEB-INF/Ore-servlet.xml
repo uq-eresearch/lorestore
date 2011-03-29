@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+  <!-- the application context definition for the oreservlet DispatcherServlet -->
+	<bean name="ore" class="oreservlet.servlets.OREController">
+		<constructor-arg ref="oreControllerConfig"/>
+	</bean>
+	
+    <bean id="oreControllerConfig" class="oreservlet.servlets.OREControllerConfig">
+    	<property name="containerFactory" ref="dbContainerFactory"/>
+    	<property name="uidGenerator" ref="uidGenerator"/>
+    	<property name="accessPolicy" ref="oreAccessPolicy"/>
+    </bean>
+    
+    <bean id="xmlViewResolver" class="org.springframework.web.servlet.view.XmlViewResolver">
+        <property name="order" value="1"></property>
+        <property name="location" value="/WEB-INF/Ore-views.xml"></property>
+    </bean>
+    
+    <bean class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
+        <property name="mappings">
+            <value>
+               /**=ore
+            </value>
+        </property>
+    </bean>
+</beans>

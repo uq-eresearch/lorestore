@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:sec="http://www.springframework.org/schema/security" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+	http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.0.xsd"
+	default-lazy-init="true">
+    
+	<!-- The site authorization configuration for Emmet -->
+
+	<bean id="filterSecurityInterceptor"
+		class="org.springframework.security.web.access.intercept.FilterSecurityInterceptor">
+		<property name="authenticationManager" ref="authenticationManager" />
+		<property name="accessDecisionManager" ref="accessDecisionManager" />
+		<property name="securityMetadataSource">
+			<sec:filter-security-metadata-source>
+                <sec:intercept-url pattern="/secure/*login.html"
+                    access="IS_AUTHENTICATED_ANONYMOUSLY,ROLE_ANY" />
+                <sec:intercept-url pattern="/secure/*.html" access="ROLE_USER" />
+                <sec:intercept-url pattern="/annotea/adam/*" access="ROLE_ADMIN" />
+                <sec:intercept-url pattern="/account/**" access="ROLE_USER" />
+                <sec:intercept-url pattern="/emmet/**" access="ROLE_ADMIN" />
+				
+				<!-- Site specific rules -->
+				<sec:intercept-url pattern="/test" access="ROLE_USER" />
+				<sec:intercept-url pattern="/repositories/**" access="ROLE_USER" />
+				<sec:intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY,ROLE_ANY" />
+			</sec:filter-security-metadata-source>
+		</property>
+	</bean>
+	
+	<bean id="dispatchingEntryPoint"
+		class="au.edu.diasb.springsecurity.DispatchingAuthenticationEntryPoint">
+		<property name="entryPointMappings" ref="authenticationEntryPointMappings"/>
+	</bean>
+	
+	<bean id="authenticationEntryPointMappings" 
+		class="org.springframework.beans.factory.config.MapFactoryBean">
+		<property name="sourceMap">
+			<map>
+				<entry key="PUT,POST,DELETE|/**" value-ref="restfulEntryPoint"/>
+				<entry key="GET|/*.svc" value-ref="restfulEntryPoint"/>
+				<entry key="GET,HEAD|/**" value-ref="loginUrlEntryPoint"/>
+				<entry key="*|/**" value-ref="forbiddenEntryPoint"/>
+			</map>
+		</property>
+	</bean>
+    
+	<alias name="defaultAccessDecisionManager" alias="accessDecisionManager" />
+</beans>

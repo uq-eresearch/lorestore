@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:sec="http://www.springframework.org/schema/security" 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+                        http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.0.xsd"
+    default-lazy-init="true">
+                
+    <!-- This security model uses a combination of OpenID 
+         authentication and form login.  The user would typically be 
+         presented with a login form that offers the choice of user/password
+         or OpenID.  
+         
+         When users choose OpenID, they are redirected to the provider to 
+         perform authentication, and then back to us.  On return, we check 
+         that the provider is on our whitelist, and if it is we then check 
+         the user's (authenticated) OpenID URL against our user details store
+         to see if they are "registered".  If we find an entry, we authorize 
+         the user based on what the details store says we should grant.  
+         If not, we grant the user (configurable) default authorities.
+         We also ask the OpenID provider for some user attributes that help
+         to identify a non-registered user.
+    -->
+    
+    <import resource="Emmet-passwordEncoder.xml"/>
+
+    <sec:http access-denied-page="${emmet.path}/emmetDenied.html" 
+              access-decision-manager-ref="accessDecisionManager"
+              entry-point-ref="dispatchingEntryPoint"
+              security-context-repository-ref="securityContextRepository">
+        <sec:intercept-url pattern="/" filters="none" />
+        <sec:intercept-url pattern="/*.html" filters="none" />
+        <sec:intercept-url pattern="/images/*" filters="none" />
+        <sec:intercept-url pattern="/stylesheets/*" filters="none" />
+        <sec:intercept-url pattern="*" access="ROLE_ANY" />
+        <sec:remember-me user-service-ref="userDetailsService"
+        				 services-alias="rememberMeService"/>
+        <sec:anonymous />
+        <sec:form-login 
+              authentication-failure-handler-ref="authenticationFailureHandler"
+              login-page="https://${emmet.hostname}/${emmet.container}/secure/ohlogin.html" 
+              default-target-url="${emmet.path}/account/loggedIn.html"/>
+        <sec:openid-login 
+              authentication-failure-handler-ref="authenticationFailureHandler"
+              default-target-url="${emmet.path}/account/loggedIn.html" 
+              user-service-ref="userDetailsService">
+            <sec:attribute-exchange>
+                <sec:openid-attribute name="email" 
+                     type="http://schema.openid.net/contact/email" 
+                     required="true" count="2"/>
+                <sec:openid-attribute name="name" 
+                     type="http://schema.openid.net/namePerson/friendly"
+                     required="true"/>
+                <sec:openid-attribute name="email2" 
+                     type="http://axschema.org/contact/email" required="true"/>
+                <sec:openid-attribute name="firstName" 
+                     type="http://axschema.org/namePerson/first" required="true"/>
+                <sec:openid-attribute name="lastName" 
+                     type="http://axschema.org/namePerson/last" required="true"/>
+            </sec:attribute-exchange>
+        </sec:openid-login>
+        <!-- The following is a temporary hack - see ticket #4 -->
+        <sec:session-management session-fixation-protection="none"/>
+        <sec:custom-filter before="FILTER_SECURITY_INTERCEPTOR"
+            ref="filterSecurityInterceptor" />
+        <sec:custom-filter before="LOGOUT_FILTER" ref="hybridLogoutFilter"/>
+    </sec:http>
+    
+    <bean id="authenticationFailureHandler" 
+          class="au.edu.diasb.springsecurity.RedirectPreservingUrlAuthenticationFailureHandler">
+       <property name="defaultFailureUrl"
+                 value="https://${emmet.hostname}/${emmet.container}/secure/ohlogin.html"/>
+    </bean>
+    
+    <sec:authentication-manager alias="authenticationManager">
+        <sec:authentication-provider user-service-ref="userDetailsService">
+            <sec:password-encoder base64="true" ref="passwordEncoder">
+                <sec:salt-source ref="saltSource"/>
+            </sec:password-encoder>
+        </sec:authentication-provider>
+        <sec:authentication-provider ref="openidExternalProvider"/>
+    </sec:authentication-manager>
+    
+    <bean id="loginUrlEntryPoint"
+          class="org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint">
+        <property name="forceHttps" value="true"/>
+        <property name="loginFormUrl" value="${emmet.path}/secure/ohlogin.html"/>
+    </bean>
+    <bean id="restfulEntryPoint"
+          class="au.edu.diasb.springsecurity.Http401AuthenticationEntryPoint">
+        <property name="wwwAuthenticate" 
+            value="Redirect https://${emmet.hostname}/${emmet.container}/secure/ohlogin.html"/>
+    </bean>
+    <bean id="forbiddenEntryPoint"
+          class="org.springframework.security.web.authentication.Http403ForbiddenEntryPoint">
+    </bean>
+	<bean id="openidExternalProvider"
+		class="au.edu.diasb.springsecurity.openid.OpenIDExternalAuthenticationProvider">
+		<property name="providerConfigurations" ref="openidProviderConfigs"/>
+	</bean>
+    
+    <bean id="hybridLogoutFilter" 
+        class="org.springframework.security.web.authentication.logout.LogoutFilter">
+        <constructor-arg ref="hybridLogoutSuccessHandler"/>
+        <constructor-arg>
+            <array>
+            	<ref bean="rememberMeService"/>
+                <ref bean="logoutHandler"/>
+            </array>
+        </constructor-arg>
+    </bean>
+    
+    <bean id="hybridLogoutSuccessHandler" 
+        class="au.edu.diasb.springsecurity.HybridLogoutSuccessHandler">
+        <property name="handlers">
+            <list>
+                <bean class="au.edu.diasb.springsecurity.openid.OpenIDLogoutSuccessHandler">
+                    <property name="logoutSuccessUrl" 
+                        value="${emmet.path}/cannotLogout.html"/>
+                </bean>
+                <bean class="au.edu.diasb.springsecurity.UserPasswordLogoutSuccessHandler">
+                    <property name="logoutSuccessUrl" 
+                        value="${emmet.path}/loggedOut.html"/>
+                </bean>
+                <bean class="au.edu.diasb.springsecurity.UnknownLogoutSuccessHandler">
+                    <property name="logoutSuccessUrl" 
+                        value="${emmet.path}/cannotLogout.html"/>
+                </bean>
+            </list>
+        </property>
+        <property name="notLoggedInUrl" value="${emmet.path}/notLoggedIn.html"/>
+    </bean>
+	
+	<import resource="OpenID.xml"/>
+	
+    <bean id="externalProviderConfigs" 
+          class="au.edu.diasb.chico.config.ListFactoryBean">
+        <property name="sourceList" ref="openidProviderConfigs"/>
+    </bean>
+    
+    <import resource="Emmet-commonAuthorization.xml"/>
+
+</beans>

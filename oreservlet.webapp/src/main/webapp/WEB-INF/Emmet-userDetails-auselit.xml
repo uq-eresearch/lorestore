@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd"
+    default-lazy-init="true">
+           
+    <!-- An emmet user details service populated with test users. -->     
+
+    <import resource="siteTailoring.xml" />
+    <import resource="Emmet-common.xml"/>
+    <import resource="Emmet-passwordEncoder.xml"/>
+
+	<bean id="userDetailsService" class="au.edu.diasb.emmet.EmmetUserDetailsService">
+		<property name="transactionManager" ref="txManager" />
+		<!-- Possible values for 'newTables' are 'yes', 'no' and 'as_required'.  The 'yes'
+		     value causes the tables to be dropped and recreated every time the servlet
+		     is restarted.  The 'asRequired' value causes the tables to be dropped and
+		     recreated if any of them is missing. -->
+		<property name="newTables" value="as_required" />
+		<property name="passwordEncoder" ref="passwordEncoder"/>
+		<property name="saltSource" ref="saltSource"/>
+		<property name="authoritiesRegistry" ref="authoritiesRegistry" />
+		<!-- If new tables are created and 'initialUserDetails' is set, the store's tables
+		     will be populated with these user accounts. -->
+		<property name="initialUserDetails">
+			<list>
+				<props>
+					<prop key="userName">auselit-adm</prop>
+					<prop key="password.password">auselit256</prop>
+					<prop key="identity.uri">http://auselit.metadata.net/danno/users/auselit-adm</prop>
+                    <prop key="identity.domain">primary</prop>
+					<prop key="authorities">ROLE_USER,ROLE_ADMIN,ROLE_ANNOTATOR</prop>
+				</props>
+				<props>
+					<prop key="userName">auselit</prop>
+					<prop key="password.password">demo</prop>
+					<prop key="identity.uri">http://auselit.metadata.net/danno/users/auselit</prop>
+                    <prop key="identity.domain">primary</prop>
+					<prop key="authorities">ROLE_USER,ROLE_ANNOTATOR</prop>
+				</props>
+				<props>
+					<prop key="userName">test</prop>
+					<prop key="password.password">secret</prop>
+					<prop key="identity.uri">http://auselit.metadata.net/danno/users/test</prop>
+                    <prop key="identity.domain">primary</prop>
+					<prop key="authorities">ROLE_USER,ROLE_ANNOTATOR,ROLE_OAI</prop>
+				</props>
+				<props>
+					<prop key="userName">oai</prop>
+					<prop key="password.password">secret</prop>
+					<prop key="identity.uri">http://auselit.metadata.net/danno/users/oai</prop>
+                    <prop key="identity.domain">primary</prop>
+					<prop key="authorities">ROLE_USER,ROLE_OAI</prop>
+				</props>
+			</list>
+		</property>
+	</bean>
+</beans>
