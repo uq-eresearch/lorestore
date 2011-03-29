@@ -13,9 +13,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathFactory;
 
 import net.metadata.auselit.lorestore.access.DefaultOREAccessPolicy;
@@ -28,11 +26,9 @@ import net.metadata.auselit.lorestore.util.UIDGenerator;
 import org.junit.Before;
 import org.junit.Test;
 import org.ontoware.rdf2go.model.Model;
-import org.springframework.http.ResponseEntity;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
 
 import au.edu.diasb.chico.mvc.RequestFailureException;
 
@@ -196,7 +192,7 @@ public class OREControllerTest {
 //	}
 	
 	@Test
-	public void queryRefersToNonExistantURL() throws Exception {
+	public void queryRefersToNonExistentURL() throws Exception {
 		String body = controller.refersToQuery("http://omad.net/").getBody();
 		assertNotNull(body);
 		
