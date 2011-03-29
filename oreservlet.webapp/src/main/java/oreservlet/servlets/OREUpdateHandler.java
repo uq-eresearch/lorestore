@@ -5,6 +5,12 @@ import java.io.IOException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.ontoware.rdf2go.ModelFactory;
+import org.ontoware.rdf2go.RDF2Go;
+import org.ontoware.rdf2go.model.Model;
+import org.ontoware.rdf2go.model.impl.URIGenerator;
+import org.ontoware.rdf2go.model.node.URI;
+
 import oreservlet.common.ORETypeFactory;
 import oreservlet.model.CompoundObject;
 import au.edu.diasb.annotation.danno.db.RDFDBContainer;
@@ -48,9 +54,11 @@ public class OREUpdateHandler {
 	 */
 	public OREResponse post(HttpServletRequest request,
 			HttpServletResponse response) throws RequestFailureException, IOException {
-		RDFDBContainer container = cf.connect(true);
+		// FIXME: totally wrong, just compile
+		ModelFactory modelFactory = RDF2Go.getModelFactory();
+		Model container = modelFactory.createModel();
 		try {
-			container.begin();
+			container.open();
 
 			CompoundObject newObject = create(container, null, request, response);
 			if (newObject != null) {
@@ -82,7 +90,7 @@ public class OREUpdateHandler {
 	 * @throws IOException
 	 * @throws RequestFailureException
 	 */
-	private CompoundObject create(RDFContainer container, String uri,
+	private CompoundObject create(Model container, String uri,
 			HttpServletRequest request, HttpServletResponse response)
 			throws IOException, RequestFailureException {
 		CompoundObject object;
@@ -96,21 +104,21 @@ public class OREUpdateHandler {
 
 	}
 
-	private CompoundObject create(HttpServletRequest request, RDFContainer container,
+	private CompoundObject create(HttpServletRequest request, Model container,
 			String uri, CompoundObject object, HttpServletResponse response) {
 		// Assign the CO's URI.
 		if (uri == null) {
 			String newUri = gen.generateCompoundObjectURI();
 			object.assignURI(newUri);
 		}
-		container.addAll(object);
+		container.addModel(object);
 		
         // Set the Location and status code if we have a response object.
         if (response != null) {
             response.setStatus(uri == null ? HttpServletResponse.SC_CREATED : 
                 HttpServletResponse.SC_OK);
             if (uri == null) {
-                response.setHeader("Location", object.getURI());
+                response.setHeader("Location", object.getContextURI().toString());
             }
         }
         return object;

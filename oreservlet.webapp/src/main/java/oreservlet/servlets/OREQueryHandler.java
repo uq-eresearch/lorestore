@@ -5,10 +5,12 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.springframework.web.servlet.ModelAndView;
+import org.ontoware.rdf2go.model.Model;
+import org.ontoware.rdf2go.model.ModelSet;
+import org.openrdf.rdf2go.RepositoryModelSet;
+import org.openrdf.repository.Repository;
+import org.openrdf.repository.RepositoryException;
 
-import au.edu.diasb.annotation.danno.db.RDFDBContainer;
-import au.edu.diasb.annotation.danno.model.RDFContainer;
 import au.edu.diasb.chico.mvc.RequestFailureException;
 
 /**
@@ -34,28 +36,24 @@ public class OREQueryHandler {
 	}
 
 	public OREResponse plainGet(HttpServletRequest request,
-			HttpServletResponse response) throws RequestFailureException {
+			HttpServletResponse response) throws RepositoryException, RequestFailureException  {
 		String uri = request.getRequestURI().toString();
 		
-		RDFDBContainer container = occ.getContainerFactory().connect(false);
+		Repository repo = ORETypeFactory.getRemoteRepo();
+		ModelSet container = new RepositoryModelSet(repo);
 		try {
-			RDFContainer resContainer = plainGet(container, uri);
-			occ.getAccessPolicy().checkRead(request, resContainer);
+			Model model = ORETypeFactory.retrieve(uri);
+			if (model == null) {
+	            throw new RequestFailureException(
+	                    HttpServletResponse.SC_NOT_FOUND,  
+	                    "No resource for '" + uri + "'");
+			}
+			occ.getAccessPolicy().checkRead(request, model);
 			
-			return new OREResponse(resContainer);
+			return new OREResponse(model);
 		} finally {
 			container.close();
 		}
-	}
-
-	private RDFContainer plainGet(RDFDBContainer container, String uri) throws RequestFailureException {
-		RDFContainer resContainer = container.extractResourceClosure(uri, occ.getBlankNodeClosureDepth());
-		if (resContainer == null) {
-            throw new RequestFailureException(
-                    HttpServletResponse.SC_NOT_FOUND,  
-                    "No resource for '" + uri + "'");
-		}
-		return resContainer;
 	}
 
 }

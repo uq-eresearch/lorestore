@@ -2,6 +2,8 @@ package oreservlet.servlets;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.ontoware.rdf2go.model.Model;
+
 import au.edu.diasb.annotation.danno.model.AnnoteaObject;
 import au.edu.diasb.annotation.danno.model.RDFContainer;
 import au.edu.diasb.chico.mvc.RequestFailureException;
@@ -27,7 +29,7 @@ public interface OREAccessPolicy {
      * 
      * @param res the result container.
      */
-    void checkRead(HttpServletRequest request, RDFContainer res) 
+    void checkRead(HttpServletRequest request, Model res) 
     throws RequestFailureException;
     
     /**
@@ -40,7 +42,7 @@ public interface OREAccessPolicy {
      *     returned in the response.
      * @throws RequestFailureException 
      */
-    void checkCreate(HttpServletRequest request, RDFContainer res) 
+    void checkCreate(HttpServletRequest request, Model res) 
     throws RequestFailureException;
     
     /**

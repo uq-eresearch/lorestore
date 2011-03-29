@@ -16,9 +16,9 @@
 	<!-- Shared version number properties -->
 	<properties>
 		<spring-version>3.0.5.RELEASE</spring-version>
-        <sesame-version>2.3.2</sesame-version>
-        <chico-version>0.5-SNAPSHOT</chico-version>
-        <danno-version>1.5-SNAPSHOT</danno-version>
+		<sesame-version>2.3.2</sesame-version>
+		<chico-version>0.5-SNAPSHOT</chico-version>
+		<danno-version>1.5-SNAPSHOT</danno-version>
 	</properties>
 
 
@@ -30,6 +30,12 @@
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-webmvc</artifactId>
 			<version>${spring-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test</artifactId>
+			<version>${spring-version}</version>
+			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>net.metadata.chico</groupId>
@@ -53,12 +59,12 @@
 			<version>2.5</version>
 		</dependency>
 
-        <dependency>
-            <groupId>net.metadata.emmet</groupId>
-            <artifactId>emmet.webapp</artifactId>
-            <version>0.5-SNAPSHOT</version>
-            <type>war</type>
-        </dependency>
+		<dependency>
+			<groupId>net.metadata.emmet</groupId>
+			<artifactId>emmet.webapp</artifactId>
+			<version>0.5-SNAPSHOT</version>
+			<type>war</type>
+		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
@@ -93,18 +99,18 @@
 					<target>1.5</target>
 				</configuration>
 			</plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-war-plugin</artifactId>
-                <configuration>
-                    <overlays>
-                        <overlay>
-                            <groupId>net.metadata.emmet</groupId>
-                            <artifactId>emmet.webapp</artifactId>
-                        </overlay>
-                    </overlays>
-                </configuration>
-            </plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
+				<configuration>
+					<overlays>
+						<overlay>
+							<groupId>net.metadata.emmet</groupId>
+							<artifactId>emmet.webapp</artifactId>
+						</overlay>
+					</overlays>
+				</configuration>
+			</plugin>
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>tomcat-maven-plugin</artifactId>

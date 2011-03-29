@@ -2,9 +2,11 @@ package oreservlet.model;
 
 import javax.xml.datatype.XMLGregorianCalendar;
 
+import org.ontoware.rdf2go.model.Model;
+
 import au.edu.diasb.annotation.danno.model.RDFObject;
 
-public interface CompoundObject extends RDFObject {
+public interface CompoundObject extends Model {
     /**
      * Get the annotation / reply's creator property.
      * 
@@ -61,5 +63,7 @@ public interface CompoundObject extends RDFObject {
      * @return the date or <code>null</code> if it is missing or not a valid date/time.
      */
     XMLGregorianCalendar getDate();
+
+	void assignURI(String newUri);
 
 }
