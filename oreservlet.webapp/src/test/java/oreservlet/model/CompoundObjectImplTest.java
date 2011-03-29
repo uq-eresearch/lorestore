@@ -31,19 +31,23 @@ public class CompoundObjectImplTest {
 
 	@Test
 	public void testGetResourceMapURL() throws OREException {
+		long beforeSize = co.getModel().size();
 		assertEquals(testRecordURL, co.getResourceMapURL());
+		assertEquals(beforeSize, co.getModel().size());
 	}
 
 	@Test
 	public void testAssignURI() throws OREException {
 		String newUri = "http://example.com/rem/rand-id-1928";
+		long beforeSize = co.getModel().size();
+		
 		co.assignURI(newUri);
 		
 		assertEquals(newUri, co.getResourceMapURL());
 		String rdfxml = co.getModelAsRDFXML();
-		
+
 		assertFalse(rdfxml.contains(testRecordURL));
-		
+		assertEquals(beforeSize, co.getModel().size());
 	}
 
 }

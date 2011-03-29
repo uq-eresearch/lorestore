@@ -4,15 +4,9 @@ import static oreservlet.common.OREConstants.AGGREGATION;
 import static oreservlet.common.OREConstants.ORE_DESCRIBES_PROPERTY;
 import static oreservlet.common.OREConstants.ORE_RESOURCEMAP_CLASS;
 import static oreservlet.common.OREConstants.RDF_TYPE_PROPERTY;
-
-import java.io.IOException;
-import java.io.StringWriter;
-import java.util.Iterator;
-
 import oreservlet.exceptions.OREException;
 
 import org.ontoware.aifbcommons.collection.ClosableIterator;
-import org.ontoware.rdf2go.exception.ModelRuntimeException;
 import org.ontoware.rdf2go.model.Model;
 import org.ontoware.rdf2go.model.Statement;
 import org.ontoware.rdf2go.model.Syntax;
@@ -41,15 +35,7 @@ public class CompoundObjectImpl {
 	}
 
 	public String getModelAsRDFXML() throws OREException {
-		StringWriter sw = new StringWriter();
-		try {
-			model.writeTo(sw, Syntax.RdfXml);
-		} catch (ModelRuntimeException e) {
-			throw new OREException(e);
-		} catch (IOException e) {
-			throw new OREException(e);
-		}
-		return sw.toString();
+		return model.serialize(Syntax.RdfXml);
 	}
 
 	public String getResourceMapURL() throws OREException {
@@ -65,11 +51,13 @@ public class CompoundObjectImpl {
 	 */
 	public void assignURI(String newUriString) throws OREException {
 		Resource oldUri = findResourceMap();
+		model.setAutocommit(false);
 		URI newURI = model.createURI(newUriString);
-		ClosableIterator<Statement> findStatements = model.findStatements(
+		ClosableIterator<Statement> resourceMapStmts = model.findStatements(
 				oldUri, Variable.ANY, Variable.ANY);
-		updateSubjectURI(findStatements, newURI);
+		updateSubjectURI(resourceMapStmts, newURI);
 		updateAggregationURI(newURI);
+		model.commit();
 	}
 
 	private void updateAggregationURI(Resource resourceMap) throws OREException {
@@ -85,24 +73,25 @@ public class CompoundObjectImpl {
 			Statement s = aggregations.next();
 			URI aggregationURI = s.getObject().asURI();
 
+			model.addStatement(s.getSubject(), s.getPredicate(),
+					newAggregationURI);
+			model.removeStatement(s);
+			
 			// Find all the statements referenced by this Aggregation
 			ClosableIterator<Statement> aggregationStmts = model
 					.findStatements(aggregationURI, Variable.ANY, Variable.ANY);
 			updateSubjectURI(aggregationStmts, newAggregationURI);
-
-			model.addStatement(s.getSubject(), s.getPredicate(),
-					newAggregationURI);
-			model.removeStatement(s);
 		}
 	}
 
-	private void updateSubjectURI(Iterator<Statement> it, URI newURI) {
+	private void updateSubjectURI(ClosableIterator<Statement> it, URI newURI) {
 		while (it.hasNext()) {
 			Statement s = it.next();
 
 			model.addStatement(newURI, s.getPredicate(), s.getObject());
 			model.removeStatement(s);
 		}
+		it.close();
 	}
 
 	private Resource findResourceMap() throws OREException {
@@ -119,6 +108,7 @@ public class CompoundObjectImpl {
 		if (it.hasNext()) {
 			throw new OREException("Multiple ResourceMaps");
 		}
+		it.close();
 		return s.getSubject();
 	}
 
