@@ -11,9 +11,9 @@
 	</bean>
 	
 	<bean id="oreControllerConfig" class="net.metadata.auselit.lorestore.servlet.OREControllerConfig">
-		<property name="containerFactory" ref="dbContainerFactory"/>
+		<property name="containerFactory" ref="dbContainerPool"/>
 		<property name="accessPolicy" ref="oreAccessPolicy"/>
-		<property name="baseUri" value="http://doc.localhost/ore/"/>
+		<property name="baseUri" value="http://doc.localhost/ore/ore/"/>
 		<property name="uidGenerator" ref="uidGenerator"/>
 	</bean>
     
@@ -40,7 +40,12 @@
     	<property name="repositoryURL" value="http://localhost:8080/openrdf-sesame/repositories/lore"/>
 	</bean>
     -->
-    <bean id="dbContainerFactory" class="net.metadata.auselit.lorestore.triplestore.PersistedTripleStoreConnectorFactory">
+    
+    <bean id="dbContainerPool" class="net.metadata.auselit.lorestore.triplestore.SimpleSesamePool">
+    	<constructor-arg ref="dbContainerFactory"></constructor-arg>
+    </bean>
+    
+    <bean id="dbContainerFactory" class="net.metadata.auselit.lorestore.triplestore.PersistedMemoryTripleStoreConnectorFactory">
     	<property name="dataDirPath" value="D:/temp/"/>
     </bean>
     
