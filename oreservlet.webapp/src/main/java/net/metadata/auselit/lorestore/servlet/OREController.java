@@ -60,7 +60,7 @@ public class OREController {
 		return qh.getOreObject(oreId);
 	}
 	
-	@RequestMapping(value = "/{id}", method = RequestMethod.POST)
+	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
 	public String put(@PathVariable("id") String oreId, InputStream in) throws RequestFailureException, IOException, OREException {
 		return uh.put(oreId, in);
 	}

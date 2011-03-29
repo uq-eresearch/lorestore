@@ -27,7 +27,10 @@ public class RequestMappingTest {
 	private MockHttpServletResponse response;
 	private OREController controller;
 	private AnnotationMethodHandlerAdapter adapter;
-
+	
+	private String exampleURI;
+	private String exampleID;
+	
 	@Before
 	public void setUp() throws Exception {
 		controller = EasyMock.createNiceMock(OREController.class);
@@ -35,19 +38,69 @@ public class RequestMappingTest {
 		adapter = new AnnotationMethodHandlerAdapter();
 		request = new MockHttpServletRequest();
 		response = new MockHttpServletResponse();
+		
+		exampleURI = "http://example.com/";
+		exampleID = "asdn19";
 	}
 
 	@Test
-	public void plainGet() throws Exception {
-		request.setRequestURI("/asdfkl");
-		request.setMethod("GET");
-
-
-		EasyMock.expect(controller.get("asdfkl")).andReturn(null);
+	public void plainRetrieve() throws Exception {
+		EasyMock.expect(controller.get(exampleID)).andReturn(null);
 		EasyMock.replay(controller);
+		
+		request.setRequestURI("/" + exampleID);
+		request.setMethod("GET");
 		
 		adapter.handle(request, response, controller);
 		EasyMock.verify(controller);
 	}
 
+	@Test
+	public void refersToQuery() throws Exception {
+		EasyMock.expect(controller.refersToQuery(exampleURI)).andReturn(null);
+		EasyMock.replay(controller);
+		
+		request.setRequestURI("/");
+		request.setParameter("refersTo", exampleURI);
+		request.setMethod("GET");
+		
+		adapter.handle(request, response, controller);
+		EasyMock.verify(controller);
+	}
+	
+	@Test
+	public void post() throws Exception {
+		EasyMock.expect(controller.post(null)).andReturn(null);
+		EasyMock.replay(controller);
+		
+		request.setRequestURI("/");
+		request.setMethod("POST");
+		
+		adapter.handle(request, response, controller);
+		EasyMock.verify(controller);
+	}
+	
+	@Test
+	public void put() throws Exception {
+		EasyMock.expect(controller.put(exampleID, null)).andReturn(null);
+		EasyMock.replay(controller);
+		
+		request.setRequestURI("/" + exampleID);
+		request.setMethod("PUT");
+		
+		adapter.handle(request, response, controller);
+		EasyMock.verify(controller);
+	}
+	
+	@Test
+	public void delete() throws Exception {
+		EasyMock.expect(controller.delete(exampleID, request)).andReturn(null);
+		EasyMock.replay(controller);
+		
+		request.setRequestURI("/" + exampleID);
+		request.setMethod("DELETE");
+		
+		adapter.handle(request, response, controller);
+		EasyMock.verify(controller);
+	}
 }
