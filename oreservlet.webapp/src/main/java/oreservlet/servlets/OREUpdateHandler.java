@@ -46,7 +46,7 @@ public class OREUpdateHandler {
 	 * @return
 	 * @throws IOException
 	 * @throws RequestFailureException
-	 * @throws OREException 
+	 * @throws OREException
 	 */
 	public String post(InputStream inputRDF) throws RequestFailureException,
 			IOException, OREException {
@@ -55,12 +55,10 @@ public class OREUpdateHandler {
 		String uid = occ.getUidGenerator().newUID();
 		URI newUri = mf.createModel().createURI(occ.getBaseUri() + uid);
 		Model model = mf.createModel(newUri);
-		
 
 		model.open();
 		try {
-			model.readFrom(inputRDF, Syntax.RdfXml,
-					occ.getBaseUri());
+			model.readFrom(inputRDF, Syntax.RdfXml, occ.getBaseUri());
 		} catch (ModelRuntimeException e) {
 			throw new RequestFailureException(
 					HttpServletResponse.SC_BAD_REQUEST, "Error reading RDF");
@@ -68,19 +66,17 @@ public class OREUpdateHandler {
 
 		CompoundObjectImpl compoundObject = new CompoundObjectImpl(model);
 		compoundObject.assignURI(occ.getBaseUri() + uid);
-		
-//		occ.getAccessPolicy().checkCreate(request, model);
+
+		// occ.getAccessPolicy().checkCreate(request, model);
 		ModelSet ms = cf.retrieveConnection();
 		ms.addModel(model);
 		ms.commit();
 		ms.close();
 		model.close();
-//		return new OREResponse(model);
+		// return new OREResponse(model);
 		return "redirect:" + "/ore/" + uid;
 
 	}
-
-
 
 	public OREResponse delete(MockHttpServletRequest request)
 			throws NoSuchRequestHandlingMethodException {
@@ -93,5 +89,35 @@ public class OREUpdateHandler {
 		ms.removeModel(contextURI);
 
 		return new OREResponse(null);
+	}
+
+	public String put(String oreId, InputStream inputRDF)
+			throws RequestFailureException, IOException {
+		ModelFactory mf = RDF2Go.getModelFactory();
+		URI objURI = mf.createModel().createURI(occ.getBaseUri() + oreId);
+		Model model = mf.createModel(objURI);
+
+		// TODO: should check that we are replacing an object, and fail if there
+		// isn't one already
+
+		model.open();
+		try {
+			model.readFrom(inputRDF, Syntax.RdfXml, occ.getBaseUri());
+		} catch (ModelRuntimeException e) {
+			throw new RequestFailureException(
+					HttpServletResponse.SC_BAD_REQUEST, "Error reading RDF");
+		}
+
+		// TODO: needs to do stuff like maintaining the created/modified dates,
+		// and the creator
+
+		ModelSet ms = cf.retrieveConnection();
+		ms.removeModel(objURI);
+		ms.addModel(model);
+		ms.commit();
+		ms.close();
+		model.close();
+
+		return "redirect:" + "/ore/" + oreId;
 	}
 }

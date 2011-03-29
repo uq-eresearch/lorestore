@@ -65,6 +65,11 @@ public class OREController {
 	public OREResponse get(@PathVariable("id") String oreId) {
 		return qh.getOreObject(oreId);
 	}
+	
+	@RequestMapping(value = "/{id}", method = RequestMethod.POST)
+	public String put(@PathVariable("id") String oreId, InputStream in) {
+		return qh.put(oreId, in);
+	}
 
 	@RequestMapping(value = "/", params="refersTo", method = RequestMethod.GET)
 	public ResponseEntity<String> refersToQuery(@RequestParam("refersTo") String refersTo) throws Exception {
