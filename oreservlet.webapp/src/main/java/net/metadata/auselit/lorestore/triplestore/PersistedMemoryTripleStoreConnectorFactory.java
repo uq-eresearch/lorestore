@@ -1,5 +1,7 @@
 package net.metadata.auselit.lorestore.triplestore;
 
+import java.io.File;
+
 import net.metadata.auselit.lorestore.exceptions.OREDBConnectionException;
 
 import org.ontoware.rdf2go.model.ModelSet;
@@ -7,12 +9,13 @@ import org.openrdf.rdf2go.RepositoryModelSet;
 import org.openrdf.repository.RepositoryException;
 import org.openrdf.repository.sail.SailRepository;
 import org.openrdf.repository.sail.SailRepositoryConnection;
-import org.openrdf.sail.memory.MemoryStore;
+import org.openrdf.sail.nativerdf.NativeStore;
 
-public class InMemoryTripleStoreConnectorFactory implements
+public class PersistedMemoryTripleStoreConnectorFactory implements
 		TripleStoreConnectorFactory {
 
 	private SailRepository repo;
+	private String dataDirPath;
 	
 	public ModelSet retrieveConnection() {
 		if (repo == null) {
@@ -24,7 +27,8 @@ public class InMemoryTripleStoreConnectorFactory implements
 	}
 
 	private void initRepo() {
-		repo = new SailRepository(new MemoryStore());
+		File dataDir = new File(dataDirPath);
+		repo = new SailRepository(new NativeStore(dataDir));
 		try {
 			repo.initialize();
 		} catch (RepositoryException e) {
@@ -37,6 +41,14 @@ public class InMemoryTripleStoreConnectorFactory implements
 		long size = connection.size();
 		connection.close();
 		return size;
+	}
+
+	public void setDataDirPath(String dataDirPath) {
+		this.dataDirPath = dataDirPath;
+	}
+
+	public String getDataDirPath() {
+		return dataDirPath;
 	}
 
 	public void release(ModelSet connection) throws InterruptedException {

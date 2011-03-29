@@ -24,7 +24,7 @@ import au.edu.diasb.chico.mvc.RequestFailureException;
 
 @Controller
 public class OREController {
-    private static final Logger LOG = Logger.getLogger(OREController.class);
+	private static final Logger LOG = Logger.getLogger(OREController.class);
 
 	private final OREControllerConfig occ;
 	private OREQueryHandler qh;
@@ -38,51 +38,62 @@ public class OREController {
 
 	@RequestMapping(value = "/", method = RequestMethod.POST)
 	public String post(InputStream inputRDF) throws RequestFailureException,
-			IOException, OREException {
+			IOException, OREException, InterruptedException {
 
 		return uh.post(inputRDF);
 	}
 
-//	@RequestMapping(method = RequestMethod.GET)
-//	public OREResponse get(HttpServletRequest request)
-//			throws RepositoryException, ServletException {
-//		String pathInfo = request.getPathInfo();
-//		if (pathInfo == null || pathInfo.equals("") || pathInfo.equals("/")) {
-//			LOG.error("Incorrect path in GET request");
-//			return null;
-//		} else {
-//			return qh.plainGet(request);
-//		}
-//	}
-	
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
-	public OREResponse get(@PathVariable("id") String oreId) throws NotFoundException {
+	public OREResponse get(@PathVariable("id") String oreId)
+			throws NotFoundException, InterruptedException {
 		return qh.getOreObject(oreId);
 	}
-	
+
 	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
-	public String put(@PathVariable("id") String oreId, InputStream in) throws RequestFailureException, IOException, OREException {
+	public String put(@PathVariable("id") String oreId, InputStream in)
+			throws RequestFailureException, IOException, OREException,
+			InterruptedException {
 		return uh.put(oreId, in);
 	}
 
-	@RequestMapping(value = "/", params="refersTo", method = RequestMethod.GET)
-	public ResponseEntity<String> refersToQuery(@RequestParam("refersTo") String urlParam) throws Exception {
+	@RequestMapping(value = "/", params = "refersTo", method = RequestMethod.GET)
+	public ResponseEntity<String> refersToQuery(
+			@RequestParam("refersTo") String urlParam) throws Exception {
 		if (urlParam == null || urlParam.isEmpty()) {
-			throw new InvalidQueryParametersException("Missing or empty query parameters");
+			throw new InvalidQueryParametersException(
+					"Missing or empty query parameters");
 		}
-		
+
 		return qh.browseQuery(urlParam);
 	}
-	
-	@RequestMapping(value = "/", params="exploreFrom", method = RequestMethod.GET)
-	public ResponseEntity<String> exploreQuery(@RequestParam("exploreFrom") String urlParam) throws Exception {
+
+	@RequestMapping(value = "/", params = { "refersTo", "matchpred", "matchval" }, method = RequestMethod.GET)
+	public ResponseEntity<String> searchQuery(
+			@RequestParam("refersTo") String urlParam,
+			@RequestParam("matchpred") String matchpred,
+			@RequestParam("matchval") String matchval) throws Exception {
+		if (urlParam == null || urlParam.isEmpty()) {
+			throw new InvalidQueryParametersException(
+					"Missing or empty query parameters");
+		}
+
+		return qh.searchQuery(urlParam, matchpred, matchval);
+	}
+
+	@RequestMapping(value = "/", params = "exploreFrom", method = RequestMethod.GET)
+	public ResponseEntity<String> exploreQuery(
+			@RequestParam("exploreFrom") String urlParam) throws Exception {
+		if (urlParam == null || urlParam.isEmpty()) {
+			throw new InvalidQueryParametersException(
+					"Missing or empty query parameters");
+		}
 		return qh.exploreQuery(urlParam);
 	}
-	
+
 	public View saveORE() {
 		return new RedirectView("", true);
 	}
-	
+
 	@ResponseStatus(HttpStatus.NOT_FOUND)
 	@ExceptionHandler({ RequestFailureException.class })
 	public void return404() {
@@ -91,7 +102,7 @@ public class OREController {
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
 	public OREResponse delete(@PathVariable("id") String oreId)
-			throws NotFoundException {
+			throws NotFoundException, InterruptedException {
 		return uh.delete(oreId);
 	}
 

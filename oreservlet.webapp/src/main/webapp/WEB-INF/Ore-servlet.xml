@@ -36,10 +36,13 @@
 		</property>
 	</bean>
     
-	<bean id="dbContainerFactory" class="net.metadata.auselit.lorestore.triplestore.HttpTripleStoreConnectorFactory">
+<!--	<bean id="dbContainerFactory" class="net.metadata.auselit.lorestore.triplestore.HttpTripleStoreConnectorFactory">
     	<property name="repositoryURL" value="http://localhost:8080/openrdf-sesame/repositories/lore"/>
 	</bean>
-    
+    -->
+    <bean id="dbContainerFactory" class="net.metadata.auselit.lorestore.triplestore.PersistedTripleStoreConnectorFactory">
+    	<property name="dataDirPath" value="D:/temp/"/>
+    </bean>
     
 	<bean id="oreAccessPolicy" class="net.metadata.auselit.lorestore.access.DefaultOREAccessPolicy">
     	

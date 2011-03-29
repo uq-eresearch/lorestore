@@ -54,19 +54,6 @@ public class RequestMappingTest {
 		adapter.handle(request, response, controller);
 		EasyMock.verify(controller);
 	}
-
-	@Test
-	public void refersToQuery() throws Exception {
-		EasyMock.expect(controller.refersToQuery(exampleURI)).andReturn(null);
-		EasyMock.replay(controller);
-		
-		request.setRequestURI("/");
-		request.setParameter("refersTo", exampleURI);
-		request.setMethod("GET");
-		
-		adapter.handle(request, response, controller);
-		EasyMock.verify(controller);
-	}
 	
 	@Test
 	public void post() throws Exception {
@@ -99,6 +86,47 @@ public class RequestMappingTest {
 		
 		request.setRequestURI("/" + exampleID);
 		request.setMethod("DELETE");
+		
+		adapter.handle(request, response, controller);
+		EasyMock.verify(controller);
+	}
+
+	@Test
+	public void refersToQuery() throws Exception {
+		EasyMock.expect(controller.refersToQuery(exampleURI)).andReturn(null);
+		EasyMock.replay(controller);
+		
+		request.setRequestURI("/");
+		request.setParameter("refersTo", exampleURI);
+		request.setMethod("GET");
+		
+		adapter.handle(request, response, controller);
+		EasyMock.verify(controller);
+	}
+
+	@Test
+	public void searchQuery() throws Exception {
+		EasyMock.expect(controller.searchQuery(exampleURI, "matchpred", "matchval")).andReturn(null);
+		EasyMock.replay(controller);
+		
+		request.setRequestURI("/");
+		request.setParameter("refersTo", exampleURI);
+		request.setParameter("matchpred", "matchpred");
+		request.setParameter("matchval", "matchval");
+		request.setMethod("GET");
+		
+		adapter.handle(request, response, controller);
+		EasyMock.verify(controller);
+	}
+
+	@Test
+	public void exploreQuery() throws Exception {
+		EasyMock.expect(controller.exploreQuery(exampleURI)).andReturn(null);
+		EasyMock.replay(controller);
+		
+		request.setRequestURI("/");
+		request.setParameter("exploreFrom", exampleURI);
+		request.setMethod("GET");
 		
 		adapter.handle(request, response, controller);
 		EasyMock.verify(controller);

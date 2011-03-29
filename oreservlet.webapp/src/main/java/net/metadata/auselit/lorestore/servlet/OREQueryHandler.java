@@ -31,7 +31,7 @@ import org.springframework.http.ResponseEntity;
  * @author uqdayers
  */
 public class OREQueryHandler {
-    private static final Logger LOG = Logger.getLogger(OREQueryHandler.class);
+	private static final Logger LOG = Logger.getLogger(OREQueryHandler.class);
 	protected final OREControllerConfig occ;
 	private TripleStoreConnectorFactory cf;
 
@@ -40,76 +40,102 @@ public class OREQueryHandler {
 		this.cf = occ.getContainerFactory();
 	}
 
-	public OREResponse getOreObject(String oreId) throws NotFoundException {
+	public OREResponse getOreObject(String oreId) throws NotFoundException,
+			InterruptedException {
 		ModelSet container = cf.retrieveConnection();
+		Model model;
 
-		URI uri = container.createURI(occ.getBaseUri() + oreId);
-		Model model = container.getModel(uri);
-		if (model == null || model.isEmpty()) {
-			LOG.debug("Cannot find requested resource: " + oreId);
-			throw new NotFoundException("Cannot find resource: " + oreId);
+		try {
+			URI uri = container.createURI(occ.getBaseUri() + oreId);
+			model = container.getModel(uri);
+			if (model == null || model.isEmpty()) {
+				LOG.debug("Cannot find requested resource: " + oreId);
+				throw new NotFoundException("Cannot find resource: " + oreId);
+			}
+			// occ.getAccessPolicy().checkRead(null, model);
+		} finally {
+			cf.release(container);
 		}
-		// occ.getAccessPolicy().checkRead(null, model);
-
 		return new OREResponse(model);
 
 	}
-	
-	public ResponseEntity<String> browseQuery(String url) 
-			throws RepositoryException, MalformedQueryException, 
-			QueryEvaluationException, TupleQueryResultHandlerException {
+
+	public ResponseEntity<String> browseQuery(String url)
+			throws RepositoryException, MalformedQueryException,
+			QueryEvaluationException, TupleQueryResultHandlerException,
+			InterruptedException {
 		String queryString = generateBrowseQuery(url);
-		
+
 		HttpHeaders responseHeaders = new HttpHeaders();
-		responseHeaders.setContentType(MediaType.parseMediaType(SPARQL_RESULTS_XML));
-		return new ResponseEntity<String>(runSparqlQuery(queryString), responseHeaders, HttpStatus.OK);
+		responseHeaders.setContentType(MediaType
+				.parseMediaType(SPARQL_RESULTS_XML));
+		return new ResponseEntity<String>(runSparqlQuery(queryString),
+				responseHeaders, HttpStatus.OK);
 	}
 
-	public ResponseEntity<String> exploreQuery(String url) 
-			throws RepositoryException, MalformedQueryException, 
-			QueryEvaluationException, TupleQueryResultHandlerException {
+	public ResponseEntity<String> searchQuery(String urlParam,
+			String matchpred, String matchval) throws RepositoryException,
+			MalformedQueryException, QueryEvaluationException,
+			TupleQueryResultHandlerException, InterruptedException {
+		String queryString = generateSearchQuery(urlParam, matchpred, matchval);
+
+		HttpHeaders responseHeaders = new HttpHeaders();
+		responseHeaders.setContentType(MediaType
+				.parseMediaType(SPARQL_RESULTS_XML));
+		return new ResponseEntity<String>(runSparqlQuery(queryString),
+				responseHeaders, HttpStatus.OK);
+	}
+
+	public ResponseEntity<String> exploreQuery(String url)
+			throws RepositoryException, MalformedQueryException,
+			QueryEvaluationException, TupleQueryResultHandlerException,
+			InterruptedException {
 		String queryString = generateExploreQuery(url);
 
 		HttpHeaders responseHeaders = new HttpHeaders();
-		responseHeaders.setContentType(MediaType.parseMediaType(SPARQL_RESULTS_XML));
-		return new ResponseEntity<String>(runSparqlQuery(queryString), responseHeaders, HttpStatus.OK);
+		responseHeaders.setContentType(MediaType
+				.parseMediaType(SPARQL_RESULTS_XML));
+		return new ResponseEntity<String>(runSparqlQuery(queryString),
+				responseHeaders, HttpStatus.OK);
 	}
-	
-	
-	private String runSparqlQuery(String queryString) 
-			throws RepositoryException, MalformedQueryException, 
-			QueryEvaluationException, TupleQueryResultHandlerException  {
+
+	private String runSparqlQuery(String queryString)
+			throws RepositoryException, MalformedQueryException,
+			QueryEvaluationException, TupleQueryResultHandlerException,
+			InterruptedException {
 		System.out.println("Query String: " + queryString);
-		ModelSet container = cf.retrieveConnection();
-		Repository rep = (Repository)container.getUnderlyingModelSetImplementation();
-		ByteArrayOutputStream stream = new ByteArrayOutputStream();
-		RepositoryConnection con = rep.getConnection();
+		ModelSet container = null;
+		RepositoryConnection con = null;
+		ByteArrayOutputStream stream;
 		try {
-			TupleQuery tupleQuery = con.prepareTupleQuery(QueryLanguage.SPARQL, queryString);
-			
-			SPARQLResultsXMLWriter resultsXMLWriter = new SPARQLResultsXMLWriter(stream);
-			
+			container = cf.retrieveConnection();
+			Repository rep = (Repository) container
+			.getUnderlyingModelSetImplementation();
+			stream = new ByteArrayOutputStream();
+			con = rep.getConnection();
+			TupleQuery tupleQuery = con.prepareTupleQuery(QueryLanguage.SPARQL,
+					queryString);
+
+			SPARQLResultsXMLWriter resultsXMLWriter = new SPARQLResultsXMLWriter(
+					stream);
+
 			tupleQuery.evaluate(resultsXMLWriter);
 		} finally {
-			con.close();
+			if (con != null)
+				con.close();
+			if (container != null)
+				cf.release(container);
 		}
-		
+
 		return stream.toString();
 	}
-	
+
 	/*
-select distinct ?g ?a ?m ?t
-where {
-   graph ?g  {
-          {<escapedURL> ?p ?o .}
-    UNION {?s ?p2 <escapedURL>}
-    UNION {<altURL> ?p3 ?o2 .}
-    UNION {?s2 ?p4 <altURL>}
-  } 
-  . {?g <http://purl.org/dc/elements/1.1/creator> ?a}
-  . {?g <http://purl.org/dc/terms/modified> ?m}
-  . OPTIONAL {?g <http://purl.org/dc/elements/1.1/title> ?t}
-};
+	 * select distinct ?g ?a ?m ?t where { graph ?g { {<escapedURL> ?p ?o .}
+	 * UNION {?s ?p2 <escapedURL>} UNION {<altURL> ?p3 ?o2 .} UNION {?s2 ?p4
+	 * <altURL>} } . {?g <http://purl.org/dc/elements/1.1/creator> ?a} . {?g
+	 * <http://purl.org/dc/terms/modified> ?m} . OPTIONAL {?g
+	 * <http://purl.org/dc/elements/1.1/title> ?t} };
 	 */
 	protected String generateBrowseQuery(String escapedURL) {
 		// Needs to match both www and non-www version of URL
@@ -134,6 +160,32 @@ where {
 		}
 	}
 
+	private String generateSearchQuery(String urlParam, String matchpred,
+			String matchval) {
+		String escapedURL = "?u";
+		if (urlParam != null && !urlParam.isEmpty()) {
+			escapedURL = "<" + urlParam + ">";
+		}
+
+		String predicate = "?p";
+		if (matchpred != null && !matchpred.isEmpty()) {
+			predicate = "<" + matchpred + ">";
+		}
+
+		String filter = "";
+		if (matchval != null && !matchval.isEmpty()) {
+			filter = makeFilter(matchval);
+		}
+
+		String queryString = "select distinct ?g ?a ?m ?t ?v where {"
+				+ " graph ?g {" + escapedURL + " " + predicate + " ?v ."
+				+ filter + "} ."
+				+ "{?g <http://purl.org/dc/elements/1.1/creator> ?a} ."
+				+ "{?g <http://purl.org/dc/terms/modified> ?m} ."
+				+ "OPTIONAL {?g <http://purl.org/dc/elements/1.1/title> ?t}}";
+		return queryString;
+	}
+
 	/**
 	 * Constructs a filter for a SPARQL query
 	 * 
@@ -155,43 +207,51 @@ where {
 		}
 		return fExpr;
 	}
-	
+
 	protected String generateExploreQuery(String escapedURI) {
-		String query = "PREFIX dc:<http://purl.org/dc/elements/1.1/> " 
-            + "PREFIX dcterms:<http://purl.org/dc/terms/>"
-            + "PREFIX ore:<http://www.openarchives.org/ore/terms/> " 
-            + "PREFIX rdf:<http://www.w3.org/1999/02/22-rdf-syntax-ns#>"
-		    + "SELECT DISTINCT ?something ?somerel ?sometitle ?sometype ?creator ?modified ?anotherrel ?somethingelse WHERE {"
-            // Compound objects that contain this uri
-		    + "{?aggre ore:aggregates <" + escapedURI + "> . " 
-                    + "?something ore:describes ?aggre . "
-		            + "?something a ?sometype . " 
-                    + "OPTIONAL {?something dc:creator ?creator .} "
-                    + "OPTIONAL {?something dcterms:modified ?modified .} "
-                    + "OPTIONAL {?something dc:title ?sometitle .}}"
-            // uris that have an asserted relationship to this uri
-		    +  "UNION { ?something ?somerel <" + escapedURI + "> . " 
-                    + "FILTER isURI(?something) ."
-		            + "FILTER (?somerel != ore:aggregates) . " 
-                    + "FILTER (?somerel != rdf:type) . " 
-                    + "OPTIONAL {?something a ?sometype} ."
-                    + "OPTIONAL {?something dc:title ?sometitle.} }"
-            // uris that have an asserted relationships from this uri
-		    + "UNION {<"+ escapedURI + "> ?somerel ?something . " 
-                    + "FILTER isURI(?something). " 
-                    + "FILTER (?somerel != rdf:type) . " 
-                    + "FILTER (?somerel != ore:describes) . "
-                    + "OPTIONAL {?something a ?sometype} ."
-                    + "OPTIONAL {?something dc:title ?sometitle.}}"
-            // if this is a compound object, uris contained
-		    + "UNION {<" + escapedURI + "> ore:describes ?aggre ."
-                    + "?aggre ?somerel ?something . " 
-                    + "FILTER isURI(?something) ."
-                    + "FILTER (?somerel != rdf:type) ." 
-                    + "OPTIONAL {?something dc:title ?sometitle . } . " 
-                    + "OPTIONAL {?something ?anotherrel ?somethingelse . FILTER isURI(?somethingelse)} . "
-                    + "OPTIONAL {?something a ?sometype}}}";
+		String query = "PREFIX dc:<http://purl.org/dc/elements/1.1/> "
+				+ "PREFIX dcterms:<http://purl.org/dc/terms/>"
+				+ "PREFIX ore:<http://www.openarchives.org/ore/terms/> "
+				+ "PREFIX rdf:<http://www.w3.org/1999/02/22-rdf-syntax-ns#>"
+				+ "SELECT DISTINCT ?something ?somerel ?sometitle ?sometype ?creator ?modified ?anotherrel ?somethingelse WHERE {"
+				// Compound objects that contain this uri
+				+ "{?aggre ore:aggregates <"
+				+ escapedURI
+				+ "> . "
+				+ "?something ore:describes ?aggre . "
+				+ "?something a ?sometype . "
+				+ "OPTIONAL {?something dc:creator ?creator .} "
+				+ "OPTIONAL {?something dcterms:modified ?modified .} "
+				+ "OPTIONAL {?something dc:title ?sometitle .}}"
+				// uris that have an asserted relationship to this uri
+				+ "UNION { ?something ?somerel <"
+				+ escapedURI
+				+ "> . "
+				+ "FILTER isURI(?something) ."
+				+ "FILTER (?somerel != ore:aggregates) . "
+				+ "FILTER (?somerel != rdf:type) . "
+				+ "OPTIONAL {?something a ?sometype} ."
+				+ "OPTIONAL {?something dc:title ?sometitle.} }"
+				// uris that have an asserted relationships from this uri
+				+ "UNION {<"
+				+ escapedURI
+				+ "> ?somerel ?something . "
+				+ "FILTER isURI(?something). "
+				+ "FILTER (?somerel != rdf:type) . "
+				+ "FILTER (?somerel != ore:describes) . "
+				+ "OPTIONAL {?something a ?sometype} ."
+				+ "OPTIONAL {?something dc:title ?sometitle.}}"
+				// if this is a compound object, uris contained
+				+ "UNION {<"
+				+ escapedURI
+				+ "> ore:describes ?aggre ."
+				+ "?aggre ?somerel ?something . "
+				+ "FILTER isURI(?something) ."
+				+ "FILTER (?somerel != rdf:type) ."
+				+ "OPTIONAL {?something dc:title ?sometitle . } . "
+				+ "OPTIONAL {?something ?anotherrel ?somethingelse . FILTER isURI(?somethingelse)} . "
+				+ "OPTIONAL {?something a ?sometype}}}";
 		return query;
 	}
-	
+
 }

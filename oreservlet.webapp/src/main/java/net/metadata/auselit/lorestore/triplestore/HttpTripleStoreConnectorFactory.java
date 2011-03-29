@@ -38,4 +38,9 @@ public class HttpTripleStoreConnectorFactory implements
 	public String getRepositoryURL() {
 		return repositoryURL;
 	}
+
+	public void release(ModelSet connection) throws InterruptedException {
+		// TODO Auto-generated method stub
+		
+	}
 }

@@ -17,6 +17,7 @@ import org.ontoware.rdf2go.model.Model;
 import org.ontoware.rdf2go.model.ModelSet;
 import org.ontoware.rdf2go.model.Syntax;
 import org.ontoware.rdf2go.model.node.URI;
+import org.openrdf.rdf2go.RepositoryModelFactory;
 
 import au.edu.diasb.chico.mvc.RequestFailureException;
 
@@ -47,10 +48,12 @@ public class OREUpdateHandler {
 	 * @throws IOException
 	 * @throws RequestFailureException
 	 * @throws OREException
+	 * @throws InterruptedException
 	 */
 	public String post(InputStream inputRDF) throws RequestFailureException,
-			IOException, OREException {
-		ModelFactory mf = RDF2Go.getModelFactory();
+			IOException, OREException, InterruptedException {
+		
+		RepositoryModelFactory mf = new RepositoryModelFactory();
 
 		String uid = occ.getUidGenerator().newUID();
 		URI newUri = mf.createModel().createURI(occ.getBaseUri() + uid);
@@ -66,63 +69,77 @@ public class OREUpdateHandler {
 
 		CompoundObjectImpl compoundObject = new CompoundObjectImpl(model);
 		compoundObject.assignURI(occ.getBaseUri() + uid);
-		
+
 		// TODO: needs to do stuff like maintaining the created/modified dates,
 		// and the creator
 
 		// occ.getAccessPolicy().checkCreate(request, model);
-		ModelSet ms = cf.retrieveConnection();
-		ms.addModel(model);
-		ms.commit();
-		ms.close();
-		model.close();
+		ModelSet ms = null;
+		try {
+			ms = cf.retrieveConnection();
+			ms.addModel(model);
+			ms.commit();
+			model.close();
+		} finally {
+			cf.release(ms);
+		}
 		// return new OREResponse(model);
 		return "redirect:" + "/ore/" + uid;
 
 	}
 
-	public OREResponse delete(String oreId)
-			throws NotFoundException {
-		ModelSet container = cf.retrieveConnection();
-		URI contextURI = container.createURI(occ.getBaseUri() + oreId);
-		if (!container.containsModel(contextURI)) {
-			throw new NotFoundException("Cannot delete, object not found");
+	public OREResponse delete(String oreId) throws NotFoundException,
+			InterruptedException {
+		ModelSet container = null;
+		try {
+			container = cf.retrieveConnection();
+			URI contextURI = container.createURI(occ.getBaseUri() + oreId);
+			if (!container.containsModel(contextURI)) {
+				throw new NotFoundException("Cannot delete, object not found");
+			}
+			container.removeModel(contextURI);
+		} finally {
+			cf.release(container);
 		}
-		container.removeModel(contextURI);
 
 		return new OREResponse(null);
 	}
 
 	public String put(String oreId, InputStream inputRDF)
-			throws RequestFailureException, IOException, OREException {
+			throws RequestFailureException, IOException, OREException,
+			InterruptedException {
 		ModelFactory mf = RDF2Go.getModelFactory();
 		URI objURI = mf.createModel().createURI(occ.getBaseUri() + oreId);
-		
-		ModelSet container = cf.retrieveConnection();
-		Model model = container.getModel(objURI);
-		if (model == null || model.isEmpty()) {
-			throw new OREException("Cannot update nonexistant object");
-		}
-		
-		model = mf.createModel(objURI);
 
-		model.open();
+		ModelSet container = null;
 		try {
-			model.readFrom(inputRDF, Syntax.RdfXml, occ.getBaseUri());
-		} catch (ModelRuntimeException e) {
-			throw new RequestFailureException(
-					HttpServletResponse.SC_BAD_REQUEST, "Error reading RDF");
+			container = cf.retrieveConnection();
+			Model model = container.getModel(objURI);
+			if (model == null || model.isEmpty()) {
+				throw new OREException("Cannot update nonexistant object");
+			}
+
+			model = mf.createModel(objURI);
+
+			model.open();
+			try {
+				model.readFrom(inputRDF, Syntax.RdfXml, occ.getBaseUri());
+			} catch (ModelRuntimeException e) {
+				throw new RequestFailureException(
+						HttpServletResponse.SC_BAD_REQUEST, "Error reading RDF");
+			}
+
+			// TODO: needs to do stuff like maintaining the created/modified
+			// dates,
+			// and the creator
+
+			container.removeModel(objURI);
+			container.addModel(model);
+			container.commit();
+			model.close();
+		} finally {
+			cf.release(container);
 		}
-
-		// TODO: needs to do stuff like maintaining the created/modified dates,
-		// and the creator
-
-		ModelSet ms = cf.retrieveConnection();
-		ms.removeModel(objURI);
-		ms.addModel(model);
-		ms.commit();
-		ms.close();
-		model.close();
 
 		return "redirect:" + "/ore/" + oreId;
 	}
