@@ -2,9 +2,10 @@ package oreservlet.servlets;
 
 import javax.servlet.http.HttpServletRequest;
 
+import oreservlet.model.CompoundObject;
+
 import org.ontoware.rdf2go.model.Model;
 
-import au.edu.diasb.annotation.danno.model.AnnoteaObject;
 import au.edu.diasb.chico.mvc.RequestFailureException;
 
 public class DefaultOREAccessPolicy implements OREAccessPolicy {
@@ -21,13 +22,13 @@ public class DefaultOREAccessPolicy implements OREAccessPolicy {
 
 	}
 
-	public void checkUpdate(HttpServletRequest request, AnnoteaObject obj)
+	public void checkUpdate(HttpServletRequest request, CompoundObject obj)
 			throws RequestFailureException {
 		// TODO Auto-generated method stub
 
 	}
 
-	public void checkDelete(HttpServletRequest request, AnnoteaObject obj)
+	public void checkDelete(HttpServletRequest request, CompoundObject obj)
 			throws RequestFailureException {
 		// TODO Auto-generated method stub
 

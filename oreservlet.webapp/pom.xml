@@ -49,10 +49,11 @@
 			<version>${chico-version}</version>
 		</dependency>
 		<dependency>
-			<groupId>net.metadata.danno</groupId>
-			<artifactId>danno.core</artifactId>
-			<version>${danno-version}</version>
+			<groupId>net.metadata.chico</groupId>
+			<artifactId>chico.config</artifactId>
+			<version>${chico-version}</version>
 		</dependency>
+
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>servlet-api</artifactId>

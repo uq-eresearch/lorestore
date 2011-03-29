@@ -2,10 +2,10 @@ package oreservlet.servlets;
 
 import javax.servlet.http.HttpServletRequest;
 
+import oreservlet.model.CompoundObject;
+
 import org.ontoware.rdf2go.model.Model;
 
-import au.edu.diasb.annotation.danno.model.AnnoteaObject;
-import au.edu.diasb.annotation.danno.model.RDFContainer;
 import au.edu.diasb.chico.mvc.RequestFailureException;
 
 /**
@@ -53,7 +53,7 @@ public interface OREAccessPolicy {
      *     the triple store.
      * @throws RequestFailureException 
      */
-    void checkUpdate(HttpServletRequest request, AnnoteaObject obj)  
+    void checkUpdate(HttpServletRequest request, CompoundObject obj)  
     throws RequestFailureException;
     
     /**
@@ -64,7 +64,7 @@ public interface OREAccessPolicy {
      *     the triple store.
      * @throws RequestFailureException 
      */
-    void checkDelete(HttpServletRequest request, AnnoteaObject obj) 
+    void checkDelete(HttpServletRequest request, CompoundObject obj) 
     throws RequestFailureException;
     
     /**

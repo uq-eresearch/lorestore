@@ -18,10 +18,8 @@ import org.apache.log4j.Logger;
 import org.ontoware.rdf2go.model.Model;
 import org.ontoware.rdf2go.model.Syntax;
 
-import au.edu.diasb.annotation.danno.model.AnnoteaTypeException;
-import au.edu.diasb.annotation.danno.model.RDFTooComplexException;
 import au.edu.diasb.chico.mvc.BaseView;
-import au.edu.diasb.danno.constants.MimeTypes;
+import au.edu.diasb.chico.mvc.MimeTypes;
 
 public class OREResponseView extends BaseView {
     public OREResponseView() {
@@ -31,7 +29,7 @@ public class OREResponseView extends BaseView {
     @Override
     protected void renderMergedOutputModel(Map<String, Object> map, 
             HttpServletRequest request, HttpServletResponse response) 
-    throws IOException, AnnoteaTypeException {
+    throws IOException {
     	Model responseRDF = (Model) map.get(RESPONSE_RDF_KEY);
         Properties props = (Properties) map.get(ORE_PROPS_KEY);
         String stylesheetParam = request.getParameter(ORE_USE_STYLESHEET);
@@ -82,7 +80,7 @@ public class OREResponseView extends BaseView {
 
     private OutputStream outputRDF(HttpServletResponse response,  
     		Model responseRDF, String stylesheetURL) 
-    throws IOException, RDFTooComplexException {
+    throws IOException {
         response.setContentType("application/xml");
         if (stylesheetURL == null) {
             OutputStream os = response.getOutputStream();

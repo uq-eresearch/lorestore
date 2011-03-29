@@ -2,10 +2,6 @@ package oreservlet.model;
 
 import javax.xml.datatype.XMLGregorianCalendar;
 
-import org.ontoware.rdf2go.model.Model;
-
-import au.edu.diasb.annotation.danno.model.RDFObject;
-
 public interface CompoundObject {
     /**
      * Get the annotation / reply's creator property.

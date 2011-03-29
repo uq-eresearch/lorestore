@@ -5,7 +5,7 @@ import java.io.ByteArrayOutputStream;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 
-import oreservlet.common.OREConstants;
+import static oreservlet.common.OREConstants.SPARQL_RESULTS_XML;
 
 import org.apache.log4j.Logger;
 import org.ontoware.rdf2go.model.Model;
@@ -70,7 +70,7 @@ public class OREQueryHandler {
 		String queryString = generateBrowseQuery(url);
 		
 		HttpHeaders responseHeaders = new HttpHeaders();
-		responseHeaders.setContentType(MediaType.parseMediaType(OREConstants.SPARQL_RESULTS_XML));
+		responseHeaders.setContentType(MediaType.parseMediaType(SPARQL_RESULTS_XML));
 		return new ResponseEntity<String>(runSparqlQuery(queryString), responseHeaders, HttpStatus.OK);
 	}
 
@@ -78,7 +78,7 @@ public class OREQueryHandler {
 		String queryString = generateExploreQuery(url);
 
 		HttpHeaders responseHeaders = new HttpHeaders();
-		responseHeaders.setContentType(MediaType.parseMediaType(OREConstants.SPARQL_RESULTS_XML));
+		responseHeaders.setContentType(MediaType.parseMediaType(SPARQL_RESULTS_XML));
 		return new ResponseEntity<String>(runSparqlQuery(queryString), responseHeaders, HttpStatus.OK);
 	}
 	

@@ -31,10 +31,10 @@ public class OREControllerTest {
 
 	private OREController getController() {
 		OREControllerConfig occ = new OREControllerConfig();
-		// occ.setContainerFactory(new InMemoryTripleStoreConnectorFactory());
-		HttpTripleStoreConnectorFactory cf = new HttpTripleStoreConnectorFactory();
-		cf.setRepositoryURL("http://localhost:8080/openrdf-sesame/repositories/lore");
-		occ.setContainerFactory(cf);
+		 occ.setContainerFactory(new InMemoryTripleStoreConnectorFactory());
+//		HttpTripleStoreConnectorFactory cf = new HttpTripleStoreConnectorFactory();
+//		cf.setRepositoryURL("http://localhost:8080/openrdf-sesame/repositories/lore");
+//		occ.setContainerFactory(cf);
 		occ.setAccessPolicy(new DefaultOREAccessPolicy());
 		occ.setBaseUri("http://example.com/");
 		occ.setUidGenerator(new UIDGenerator());
@@ -119,7 +119,7 @@ public class OREControllerTest {
 
 		MockHttpServletRequest servletRequest = new MockHttpServletRequest();
 		InputStream in = new ByteArrayInputStream(
-				CommonTestRecords.ORE_TEXT.getBytes());
+				CommonTestRecords.SIMPLE_ORE_EXAMPLE.getBytes());
 
 		String redirect = controller.post(in);
 		assertTrue(redirect.startsWith("redirect:"));
