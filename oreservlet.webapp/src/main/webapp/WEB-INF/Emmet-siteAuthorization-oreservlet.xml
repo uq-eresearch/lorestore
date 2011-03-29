@@ -6,7 +6,7 @@
 	http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.0.xsd"
 	default-lazy-init="true">
     
-	<!-- The site authorization configuration for Emmet -->
+	<!-- The site authorization configuration for LoreStore -->
 
 	<bean id="filterSecurityInterceptor"
 		class="org.springframework.security.web.access.intercept.FilterSecurityInterceptor">
@@ -23,7 +23,7 @@
 				
 				<!-- Site specific rules -->
 				<sec:intercept-url pattern="/test" access="ROLE_USER" />
-				<sec:intercept-url pattern="/repositories/**" access="ROLE_USER" />
+				<sec:intercept-url pattern="/ore/**" access="IS_AUTHENTICATED_ANONYMOUSLY,ROLE_ANY" />
 				<sec:intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY,ROLE_ANY" />
 			</sec:filter-security-metadata-source>
 		</property>
@@ -40,6 +40,7 @@
 			<map>
 				<entry key="PUT,POST,DELETE|/**" value-ref="restfulEntryPoint"/>
 				<entry key="GET|/*.svc" value-ref="restfulEntryPoint"/>
+				<entry key="GET|/ore/*" value-ref="restfulEntryPoint"/>
 				<entry key="GET,HEAD|/**" value-ref="loginUrlEntryPoint"/>
 				<entry key="*|/**" value-ref="forbiddenEntryPoint"/>
 			</map>
