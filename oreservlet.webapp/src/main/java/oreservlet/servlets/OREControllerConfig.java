@@ -1,33 +1,38 @@
 package oreservlet.servlets;
 
-import oreservlet.common.ORETypeFactory;
-import au.edu.diasb.annotation.danno.db.RDFDBContainerFactory;
 
 public class OREControllerConfig {
 
-	public RDFDBContainerFactory getContainerFactory() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	private OREAccessPolicy accessPolicy;
+	private TripleStoreConnectorFactory cf;
+	private String baseUri;
+	
 
-	public UIDGenerator getUIDGenerator() {
-		// TODO Auto-generated method stub
-		return null;
+	public void setAccessPolicy(OREAccessPolicy accessPolicy) {
+		this.accessPolicy = accessPolicy;
 	}
-
-	public ORETypeFactory getTypeFactory() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
+	
 	public OREAccessPolicy getAccessPolicy() {
-		return null;
+		return accessPolicy;
 		
 	}
 
-	public int getBlankNodeClosureDepth() {
-		// TODO Auto-generated method stub
-		return 0;
+	public void setContainerFactory(TripleStoreConnectorFactory cf) {
+		this.cf = cf;
 	}
+
+	public TripleStoreConnectorFactory getContainerFactory() {
+		return cf;
+	}
+
+	public String getBaseUri() {
+		return this.baseUri;
+	}
+
+	public void setBaseUri(String baseUri) {
+		this.baseUri = baseUri;
+	}
+	
+	
 
 }

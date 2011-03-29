@@ -7,7 +7,7 @@
 	http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd" >
 	
 	<!--START: CONTEXT PARAMS-->
-	<context-param>
+<!--	<context-param>
 		<param-name>contextConfigLocation</param-name>
 		<param-value>/WEB-INF/Emmet-security.xml</param-value>
 	</context-param>
@@ -19,7 +19,7 @@
 	<listener>
 		<listener-class>au.edu.diasb.chico.config.ContextLoaderListener</listener-class>
 	</listener>
-
+-->
 	<filter>
 		<filter-name>Encoding Filter</filter-name>
 		<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>

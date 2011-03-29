@@ -66,6 +66,9 @@ public class OREResponseView extends BaseView {
             if (os != null) {
                 os.close();
             }
+            if (responseRDF != null) {
+            	responseRDF.close();
+            }
         }
     }
     
