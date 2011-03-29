@@ -67,6 +67,9 @@ public class OREUpdateHandler {
 
 		CompoundObjectImpl compoundObject = new CompoundObjectImpl(model);
 		compoundObject.assignURI(occ.getBaseUri() + uid);
+		
+		// TODO: needs to do stuff like maintaining the created/modified dates,
+		// and the creator
 
 		// occ.getAccessPolicy().checkCreate(request, model);
 		ModelSet ms = cf.retrieveConnection();
@@ -92,13 +95,17 @@ public class OREUpdateHandler {
 	}
 
 	public String put(String oreId, InputStream inputRDF)
-			throws RequestFailureException, IOException {
+			throws RequestFailureException, IOException, OREException {
 		ModelFactory mf = RDF2Go.getModelFactory();
 		URI objURI = mf.createModel().createURI(occ.getBaseUri() + oreId);
-		Model model = mf.createModel(objURI);
-
-		// TODO: should check that we are replacing an object, and fail if there
-		// isn't one already
+		
+		ModelSet container = cf.retrieveConnection();
+		Model model = container.getModel(objURI);
+		if (model == null || model.isEmpty()) {
+			throw new OREException("Cannot update nonexistant object");
+		}
+		
+		model = mf.createModel(objURI);
 
 		model.open();
 		try {

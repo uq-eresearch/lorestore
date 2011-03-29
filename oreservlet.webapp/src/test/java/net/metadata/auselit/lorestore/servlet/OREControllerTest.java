@@ -92,22 +92,19 @@ public class OREControllerTest {
 		}
 	}
 
-	@Test
-	public void postBadURL() {
-		fail();
-		// Expect sc 400 - bad request
-	}
-
-	@Test
-	public void postBadCompoundObject() {
-		fail();
+	@Test(expected = RequestFailureException.class)	
+	public void postBadCompoundObject() throws Exception {
+		OREController controller = getController();
+		ByteArrayInputStream in = new ByteArrayInputStream(CommonTestRecords.BAD_ORE_BROKEN_XML.getBytes());
+		controller.post(in);
 		// expect 400 - bad request
 	}
 
-	@Test
-	public void postBadCompoundObject2() {
-		// invalid xml or something
-		fail();
+	@Test(expected = OREException.class)	
+	public void postBadCompoundObject2() throws Exception {
+		OREController controller = getController();
+		ByteArrayInputStream in = new ByteArrayInputStream(CommonTestRecords.BAD_ORE_NO_RESOURCEMAP.getBytes());
+		controller.post(in);
 		// expect 400 - bad request
 	}
 
@@ -131,8 +128,7 @@ public class OREControllerTest {
 				CommonTestRecords.SIMPLE_ORE_EXAMPLE.getBytes());
 
 		String redirect = controller.post(in);
-		assertTrue(redirect.startsWith("redirect:"));
-		String createdId = redirect.substring(redirect.lastIndexOf("/") + 1);
+		String createdId = findUIDFromRedirect(redirect);
 
 		OREResponse oreResponse2 = controller.get(createdId);
 		assertNotNull(oreResponse2);
@@ -164,4 +160,35 @@ public class OREControllerTest {
 
 	}
 
+	private String findUIDFromRedirect(String redirect) {
+		assertTrue(redirect.startsWith("redirect:"));
+		String createdId = redirect.substring(redirect.lastIndexOf("/") + 1);
+		return createdId;
+	}
+	
+	
+	@Test(expected = OREException.class)
+	public void putNonexistent() throws Exception {
+		OREController controller = getController();
+		InputStream in = new ByteArrayInputStream(
+				CommonTestRecords.SIMPLE_ORE_EXAMPLE.getBytes());
+
+		controller.put("", in);
+	}
+
+	@Test
+	public void postThenPut() throws Exception {
+		OREController controller = getController();
+
+		InputStream in = new ByteArrayInputStream(
+				CommonTestRecords.SIMPLE_ORE_EXAMPLE.getBytes());
+		String redirect = controller.post(in);
+		String id = findUIDFromRedirect(redirect);
+		
+		in = new ByteArrayInputStream(
+				CommonTestRecords.SIMPLE_ORE_EXAMPLE.getBytes());
+		controller.put(id, in);
+		
+	}
+	
 }

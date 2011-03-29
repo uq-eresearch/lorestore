@@ -61,7 +61,7 @@ public class OREController {
 	}
 	
 	@RequestMapping(value = "/{id}", method = RequestMethod.POST)
-	public String put(@PathVariable("id") String oreId, InputStream in) throws RequestFailureException, IOException {
+	public String put(@PathVariable("id") String oreId, InputStream in) throws RequestFailureException, IOException, OREException {
 		return uh.put(oreId, in);
 	}
 
