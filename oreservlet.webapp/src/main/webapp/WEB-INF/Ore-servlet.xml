@@ -14,6 +14,7 @@
 		<property name="containerFactory" ref="dbContainerFactory"/>
 		<property name="accessPolicy" ref="oreAccessPolicy"/>
 		<property name="baseUri" value="http://doc.localhost/ore/"/>
+		<property name="uidGenerator" ref="uidGenerator"/>
 	</bean>
     
 	<bean id="xmlViewResolver" class="org.springframework.web.servlet.view.XmlViewResolver">
@@ -42,5 +43,9 @@
     
 	<bean id="oreAccessPolicy" class="oreservlet.servlets.DefaultOREAccessPolicy">
     	
+	</bean>
+	
+	<bean id="uidGenerator" class="oreservlet.common.UIDGenerator">
+		
 	</bean>
 </beans>

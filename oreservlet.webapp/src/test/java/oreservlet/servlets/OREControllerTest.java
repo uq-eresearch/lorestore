@@ -12,10 +12,12 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 
+import oreservlet.common.UIDGenerator;
+import oreservlet.exceptions.OREException;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.ontoware.rdf2go.model.Model;
-import org.ontoware.rdf2go.model.node.URI;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.web.servlet.mvc.multiaction.NoSuchRequestHandlingMethodException;
 
@@ -35,6 +37,7 @@ public class OREControllerTest {
 		occ.setContainerFactory(cf);
 		occ.setAccessPolicy(new DefaultOREAccessPolicy());
 		occ.setBaseUri("http://example.com/");
+		occ.setUidGenerator(new UIDGenerator());
 		return new OREController(occ);
 	}
 
@@ -74,7 +77,7 @@ public class OREControllerTest {
 	}
 
 	@Test
-	public void postEmpty() throws RequestFailureException, IOException {
+	public void postEmpty() throws RequestFailureException, IOException, OREException {
 		OREController controller = getController();
 		InputStream in = new ByteArrayInputStream("".getBytes());
 		try {

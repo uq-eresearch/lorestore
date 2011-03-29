@@ -2,7 +2,6 @@ package oreservlet.servlets;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.rmi.server.UID;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -53,7 +52,7 @@ public class OREUpdateHandler {
 			IOException, OREException {
 		ModelFactory mf = RDF2Go.getModelFactory();
 
-		String uid = new UID().toString();
+		String uid = occ.getUidGenerator().newUID();
 		URI newUri = mf.createModel().createURI(occ.getBaseUri() + uid);
 		Model model = mf.createModel(newUri);
 		

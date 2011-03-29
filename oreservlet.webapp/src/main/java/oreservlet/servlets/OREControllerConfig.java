@@ -1,11 +1,14 @@
 package oreservlet.servlets;
 
+import oreservlet.common.UIDGenerator;
+
 
 public class OREControllerConfig {
 
 	private OREAccessPolicy accessPolicy;
 	private TripleStoreConnectorFactory cf;
 	private String baseUri;
+	private UIDGenerator uidGenerator;
 	
 
 	public void setAccessPolicy(OREAccessPolicy accessPolicy) {
@@ -31,6 +34,14 @@ public class OREControllerConfig {
 
 	public void setBaseUri(String baseUri) {
 		this.baseUri = baseUri;
+	}
+
+	public void setUidGenerator(UIDGenerator uidGenerator) {
+		this.uidGenerator = uidGenerator;
+	}
+
+	public UIDGenerator getUidGenerator() {
+		return uidGenerator;
 	}
 	
 	
