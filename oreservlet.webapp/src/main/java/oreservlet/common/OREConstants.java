@@ -1,5 +1,7 @@
 package oreservlet.common;
 
+import org.springframework.http.MediaType;
+
 public interface OREConstants {
 
 	String ORE_USE_STYLESHEET = "oreUseStylesheet";
@@ -23,6 +25,8 @@ public interface OREConstants {
     //
 
     String RDF_TYPE_PROPERTY = RDF_SYNTAX_URL + "type";
+
+	String SPARQL_RESULTS_XML = "application/sparql-results+xml";
 
 	public static final String AGGREGATION = "#aggregation";
 }

@@ -6,6 +6,8 @@ import java.util.Map;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 
+import oreservlet.common.OREConstants;
+
 import org.ontoware.rdf2go.model.Model;
 import org.ontoware.rdf2go.model.ModelSet;
 import org.ontoware.rdf2go.model.node.URI;
@@ -75,7 +77,7 @@ public class OREQueryHandler {
 		String queryString = browseSparqlQuery(url);
 		
 		HttpHeaders responseHeaders = new HttpHeaders();
-		responseHeaders.setContentType(MediaType.APPLICATION_XML);
+		responseHeaders.setContentType(MediaType.parseMediaType(OREConstants.SPARQL_RESULTS_XML));
 		return new ResponseEntity<String>(runSparqlQuery(queryString), responseHeaders, HttpStatus.OK);
 	}
 
@@ -83,7 +85,7 @@ public class OREQueryHandler {
 		String queryString = createExploreQuery(url);
 
 		HttpHeaders responseHeaders = new HttpHeaders();
-		responseHeaders.setContentType(MediaType.APPLICATION_XML);
+		responseHeaders.setContentType(MediaType.parseMediaType(OREConstants.SPARQL_RESULTS_XML));
 		return new ResponseEntity<String>(runSparqlQuery(queryString), responseHeaders, HttpStatus.OK);
 	}
 	
