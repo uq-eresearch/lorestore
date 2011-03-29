@@ -60,22 +60,15 @@
 		</dependency>
 
 		<dependency>
-			<groupId>net.metadata.emmet</groupId>
-			<artifactId>emmet.webapp</artifactId>
-			<version>0.5-SNAPSHOT</version>
-			<type>war</type>
+			<groupId>commons-httpclient</groupId>
+			<artifactId>commons-httpclient</artifactId>
+			<version>4.1</version>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>4.5</version>
 			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>net.metadata.auselit</groupId>
-			<artifactId>oreservlet.core</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.semweb4j</groupId>

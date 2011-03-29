@@ -5,7 +5,5 @@
 	<packaging>pom</packaging>
 	<version>0.0.1-SNAPSHOT</version>
 	<modules>
-		<module>oreservlet.sesame</module>
-		<module>oreservlet.core</module>
 	</modules>
 </project>

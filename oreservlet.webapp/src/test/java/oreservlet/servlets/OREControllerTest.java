@@ -1,13 +1,11 @@
 package oreservlet.servlets;
 
+import static org.junit.Assert.assertNotNull;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.openrdf.repository.RepositoryException;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
-
-import au.edu.diasb.chico.mvc.RequestFailureException;
 
 public class OREControllerTest {
 
@@ -30,8 +28,11 @@ public class OREControllerTest {
 		OREController controller = getController();
 		MockHttpServletRequest request = new MockHttpServletRequest();
 		request.setRequestURI("http://doc.localhost/ore/rem/13532");
+		request.setPathInfo("/rem/13532");
 		MockHttpServletResponse response = new MockHttpServletResponse();
 		
-		controller.get(request, response);
+		OREResponse oreResponse = controller.get(request, response);
+		
+		assertNotNull(oreResponse);
 	}
 }

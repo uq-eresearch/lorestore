@@ -21,7 +21,8 @@ public class OREController {
 
 	public OREController(OREControllerConfig occ) {
 		this.occ = occ;
-
+		this.qh = new OREQueryHandler(occ);
+		this.uh = new OREUpdateHandler(occ);
 	}
 
 	@RequestMapping(method = RequestMethod.POST)

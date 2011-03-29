@@ -1,6 +1,7 @@
 package oreservlet.servlets;
 
 import java.io.ByteArrayInputStream;
+import static org.junit.Assert.*;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -31,6 +32,6 @@ public class OREResponseViewTest {
 		
 		view.render(mv.getModel(), request, response);
 		
-		System.out.println(response.getContentType());
+		assertEquals("application/xml", response.getContentType());
 	}
 }
