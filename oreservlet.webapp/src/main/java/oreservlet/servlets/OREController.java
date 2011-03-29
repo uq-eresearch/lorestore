@@ -6,6 +6,8 @@ import java.io.InputStream;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 
+import oreservlet.exceptions.OREException;
+
 import org.openrdf.query.MalformedQueryException;
 import org.openrdf.query.QueryEvaluationException;
 import org.openrdf.query.TupleQueryResultHandlerException;
@@ -43,7 +45,7 @@ public class OREController {
 
 	@RequestMapping(value = "/", method = RequestMethod.POST)
 	public String post(InputStream inputRDF) throws RequestFailureException,
-			IOException {
+			IOException, OREException {
 
 		return uh.post(inputRDF);
 	}

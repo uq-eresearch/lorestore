@@ -6,11 +6,11 @@ public interface OREConstants {
 	
 	String ORE_SYNTAX_URL = "http://www.openarchives.org/ore/terms/";
 	
-	String ORE_RESOURCEMAP_CLASS = ORE_SYNTAX_URL + "#ResourceMap";
+	String ORE_RESOURCEMAP_CLASS = ORE_SYNTAX_URL + "ResourceMap";
 	
-	String ORE_AGGREGATION_CLASS = ORE_SYNTAX_URL + "#Aggregation";
+	String ORE_AGGREGATION_CLASS = ORE_SYNTAX_URL + "Aggregation";
 	
-	String ORE_DESCRIBES_PROPERTY = ORE_SYNTAX_URL + "#describes";
+	String ORE_DESCRIBES_PROPERTY = ORE_SYNTAX_URL + "describes";
 	
 	
 	

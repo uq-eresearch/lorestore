@@ -5,13 +5,17 @@ import static oreservlet.common.OREConstants.ORE_DESCRIBES_PROPERTY;
 import static oreservlet.common.OREConstants.ORE_RESOURCEMAP_CLASS;
 import static oreservlet.common.OREConstants.RDF_TYPE_PROPERTY;
 
+import java.io.IOException;
+import java.io.StringWriter;
 import java.util.Iterator;
 
 import oreservlet.exceptions.OREException;
 
 import org.ontoware.aifbcommons.collection.ClosableIterator;
+import org.ontoware.rdf2go.exception.ModelRuntimeException;
 import org.ontoware.rdf2go.model.Model;
 import org.ontoware.rdf2go.model.Statement;
+import org.ontoware.rdf2go.model.Syntax;
 import org.ontoware.rdf2go.model.node.Resource;
 import org.ontoware.rdf2go.model.node.URI;
 import org.ontoware.rdf2go.model.node.Variable;
@@ -32,6 +36,26 @@ public class CompoundObjectImpl {
 		return model.isOpen();
 	}
 
+	public Model getModel() {
+		return model;
+	}
+
+	public String getModelAsRDFXML() throws OREException {
+		StringWriter sw = new StringWriter();
+		try {
+			model.writeTo(sw, Syntax.RdfXml);
+		} catch (ModelRuntimeException e) {
+			throw new OREException(e);
+		} catch (IOException e) {
+			throw new OREException(e);
+		}
+		return sw.toString();
+	}
+
+	public String getResourceMapURL() throws OREException {
+		return findResourceMap().toString();
+	}
+
 	/**
 	 * Assigns a new URI to the embedded model, updating the URI of the
 	 * ResourceMap and the associated Aggregation
@@ -48,25 +72,26 @@ public class CompoundObjectImpl {
 		updateAggregationURI(newURI);
 	}
 
-	private void updateAggregationURI(Resource resourceMap)
-			throws OREException {
-		URI newAggregationURI = model.createURI(resourceMap.toString() + AGGREGATION);
+	private void updateAggregationURI(Resource resourceMap) throws OREException {
+		URI newAggregationURI = model.createURI(resourceMap.toString()
+				+ AGGREGATION);
 
 		// Find all the aggregations referenced by this ResourceMap
-		ClosableIterator<Statement> aggregations = model.findStatements(resourceMap,
-				model.createURI(ORE_DESCRIBES_PROPERTY), Variable.ANY);
-		
+		ClosableIterator<Statement> aggregations = model.findStatements(
+				resourceMap, model.createURI(ORE_DESCRIBES_PROPERTY),
+				Variable.ANY);
+
 		while (aggregations.hasNext()) {
 			Statement s = aggregations.next();
 			URI aggregationURI = s.getObject().asURI();
-			
+
 			// Find all the statements referenced by this Aggregation
-			ClosableIterator<Statement> aggregationStmts = model.findStatements(aggregationURI,
-					model.createURI(ORE_DESCRIBES_PROPERTY), Variable.ANY);
+			ClosableIterator<Statement> aggregationStmts = model
+					.findStatements(aggregationURI, Variable.ANY, Variable.ANY);
 			updateSubjectURI(aggregationStmts, newAggregationURI);
-			
-			
-			model.addStatement(s.getSubject(), s.getPredicate(), newAggregationURI);
+
+			model.addStatement(s.getSubject(), s.getPredicate(),
+					newAggregationURI);
 			model.removeStatement(s);
 		}
 	}
@@ -79,16 +104,14 @@ public class CompoundObjectImpl {
 			model.removeStatement(s);
 		}
 	}
-	
+
 	private Resource findResourceMap() throws OREException {
 		ClosableIterator<Statement> it = model.findStatements(Variable.ANY,
 				model.createURI(RDF_TYPE_PROPERTY),
 				model.createURI(ORE_RESOURCEMAP_CLASS));
 		Statement s = null;
-		;
-		while (it.hasNext()) {
+		if (it.hasNext()) {
 			s = it.next();
-			s.getSubject();
 		}
 		if (s == null) {
 			throw new OREException("Appears not to be an ORE ResourceMap");
