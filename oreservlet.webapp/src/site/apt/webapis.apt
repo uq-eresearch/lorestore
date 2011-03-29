@@ -1,0 +1,41 @@
+LoreStore Web APIs
+
+  This page describes the Web (i.e. HTTP-based) APIs that are implemented
+  by LoreStore.
+
+~~INDEX
+===
+
+  * {{ORE REST API}}
+  
+  * {{Querying}}
+
+* {ORE REST API}
+
+  LoreStore uses a REST based API for the storage and retrieval of Compound
+  Objects. It was partially inspired by the {{{http://www.w3.org/2001/Annotea/User/Protocol.html}Annotea Protocol}}
+  
+
+*--------+-----+-----------+--------+
+|| Method || URI || Post data || Meaning |
+*--------+-----+-----------+--------+
+|POST  | http://\<hostname\>:/ore/ | ORE RDF | Create a Compound Object |
+|PUT   | http://\<hostname\>:/ore/\<identifier\> | ORE RDF | Update a Compound Object |
+|DELETE| http://\<hostname\>:/ore/\<identifier\> | n/a | Delete a Compound Object |
+|GET   | http://\<hostname\>:/ore/\<identifier\> | n/a | Retrieve a Compound Object |
+|GET   | http://\<hostname\>:/ore/?refersTo=\<uri\> | n/a | Find compound objects referencing \<uri\> |
+*--------+-----+-----------+--------+
+
+
+
+* {Querying}
+
+  All queries return data as SPARQL/XML.
+
+  Query parameters as follows:
+
+*--------+----------------+--------+
+||Query parameter  | Value | Meaning |
+*--------+----------------+--------+
+|refersTo | URI | Find all Compound Objects referencing the supplied URI |
+*--------+----------------+--------+

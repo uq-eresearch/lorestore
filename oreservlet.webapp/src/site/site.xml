@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project name="LoreStore">
+	
+	<body>
+		<menu name="LoreStore">
+			<item name="Overview" href="index.html"/>
+			<item name="Installation" href="installation.html"/>
+			<item name="Design" href="design.html"/>
+			<item name="Web APIs" href="webapis.html"/>
+		</menu>
+		<menu ref="reports"/>
+	</body>
+</project>
