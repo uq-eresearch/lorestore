@@ -10,6 +10,7 @@ import org.ontoware.aifbcommons.collection.ClosableIterator;
 import org.ontoware.rdf2go.model.Model;
 import org.ontoware.rdf2go.model.Statement;
 import org.ontoware.rdf2go.model.Syntax;
+import org.ontoware.rdf2go.model.node.Node;
 import org.ontoware.rdf2go.model.node.Resource;
 import org.ontoware.rdf2go.model.node.URI;
 import org.ontoware.rdf2go.model.node.Variable;
@@ -20,14 +21,6 @@ public class CompoundObjectImpl {
 
 	public CompoundObjectImpl(Model model) {
 		this.model = model;
-	}
-
-	public URI getContextURI() {
-		return model.getContextURI();
-	}
-
-	public boolean isOpen() {
-		return model.isOpen();
 	}
 
 	public Model getModel() {
@@ -76,7 +69,7 @@ public class CompoundObjectImpl {
 			model.addStatement(s.getSubject(), s.getPredicate(),
 					newAggregationURI);
 			model.removeStatement(s);
-			
+
 			// Find all the statements referenced by this Aggregation
 			ClosableIterator<Statement> aggregationStmts = model
 					.findStatements(aggregationURI, Variable.ANY, Variable.ANY);
@@ -98,18 +91,68 @@ public class CompoundObjectImpl {
 		ClosableIterator<Statement> it = model.findStatements(Variable.ANY,
 				model.createURI(RDF_TYPE_PROPERTY),
 				model.createURI(ORE_RESOURCEMAP_CLASS));
+		Statement s = lookupOneStatement(it);
+		return s.getSubject();
+	}
+
+	public Node getCreator() throws OREException {
+		return lookupResourceMapNode(model.createURI("dc:creator"));
+	}
+	
+	public Node getCreatedDate() throws OREException {
+		return lookupResourceMapNode(model.createURI("dc:created"));
+	}
+	
+	public Node getModifiedDate() throws OREException {
+		return lookupResourceMapNode(model.createURI("dc:modified"));
+	}	
+	
+
+	public Node getUser() throws OREException {
+		return lookupResourceMapNode(model.createURI("auselit:user"));
+	}
+	
+	public Node lookupResourceMapNode(URI uri) throws OREException {
+		Resource findResourceMap = findResourceMap();
+
+		ClosableIterator<Statement> it = model.findStatements(findResourceMap,
+				uri, Variable.ANY);
+		return lookupOneObject(it);
+	}
+	
+	
+	public void setUser(String newUser) throws OREException {
+		Node user = getUser();
+		if (user != null) {
+			throw new OREException("User already set, not allowed to update");
+		}
+		Resource findResourceMap = findResourceMap();
+		model.addStatement(findResourceMap, model.createURI("auselit:user"), model.createPlainLiteral(newUser));
+		model.commit();
+	}
+	
+	
+	private Node lookupOneObject(ClosableIterator<Statement> it)
+			throws OREException {
+		Statement s = lookupOneStatement(it);
+
+		return s.getObject();
+	}
+
+	private Statement lookupOneStatement(ClosableIterator<Statement> it)
+			throws OREException {
 		Statement s = null;
 		if (it.hasNext()) {
 			s = it.next();
 		}
 		if (s == null) {
-			throw new OREException("Appears not to be an ORE ResourceMap");
+			throw new OREException("No result found");
 		}
 		if (it.hasNext()) {
-			throw new OREException("Multiple ResourceMaps");
+			throw new OREException("Multiple results found");
 		}
 		it.close();
-		return s.getSubject();
+		return s;
 	}
 
 }

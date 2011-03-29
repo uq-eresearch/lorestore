@@ -1,13 +1,13 @@
 package oreservlet.servlets;
 
 import java.io.ByteArrayOutputStream;
-import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 
 import oreservlet.common.OREConstants;
 
+import org.apache.log4j.Logger;
 import org.ontoware.rdf2go.model.Model;
 import org.ontoware.rdf2go.model.ModelSet;
 import org.ontoware.rdf2go.model.node.URI;
@@ -34,21 +34,13 @@ import au.edu.diasb.chico.mvc.RequestFailureException;
  * @author uqdayers
  */
 public class OREQueryHandler {
-
+    private static final Logger LOG = Logger.getLogger(OREQueryHandler.class);
 	protected final OREControllerConfig occ;
 	private TripleStoreConnectorFactory cf;
 
 	public OREQueryHandler(OREControllerConfig occ) {
 		this.occ = occ;
 		this.cf = occ.getContainerFactory();
-	}
-
-	public OREResponse query(HttpServletRequest request) {
-
-		Map<String, String[]> parameterMap = request.getParameterMap();
-
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	public OREResponse plainGet(HttpServletRequest request)
@@ -62,6 +54,7 @@ public class OREQueryHandler {
 		Model model = container.getModel(uri);
 
 		if (model == null || model.isEmpty()) {
+			LOG.debug("Requested object that doesn't exist");
 			throw new NoSuchRequestHandlingMethodException(request);
 			// throw new RequestFailureException(
 			// HttpServletResponse.SC_NOT_FOUND,
@@ -74,7 +67,7 @@ public class OREQueryHandler {
 	}
 
 	public ResponseEntity<String> browseQuery(String url) throws RepositoryException, MalformedQueryException, QueryEvaluationException, TupleQueryResultHandlerException {
-		String queryString = browseSparqlQuery(url);
+		String queryString = generateBrowseQuery(url);
 		
 		HttpHeaders responseHeaders = new HttpHeaders();
 		responseHeaders.setContentType(MediaType.parseMediaType(OREConstants.SPARQL_RESULTS_XML));
@@ -82,7 +75,7 @@ public class OREQueryHandler {
 	}
 
 	public ResponseEntity<String> exploreQuery(String url) throws RepositoryException, MalformedQueryException, QueryEvaluationException, TupleQueryResultHandlerException {
-		String queryString = createExploreQuery(url);
+		String queryString = generateExploreQuery(url);
 
 		HttpHeaders responseHeaders = new HttpHeaders();
 		responseHeaders.setContentType(MediaType.parseMediaType(OREConstants.SPARQL_RESULTS_XML));
@@ -123,7 +116,7 @@ where {
   . OPTIONAL {?g <http://purl.org/dc/elements/1.1/title> ?t}
 };
 	 */
-	protected String browseSparqlQuery(String escapedURL) {
+	protected String generateBrowseQuery(String escapedURL) {
 		// Needs to match both www and non-www version of URL
 		String altURL = makeAltURL(escapedURL);
 		String query = "select distinct ?g ?a ?m ?t" + " where { graph ?g {"
@@ -185,7 +178,7 @@ where {
 
 	}
 	
-	protected String createExploreQuery(String escapedURI) {
+	protected String generateExploreQuery(String escapedURI) {
 		String query = "PREFIX dc:<http://purl.org/dc/elements/1.1/> " 
             + "PREFIX dcterms:<http://purl.org/dc/terms/>"
             + "PREFIX ore:<http://www.openarchives.org/ore/terms/> " 

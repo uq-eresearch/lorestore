@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import oreservlet.exceptions.OREException;
 
+import org.apache.log4j.Logger;
 import org.openrdf.repository.RepositoryException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,6 +28,7 @@ import au.edu.diasb.chico.mvc.RequestFailureException;
 
 @Controller
 public class OREController {
+    private static final Logger LOG = Logger.getLogger(OREController.class);
 
 	private final OREControllerConfig occ;
 	private OREQueryHandler qh;
@@ -50,7 +52,8 @@ public class OREController {
 			throws RepositoryException, ServletException {
 		String pathInfo = request.getPathInfo();
 		if (pathInfo == null || pathInfo.equals("") || pathInfo.equals("/")) {
-			return qh.query(request);
+			LOG.error("Incorrect path in GET request");
+			return null;
 		} else {
 			return qh.plainGet(request);
 		}
