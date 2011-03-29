@@ -41,7 +41,7 @@
 	</bean>
     -->
     
-    <bean id="dbContainerPool" class="net.metadata.auselit.lorestore.triplestore.SimpleSesamePool">
+    <bean id="dbContainerPool" class="net.metadata.auselit.lorestore.triplestore.SimpleSesamePool" destroy-method="destroy">
     	<constructor-arg ref="dbContainerFactory"></constructor-arg>
     </bean>
     

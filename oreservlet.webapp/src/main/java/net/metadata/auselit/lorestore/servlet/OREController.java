@@ -87,6 +87,7 @@ public class OREController {
 			throw new InvalidQueryParametersException(
 					"Missing or empty query parameters");
 		}
+		
 		return qh.exploreQuery(urlParam);
 	}
 

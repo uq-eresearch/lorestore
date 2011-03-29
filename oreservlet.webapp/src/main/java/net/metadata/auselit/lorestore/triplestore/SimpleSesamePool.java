@@ -3,6 +3,7 @@ package net.metadata.auselit.lorestore.triplestore;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
+import org.apache.log4j.Logger;
 import org.ontoware.rdf2go.model.ModelSet;
 
 /**
@@ -16,10 +17,13 @@ import org.ontoware.rdf2go.model.ModelSet;
  * 
  */
 public final class SimpleSesamePool implements TripleStoreConnectorFactory {
+	private static final Logger LOG = Logger.getLogger(SimpleSesamePool.class);
 
 	private final BlockingQueue<ModelSet> connections;
+	private final TripleStoreConnectorFactory cf;
 	
 	public SimpleSesamePool(TripleStoreConnectorFactory cf) throws InterruptedException {
+		this.cf = cf;
 		ModelSet theConnection = cf.retrieveConnection();
 		this.connections = new ArrayBlockingQueue<ModelSet>(1, false);
 		connections.add(theConnection);
@@ -31,5 +35,16 @@ public final class SimpleSesamePool implements TripleStoreConnectorFactory {
 	
 	public void release(ModelSet connection) throws InterruptedException {
 		this.connections.put(connection);
+	}
+	
+	public void destroy() {
+		LOG.info("Closing repository connection");
+		try {
+			ModelSet con = retrieveConnection();
+			con.close();
+		} catch (InterruptedException e) {
+			LOG.error("Unable to close connection", e);
+		}
+		cf.destroy();
 	}
 }

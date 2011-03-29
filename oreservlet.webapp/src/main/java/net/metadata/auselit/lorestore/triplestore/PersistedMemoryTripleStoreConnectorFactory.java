@@ -4,6 +4,7 @@ import java.io.File;
 
 import net.metadata.auselit.lorestore.exceptions.OREDBConnectionException;
 
+import org.apache.log4j.Logger;
 import org.ontoware.rdf2go.model.ModelSet;
 import org.openrdf.rdf2go.RepositoryModelSet;
 import org.openrdf.repository.RepositoryException;
@@ -11,8 +12,14 @@ import org.openrdf.repository.sail.SailRepository;
 import org.openrdf.repository.sail.SailRepositoryConnection;
 import org.openrdf.sail.nativerdf.NativeStore;
 
+/**
+ * 
+ * @author uqdayers
+ *
+ */
 public class PersistedMemoryTripleStoreConnectorFactory implements
 		TripleStoreConnectorFactory {
+	private static final Logger LOG = Logger.getLogger(PersistedMemoryTripleStoreConnectorFactory.class);
 
 	private SailRepository repo;
 	private String dataDirPath;
@@ -32,7 +39,7 @@ public class PersistedMemoryTripleStoreConnectorFactory implements
 		try {
 			repo.initialize();
 		} catch (RepositoryException e) {
-			throw new OREDBConnectionException("Error creating in memory sesame store", e);
+			throw new OREDBConnectionException("Error creating persistent sesame store", e);
 		}
 	}
 	
@@ -54,5 +61,14 @@ public class PersistedMemoryTripleStoreConnectorFactory implements
 	public void release(ModelSet connection) throws InterruptedException {
 		// TODO Auto-generated method stub
 		
+	}
+	
+	public void destroy() {
+		LOG.info("Shutting down SAIL repository");
+		try {
+			repo.shutDown();
+		} catch (RepositoryException e) {
+			LOG.error("Error shutting down sail repository", e);
+		}
 	}
 }

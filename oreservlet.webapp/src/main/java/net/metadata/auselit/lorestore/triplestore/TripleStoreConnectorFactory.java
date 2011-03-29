@@ -7,4 +7,6 @@ public interface TripleStoreConnectorFactory {
 	public ModelSet retrieveConnection() throws InterruptedException;
 	
 	public void release(ModelSet connection) throws InterruptedException;
+	
+	public void destroy();
 }

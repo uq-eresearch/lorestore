@@ -43,4 +43,9 @@ public class HttpTripleStoreConnectorFactory implements
 		// TODO Auto-generated method stub
 		
 	}
+
+	public void destroy() {
+		// TODO Auto-generated method stub
+		
+	}
 }
