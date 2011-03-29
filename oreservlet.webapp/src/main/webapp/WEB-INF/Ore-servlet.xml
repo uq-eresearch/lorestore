@@ -6,11 +6,11 @@
 	http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
 	<!-- the application context definition for the oreservlet DispatcherServlet -->
-	<bean name="ore" class="oreservlet.servlets.OREController">
+	<bean name="ore" class="net.metadata.auselit.lorestore.servlet.OREController">
 		<constructor-arg ref="oreControllerConfig"/>
 	</bean>
 	
-	<bean id="oreControllerConfig" class="oreservlet.servlets.OREControllerConfig">
+	<bean id="oreControllerConfig" class="net.metadata.auselit.lorestore.servlet.OREControllerConfig">
 		<property name="containerFactory" ref="dbContainerFactory"/>
 		<property name="accessPolicy" ref="oreAccessPolicy"/>
 		<property name="baseUri" value="http://doc.localhost/ore/"/>
@@ -36,16 +36,16 @@
 		</property>
 	</bean>
     
-	<bean id="dbContainerFactory" class="oreservlet.servlets.HttpTripleStoreConnectorFactory">
+	<bean id="dbContainerFactory" class="net.metadata.auselit.lorestore.triplestore.HttpTripleStoreConnectorFactory">
     	<property name="repositoryURL" value="http://localhost:8080/openrdf-sesame/repositories/lore"/>
 	</bean>
     
     
-	<bean id="oreAccessPolicy" class="oreservlet.servlets.DefaultOREAccessPolicy">
+	<bean id="oreAccessPolicy" class="net.metadata.auselit.lorestore.access.DefaultOREAccessPolicy">
     	
 	</bean>
 	
-	<bean id="uidGenerator" class="oreservlet.common.UIDGenerator">
+	<bean id="uidGenerator" class="net.metadata.auselit.lorestore.util.UIDGenerator">
 		
 	</bean>
 </beans>
