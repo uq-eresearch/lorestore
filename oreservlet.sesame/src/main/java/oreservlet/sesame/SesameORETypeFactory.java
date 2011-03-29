@@ -20,12 +20,12 @@ public class SesameORETypeFactory extends SesameAnnoteaTypeFactory implements
 		ORETypeFactory {
 
 	public SesameORETypeFactory() {
-		super(Logger.getLogger(SesameORETypeFactory.class));
+//		super(Logger.getLogger(SesameORETypeFactory.class));
 	}
 	
 	public CompoundObject createCompoundObject(InputStream in) {
-		RepositoryConnection tconn = loadRDF(in);
-        RDFContainer tmp = new SesameRDFContainer(tconn, this);
+//		RepositoryConnection tconn = loadRDF(in);
+//        RDFContainer tmp = new SesameRDFContainer(tconn, this);
 		return null;
 	}
 
