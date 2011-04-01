@@ -45,7 +45,7 @@ public class OREController {
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public OREResponse get(@PathVariable("id") String oreId)
-			throws NotFoundException, InterruptedException {
+			throws NotFoundException, InterruptedException, RequestFailureException {
 		return qh.getOreObject(oreId);
 	}
 
@@ -114,7 +114,7 @@ public class OREController {
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
 	public OREResponse delete(@PathVariable("id") String oreId)
-			throws NotFoundException, InterruptedException {
+			throws NotFoundException, InterruptedException, RequestFailureException {
 		return uh.delete(oreId);
 	}
 

@@ -6,7 +6,18 @@
 	<packaging>war</packaging>
 	<version>0.0.2-SNAPSHOT</version>
 	<name>LoreStore</name>
-	<url>http://maven.apache.org</url>
+	<url>http://www.aus-e-lit.net/</url>
+	<developers>
+		<developer>
+			<id>damien.ayers</id>
+			<name>Damien Ayers</name>
+			<email>d.ayers@uq.edu.au</email>
+			<url>http://www.itee.uq.edu.au/~eresearch/</url>
+			<roles>
+				<role>Developer</role>
+			</roles>
+		</developer>
+	</developers>
 
 	<!-- Shared version number properties -->
 	<properties>
@@ -54,6 +65,11 @@
 			<artifactId>emmet.webapp</artifactId>
 			<version>${emmet-version}</version>
 			<type>war</type>
+		</dependency>
+		<dependency>
+			<groupId>net.metadata.emmet</groupId>
+			<artifactId>emmet.servlet</artifactId>
+			<version>${emmet-version}</version>
 		</dependency>
 
 		<dependency>
@@ -146,6 +162,9 @@
 				<version>7.2.2.v20101205</version>
 				<configuration>
 					<scanIntervalSeconds>10</scanIntervalSeconds>
+					<webAppConfig>
+						<contextPath>/lorestore</contextPath>
+					</webAppConfig>
 					<connectors>
 						<connector implementation="org.eclipse.jetty.server.nio.SelectChannelConnector">
 							<port>9090</port>

@@ -2,13 +2,16 @@ package net.metadata.auselit.lorestore.model;
 
 import javax.xml.datatype.XMLGregorianCalendar;
 
+import net.metadata.auselit.lorestore.exceptions.OREException;
+
 public interface CompoundObject {
     /**
      * Get the annotation / reply's creator property.
      * 
      * @return the creator name or identifier or <code>null</code> if it is missing.
+     * @throws OREException 
      */
-    String getCreator();
+    String getCreator() throws OREException;
 
     /**
      * Set the resource's creator property to the supplied name.
@@ -60,6 +63,6 @@ public interface CompoundObject {
      */
     XMLGregorianCalendar getDate();
 
-	void assignURI(String newUri);
+	void assignURI(String newUri) throws OREException;
 
 }

@@ -15,6 +15,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathFactory;
 
+import net.metadata.auselit.lorestore.access.AllowEverythingAccessPolicy;
 import net.metadata.auselit.lorestore.access.DefaultOREAccessPolicy;
 import net.metadata.auselit.lorestore.exceptions.InvalidQueryParametersException;
 import net.metadata.auselit.lorestore.exceptions.NotFoundException;
@@ -22,10 +23,12 @@ import net.metadata.auselit.lorestore.exceptions.OREException;
 import net.metadata.auselit.lorestore.triplestore.InMemoryTripleStoreConnectorFactory;
 import net.metadata.auselit.lorestore.triplestore.TripleStoreConnectorFactory;
 import net.metadata.auselit.lorestore.util.UIDGenerator;
+import net.metadata.auselit.test.mocks.MockAuthenticationContext;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.ontoware.rdf2go.model.Model;
+import org.springframework.security.access.AccessDeniedException;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
@@ -36,11 +39,13 @@ public class OREControllerTest {
 
 	private TripleStoreConnectorFactory cf;
 	static OREController controller;
+	static OREController authController;
 	static XPath xPath;
 
 	@Before
 	public  void setUp() throws Exception {
 		controller = getController();
+		authController = getAuthController();
 		xPath = XPathFactory.newInstance().newXPath();
 	}
 
@@ -52,12 +57,32 @@ public class OREControllerTest {
 		// HttpTripleStoreConnectorFactory();
 		// cf.setRepositoryURL("http://localhost:8080/openrdf-sesame/repositories/lore");
 		// occ.setContainerFactory(cf);
-		occ.setAccessPolicy(new DefaultOREAccessPolicy());
+		occ.setAccessPolicy(new AllowEverythingAccessPolicy());
+		occ.setBaseUri("http://example.com/");
+		occ.setUidGenerator(new UIDGenerator());
+		return new OREController(occ);
+	}
+	
+	private OREController getAuthController() throws Exception {
+		OREControllerConfig occ = new OREControllerConfig();
+		cf = new InMemoryTripleStoreConnectorFactory();
+		occ.setContainerFactory(cf);
+		DefaultOREAccessPolicy ap = new DefaultOREAccessPolicy();
+		ap.setReadAuthorities("ROLE_USER,ROLE_ANONYMOUS");
+		ap.setWriteAuthorities("ROLE_ORE");
+		ap.afterPropertiesSet();
+		occ.setAccessPolicy(ap);
+
 		occ.setBaseUri("http://example.com/");
 		occ.setUidGenerator(new UIDGenerator());
 		return new OREController(occ);
 	}
 
+	private void updateAuthenticationContext(String username, String uri, String[] authorities) throws Exception {
+		DefaultOREAccessPolicy accessPolicy = (DefaultOREAccessPolicy)authController.getControllerConfig().getAccessPolicy();
+		accessPolicy.setAuthenticationContext(new MockAuthenticationContext(username, uri, authorities));
+		accessPolicy.afterPropertiesSet();
+	}
 
 
 	@Test(expected = NotFoundException.class)
@@ -186,6 +211,11 @@ public class OREControllerTest {
 		NodeList results = document.getElementsByTagName("result");
 		assertEquals(0, results.getLength());
 	}
+	
+	private Document parseXmlToDocument(String xml) throws Exception {
+		return DocumentBuilderFactory.newInstance().newDocumentBuilder()
+				.parse(new InputSource(new StringReader(xml)));
+	}
 
 	@Test
 	public void queryRefersToExistingURL() throws Exception {
@@ -210,12 +240,31 @@ public class OREControllerTest {
 	@Test
 	public void keywordSearch() throws Exception {
 		String body = controller.keywordSearch("test").getBody();
-		System.out.println(body);
+
 		assertNotNull(body);
 	}
 	
-	private Document parseXmlToDocument(String xml) throws Exception {
-		return DocumentBuilderFactory.newInstance().newDocumentBuilder()
-				.parse(new InputSource(new StringReader(xml)));
+	@Test(expected = AccessDeniedException.class)
+	public void postWithNoAuth() throws Exception {
+		InputStream in = new ByteArrayInputStream(
+				CommonTestRecords.SIMPLE_ORE_EXAMPLE.getBytes());
+		OREResponse response = authController.post(in);
 	}
+	
+	@Test
+	public void postWithAuth() throws Exception {
+		updateAuthenticationContext("bob", "http://example.com/user/bob", new String[]{"ROLE_USER","ROLE_ORE"});
+		
+		InputStream in = new ByteArrayInputStream(
+				CommonTestRecords.SIMPLE_ORE_EXAMPLE.getBytes());
+		OREResponse response = authController.post(in);
+	}
+	
+	@Test(expected = AccessDeniedException.class)
+	public void postWithNoAuth2() throws Exception {
+		InputStream in = new ByteArrayInputStream(
+				CommonTestRecords.SIMPLE_ORE_EXAMPLE.getBytes());
+		OREResponse response = authController.post(in);
+	}
+	
 }

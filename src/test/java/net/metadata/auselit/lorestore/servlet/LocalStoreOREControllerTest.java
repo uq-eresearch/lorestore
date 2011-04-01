@@ -1,9 +1,8 @@
 package net.metadata.auselit.lorestore.servlet;
 
-import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathFactory;
 
-import net.metadata.auselit.lorestore.access.DefaultOREAccessPolicy;
+import net.metadata.auselit.lorestore.access.AllowEverythingAccessPolicy;
 import net.metadata.auselit.lorestore.triplestore.PersistedMemoryTripleStoreConnectorFactory;
 import net.metadata.auselit.lorestore.triplestore.SimpleSesamePool;
 import net.metadata.auselit.lorestore.triplestore.TripleStoreConnectorFactory;
@@ -13,7 +12,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.ontoware.rdf2go.model.ModelSet;
 
-public class LocalStoreOREControllerTest extends OREControllerTest {
+public abstract class LocalStoreOREControllerTest extends OREControllerTest {
 
 	
 	@Before
@@ -36,7 +35,7 @@ public class LocalStoreOREControllerTest extends OREControllerTest {
 		TripleStoreConnectorFactory pool = new SimpleSesamePool(cf);
 		occ.setContainerFactory(pool);
 
-		occ.setAccessPolicy(new DefaultOREAccessPolicy());
+		occ.setAccessPolicy(new AllowEverythingAccessPolicy());
 		occ.setBaseUri("http://example.com/");
 		occ.setUidGenerator(new UIDGenerator());
 		return new OREController(occ);

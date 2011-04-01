@@ -8,6 +8,9 @@ import static net.metadata.auselit.lorestore.common.OREConstants.DC_CREATOR;
 import static net.metadata.auselit.lorestore.common.OREConstants.ORE_AGGREGATION_CLASS;
 import static net.metadata.auselit.lorestore.common.OREConstants.ORE_DESCRIBES_PROPERTY;
 import static net.metadata.auselit.lorestore.common.OREConstants.RDF_TYPE_PROPERTY;
+
+import javax.xml.datatype.XMLGregorianCalendar;
+
 import net.metadata.auselit.lorestore.exceptions.OREException;
 
 import org.ontoware.aifbcommons.collection.ClosableIterator;
@@ -21,7 +24,7 @@ import org.ontoware.rdf2go.model.node.Resource;
 import org.ontoware.rdf2go.model.node.URI;
 import org.ontoware.rdf2go.model.node.Variable;
 
-public class CompoundObjectImpl {
+public class CompoundObjectImpl implements CompoundObject {
 
 	private Model model;
 
@@ -98,15 +101,14 @@ public class CompoundObjectImpl {
 				"select ?rem WHERE {?aggre <%1$s> <%2$s>. ?rem <%3$s> ?aggre}",
 				RDF_TYPE_PROPERTY, ORE_AGGREGATION_CLASS, ORE_DESCRIBES_PROPERTY));
 
-		Resource res = null;
 		for (QueryRow row : resultTable) {
 			return row.getValue("rem").asResource();
 		}
-		return res;
+		throw new OREException("Invalid CompoundObject, no ResourceMap found");
 	}
 
-	public Node getCreator() throws OREException {
-		return lookupResourceMapNode(model.createURI(DC_CREATOR));
+	public String getCreator() throws OREException {
+		return lookupResourceMapNode(model.createURI(DC_CREATOR)).toString();
 	}
 
 	public Node getCreatedDate() throws OREException {
@@ -160,6 +162,41 @@ public class CompoundObjectImpl {
 		}
 		it.close();
 		return s;
+	}
+
+	public void setCreator(String userName) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public String getOwnerId() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public void setOwnerId(String ownerURI) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public XMLGregorianCalendar getCreated() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public void setDatestamp(String propName, XMLGregorianCalendar timestamp) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public XMLGregorianCalendar getModified() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public XMLGregorianCalendar getDate() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

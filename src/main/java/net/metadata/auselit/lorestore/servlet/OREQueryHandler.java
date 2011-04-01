@@ -4,6 +4,7 @@ import static net.metadata.auselit.lorestore.common.OREConstants.SPARQL_RESULTS_
 
 import java.io.ByteArrayOutputStream;
 
+import net.metadata.auselit.lorestore.access.OREAccessPolicy;
 import net.metadata.auselit.lorestore.exceptions.NotFoundException;
 import net.metadata.auselit.lorestore.triplestore.TripleStoreConnectorFactory;
 
@@ -25,6 +26,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
+import au.edu.diasb.chico.mvc.RequestFailureException;
+
 /**
  * The OREQueryHandler class handles queries from the {@link OREController}.
  * 
@@ -34,14 +37,16 @@ public class OREQueryHandler {
 	private static final Logger LOG = Logger.getLogger(OREQueryHandler.class);
 	protected final OREControllerConfig occ;
 	private TripleStoreConnectorFactory cf;
+	private OREAccessPolicy ap;
 
 	public OREQueryHandler(OREControllerConfig occ) {
 		this.occ = occ;
 		this.cf = occ.getContainerFactory();
+		this.ap = occ.getAccessPolicy();
 	}
 
 	public OREResponse getOreObject(String oreId) throws NotFoundException,
-			InterruptedException {
+			InterruptedException, RequestFailureException {
 		ModelSet container = cf.retrieveConnection();
 		Model model;
 
@@ -56,6 +61,7 @@ public class OREQueryHandler {
 		} finally {
 			cf.release(container);
 		}
+		ap.checkRead(model);
 		return new OREResponse(model);
 
 	}

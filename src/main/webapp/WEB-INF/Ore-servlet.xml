@@ -36,21 +36,27 @@
 		</property>
 	</bean>
     
-<!--	<bean id="dbContainerFactory" class="net.metadata.auselit.lorestore.triplestore.HttpTripleStoreConnectorFactory">
-    	<property name="repositoryURL" value="http://localhost:8080/openrdf-sesame/repositories/lore"/>
+	<!--	<bean id="dbContainerFactory" class="net.metadata.auselit.lorestore.triplestore.HttpTripleStoreConnectorFactory">
+			<property name="repositoryURL" value="http://localhost:8080/openrdf-sesame/repositories/lore"/>
+		</bean>
+		-->
+    
+	<bean id="dbContainerPool" class="net.metadata.auselit.lorestore.triplestore.SimpleSesamePool" destroy-method="destroy">
+		<constructor-arg ref="dbContainerFactory"></constructor-arg>
 	</bean>
-    -->
     
-    <bean id="dbContainerPool" class="net.metadata.auselit.lorestore.triplestore.SimpleSesamePool" destroy-method="destroy">
-    	<constructor-arg ref="dbContainerFactory"></constructor-arg>
-    </bean>
-    
-    <bean id="dbContainerFactory" class="net.metadata.auselit.lorestore.triplestore.PersistedMemoryTripleStoreConnectorFactory">
-    	<property name="dataDirPath" value="D:/temp/"/>
-    </bean>
+	<bean id="dbContainerFactory" class="net.metadata.auselit.lorestore.triplestore.PersistedMemoryTripleStoreConnectorFactory">
+		<property name="dataDirPath" value="D:/temp/"/>
+	</bean>
     
 	<bean id="oreAccessPolicy" class="net.metadata.auselit.lorestore.access.DefaultOREAccessPolicy">
-    	
+		<property name="readAuthorities" value="ROLE_USER,ROLE_ANONYMOUS" />
+		<property name="writeAuthorities" value="ROLE_ORE" />
+<!--
+		<property name="checkOwner" value="true" />
+		<property name="privateFieldName" value="http://austlit.edu.au/ontologies/2009/03/lit-annotation-ns#private" />
+		<property name="privateValue" value="true" />
+-->
 	</bean>
 	
 	<bean id="uidGenerator" class="net.metadata.auselit.lorestore.util.UIDGenerator">

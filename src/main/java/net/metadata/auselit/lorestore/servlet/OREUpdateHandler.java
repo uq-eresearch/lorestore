@@ -5,8 +5,10 @@ import java.io.InputStream;
 
 import javax.servlet.http.HttpServletResponse;
 
+import net.metadata.auselit.lorestore.access.OREAccessPolicy;
 import net.metadata.auselit.lorestore.exceptions.NotFoundException;
 import net.metadata.auselit.lorestore.exceptions.OREException;
+import net.metadata.auselit.lorestore.model.CompoundObject;
 import net.metadata.auselit.lorestore.model.CompoundObjectImpl;
 import net.metadata.auselit.lorestore.triplestore.TripleStoreConnectorFactory;
 
@@ -33,10 +35,12 @@ public class OREUpdateHandler {
 
 	protected final OREControllerConfig occ;
 	private final TripleStoreConnectorFactory cf;
+	private OREAccessPolicy ap;
 
 	public OREUpdateHandler(OREControllerConfig occ) {
 		this.occ = occ;
 		this.cf = occ.getContainerFactory();
+		this.ap = occ.getAccessPolicy();
 	}
 
 	/**
@@ -73,7 +77,7 @@ public class OREUpdateHandler {
 		// TODO: needs to do stuff like maintaining the created/modified dates,
 		// and the creator
 
-		// occ.getAccessPolicy().checkCreate(request, model);
+		ap.checkCreate(model);
 		ModelSet ms = null;
 		try {
 			ms = cf.retrieveConnection();
@@ -86,20 +90,25 @@ public class OREUpdateHandler {
 		response.setLocationHeaer(occ.getBaseUri() + uid);
 		response.setReturnStatus(201);
 		return response;
-		//return "redirect:" + "/ore/" + uid;
-
 	}
 
 	public OREResponse delete(String oreId) throws NotFoundException,
-			InterruptedException {
+			InterruptedException, RequestFailureException {
 		ModelSet container = null;
+		Model model = null;
 		try {
 			container = cf.retrieveConnection();
-			URI contextURI = container.createURI(occ.getBaseUri() + oreId);
-			if (!container.containsModel(contextURI)) {
+			URI objURI = container.createURI(occ.getBaseUri() + oreId);
+
+			model = container.getModel(objURI);
+			CompoundObject co = new CompoundObjectImpl(model);
+			
+			ap.checkDelete(co);
+			
+			if (!container.containsModel(objURI)) {
 				throw new NotFoundException("Cannot delete, object not found");
 			}
-			container.removeModel(contextURI);
+			container.removeModel(objURI);
 		} finally {
 			cf.release(container);
 		}
