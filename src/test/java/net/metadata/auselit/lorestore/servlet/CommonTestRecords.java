@@ -69,10 +69,10 @@ public abstract class CommonTestRecords {
 	"<rdf:Description rdf:about=\"http://doc.localhost/rem/96ae9ffb-905a-79a6-b5bb-b927d94ef8b1#aggregation\">\r\n" + 
 	"	<rdf:type rdf:resource=\"http://www.openarchives.org/ore/terms/Aggregation\"/>\r\n" + 
 	"	<dcterms:modified>2011-03-02T13:46:40+10:00</dcterms:modified>\r\n" + 
-	"	<ore:aggregates rdf:resource=\"https://doc.localhost/oreservlet/secure/login.html\"/>\r\n" + 
+	"	<ore:aggregates rdf:resource=\"https://doc.localhost/lorestore/secure/login.html\"/>\r\n" + 
 	"</rdf:Description>\r\n" + 
 	"\r\n" + 
-	"<rdf:Description rdf:about=\"https://doc.localhost/oreservlet/secure/login.html\">\r\n" + 
+	"<rdf:Description rdf:about=\"https://doc.localhost/lorestore/secure/login.html\">\r\n" + 
 	"	<dc:title>503 Service Temporarily Unavailable</dc:title>\r\n" + 
 	"	<dc:format>text/html;charset=utf-8</dc:format>\r\n" + 
 	"	<layout:x>40</layout:x>\r\n" + 

@@ -4,8 +4,8 @@
 	<groupId>auselit.metadata.net</groupId>
 	<artifactId>lorestore</artifactId>
 	<packaging>war</packaging>
-	<version>0.0.1-SNAPSHOT</version>
-	<name>servlet Maven Webapp</name>
+	<version>0.0.2-SNAPSHOT</version>
+	<name>LoreStore</name>
 	<url>http://maven.apache.org</url>
 
 	<!-- Shared version number properties -->
@@ -103,8 +103,10 @@
 </dependency>
  -->
 	</dependencies>
+	
+	
 	<build>
-		<finalName>oreservlet</finalName>
+		<finalName>lorestore</finalName>
 		<plugins>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
@@ -134,7 +136,7 @@
 					<server>local_tomcat</server>
 					<username>admin</username>
 					<password>password</password>
-					<path>/oreservlet</path>
+					<path>/lorestore</path>
 					<url>http://localhost:8080/manager</url>
 				</configuration>
 			</plugin>

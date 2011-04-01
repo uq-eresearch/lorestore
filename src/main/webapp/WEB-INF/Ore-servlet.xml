@@ -13,7 +13,7 @@
 	<bean id="oreControllerConfig" class="net.metadata.auselit.lorestore.servlet.OREControllerConfig">
 		<property name="containerFactory" ref="dbContainerPool"/>
 		<property name="accessPolicy" ref="oreAccessPolicy"/>
-		<property name="baseUri" value="http://doc.localhost/ore/ore/"/>
+		<property name="baseUri" value="http://doc.localhost/lorestore/ore/"/>
 		<property name="uidGenerator" ref="uidGenerator"/>
 	</bean>
     

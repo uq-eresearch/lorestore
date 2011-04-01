@@ -36,40 +36,17 @@
 	</filter-mapping>
 	
 	
-	<!-- Jetty Asynchronous Proxy Client
-		http://docs.codehaus.org/display/JETTY/Asynchronous+Proxy+Servlet
-		-->
-<!--	<servlet>
-		<servlet-name>SesameProxy</servlet-name>
-		<servlet-class>org.mortbay.proxy.AsyncProxyServlet$Transparent</servlet-class>
-		<load-on-startup>1</load-on-startup>
-		<init-param>
-			<param-name>ProxyTo</param-name>
-			<param-value>http://doc.localhost/openrdf-sesame/repositories/lore</param-value>
-		</init-param>
-		<init-param>
-			<param-name>Prefix</param-name>
-			<param-value>/oreservlet/repositories/lore</param-value>
-		</init-param>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>SesameProxy</servlet-name>
-		<url-pattern>/repositories/lore/*</url-pattern>
-	</servlet-mapping>
-	-->
-
-
 	
-  <servlet>
-    <servlet-name>Ore</servlet-name>
-    <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
-    <load-on-startup>1</load-on-startup>
-  </servlet>
+	<servlet>
+		<servlet-name>Ore</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
   
-  <servlet-mapping>
-    <servlet-name>Ore</servlet-name>
-    <url-pattern>/ore/*</url-pattern>
-  </servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>Ore</servlet-name>
+		<url-pattern>/ore/*</url-pattern>
+	</servlet-mapping>
   
 	<servlet>
 		<servlet-name>Emmet</servlet-name>
