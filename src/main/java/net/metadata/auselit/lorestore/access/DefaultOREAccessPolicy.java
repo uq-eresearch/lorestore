@@ -112,7 +112,7 @@ public class DefaultOREAccessPolicy implements OREAccessPolicy, InitializingBean
     }
 
     /**
-     * Set the names of the write authorities; e.g. "ROLE_ANNOTATOR".
+     * Set the names of the write authorities; e.g. "ROLE_ORE".
      * @param writeAuthorities
      */
     public void setWriteAuthorities(String writeAuthorities) {

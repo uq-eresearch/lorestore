@@ -131,4 +131,17 @@ public class RequestMappingTest {
 		adapter.handle(request, response, controller);
 		EasyMock.verify(controller);
 	}
+	
+	@Test
+	public void keywordSearchQuery() throws Exception {
+		EasyMock.expect(controller.keywordSearch("matchval")).andReturn(null);
+		EasyMock.replay(controller);
+		
+		request.setRequestURI("/");
+		request.setParameter("matchval", "matchval");
+		request.setMethod("GET");
+		
+		adapter.handle(request, response, controller);
+		EasyMock.verify(controller);
+	}
 }

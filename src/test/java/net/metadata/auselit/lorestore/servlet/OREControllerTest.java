@@ -206,6 +206,14 @@ public class OREControllerTest {
 				xPath.evaluate("//binding[@name='a']/literal", document));
 	}
 
+	
+	@Test
+	public void keywordSearch() throws Exception {
+		String body = controller.keywordSearch("test").getBody();
+		System.out.println(body);
+		assertNotNull(body);
+	}
+	
 	private Document parseXmlToDocument(String xml) throws Exception {
 		return DocumentBuilderFactory.newInstance().newDocumentBuilder()
 				.parse(new InputSource(new StringReader(xml)));
