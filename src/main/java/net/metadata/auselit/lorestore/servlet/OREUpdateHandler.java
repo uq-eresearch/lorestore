@@ -57,6 +57,10 @@ public class OREUpdateHandler {
 	public OREResponse post(InputStream inputRDF) throws RequestFailureException,
 			IOException, OREException, InterruptedException {
 		
+		// TODO: probably should check after we've loaded the model,
+		// but at this stage, the security check ignores it anyway
+		ap.checkCreate(null);
+		
 		RepositoryModelFactory mf = new RepositoryModelFactory();
 
 		String uid = occ.getUidGenerator().newUID();
@@ -76,8 +80,9 @@ public class OREUpdateHandler {
 
 		// TODO: needs to do stuff like maintaining the created/modified dates,
 		// and the creator
+		String userURI = occ.getIdentityProvider().obtainUserURI();
+		compoundObject.setUser(userURI);
 
-		ap.checkCreate(model);
 		ModelSet ms = null;
 		try {
 			ms = cf.retrieveConnection();
@@ -132,8 +137,8 @@ public class OREUpdateHandler {
 			}
 
 			model = mf.createModel(objURI);
-
 			model.open();
+
 			try {
 				model.readFrom(inputRDF, Syntax.RdfXml, occ.getBaseUri());
 			} catch (ModelRuntimeException e) {
