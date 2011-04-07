@@ -24,6 +24,7 @@ import net.metadata.auselit.lorestore.triplestore.InMemoryTripleStoreConnectorFa
 import net.metadata.auselit.lorestore.triplestore.TripleStoreConnectorFactory;
 import net.metadata.auselit.lorestore.util.UIDGenerator;
 import net.metadata.auselit.test.mocks.MockAuthenticationContext;
+import net.metadata.auselit.test.mocks.MockOREIdentityProvider;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -60,6 +61,7 @@ public class OREControllerTest {
 		occ.setAccessPolicy(new AllowEverythingAccessPolicy());
 		occ.setBaseUri("http://example.com/");
 		occ.setUidGenerator(new UIDGenerator());
+		occ.setIdentityProvider(new MockOREIdentityProvider());
 		return new OREController(occ);
 	}
 	
@@ -73,6 +75,7 @@ public class OREControllerTest {
 		ap.afterPropertiesSet();
 		occ.setAccessPolicy(ap);
 
+		occ.setIdentityProvider(new MockOREIdentityProvider());
 		occ.setBaseUri("http://example.com/");
 		occ.setUidGenerator(new UIDGenerator());
 		return new OREController(occ);

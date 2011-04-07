@@ -1,6 +1,7 @@
 package net.metadata.auselit.lorestore.servlet;
 
 import net.metadata.auselit.lorestore.access.OREAccessPolicy;
+import net.metadata.auselit.lorestore.access.OREIdentityProvider;
 import net.metadata.auselit.lorestore.triplestore.TripleStoreConnectorFactory;
 import net.metadata.auselit.lorestore.util.UIDGenerator;
 
@@ -11,6 +12,7 @@ public class OREControllerConfig {
 	private TripleStoreConnectorFactory cf;
 	private String baseUri;
 	private UIDGenerator uidGenerator;
+	private OREIdentityProvider ip;
 	
 
 	public void setAccessPolicy(OREAccessPolicy accessPolicy) {
@@ -45,4 +47,13 @@ public class OREControllerConfig {
 	public UIDGenerator getUidGenerator() {
 		return uidGenerator;
 	}
+
+	public void setIdentityProvider(OREIdentityProvider ip) {
+		this.ip = ip;
+	}
+
+	public OREIdentityProvider getIdentityProvider() {
+		return ip;
+	}
+
 }
