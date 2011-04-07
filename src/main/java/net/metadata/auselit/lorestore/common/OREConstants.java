@@ -36,7 +36,7 @@ public interface OREConstants {
     String DC_CREATOR = DC_NS_URL + "creator";
     
     
-    String AUSELIT_NS_URL = "";
+    String AUSELIT_NS_URL = "http://auselit.metadata.net/oreextensions/";
     String AUSELIT_USER = AUSELIT_NS_URL + "user";
     
 

@@ -30,6 +30,7 @@ public class CompoundObjectImpl implements CompoundObject {
 
 	public CompoundObjectImpl(Model model) {
 		this.model = model;
+		model.setAutocommit(false);
 	}
 
 	public Model getModel() {
@@ -52,7 +53,6 @@ public class CompoundObjectImpl implements CompoundObject {
 	 * @throws OREException
 	 */
 	public void assignURI(String newUriString) throws OREException {
-		model.setAutocommit(false);
 		Resource oldUri = findResourceMap();
 		URI newURI = model.createURI(newUriString);
 		ClosableIterator<Statement> resourceMapStmts = model.findStatements(
@@ -135,8 +135,8 @@ public class CompoundObjectImpl implements CompoundObject {
 		if (user != null) {
 			throw new OREException("User already set, not allowed to update");
 		}
-		Resource findResourceMap = findResourceMap();
-		model.addStatement(findResourceMap, model.createURI(AUSELIT_USER),
+		Resource resourceMap = findResourceMap();
+		model.addStatement(resourceMap, model.createURI(AUSELIT_USER),
 				model.createPlainLiteral(newUser));
 		model.commit();
 	}
@@ -145,7 +145,7 @@ public class CompoundObjectImpl implements CompoundObject {
 			throws OREException {
 		Statement s = lookupOneStatement(it);
 
-		return s.getObject();
+		return s == null ? null : s.getObject();
 	}
 
 	private Statement lookupOneStatement(ClosableIterator<Statement> it)
@@ -155,7 +155,7 @@ public class CompoundObjectImpl implements CompoundObject {
 			s = it.next();
 		}
 		if (s == null) {
-			throw new OREException("No result found");
+			return null;
 		}
 		if (it.hasNext()) {
 			throw new OREException("Multiple results found");
@@ -164,8 +164,9 @@ public class CompoundObjectImpl implements CompoundObject {
 		return s;
 	}
 
-	public void setCreator(String userName) {
-		// TODO Auto-generated method stub
+	public void setCreator(String userURI) {
+//		Resource rm = findResourceMap();
+		
 		
 	}
 

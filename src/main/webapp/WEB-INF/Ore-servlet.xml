@@ -15,6 +15,7 @@
 		<property name="accessPolicy" ref="oreAccessPolicy"/>
 		<property name="baseUri" value="http://doc.localhost/lorestore/ore/"/>
 		<property name="uidGenerator" ref="uidGenerator"/>
+		<property name="identityProvider" ref="identityProvider"/>
 	</bean>
     
 	<bean id="xmlViewResolver" class="org.springframework.web.servlet.view.XmlViewResolver">
@@ -52,6 +53,7 @@
 	<bean id="oreAccessPolicy" class="net.metadata.auselit.lorestore.access.DefaultOREAccessPolicy">
 		<property name="readAuthorities" value="ROLE_USER,ROLE_ANONYMOUS" />
 		<property name="writeAuthorities" value="ROLE_ORE" />
+		<property name="identityProvider" ref="identityProvider"/>
 <!--
 		<property name="checkOwner" value="true" />
 		<property name="privateFieldName" value="http://austlit.edu.au/ontologies/2009/03/lit-annotation-ns#private" />
@@ -60,6 +62,12 @@
 	</bean>
 	
 	<bean id="uidGenerator" class="net.metadata.auselit.lorestore.util.UIDGenerator">
-		
+	</bean>
+	
+    <bean id="oreAuthenticationContext" 
+          class="au.edu.diasb.chico.mvc.DefaultAuthenticationContext"/>
+          
+	<bean id="identityProvider" class="net.metadata.auselit.lorestore.access.DefaultOREIdentityProvider">
+	    <property name="authenticationContext" ref="oreAuthenticationContext"/>
 	</bean>
 </beans>
