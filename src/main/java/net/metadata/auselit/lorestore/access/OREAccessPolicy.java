@@ -1,7 +1,5 @@
 package net.metadata.auselit.lorestore.access;
 
-import javax.servlet.http.HttpServletRequest;
-
 import net.metadata.auselit.lorestore.model.CompoundObject;
 
 import org.ontoware.rdf2go.model.Model;

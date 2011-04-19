@@ -1,7 +1,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>auselit.metadata.net</groupId>
+	<groupId>net.metadata.auselit</groupId>
 	<artifactId>lorestore</artifactId>
 	<packaging>war</packaging>
 	<version>0.0.2-SNAPSHOT</version>
@@ -21,7 +21,7 @@
 
 	<!-- Shared version number properties -->
 	<properties>
-		<spring-version>3.0.5.RELEASE</spring-version>
+		<spring-version>3.0.3.RELEASE</spring-version>
 		<sesame-version>2.3.2</sesame-version>
 		<chico-version>0.5-SNAPSHOT</chico-version>
 		<emmet-version>0.5-SNAPSHOT</emmet-version>
@@ -42,7 +42,7 @@
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-test</artifactId>
 			<version>${spring-version}</version>
-			<scope>compile</scope>
+			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>net.metadata.chico</groupId>
@@ -62,22 +62,15 @@
 		</dependency>
 		<dependency>
 			<groupId>net.metadata.emmet</groupId>
-			<artifactId>emmet.webapp</artifactId>
-			<version>${emmet-version}</version>
-			<type>war</type>
-		</dependency>
-		<dependency>
-			<groupId>net.metadata.emmet</groupId>
 			<artifactId>emmet.servlet</artifactId>
 			<version>${emmet-version}</version>
 		</dependency>
-
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>servlet-api</artifactId>
 			<version>2.5</version>
+			<scope>provided</scope>
 		</dependency>
-
 		<dependency>
 			<groupId>commons-httpclient</groupId>
 			<artifactId>commons-httpclient</artifactId>
@@ -86,7 +79,7 @@
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>4.5</version>
+			<version>4.7</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
@@ -111,16 +104,16 @@
 			<version>1.2.16</version>
 			<scope>compile</scope>
 		</dependency>
-<!-- 
-<dependency>
-	<groupId>ch.qos.logback</groupId>
-	<artifactId>logback-classic</artifactId>
-	<version>0.9.18</version>
-</dependency>
- -->
+
+		<dependency>
+			<groupId>rome</groupId>
+			<artifactId>rome</artifactId>
+			<version>0.9</version>
+		</dependency>
+
 	</dependencies>
-	
-	
+
+
 	<build>
 		<finalName>lorestore</finalName>
 		<plugins>
@@ -135,14 +128,6 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-war-plugin</artifactId>
-				<configuration>
-					<overlays>
-						<overlay>
-							<groupId>net.metadata.emmet</groupId>
-							<artifactId>emmet.webapp</artifactId>
-						</overlay>
-					</overlays>
-				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
