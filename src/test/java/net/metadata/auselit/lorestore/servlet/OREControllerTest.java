@@ -27,7 +27,11 @@ import net.metadata.auselit.test.mocks.MockAuthenticationContext;
 import net.metadata.auselit.test.mocks.MockOREIdentityProvider;
 
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 import org.ontoware.rdf2go.model.Model;
 import org.springframework.security.access.AccessDeniedException;
 import org.w3c.dom.Document;
@@ -36,15 +40,21 @@ import org.xml.sax.InputSource;
 
 import au.edu.diasb.chico.mvc.RequestFailureException;
 
+@RunWith(JUnit4.class)
 public class OREControllerTest {
 
 	private TripleStoreConnectorFactory cf;
+	private MockOREIdentityProvider ip;
 	static OREController controller;
 	static OREController authController;
 	static XPath xPath;
 
+	@Rule
+	public ExpectedException exception = ExpectedException.none();
+	
 	@Before
 	public  void setUp() throws Exception {
+		cf = new InMemoryTripleStoreConnectorFactory();
 		controller = getController();
 		authController = getAuthController();
 		xPath = XPathFactory.newInstance().newXPath();
@@ -52,7 +62,6 @@ public class OREControllerTest {
 
 	private  OREController getController() throws InterruptedException {
 		OREControllerConfig occ = new OREControllerConfig();
-		cf = new InMemoryTripleStoreConnectorFactory();
 		occ.setContainerFactory(cf);
 		// HttpTripleStoreConnectorFactory cf = new
 		// HttpTripleStoreConnectorFactory();
@@ -67,15 +76,16 @@ public class OREControllerTest {
 	
 	private OREController getAuthController() throws Exception {
 		OREControllerConfig occ = new OREControllerConfig();
-		cf = new InMemoryTripleStoreConnectorFactory();
 		occ.setContainerFactory(cf);
+		ip = new MockOREIdentityProvider();
 		DefaultOREAccessPolicy ap = new DefaultOREAccessPolicy();
 		ap.setReadAuthorities("ROLE_USER,ROLE_ANONYMOUS");
 		ap.setWriteAuthorities("ROLE_ORE");
 		ap.afterPropertiesSet();
+		ap.setIdentityProvider(ip);
 		occ.setAccessPolicy(ap);
 
-		occ.setIdentityProvider(new MockOREIdentityProvider());
+		occ.setIdentityProvider(ip);
 		occ.setBaseUri("http://example.com/");
 		occ.setUidGenerator(new UIDGenerator());
 		return new OREController(occ);
@@ -85,6 +95,8 @@ public class OREControllerTest {
 		DefaultOREAccessPolicy accessPolicy = (DefaultOREAccessPolicy)authController.getControllerConfig().getAccessPolicy();
 		accessPolicy.setAuthenticationContext(new MockAuthenticationContext(username, uri, authorities));
 		accessPolicy.afterPropertiesSet();
+		
+		ip.setUserURI(uri);
 	}
 
 
@@ -182,15 +194,15 @@ public class OREControllerTest {
 		InputStream in = new ByteArrayInputStream(recordXML.getBytes());
 		OREResponse response = controller.post(in);
 		
-		String redirect = response.getLocationHeader();
-		String id = findUIDFromRedirect(redirect);
+		String id = findUIDFromResponse(response);
 
 		return id;
 		
 	}
 
-	private String findUIDFromRedirect(String redirect) {
+	private String findUIDFromResponse(OREResponse response) {
 //		assertTrue(redirect.startsWith("redirect:"));
+		String redirect = response.getLocationHeader();
 		String createdId = redirect.substring(redirect.lastIndexOf("/") + 1);
 		return createdId;
 	}
@@ -270,4 +282,68 @@ public class OREControllerTest {
 		OREResponse response = authController.post(in);
 	}
 	
+	
+	@Test(expected = OREException.class)
+	public void putToNonExistant() throws Exception {
+		InputStream in = new ByteArrayInputStream(
+				CommonTestRecords.SIMPLE_ORE_EXAMPLE.getBytes());
+		authController.put("http://nonexistant.example.com/ore/id", in);
+	}
+	
+	@Test
+	public void putSuccessful() throws Exception {
+		String createdId = saveRecordToStore(CommonTestRecords.SIMPLE_ORE_EXAMPLE);
+		
+		InputStream in = new ByteArrayInputStream(
+				CommonTestRecords.SIMPLE_ORE_EXAMPLE.getBytes());
+		OREResponse response = controller.put(createdId, in);
+		
+		in = new ByteArrayInputStream(
+				CommonTestRecords.SIMPLE_ORE_EXAMPLE.getBytes());
+		response = controller.put(createdId, in);
+	}
+	
+	@Test
+	public void putWithNoAuth() throws Exception {
+		String createdId = saveRecordToStore(CommonTestRecords.SIMPLE_ORE_EXAMPLE);
+		
+		InputStream in = new ByteArrayInputStream(
+				CommonTestRecords.SIMPLE_ORE_EXAMPLE.getBytes());
+		
+		exception.expect(AccessDeniedException.class);
+		exception.expectMessage("Authentication problem: request has no authentication object");
+		OREResponse response = authController.put(createdId, in);
+	}
+	
+	@Test
+	public void postThenPutWithAuth() throws Exception {
+		updateAuthenticationContext("bob", "http://example.com/user/bob", new String[]{"ROLE_USER","ROLE_ORE"});
+		InputStream in = new ByteArrayInputStream(CommonTestRecords.SIMPLE_ORE_EXAMPLE.getBytes());
+		OREResponse response = authController.post(in);
+		
+		String recordId = findUIDFromResponse(response);
+		
+		in = new ByteArrayInputStream(
+				CommonTestRecords.SIMPLE_ORE_EXAMPLE.getBytes());
+		response = authController.put(recordId, in);
+	}
+	
+
+	
+	@Test
+	public void postThenPutWithChangedAuth() throws Exception {
+		updateAuthenticationContext("bob", "http://example.com/user/bob", new String[]{"ROLE_USER","ROLE_ORE"});
+		InputStream in = new ByteArrayInputStream(CommonTestRecords.SIMPLE_ORE_EXAMPLE.getBytes());
+		OREResponse response = authController.post(in);
+		
+		String recordId = findUIDFromResponse(response);
+
+		updateAuthenticationContext("james", "http://example.com/user/james", new String[]{"ROLE_USER","ROLE_ORE"});
+		in = new ByteArrayInputStream(
+				CommonTestRecords.SIMPLE_ORE_EXAMPLE.getBytes());
+		
+		exception.expect(AccessDeniedException.class);
+		exception.expectMessage("You do not own this object");
+		response = authController.put(recordId, in);
+	}
 }

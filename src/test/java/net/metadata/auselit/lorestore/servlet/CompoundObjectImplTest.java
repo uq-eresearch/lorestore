@@ -23,7 +23,7 @@ public class CompoundObjectImplTest {
 		ModelFactory modelFactory = RDF2Go.getModelFactory();
 		Model model = modelFactory.createModel();
 		model.open();
-		model.readFrom(new ByteArrayInputStream(CommonTestRecords.SIMPLE_ORE_EXAMPLE.getBytes()));
+		model.readFrom(new ByteArrayInputStream(CommonTestRecords.SIMPLE_ORE_EXAMPLE_WITH_OWNER.getBytes()));
 		model.commit();
 		
 		co = new CompoundObjectImpl(model);
@@ -50,4 +50,9 @@ public class CompoundObjectImplTest {
 		assertEquals(beforeSize, co.getModel().size());
 	}
 
+	@Test
+	public void getObjectOwner() {
+		String ownerId = co.getOwnerId();
+		assertEquals("http://doc.localhost/users/ore", ownerId);
+	}
 }
