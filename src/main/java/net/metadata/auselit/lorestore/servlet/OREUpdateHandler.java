@@ -136,9 +136,17 @@ public class OREUpdateHandler {
 				throw new OREException("Cannot update nonexistant object");
 			}
 
+			CompoundObject co = new CompoundObjectImpl(model);
+			try {
+				ap.checkUpdate(co);
+			} finally {
+				model.close();
+			}
+			
 			model = mf.createModel(objURI);
 			model.open();
 
+			
 			try {
 				model.readFrom(inputRDF, Syntax.RdfXml, occ.getBaseUri());
 			} catch (ModelRuntimeException e) {
@@ -149,6 +157,10 @@ public class OREUpdateHandler {
 			// TODO: needs to do stuff like maintaining the created/modified
 			// dates,
 			// and the creator
+//			String userURI = occ.getIdentityProvider().obtainUserURI();
+//			CompoundObjectImpl compoundObject = new CompoundObjectImpl(model);
+//			compoundObject.getUser();
+//			compoundObject.setUser(userURI);
 
 			container.removeModel(objURI);
 			container.addModel(model);

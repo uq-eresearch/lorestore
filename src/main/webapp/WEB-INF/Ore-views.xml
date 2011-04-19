@@ -6,4 +6,6 @@
        default-lazy-init="true">
     
     <bean id="ore" class="net.metadata.auselit.lorestore.servlet.OREResponseView"/>
+    
+    
 </beans>

@@ -47,6 +47,17 @@ public class OREQueryHandler {
 		this.ap = occ.getAccessPolicy();
 	}
 
+	/**
+	 * Handles a request for a single ORE object.
+	 * 
+	 * @param oreId
+	 *            The ID of the requested object.
+	 * @return an OREResponse containing the single object
+	 * @throws NotFoundException
+	 *             if the object doesn't exist here
+	 * @throws InterruptedException
+	 * @throws RequestFailureException
+	 */
 	public OREResponse getOreObject(String oreId) throws NotFoundException,
 			InterruptedException, RequestFailureException {
 		ModelSet container = cf.retrieveConnection();
@@ -68,6 +79,19 @@ public class OREQueryHandler {
 
 	}
 
+	/**
+	 * Handles a query for objects referencing a URI
+	 * 
+	 * @param url
+	 *            the url to search for
+	 * @return a direct http response, containing the result in sparqlXML format
+	 *         as well as setting the content type.
+	 * @throws RepositoryException
+	 * @throws MalformedQueryException
+	 * @throws QueryEvaluationException
+	 * @throws TupleQueryResultHandlerException
+	 * @throws InterruptedException
+	 */
 	public ResponseEntity<String> browseQuery(String url)
 			throws RepositoryException, MalformedQueryException,
 			QueryEvaluationException, TupleQueryResultHandlerException,
@@ -81,6 +105,14 @@ public class OREQueryHandler {
 				responseHeaders, HttpStatus.OK);
 	}
 
+	/**
+	 * Handles a search query
+	 * 
+	 * @param urlParam
+	 * @param matchpred
+	 * @param matchval
+	 * @return a http response containing result in sparqlXML format
+	 */
 	public ResponseEntity<String> searchQuery(String urlParam,
 			String matchpred, String matchval) throws RepositoryException,
 			MalformedQueryException, QueryEvaluationException,
@@ -94,6 +126,13 @@ public class OREQueryHandler {
 				responseHeaders, HttpStatus.OK);
 	}
 
+	/**
+	 * LORE explore results for a url
+	 * 
+	 * @param url
+	 *            the url to find explore results for
+	 * @return a http response containing result in sparqlXML format
+	 */
 	public ResponseEntity<String> exploreQuery(String url)
 			throws RepositoryException, MalformedQueryException,
 			QueryEvaluationException, TupleQueryResultHandlerException,
