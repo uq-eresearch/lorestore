@@ -1,7 +1,7 @@
 package net.metadata.auselit.lorestore.model;
 
 import static net.metadata.auselit.lorestore.common.OREConstants.AGGREGATION;
-import static net.metadata.auselit.lorestore.common.OREConstants.AUSELIT_USER;
+import static net.metadata.auselit.lorestore.common.OREConstants.LORESTORE_USER;
 import static net.metadata.auselit.lorestore.common.OREConstants.DCTERMS_CREATED;
 import static net.metadata.auselit.lorestore.common.OREConstants.DCTERMS_MODIFIED;
 import static net.metadata.auselit.lorestore.common.OREConstants.DC_CREATOR;
@@ -120,7 +120,7 @@ public class CompoundObjectImpl implements CompoundObject {
 	}
 
 	public Node getUser() throws OREException {
-		return lookupResourceMapNode(model.createURI(AUSELIT_USER));
+		return lookupResourceMapNode(model.createURI(LORESTORE_USER));
 	}
 
 	public Node lookupResourceMapNode(URI uri) throws OREException {
@@ -136,7 +136,7 @@ public class CompoundObjectImpl implements CompoundObject {
 			throw new OREException("User already set, not allowed to update");
 		}
 		Resource resourceMap = findResourceMap();
-		model.addStatement(resourceMap, model.createURI(AUSELIT_USER),
+		model.addStatement(resourceMap, model.createURI(LORESTORE_USER),
 				model.createPlainLiteral(newUser));
 		model.commit();
 	}
@@ -171,7 +171,14 @@ public class CompoundObjectImpl implements CompoundObject {
 	}
 
 	public String getOwnerId() {
-		// TODO Auto-generated method stub
+		try {
+			Node user = getUser();
+			if (user != null) {
+				return user.toString();
+			}
+		} catch (OREException e) {
+			
+		}
 		return null;
 	}
 

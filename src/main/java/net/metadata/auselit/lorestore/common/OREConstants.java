@@ -36,8 +36,8 @@ public interface OREConstants {
     String DC_CREATOR = DC_NS_URL + "creator";
     
     
-    String AUSELIT_NS_URL = "http://auselit.metadata.net/oreextensions/";
-    String AUSELIT_USER = AUSELIT_NS_URL + "user";
+    String LORESTORE_NS_URL = "http://auselit.metadata.net/lorestore/";
+    String LORESTORE_USER = LORESTORE_NS_URL + "user";
     
 
 	String SPARQL_RESULTS_XML = "application/sparql-results+xml";
