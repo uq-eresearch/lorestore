@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.View;
 import org.springframework.web.servlet.view.RedirectView;
 
@@ -100,6 +101,17 @@ public class OREController {
 		}
 		
 		return qh.exploreQuery(urlParam);
+	}
+
+	@RequestMapping(value = "/rss", params = "refersTo", method = RequestMethod.GET)
+	public ModelAndView rssRefersToQuery(
+			@RequestParam("refersTo") String urlParam) throws Exception {
+		if (urlParam == null || urlParam.isEmpty()) {
+			throw new InvalidQueryParametersException(
+					"Missing or empty query parameters");
+		}
+
+		return qh.browseRSSQuery(urlParam);
 	}
 
 	public View saveORE() {

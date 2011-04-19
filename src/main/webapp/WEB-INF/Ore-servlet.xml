@@ -5,6 +5,8 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/beans
 	http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
+	<import resource="siteTailoring.xml" />
+    
 	<!-- the application context definition for the oreservlet DispatcherServlet -->
 	<bean name="ore" class="net.metadata.auselit.lorestore.servlet.OREController">
 		<constructor-arg ref="oreControllerConfig"/>
@@ -13,7 +15,7 @@
 	<bean id="oreControllerConfig" class="net.metadata.auselit.lorestore.servlet.OREControllerConfig">
 		<property name="containerFactory" ref="dbContainerPool"/>
 		<property name="accessPolicy" ref="oreAccessPolicy"/>
-		<property name="baseUri" value="http://doc.localhost/lorestore/ore/"/>
+		<property name="baseUri" value="${lorestore.baseurl}"/>
 		<property name="uidGenerator" ref="uidGenerator"/>
 		<property name="identityProvider" ref="identityProvider"/>
 	</bean>
@@ -24,9 +26,18 @@
 	</bean>
     
 	<bean id="urlViewResolver" class="org.springframework.web.servlet.view.UrlBasedViewResolver">
+		<property name="order" value="3"/>
 		<property name="viewClass" value="org.springframework.web.servlet.view.JstlView"></property>
 		<property name="prefix" value="/WEB-INF/jsp/"></property>
 		<property name="suffix" value=".jsp"></property>    
+	</bean>
+	
+	<bean id="xsltViewResolver" class="org.springframework.web.servlet.view.xslt.XsltViewResolver">
+		<property name="order" value="2"/>
+		<property name="viewClass" value="org.springframework.web.servlet.view.xslt.XsltView"/>
+		<property name="sourceKey" value="xmlData" /> 
+		<property name="suffix" value=".xsl" />
+		<property name="prefix" value="/WEB-INF/xsl/" />
 	</bean>
     
 	<bean class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
@@ -47,27 +58,27 @@
 	</bean>
     
 	<bean id="dbContainerFactory" class="net.metadata.auselit.lorestore.triplestore.PersistedMemoryTripleStoreConnectorFactory">
-		<property name="dataDirPath" value="D:/temp/"/>
+		<property name="dataDirPath" value="${lorestore.datadir}"/>
 	</bean>
     
 	<bean id="oreAccessPolicy" class="net.metadata.auselit.lorestore.access.DefaultOREAccessPolicy">
 		<property name="readAuthorities" value="ROLE_USER,ROLE_ANONYMOUS" />
 		<property name="writeAuthorities" value="ROLE_ORE" />
 		<property name="identityProvider" ref="identityProvider"/>
-<!--
-		<property name="checkOwner" value="true" />
-		<property name="privateFieldName" value="http://austlit.edu.au/ontologies/2009/03/lit-annotation-ns#private" />
-		<property name="privateValue" value="true" />
+		<!--
+			<property name="checkOwner" value="true" />
+			<property name="privateFieldName" value="http://austlit.edu.au/ontologies/2009/03/lit-annotation-ns#private" />
+			<property name="privateValue" value="true" />
 -->
 	</bean>
 	
 	<bean id="uidGenerator" class="net.metadata.auselit.lorestore.util.UIDGenerator">
 	</bean>
 	
-    <bean id="oreAuthenticationContext" 
-          class="au.edu.diasb.chico.mvc.DefaultAuthenticationContext"/>
+	<bean id="oreAuthenticationContext" 
+		class="au.edu.diasb.chico.mvc.DefaultAuthenticationContext"/>
           
 	<bean id="identityProvider" class="net.metadata.auselit.lorestore.access.DefaultOREIdentityProvider">
-	    <property name="authenticationContext" ref="oreAuthenticationContext"/>
+		<property name="authenticationContext" ref="oreAuthenticationContext"/>
 	</bean>
 </beans>

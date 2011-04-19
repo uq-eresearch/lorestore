@@ -2,6 +2,7 @@ package net.metadata.auselit.lorestore.servlet;
 
 import static net.metadata.auselit.lorestore.common.OREConstants.SPARQL_RESULTS_XML;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 
 import net.metadata.auselit.lorestore.access.OREAccessPolicy;
@@ -25,6 +26,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.servlet.ModelAndView;
 
 import au.edu.diasb.chico.mvc.RequestFailureException;
 
@@ -105,6 +107,19 @@ public class OREQueryHandler {
 				responseHeaders, HttpStatus.OK);
 	}
 
+	public ModelAndView browseRSSQuery(String url) throws RepositoryException,
+			MalformedQueryException, QueryEvaluationException,
+			TupleQueryResultHandlerException, InterruptedException {
+		String queryString = generateBrowseQuery(url);
+		ModelAndView view = new ModelAndView("rss");
+
+		ByteArrayInputStream inputStream = new ByteArrayInputStream(
+				runSparqlQuery(queryString).getBytes());
+		view.addObject("xmlData", inputStream);
+
+		return view;
+	}
+
 	private String runSparqlQuery(String queryString)
 			throws RepositoryException, MalformedQueryException,
 			QueryEvaluationException, TupleQueryResultHandlerException,
@@ -115,7 +130,7 @@ public class OREQueryHandler {
 		try {
 			container = cf.retrieveConnection();
 			Repository rep = (Repository) container
-			.getUnderlyingModelSetImplementation();
+					.getUnderlyingModelSetImplementation();
 			stream = new ByteArrayOutputStream();
 			con = rep.getConnection();
 			TupleQuery tupleQuery = con.prepareTupleQuery(QueryLanguage.SPARQL,
