@@ -25,7 +25,7 @@ import au.edu.diasb.chico.mvc.RequestFailureException;
 
 @Controller
 public class OREController {
-	private static final Logger LOG = Logger.getLogger(OREController.class);
+	private final Logger LOG = Logger.getLogger(OREController.class);
 
 	private final OREControllerConfig occ;
 	private OREQueryHandler qh;

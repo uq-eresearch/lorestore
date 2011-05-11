@@ -36,7 +36,7 @@ import au.edu.diasb.chico.mvc.RequestFailureException;
  * @author uqdayers
  */
 public class OREQueryHandler {
-	private static final Logger LOG = Logger.getLogger(OREQueryHandler.class);
+	private final Logger LOG = Logger.getLogger(OREQueryHandler.class);
 	protected final OREControllerConfig occ;
 	private TripleStoreConnectorFactory cf;
 	private OREAccessPolicy ap;
