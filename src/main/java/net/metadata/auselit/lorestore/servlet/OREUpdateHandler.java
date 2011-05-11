@@ -97,8 +97,8 @@ public class OREUpdateHandler {
 		return response;
 	}
 
-	public OREResponse delete(String oreId) throws NotFoundException,
-			InterruptedException, RequestFailureException {
+	public void delete(String oreId) throws NotFoundException,
+			InterruptedException {
 		ModelSet container = null;
 		Model model = null;
 		try {
@@ -118,7 +118,6 @@ public class OREUpdateHandler {
 			cf.release(container);
 		}
 
-		return new OREResponse(null);
 	}
 
 	public OREResponse put(String oreId, InputStream inputRDF)

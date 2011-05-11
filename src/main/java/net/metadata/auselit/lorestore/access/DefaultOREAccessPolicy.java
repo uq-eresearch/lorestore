@@ -10,7 +10,6 @@ import org.springframework.util.StringUtils;
 
 import au.edu.diasb.chico.mvc.AuthenticationContext;
 import au.edu.diasb.chico.mvc.DefaultAuthenticationContext;
-import au.edu.diasb.chico.mvc.RequestFailureException;
 
 public class DefaultOREAccessPolicy implements OREAccessPolicy, InitializingBean {
 	
@@ -30,26 +29,22 @@ public class DefaultOREAccessPolicy implements OREAccessPolicy, InitializingBean
         }
 	}
 	
-	public void checkRead(Model res)
-			throws RequestFailureException {
+	public void checkRead(Model res) {
 		ac.checkAuthority(null, readAuthorities);
 
 	}
 
-	public void checkCreate( Model res)
-			throws RequestFailureException {
+	public void checkCreate( Model res) {
 		ac.checkAuthority(null, writeAuthorities);
 	}
 
-	public void checkUpdate( CompoundObject obj)
-			throws RequestFailureException {
+	public void checkUpdate( CompoundObject obj) {
 		Authentication auth = ac.checkAuthority(null, writeAuthorities);
 		checkObjectOwner(obj, auth);
 
 	}
 
-	public void checkDelete( CompoundObject obj)
-			throws RequestFailureException {
+	public void checkDelete( CompoundObject obj) {
 		Authentication auth = ac.checkAuthority(null, writeAuthorities);
 		checkObjectOwner(obj, auth);
 	}
@@ -68,8 +63,7 @@ public class DefaultOREAccessPolicy implements OREAccessPolicy, InitializingBean
 		
 	}
 
-	public void checkAdmin()
-			throws RequestFailureException {
+	public void checkAdmin() {
 		ac.checkAuthority(null, adminAuthorities);
 
 	}

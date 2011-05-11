@@ -4,7 +4,6 @@ import net.metadata.auselit.lorestore.model.CompoundObject;
 
 import org.ontoware.rdf2go.model.Model;
 
-import au.edu.diasb.chico.mvc.RequestFailureException;
 
 /**
  * An OREAccessPolicy is exactly based upon DannoAccessPolicy, but I don't want
@@ -27,7 +26,7 @@ public interface OREAccessPolicy {
 	 * @param res
 	 *            the result container.
 	 */
-	void checkRead(Model res) throws RequestFailureException;
+	void checkRead(Model res);
 
 	/**
 	 * Called for PUT and POST requests after preparing the result container and
@@ -39,9 +38,8 @@ public interface OREAccessPolicy {
 	 * @param res
 	 *            the result container containing the triples to be returned in
 	 *            the response.
-	 * @throws RequestFailureException
 	 */
-	void checkCreate(Model res) throws RequestFailureException;
+	void checkCreate(Model res);
 
 	/**
 	 * Called for PUT requests to check that the requestor may update an object.
@@ -50,9 +48,8 @@ public interface OREAccessPolicy {
 	 * @param obj
 	 *            the original version of the object as fetched from the triple
 	 *            store.
-	 * @throws RequestFailureException
 	 */
-	void checkUpdate(CompoundObject obj) throws RequestFailureException;
+	void checkUpdate(CompoundObject obj);
 
 	/**
 	 * Called for DELETE requests prior to committing. An implementation may
@@ -61,9 +58,8 @@ public interface OREAccessPolicy {
 	 * @param obj
 	 *            the original version of the object as fetched from the triple
 	 *            store.
-	 * @throws RequestFailureException
 	 */
-	void checkDelete(CompoundObject obj) throws RequestFailureException;
+	void checkDelete(CompoundObject obj);
 
 	/**
 	 * Called for administrative requests to check that the request has the
@@ -71,8 +67,7 @@ public interface OREAccessPolicy {
 	 * 
 	 * @param request
 	 *            the specific request.
-	 * @throws RequestFailureException
 	 */
-	void checkAdmin() throws RequestFailureException;
+	void checkAdmin();
 
 }

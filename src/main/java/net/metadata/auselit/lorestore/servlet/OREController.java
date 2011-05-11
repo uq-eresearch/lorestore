@@ -3,6 +3,8 @@ package net.metadata.auselit.lorestore.servlet;
 import java.io.IOException;
 import java.io.InputStream;
 
+import javax.servlet.http.HttpServletResponse;
+
 import net.metadata.auselit.lorestore.exceptions.InvalidQueryParametersException;
 import net.metadata.auselit.lorestore.exceptions.NotFoundException;
 import net.metadata.auselit.lorestore.exceptions.OREException;
@@ -18,8 +20,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.View;
-import org.springframework.web.servlet.view.RedirectView;
 
 import au.edu.diasb.chico.mvc.RequestFailureException;
 
@@ -38,15 +38,17 @@ public class OREController {
 	}
 
 	@RequestMapping(value = "/", method = RequestMethod.POST)
-	public OREResponse post(InputStream inputRDF) throws RequestFailureException,
-			IOException, OREException, InterruptedException {
+	public OREResponse post(InputStream inputRDF)
+			throws RequestFailureException, IOException, OREException,
+			InterruptedException {
 
 		return uh.post(inputRDF);
 	}
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public OREResponse get(@PathVariable("id") String oreId)
-			throws NotFoundException, InterruptedException, RequestFailureException {
+			throws NotFoundException, InterruptedException,
+			RequestFailureException {
 		return qh.getOreObject(oreId);
 	}
 
@@ -80,15 +82,15 @@ public class OREController {
 
 		return qh.searchQuery(urlParam, matchpred, matchval);
 	}
-	
-	@RequestMapping(value = "/", params = {"matchval"}, method = RequestMethod.GET)
+
+	@RequestMapping(value = "/", params = { "matchval" }, method = RequestMethod.GET)
 	public ResponseEntity<String> keywordSearch(
 			@RequestParam("matchval") String matchval) throws Exception {
 		if (matchval == null || matchval.isEmpty()) {
 			throw new InvalidQueryParametersException(
 					"Missing or empty query parameters");
 		}
-		
+
 		return qh.searchQuery(null, null, matchval);
 	}
 
@@ -99,7 +101,7 @@ public class OREController {
 			throw new InvalidQueryParametersException(
 					"Missing or empty query parameters");
 		}
-		
+
 		return qh.exploreQuery(urlParam);
 	}
 
@@ -114,20 +116,18 @@ public class OREController {
 		return qh.browseRSSQuery(urlParam);
 	}
 
-	public View saveORE() {
-		return new RedirectView("", true);
+	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+	public void delete(@PathVariable("id") String oreId)
+			throws NotFoundException, InterruptedException {
+		uh.delete(oreId);
 	}
 
 	@ResponseStatus(HttpStatus.NOT_FOUND)
-	@ExceptionHandler({ RequestFailureException.class })
-	public void return404() {
-		LOG.debug("Handling RequestFailureException, returning 404");
-	}
-
-	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-	public OREResponse delete(@PathVariable("id") String oreId)
-			throws NotFoundException, InterruptedException, RequestFailureException {
-		return uh.delete(oreId);
+	@ExceptionHandler({ RequestFailureException.class, NotFoundException.class })
+	public void return404(Exception ex, HttpServletResponse response)
+			throws IOException {
+		LOG.debug("Handling Exception, returning 404" + ex);
+		response.sendError(HttpStatus.NOT_FOUND.value());
 	}
 
 	public OREControllerConfig getControllerConfig() {
