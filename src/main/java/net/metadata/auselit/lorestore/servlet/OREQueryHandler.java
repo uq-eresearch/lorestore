@@ -98,11 +98,20 @@ public class OREQueryHandler {
 			InterruptedException {
 		String queryString = generateBrowseQuery(url);
 
-		HttpHeaders responseHeaders = new HttpHeaders();
-		responseHeaders.setContentType(MediaType
-				.parseMediaType(SPARQL_RESULTS_XML));
+		HttpHeaders responseHeaders = getSparqlResultsHeaders();
 		return new ResponseEntity<String>(runSparqlQuery(queryString),
 				responseHeaders, HttpStatus.OK);
+	}
+
+	/**
+	 * Creates the correct headers for returning sparql results xml
+	 * @return headers object with correct content type and encoding
+	 */
+	private HttpHeaders getSparqlResultsHeaders() {
+		HttpHeaders responseHeaders = new HttpHeaders();
+		responseHeaders.setContentType(MediaType
+				.parseMediaType(SPARQL_RESULTS_XML + ";charset=UTF-8"));
+		return responseHeaders;
 	}
 
 	/**
@@ -119,9 +128,7 @@ public class OREQueryHandler {
 			TupleQueryResultHandlerException, InterruptedException {
 		String queryString = generateSearchQuery(urlParam, matchpred, matchval);
 
-		HttpHeaders responseHeaders = new HttpHeaders();
-		responseHeaders.setContentType(MediaType
-				.parseMediaType(SPARQL_RESULTS_XML));
+		HttpHeaders responseHeaders = getSparqlResultsHeaders();
 		return new ResponseEntity<String>(runSparqlQuery(queryString),
 				responseHeaders, HttpStatus.OK);
 	}
@@ -139,9 +146,7 @@ public class OREQueryHandler {
 			InterruptedException {
 		String queryString = generateExploreQuery(url);
 
-		HttpHeaders responseHeaders = new HttpHeaders();
-		responseHeaders.setContentType(MediaType
-				.parseMediaType(SPARQL_RESULTS_XML));
+		HttpHeaders responseHeaders = getSparqlResultsHeaders();
 		return new ResponseEntity<String>(runSparqlQuery(queryString),
 				responseHeaders, HttpStatus.OK);
 	}
@@ -189,13 +194,18 @@ public class OREQueryHandler {
 		return stream.toString();
 	}
 
-	/*
-	 * select distinct ?g ?a ?m ?t where { graph ?g { {<escapedURL> ?p ?o .}
-	 * UNION {?s ?p2 <escapedURL>} UNION {<altURL> ?p3 ?o2 .} UNION {?s2 ?p4
-	 * <altURL>} } . {?g <http://purl.org/dc/elements/1.1/creator> ?a} . {?g
-	 * <http://purl.org/dc/terms/modified> ?m} . OPTIONAL {?g
-	 * <http://purl.org/dc/elements/1.1/title> ?t} };
-	 */
+//	SELECT DISTINCT ?g ?a ?m ?t
+//			 WHERE {
+//			     graph ?g {
+//			            {<escapedURL> ?p ?o .}
+//			      UNION {?s ?p2 <escapedURL>}
+//			      UNION {<altURL> ?p4 ?o2 .}
+//			      UNION {?s2 ?p4 <altURL>}
+//			    } .
+//			    {?g <http://purl.org/dc/elements/1.1/creator> ?a} .
+//			    {?g <http://purl.org/dc/terms/modified> ?m} .
+//			    OPTIONAL {?g <http://purl.org/dc/elements/1.1/title> ?t}
+//			}
 	protected String generateBrowseQuery(String escapedURL) {
 		// Needs to match both www and non-www version of URL
 		String altURL = makeAltURL(escapedURL);
