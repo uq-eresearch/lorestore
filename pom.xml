@@ -158,10 +158,43 @@
 					</connectors>
 					<stopPort>9966</stopPort>
 					<stopKey>foo</stopKey>
+					<scanTargets>
+						<scanTarget>src/main/</scanTarget>
+						<scanTarget>target/classes/</scanTarget>
+					</scanTargets>
 				</configuration>
 			</plugin>
 		</plugins>
 	</build>
 
+	<profiles>
+		<profile>
+			<id>debug</id>
+			<dependencies>
+				<dependency>
+					<groupId>net.metadata.emmet</groupId>
+					<artifactId>emmet.webapp</artifactId>
+					<version>${emmet-version}</version>
+					<type>war</type>
+				</dependency>
+			</dependencies>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-war-plugin</artifactId>
+						<configuration>
+							<overlays>
+								<overlay>
+									<groupId>net.metadata.emmet</groupId>
+									<artifactId>emmet.webapp</artifactId>
+								</overlay>
+							</overlays>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
 
 </project>
