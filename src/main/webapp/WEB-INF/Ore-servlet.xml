@@ -53,6 +53,9 @@
                /**=ore
 			</value>
 		</property>
+		  <property name="interceptors">
+		    <list><ref bean="timingInterceptor"/></list>
+		  </property>
 	</bean>
 	<!--	<bean id="dbContainerFactory" class="net.metadata.auselit.lorestore.triplestore.HttpTripleStoreConnectorFactory">
 			<property name="repositoryURL" value="http://localhost:8080/openrdf-sesame/repositories/lore"/>
