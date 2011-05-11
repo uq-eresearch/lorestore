@@ -57,9 +57,13 @@
 		<constructor-arg ref="dbContainerFactory"></constructor-arg>
 	</bean>
     
-	<bean id="dbContainerFactory" class="net.metadata.auselit.lorestore.triplestore.PersistedMemoryTripleStoreConnectorFactory">
+	<bean id="dbContainerFactory" class="net.metadata.auselit.lorestore.triplestore.NativeTripleStoreConnectorFactory">
 		<property name="dataDirPath" value="${lorestore.datadir}"/>
 	</bean>
+ <!--
+	<bean id="dbContainerFactory" class="net.metadata.auselit.lorestore.triplestore.MemoryTripleStoreConnectorFactory">
+	</bean>
+	-->
     
 	<bean id="oreAccessPolicy" class="net.metadata.auselit.lorestore.access.DefaultOREAccessPolicy">
 		<property name="readAuthorities" value="ROLE_USER,ROLE_ANONYMOUS" />

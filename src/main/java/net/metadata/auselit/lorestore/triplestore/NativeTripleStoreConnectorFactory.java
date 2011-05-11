@@ -17,9 +17,9 @@ import org.openrdf.sail.nativerdf.NativeStore;
  * @author uqdayers
  *
  */
-public class PersistedMemoryTripleStoreConnectorFactory implements
+public class NativeTripleStoreConnectorFactory implements
 		TripleStoreConnectorFactory {
-	private static final Logger LOG = Logger.getLogger(PersistedMemoryTripleStoreConnectorFactory.class);
+	private static final Logger LOG = Logger.getLogger(NativeTripleStoreConnectorFactory.class);
 
 	private SailRepository repo;
 	private String dataDirPath;
@@ -35,7 +35,8 @@ public class PersistedMemoryTripleStoreConnectorFactory implements
 
 	private void initRepo() {
 		File dataDir = new File(dataDirPath);
-		repo = new SailRepository(new NativeStore(dataDir));
+		NativeStore nativeStore = new NativeStore(dataDir, "spoc,posc,cspo");
+		repo = new SailRepository(nativeStore);
 		try {
 			repo.initialize();
 		} catch (RepositoryException e) {

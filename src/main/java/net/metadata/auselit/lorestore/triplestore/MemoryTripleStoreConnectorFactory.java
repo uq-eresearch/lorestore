@@ -1,5 +1,7 @@
 package net.metadata.auselit.lorestore.triplestore;
 
+import java.io.File;
+
 import net.metadata.auselit.lorestore.exceptions.OREDBConnectionException;
 
 import org.ontoware.rdf2go.model.ModelSet;
@@ -8,11 +10,25 @@ import org.openrdf.repository.RepositoryException;
 import org.openrdf.repository.sail.SailRepository;
 import org.openrdf.repository.sail.SailRepositoryConnection;
 import org.openrdf.sail.memory.MemoryStore;
+import org.springframework.beans.factory.InitializingBean;
 
-public class InMemoryTripleStoreConnectorFactory implements
-		TripleStoreConnectorFactory {
+public class MemoryTripleStoreConnectorFactory implements
+		TripleStoreConnectorFactory, InitializingBean {
 
 	private SailRepository repo;
+	private String dataDir;
+	private MemoryStore memoryStore;
+
+	public MemoryTripleStoreConnectorFactory() {
+		this.memoryStore = new MemoryStore();
+	}
+	
+	public void afterPropertiesSet() throws Exception {
+		if (dataDir != null) {
+			File dataLocation = new File(dataDir);
+			this.memoryStore = new MemoryStore(dataLocation);
+		}
+	}
 	
 	public ModelSet retrieveConnection() {
 		if (repo == null) {
@@ -24,7 +40,7 @@ public class InMemoryTripleStoreConnectorFactory implements
 	}
 
 	private void initRepo() {
-		repo = new SailRepository(new MemoryStore());
+		repo = new SailRepository(memoryStore);
 		try {
 			repo.initialize();
 		} catch (RepositoryException e) {
@@ -48,4 +64,19 @@ public class InMemoryTripleStoreConnectorFactory implements
 		// TODO Auto-generated method stub
 		
 	}
+
+	/**
+	 * @return the dataDir
+	 */
+	public String getDataDir() {
+		return dataDir;
+	}
+
+	/**
+	 * @param dataDir the dataDir to set
+	 */
+	public void setDataDir(String dataDir) {
+		this.dataDir = dataDir;
+	}
+
 }
