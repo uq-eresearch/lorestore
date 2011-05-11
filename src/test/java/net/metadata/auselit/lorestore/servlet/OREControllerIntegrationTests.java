@@ -21,6 +21,8 @@ import static org.springframework.test.web.ModelAndViewAssert.*;
  * - http://stackoverflow.com/questions/1401128/how-to-unit-test-a-spring-mvc-controller-using-pathvariable
  * - http://www.scarba05.co.uk/blog/2010/03/integration-testing-of-springs-mvc-annotation-mapppings-for-controllers/
  * 
+ * This is just a mock up, not actually used (yet).
+ * 
  * @author uqdayers
  */
 @RunWith(SpringJUnit4ClassRunner.class)

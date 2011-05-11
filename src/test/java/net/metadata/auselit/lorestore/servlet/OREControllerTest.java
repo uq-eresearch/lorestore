@@ -5,7 +5,10 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.StringReader;
 import java.util.Map;
@@ -20,7 +23,7 @@ import net.metadata.auselit.lorestore.access.DefaultOREAccessPolicy;
 import net.metadata.auselit.lorestore.exceptions.InvalidQueryParametersException;
 import net.metadata.auselit.lorestore.exceptions.NotFoundException;
 import net.metadata.auselit.lorestore.exceptions.OREException;
-import net.metadata.auselit.lorestore.triplestore.InMemoryTripleStoreConnectorFactory;
+import net.metadata.auselit.lorestore.triplestore.MemoryTripleStoreConnectorFactory;
 import net.metadata.auselit.lorestore.triplestore.TripleStoreConnectorFactory;
 import net.metadata.auselit.lorestore.util.UIDGenerator;
 import net.metadata.auselit.test.mocks.MockAuthenticationContext;
@@ -54,7 +57,7 @@ public class OREControllerTest {
 	
 	@Before
 	public  void setUp() throws Exception {
-		cf = new InMemoryTripleStoreConnectorFactory();
+		cf = new MemoryTripleStoreConnectorFactory();
 		controller = getController();
 		authController = getAuthController();
 		xPath = XPathFactory.newInstance().newXPath();
@@ -346,4 +349,10 @@ public class OREControllerTest {
 		exception.expectMessage("You do not own this object");
 		response = authController.put(recordId, in);
 	}
+	
+//	@Test
+//	public void bulkImport() throws Exception {
+//		InputStream fileInput = new BufferedInputStream(new FileInputStream("D:/export.trig"));
+//		controller.bulkImport(fileInput, "application/x-trig");
+//	}
 }

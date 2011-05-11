@@ -155,7 +155,7 @@ public abstract class CommonTestRecords {
 	"		<dcterms:modified rdf:datatype=\"http://purl.org/dc/terms/W3CDTF\">2011-03-09T16:47:22+10:00</dcterms:modified>\r\n" + 
 	"		<dcterms:created rdf:datatype=\"http://purl.org/dc/terms/W3CDTF\">2011-03-09T16:39:33+10:00</dcterms:created>\r\n" + 
 	"		<dc:creator>Damien Ayers</dc:creator>\r\n" + 
-	"       <user xmlns=\"http://auselit.metadata.net/oreextensions/\" rdf:resource=\"http://doc.localhost/users/ore\"/>" + 
+	"       <user xmlns=\"http://auselit.metadata.net/lorestore/\" rdf:resource=\"http://doc.localhost/users/ore\"/>" + 
 	"	</ore:ResourceMap>\r\n" + 
 	"	<ore:Aggregation rdf:about=\"http://doc.localhost/rem/344385ed-2a79-4598-8a99-27be35e0b773#aggregation\">\r\n" + 
 	"		<dcterms:modified>2011-03-09T16:47:22+10:00</dcterms:modified>\r\n" + 

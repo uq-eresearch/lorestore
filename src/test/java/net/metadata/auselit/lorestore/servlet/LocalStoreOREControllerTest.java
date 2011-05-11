@@ -1,9 +1,11 @@
 package net.metadata.auselit.lorestore.servlet;
 
+import java.io.ByteArrayOutputStream;
+
 import javax.xml.xpath.XPathFactory;
 
 import net.metadata.auselit.lorestore.access.AllowEverythingAccessPolicy;
-import net.metadata.auselit.lorestore.triplestore.PersistedMemoryTripleStoreConnectorFactory;
+import net.metadata.auselit.lorestore.triplestore.NativeTripleStoreConnectorFactory;
 import net.metadata.auselit.lorestore.triplestore.SimpleSesamePool;
 import net.metadata.auselit.lorestore.triplestore.TripleStoreConnectorFactory;
 import net.metadata.auselit.lorestore.util.UIDGenerator;
@@ -11,6 +13,8 @@ import net.metadata.auselit.lorestore.util.UIDGenerator;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.ontoware.rdf2go.model.ModelSet;
+import org.openrdf.repository.Repository;
+import org.openrdf.repository.RepositoryConnection;
 
 public abstract class LocalStoreOREControllerTest extends OREControllerTest {
 
@@ -30,7 +34,7 @@ public abstract class LocalStoreOREControllerTest extends OREControllerTest {
 	private static OREController getController() throws InterruptedException {
 		OREControllerConfig occ = new OREControllerConfig();
 
-		PersistedMemoryTripleStoreConnectorFactory cf = new PersistedMemoryTripleStoreConnectorFactory();
+		NativeTripleStoreConnectorFactory cf = new NativeTripleStoreConnectorFactory();
 		cf.setDataDirPath("D:/temp/");
 		TripleStoreConnectorFactory pool = new SimpleSesamePool(cf);
 		occ.setContainerFactory(pool);
@@ -40,7 +44,8 @@ public abstract class LocalStoreOREControllerTest extends OREControllerTest {
 		occ.setUidGenerator(new UIDGenerator());
 		return new OREController(occ);
 	}
-
+	
+	
 	@Before
 	public void clearTriplestore() throws Exception {
 

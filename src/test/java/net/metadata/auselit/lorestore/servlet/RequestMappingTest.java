@@ -1,7 +1,5 @@
 package net.metadata.auselit.lorestore.servlet;
 
-import net.metadata.auselit.lorestore.servlet.OREController;
-
 import org.easymock.EasyMock;
 import org.junit.Before;
 import org.junit.Test;
@@ -81,7 +79,8 @@ public class RequestMappingTest {
 	
 	@Test
 	public void delete() throws Exception {
-		EasyMock.expect(controller.delete(exampleID)).andReturn(null);
+		controller.delete(exampleID);
+		EasyMock.expectLastCall();
 		EasyMock.replay(controller);
 		
 		request.setRequestURI("/" + exampleID);
@@ -143,5 +142,5 @@ public class RequestMappingTest {
 		
 		adapter.handle(request, response, controller);
 		EasyMock.verify(controller);
-	}
+	}	
 }
