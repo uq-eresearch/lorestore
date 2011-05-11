@@ -20,6 +20,9 @@ import org.ontoware.rdf2go.model.ModelSet;
 import org.ontoware.rdf2go.model.Syntax;
 import org.ontoware.rdf2go.model.node.URI;
 import org.openrdf.rdf2go.RepositoryModelFactory;
+import org.openrdf.repository.Repository;
+import org.openrdf.repository.RepositoryConnection;
+import org.openrdf.rio.RDFFormat;
 
 import au.edu.diasb.chico.mvc.RequestFailureException;
 
@@ -117,7 +120,6 @@ public class OREUpdateHandler {
 		} finally {
 			cf.release(container);
 		}
-
 	}
 
 	public OREResponse put(String oreId, InputStream inputRDF)
@@ -169,5 +171,43 @@ public class OREUpdateHandler {
 		}
 
 		return new OREResponse(model);
+	}
+
+	public void bulkImport(InputStream body, String fileName) throws Exception {
+		RepositoryConnection con = null;
+		ModelSet modelSet = null;
+		try {
+			modelSet = cf.retrieveConnection();
+	
+			Repository rep = (Repository) modelSet
+					.getUnderlyingModelSetImplementation();
+			con = rep.getConnection();
+			RDFFormat rdfFormat = RDFFormat.forFileName(fileName);
+			con.add(body, "", rdfFormat);
+		} finally {
+			if (con != null)
+				con.close();
+			if (modelSet != null)
+				cf.release(modelSet);
+		}
+	}
+	
+	/**
+	 * <b>Danger:</b> Clears all data from the database
+	 * 
+	 * @throws InterruptedException
+	 */
+	public void wipeDatabase() throws InterruptedException {
+
+		ModelSet modelSet = null;
+		try {
+			modelSet = cf.retrieveConnection();
+			
+			modelSet.removeAll();
+			
+		} finally {
+			if (modelSet != null)
+				cf.release(modelSet);
+		}
 	}
 }

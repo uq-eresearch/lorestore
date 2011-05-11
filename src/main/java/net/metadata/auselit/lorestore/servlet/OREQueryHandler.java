@@ -313,4 +313,19 @@ public class OREQueryHandler {
 		return query;
 	}
 
+	/**
+	 * Counts the total number of triples stored
+	 * 
+	 * @return the number of triples in the triplestore
+	 * @throws InterruptedException
+	 */
+	public long getNumberTriples() throws InterruptedException {
+		ModelSet container = cf.retrieveConnection();
+		try {
+			return container.size();
+		} finally {
+			cf.release(container);
+		}
+	}
+
 }

@@ -11,6 +11,10 @@
 	<bean name="ore" class="net.metadata.auselit.lorestore.servlet.OREController">
 		<constructor-arg ref="oreControllerConfig"/>
 	</bean>
+
+	<bean name="oreAdmin" class="net.metadata.auselit.lorestore.servlet.OREAdminController">
+		<constructor-arg ref="oreControllerConfig"/>
+	</bean>
 	
 	<bean id="oreControllerConfig" class="net.metadata.auselit.lorestore.servlet.OREControllerConfig">
 		<property name="containerFactory" ref="dbContainerPool"/>
@@ -24,30 +28,32 @@
 		<property name="order" value="1"></property>
 		<property name="location" value="/WEB-INF/Ore-views.xml"></property>
 	</bean>
-    
-	<bean id="urlViewResolver" class="org.springframework.web.servlet.view.UrlBasedViewResolver">
-		<property name="order" value="3"/>
-		<property name="viewClass" value="org.springframework.web.servlet.view.JstlView"></property>
-		<property name="prefix" value="/WEB-INF/jsp/"></property>
-		<property name="suffix" value=".jsp"></property>    
-	</bean>
 	
 	<bean id="xsltViewResolver" class="org.springframework.web.servlet.view.xslt.XsltViewResolver">
-		<property name="order" value="2"/>
+		<property name="order" value="3"/>
 		<property name="viewClass" value="org.springframework.web.servlet.view.xslt.XsltView"/>
 		<property name="sourceKey" value="xmlData" /> 
 		<property name="suffix" value=".xsl" />
 		<property name="prefix" value="/WEB-INF/xsl/" />
 	</bean>
     
+	<bean id="urlViewResolver" class="org.springframework.web.servlet.view.UrlBasedViewResolver">
+		<property name="order" value="2"/>
+		<property name="viewClass" value="org.springframework.web.servlet.view.JstlView"></property>
+		<property name="prefix" value="/WEB-INF/jsp/"></property>
+		<property name="suffix" value=".jsp"></property>    
+	</bean>
+
+    <bean id="timingInterceptor" class="net.metadata.auselit.lorestore.servlet.PerformanceHandlerIntercepter" />
+
 	<bean class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
 		<property name="mappings">
 			<value>
+               /admin/**=oreAdmin
                /**=ore
 			</value>
 		</property>
 	</bean>
-    
 	<!--	<bean id="dbContainerFactory" class="net.metadata.auselit.lorestore.triplestore.HttpTripleStoreConnectorFactory">
 			<property name="repositoryURL" value="http://localhost:8080/openrdf-sesame/repositories/lore"/>
 		</bean>
@@ -68,6 +74,7 @@
 	<bean id="oreAccessPolicy" class="net.metadata.auselit.lorestore.access.DefaultOREAccessPolicy">
 		<property name="readAuthorities" value="ROLE_USER,ROLE_ANONYMOUS" />
 		<property name="writeAuthorities" value="ROLE_ORE" />
+		<property name="adminAuthorities" value="ROLE_ADMIN" />
 		<property name="identityProvider" ref="identityProvider"/>
 		<!--
 			<property name="checkOwner" value="true" />
@@ -85,4 +92,11 @@
 	<bean id="identityProvider" class="net.metadata.auselit.lorestore.access.DefaultOREIdentityProvider">
 		<property name="authenticationContext" ref="oreAuthenticationContext"/>
 	</bean>
+	
+    <!-- Configure the multipart resolver -->
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <!-- one of the properties available; the maximum file size in bytes -->
+        <property name="maxUploadSize" value="50000000"/> <!-- 50Mb -->
+    </bean>
+	
 </beans>

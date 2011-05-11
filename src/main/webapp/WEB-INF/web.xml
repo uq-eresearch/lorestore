@@ -20,7 +20,7 @@
 		<listener-class>au.edu.diasb.chico.config.ContextLoaderListener</listener-class>
 	</listener>
 
-
+ 
 	<filter>
 		<filter-name>Encoding Filter</filter-name>
 		<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
@@ -47,7 +47,19 @@
 		<servlet-name>Ore</servlet-name>
 		<url-pattern>/ore/*</url-pattern>
 	</servlet-mapping>
+
+<!--
+	<servlet>
+		<servlet-name>OreAdmin</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
   
+	<servlet-mapping>
+		<servlet-name>OreAdmin</servlet-name>
+		<url-pattern>/oreadmin/*</url-pattern>
+	</servlet-mapping>
+-->
 	<servlet>
 		<servlet-name>Emmet</servlet-name>
 		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
