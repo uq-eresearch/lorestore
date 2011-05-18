@@ -6,13 +6,12 @@
 <html>
   <head>
     <title>LoreStore Server</title>
-    <meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1" >
   </head>
   <body>
   	<h1>LoreStore Wipe</h1>
   	<form method="post" enctype="multipart/form-data">
   		<fieldset>
-  			<legend>Import File</legend>
+  			<legend>Wipe Triplestore</legend>
   			
   			<p>
   				This will wipe all data from the LoreStore!
