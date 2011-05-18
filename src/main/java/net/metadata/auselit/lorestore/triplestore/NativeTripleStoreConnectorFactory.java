@@ -23,6 +23,7 @@ public class NativeTripleStoreConnectorFactory implements
 
 	private SailRepository repo;
 	private String dataDirPath;
+	private String sesameIndexes = "spoc,posc,cspo,ocsp";
 	
 	public ModelSet retrieveConnection() {
 		if (repo == null) {
@@ -35,7 +36,7 @@ public class NativeTripleStoreConnectorFactory implements
 
 	private void initRepo() {
 		File dataDir = new File(dataDirPath);
-		NativeStore nativeStore = new NativeStore(dataDir, "spoc,posc,cspo");
+		NativeStore nativeStore = new NativeStore(dataDir, sesameIndexes);
 		repo = new SailRepository(nativeStore);
 		try {
 			repo.initialize();
@@ -67,9 +68,19 @@ public class NativeTripleStoreConnectorFactory implements
 	public void destroy() {
 		LOG.info("Shutting down SAIL repository");
 		try {
-			repo.shutDown();
+			if (repo != null) {
+				repo.shutDown();
+			}
 		} catch (RepositoryException e) {
 			LOG.error("Error shutting down sail repository", e);
 		}
+	}
+
+	public void setSesameIndexes(String sesameIndexes) {
+		this.sesameIndexes = sesameIndexes;
+	}
+
+	public String getSesameIndexes() {
+		return sesameIndexes;
 	}
 }

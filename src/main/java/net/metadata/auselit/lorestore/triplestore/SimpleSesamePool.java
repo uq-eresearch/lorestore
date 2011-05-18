@@ -25,7 +25,7 @@ public final class SimpleSesamePool implements TripleStoreConnectorFactory {
 	public SimpleSesamePool(TripleStoreConnectorFactory cf) throws InterruptedException {
 		this.cf = cf;
 		ModelSet theConnection = cf.retrieveConnection();
-		this.connections = new ArrayBlockingQueue<ModelSet>(1, false);
+		this.connections = new ArrayBlockingQueue<ModelSet>(5, false);
 		connections.add(theConnection);
 	}
 
