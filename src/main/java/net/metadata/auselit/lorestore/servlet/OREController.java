@@ -117,9 +117,10 @@ public class OREController {
 	}
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-	public void delete(@PathVariable("id") String oreId)
+	public ResponseEntity<String> delete(@PathVariable("id") String oreId)
 			throws NotFoundException, InterruptedException {
 		uh.delete(oreId);
+		return new ResponseEntity<String>("", HttpStatus.NO_CONTENT);
 	}
 
 	@ResponseStatus(HttpStatus.NOT_FOUND)
