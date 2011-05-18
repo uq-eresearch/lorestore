@@ -43,7 +43,7 @@ public class OREAdminController {
 	@RequestMapping(value = "/import", method = RequestMethod.GET)
 	public String importData(Model model) {
 		model.addAttribute(new UploadItem());
-		return "importForm";
+		return "admin/importForm";
 	}
 	
 	@RequestMapping(value = "/import", method = RequestMethod.POST)
@@ -51,7 +51,7 @@ public class OREAdminController {
 		if (result.hasErrors()) {
 			for (ObjectError error : result.getAllErrors()) {
 				LOG.error("Error: " + error.getCode() +   " - " + error.getDefaultMessage());
-				return "importForm";
+				return "admin/importForm";
 			}
 		}
 		// Some type of file processing
@@ -64,7 +64,7 @@ public class OREAdminController {
 	
 	@RequestMapping(value = "/stats", method = RequestMethod.GET)
 	public String getStats(Model model) throws InterruptedException, RequestFailureException {
-//		ap.checkAdmin();
+		ap.checkAdmin();
 		model.addAttribute("numTriples",qh.getNumberTriples());
 		
 		return "admin/stats";
@@ -78,7 +78,7 @@ public class OREAdminController {
 	
 	@RequestMapping(value = "/wipeDatabase", method = RequestMethod.POST)
 	public String wipeDatabase() throws InterruptedException, RequestFailureException {
-//		ap.checkAdmin();
+		ap.checkAdmin();
 		uh.wipeDatabase();
 		return "redirect:/ore/admin/";
 	}
