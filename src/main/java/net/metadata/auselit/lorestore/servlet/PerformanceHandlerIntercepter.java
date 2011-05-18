@@ -9,6 +9,8 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 public class PerformanceHandlerIntercepter extends HandlerInterceptorAdapter {
 
+	private int logSlowerThan = 100;
+	
 	private final Logger LOG = Logger
 			.getLogger(PerformanceHandlerIntercepter.class);
 
@@ -28,7 +30,7 @@ public class PerformanceHandlerIntercepter extends HandlerInterceptorAdapter {
 			ModelAndView modelAndView) throws Exception {
 		long startTime = (Long) request.getAttribute("stopWatch");
 		long elapsedTime = System.currentTimeMillis() - startTime;
-		if (elapsedTime >= 1) {
+		if (elapsedTime >= logSlowerThan) {
 			LOG.info("Slow Query URL: " + getUrl(request) + " Elapsed time: "
 					+ elapsedTime + "ms");
 		}
@@ -40,5 +42,13 @@ public class PerformanceHandlerIntercepter extends HandlerInterceptorAdapter {
 	        reqUrl += "?"+queryString;
 	    }
 	    return reqUrl;
+	}
+
+	public void setLogSlowerThan(int logSlowerThan) {
+		this.logSlowerThan = logSlowerThan;
+	}
+
+	public int getLogSlowerThan() {
+		return logSlowerThan;
 	}
 }

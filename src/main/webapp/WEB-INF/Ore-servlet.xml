@@ -44,7 +44,9 @@
 		<property name="suffix" value=".jsp"></property>    
 	</bean>
 
-    <bean id="timingInterceptor" class="net.metadata.auselit.lorestore.servlet.PerformanceHandlerIntercepter" />
+    <bean id="timingInterceptor" class="net.metadata.auselit.lorestore.servlet.PerformanceHandlerIntercepter">
+    	<property name="logSlowerThan" value="10" />
+    </bean>
 
 	<bean class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
 		<property name="mappings">
