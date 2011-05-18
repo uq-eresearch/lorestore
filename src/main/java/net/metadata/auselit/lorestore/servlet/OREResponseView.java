@@ -97,6 +97,7 @@ public class OREResponseView extends BaseView {
     		Model responseRDF, String stylesheetURL) 
     throws IOException {
         response.setContentType("application/xml");
+        response.setCharacterEncoding("UTF-8");
         if (stylesheetURL == null) {
             OutputStream os = response.getOutputStream();
             responseRDF.writeTo(os, Syntax.RdfXml);
