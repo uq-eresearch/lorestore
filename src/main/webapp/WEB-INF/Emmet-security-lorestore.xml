@@ -82,7 +82,7 @@
     
     <bean id="loginUrlEntryPoint"
           class="au.edu.diasb.springsecurity.LoginUrlAuthenticationEntryPoint">
-        <property name="forceHttps" value="true"/>
+        <property name="forceHttps" value="false"/>
         <property name="loginFormUrl" value="${emmet.url.secure}/secure/ohlogin.html"/>
     </bean>
     <bean id="restfulEntryPoint"
