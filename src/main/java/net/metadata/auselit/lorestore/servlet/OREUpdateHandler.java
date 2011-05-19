@@ -117,6 +117,7 @@ public class OREUpdateHandler {
 				throw new NotFoundException("Cannot delete, object not found");
 			}
 			container.removeModel(objURI);
+			container.commit();
 		} finally {
 			cf.release(container);
 		}
@@ -182,8 +183,10 @@ public class OREUpdateHandler {
 			Repository rep = (Repository) modelSet
 					.getUnderlyingModelSetImplementation();
 			con = rep.getConnection();
+			con.setAutoCommit(false);
 			RDFFormat rdfFormat = RDFFormat.forFileName(fileName);
 			con.add(body, "", rdfFormat);
+			con.commit();
 		} finally {
 			if (con != null)
 				con.close();
@@ -204,6 +207,8 @@ public class OREUpdateHandler {
 			modelSet = cf.retrieveConnection();
 			
 			modelSet.removeAll();
+			
+			modelSet.commit();
 			
 		} finally {
 			if (modelSet != null)

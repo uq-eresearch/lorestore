@@ -29,9 +29,10 @@ public class NativeTripleStoreConnectorFactory implements
 		if (repo == null) {
 			initRepo();
 		}
-		ModelSet container = new RepositoryModelSet(repo);
-		container.open();
-		return container;
+		ModelSet connection = new RepositoryModelSet(repo);
+		connection.open();
+		connection.setAutocommit(false);
+		return connection;
 	}
 
 	private void initRepo() {
@@ -61,8 +62,7 @@ public class NativeTripleStoreConnectorFactory implements
 	}
 
 	public void release(ModelSet connection) throws InterruptedException {
-		// TODO Auto-generated method stub
-		
+		connection.close();
 	}
 	
 	public void destroy() {
