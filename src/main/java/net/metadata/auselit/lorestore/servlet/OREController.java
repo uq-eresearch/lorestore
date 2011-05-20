@@ -11,6 +11,7 @@ import net.metadata.auselit.lorestore.exceptions.NotFoundException;
 import net.metadata.auselit.lorestore.exceptions.OREException;
 
 import org.apache.log4j.Logger;
+import org.openrdf.rio.RDFFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -124,7 +125,12 @@ public class OREController {
 		return new ResponseEntity<String>("", HttpStatus.NO_CONTENT);
 	}
 
-	public void export(Writer outputWriter) throws Exception {
+	@RequestMapping(value = "/export")
+	public void export(HttpServletResponse response) throws Exception {
+		response.setContentType(RDFFormat.TRIG.getDefaultMIMEType());
+		String filename = "export." + RDFFormat.TRIG.getDefaultFileExtension();
+		response.setHeader("Content-Disposition", "attachment; filename="+filename);
+		Writer outputWriter = response.getWriter();
 		qh.exportAll(outputWriter);
 	}
 	
