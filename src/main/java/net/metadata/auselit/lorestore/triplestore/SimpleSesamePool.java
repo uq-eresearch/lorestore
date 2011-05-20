@@ -7,14 +7,12 @@ import org.apache.log4j.Logger;
 import org.ontoware.rdf2go.model.ModelSet;
 
 /**
- * File based sesame repositories can only have one connection open to them at a
- * time. This class creates a pool of size one for connections.
+ * Manages a pool of connections to a triple store.
  * 
  * Uses a java BlockingQueue, and based upon:
  * http://stackoverflow.com/questions/1137118/does-this-basic-java-object-pool-work/1139830#1139830
  * 
  * @author uqdayers
- * 
  */
 public final class SimpleSesamePool implements TripleStoreConnectorFactory {
 	private static final Logger LOG = Logger.getLogger(SimpleSesamePool.class);
@@ -33,14 +31,23 @@ public final class SimpleSesamePool implements TripleStoreConnectorFactory {
 		}
 	}
 
+	/**
+	 * Return the next available connection from the pool. Will block until one is available.
+	 */
 	public ModelSet retrieveConnection() throws InterruptedException {
 		return this.connections.take();
 	}
 	
+	/**
+	 * Return a connection to the pool.
+	 */
 	public void release(ModelSet connection) throws InterruptedException {
 		this.connections.put(connection);
 	}
 	
+	/**
+	 * Shut down all the connections in the pool.
+	 */
 	public void destroy() {
 		LOG.info("Closing repository connection");
 		try {

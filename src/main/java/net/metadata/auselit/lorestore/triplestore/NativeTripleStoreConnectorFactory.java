@@ -25,6 +25,9 @@ public class NativeTripleStoreConnectorFactory implements
 	private String dataDirPath;
 	private String sesameIndexes = "spoc,posc,cspo,ocsp";
 	
+	/**
+	 * Opens a new connection to the repository and returns it.
+	 */
 	public ModelSet retrieveConnection() {
 		if (repo == null) {
 			initRepo();
@@ -46,6 +49,11 @@ public class NativeTripleStoreConnectorFactory implements
 		}
 	}
 	
+	/**
+	 * Return the total number of triples in the triplestore.
+	 * @return total number of triples in the triplestore
+	 * @throws RepositoryException
+	 */
 	public long size() throws RepositoryException {
 		SailRepositoryConnection connection = repo.getConnection();
 		long size = connection.size();
@@ -53,18 +61,16 @@ public class NativeTripleStoreConnectorFactory implements
 		return size;
 	}
 
-	public void setDataDirPath(String dataDirPath) {
-		this.dataDirPath = dataDirPath;
-	}
-
-	public String getDataDirPath() {
-		return dataDirPath;
-	}
-
+	/**
+	 * Ends the use of a connection. The connection will be closed.
+	 */
 	public void release(ModelSet connection) throws InterruptedException {
 		connection.close();
 	}
 	
+	/**
+	 * Shut down the repository, closing all connections to it.
+	 */
 	public void destroy() {
 		LOG.info("Shutting down SAIL repository");
 		try {
@@ -74,6 +80,14 @@ public class NativeTripleStoreConnectorFactory implements
 		} catch (RepositoryException e) {
 			LOG.error("Error shutting down sail repository", e);
 		}
+	}
+
+	public void setDataDirPath(String dataDirPath) {
+		this.dataDirPath = dataDirPath;
+	}
+
+	public String getDataDirPath() {
+		return dataDirPath;
 	}
 
 	public void setSesameIndexes(String sesameIndexes) {

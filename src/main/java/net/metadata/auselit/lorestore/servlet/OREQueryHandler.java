@@ -30,8 +30,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.servlet.ModelAndView;
 
-import au.edu.diasb.chico.mvc.RequestFailureException;
-
 /**
  * The OREQueryHandler class handles queries from the {@link OREController}.
  * 
@@ -50,21 +48,24 @@ public class OREQueryHandler {
 	}
 
 	/**
-	 * Handles a request for a single ORE object.
+	 * Finds a single compound object of id oreId.
+	 * <p>
+	 * The object is wrapped in a ModelAndView
 	 * 
 	 * @param oreId
 	 *            The ID of the requested object.
 	 * @return an OREResponse containing the single object
 	 * @throws NotFoundException
 	 *             if the object doesn't exist here
-	 * @throws InterruptedException
-	 * @throws RequestFailureException
 	 */
 	public OREResponse getOreObject(String oreId) throws NotFoundException,
-			InterruptedException, RequestFailureException {
+			InterruptedException {
 		ModelSet container = cf.retrieveConnection();
 		Model model;
 
+		//FIXME: should copy the model to a separate store, this currently maintains
+		// it's connection to the main triplestore via the opened connection, right
+		// through until the view has finished dealing with it.
 		try {
 			URI uri = container.createURI(occ.getBaseUri() + oreId);
 			model = container.getModel(uri);
@@ -72,7 +73,6 @@ public class OREQueryHandler {
 				LOG.debug("Cannot find requested resource: " + oreId);
 				throw new NotFoundException("Cannot find resource: " + oreId);
 			}
-			// occ.getAccessPolicy().checkRead(null, model);
 		} finally {
 			cf.release(container);
 		}
@@ -82,17 +82,12 @@ public class OREQueryHandler {
 	}
 
 	/**
-	 * Handles a query for objects referencing a URI
-	 * 
+	 * Finds all compound objects referring to the supplied URL
+	 *  
 	 * @param url
 	 *            the url to search for
 	 * @return a direct http response, containing the result in sparqlXML format
 	 *         as well as setting the content type.
-	 * @throws RepositoryException
-	 * @throws MalformedQueryException
-	 * @throws QueryEvaluationException
-	 * @throws TupleQueryResultHandlerException
-	 * @throws InterruptedException
 	 */
 	public ResponseEntity<String> browseQuery(String url)
 			throws RepositoryException, MalformedQueryException,
@@ -106,7 +101,29 @@ public class OREQueryHandler {
 	}
 
 	/**
+	 * Finds all compound objects referring to the supplied URL, returns a response
+	 * ready to be rendered as RSS.
+	 * 
+	 * @param url
+	 * @return a model containing a sparqlxml string and marked to be displayed by an 'rss'
+	 * view
+	 */
+	public ModelAndView browseRSSQuery(String url) throws RepositoryException,
+			MalformedQueryException, QueryEvaluationException,
+			TupleQueryResultHandlerException, InterruptedException {
+		String queryString = generateBrowseQuery(url);
+		ModelAndView view = new ModelAndView("rss");
+
+		ByteArrayInputStream inputStream = new ByteArrayInputStream(
+				runSparqlQuery(queryString).getBytes());
+		view.addObject("xmlData", inputStream);
+
+		return view;
+	}
+
+	/**
 	 * Creates the correct headers for returning sparql results xml
+	 * 
 	 * @return headers object with correct content type and encoding
 	 */
 	private HttpHeaders getSparqlResultsHeaders() {
@@ -153,19 +170,18 @@ public class OREQueryHandler {
 				responseHeaders, HttpStatus.OK);
 	}
 
-	public ModelAndView browseRSSQuery(String url) throws RepositoryException,
-			MalformedQueryException, QueryEvaluationException,
-			TupleQueryResultHandlerException, InterruptedException {
-		String queryString = generateBrowseQuery(url);
-		ModelAndView view = new ModelAndView("rss");
-
-		ByteArrayInputStream inputStream = new ByteArrayInputStream(
-				runSparqlQuery(queryString).getBytes());
-		view.addObject("xmlData", inputStream);
-
-		return view;
-	}
-
+	/**
+	 * Takes a sparql query and returns a string of the sparql xml results
+	 * from running that query on the configured triplestore.
+	 * 
+	 * @param queryString a valid sparql query
+	 * @return
+	 * @throws RepositoryException
+	 * @throws MalformedQueryException
+	 * @throws QueryEvaluationException
+	 * @throws TupleQueryResultHandlerException
+	 * @throws InterruptedException
+	 */
 	private String runSparqlQuery(String queryString)
 			throws RepositoryException, MalformedQueryException,
 			QueryEvaluationException, TupleQueryResultHandlerException,
@@ -196,32 +212,26 @@ public class OREQueryHandler {
 		return stream.toString();
 	}
 
-//	SELECT DISTINCT ?g ?a ?m ?t
-//			 WHERE {
-//			     graph ?g {
-//			            {<escapedURL> ?p ?o .}
-//			      UNION {?s ?p2 <escapedURL>}
-//			      UNION {<altURL> ?p4 ?o2 .}
-//			      UNION {?s2 ?p4 <altURL>}
-//			    } .
-//			    {?g <http://purl.org/dc/elements/1.1/creator> ?a} .
-//			    {?g <http://purl.org/dc/terms/modified> ?m} .
-//			    OPTIONAL {?g <http://purl.org/dc/elements/1.1/title> ?t}
-//			}
+
 	protected String generateBrowseQuery(String escapedURL) {
 		// Needs to match both www and non-www version of URL
 		String altURL = makeAltURL(escapedURL);
-		String query = "select distinct ?g ?a ?m ?t" + " where { graph ?g {"
+		String query = "SELECT DISTINCT ?g ?a ?m ?t "
+				+ " WHERE { graph ?g {"
 				+ "{<" + escapedURL + "> ?p ?o .}" + " UNION " + "{?s ?p2 <"
 				+ escapedURL + ">}" + " UNION " + "{<" + altURL
-				+ "> ?p3 ?o2 .}" + " UNION " + "{?s2 ?p4 <" + altURL + ">}} "
-				+ ". {?g <http://purl.org/dc/elements/1.1/creator> ?a}"
-				+ ". {?g <http://purl.org/dc/terms/modified> ?m}"
-				+ ". OPTIONAL {?g <http://purl.org/dc/elements/1.1/title> ?t}}";
+				+ "> ?p3 ?o2 .}" + " UNION " + "{?s2 ?p4 <" + altURL + ">}}. "
+				+ " {?g <http://purl.org/dc/elements/1.1/creator> ?a}."
+				+ " {?g <http://purl.org/dc/terms/modified> ?m}."
+				+ " OPTIONAL {?g <http://purl.org/dc/elements/1.1/title> ?t}}";
 
 		return query;
 	}
 
+	/**
+	 * Adds or removes the 'www' in a http url. Returns self if the provided url
+	 * doesn't match.
+	 */
 	protected String makeAltURL(String url) {
 		// TODO needs to escape
 		if (url.contains("http://www.")) {
@@ -340,13 +350,21 @@ public class OREQueryHandler {
 		}
 	}
 
+	/**
+	 * Writes the entire contents of the triplestore out in TriG format.
+	 * 
+	 * Note: This uses the sesame API directly, instead of through rdf2go.
+	 * 
+	 * @param outputWriter
+	 *            where to write the TriG output
+	 * @throws Exception
+	 */
 	public void exportAll(Writer outputWriter) throws Exception {
 		Repository rep = null;
 		ModelSet connection = cf.retrieveConnection();
 		RepositoryConnection connection2 = null;
 		try {
-			rep = (Repository) connection
-					.getUnderlyingModelSetImplementation();
+			rep = (Repository) connection.getUnderlyingModelSetImplementation();
 
 			connection2 = rep.getConnection();
 			TriGWriter triGWriter = new TriGWriter(outputWriter);

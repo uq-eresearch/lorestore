@@ -3,6 +3,13 @@ package net.metadata.auselit.lorestore.servlet;
 import org.ontoware.rdf2go.model.Model;
 import org.springframework.web.servlet.ModelAndView;
 
+/**
+ * Simple extension of ModelAndView that uses a default view
+ * of name 'ore', and allows the setting of return status and
+ * location headers.
+ * 
+ * @author uqdayers
+ */
 public class OREResponse extends ModelAndView {
 
 	public static final String RESPONSE_RDF_KEY = "responseRDF";
