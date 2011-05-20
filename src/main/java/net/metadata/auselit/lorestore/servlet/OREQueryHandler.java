@@ -4,6 +4,7 @@ import static net.metadata.auselit.lorestore.common.OREConstants.SPARQL_RESULTS_
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.Writer;
 
 import net.metadata.auselit.lorestore.access.OREAccessPolicy;
 import net.metadata.auselit.lorestore.exceptions.NotFoundException;
@@ -22,6 +23,7 @@ import org.openrdf.query.resultio.sparqlxml.SPARQLResultsXMLWriter;
 import org.openrdf.repository.Repository;
 import org.openrdf.repository.RepositoryConnection;
 import org.openrdf.repository.RepositoryException;
+import org.openrdf.rio.trig.TriGWriter;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -338,4 +340,24 @@ public class OREQueryHandler {
 		}
 	}
 
+	public void exportAll(Writer outputWriter) throws Exception {
+		Repository rep = null;
+		ModelSet connection = cf.retrieveConnection();
+		RepositoryConnection connection2 = null;
+		try {
+			rep = (Repository) connection
+					.getUnderlyingModelSetImplementation();
+
+			connection2 = rep.getConnection();
+			TriGWriter triGWriter = new TriGWriter(outputWriter);
+			connection2.export(triGWriter);
+		} finally {
+			if (connection2 != null) {
+				connection2.close();
+			}
+			if (connection != null) {
+				cf.release(connection);
+			}
+		}
+	}
 }

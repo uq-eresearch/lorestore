@@ -2,6 +2,7 @@ package net.metadata.auselit.lorestore.servlet;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Writer;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -123,6 +124,10 @@ public class OREController {
 		return new ResponseEntity<String>("", HttpStatus.NO_CONTENT);
 	}
 
+	public void export(Writer outputWriter) throws Exception {
+		qh.exportAll(outputWriter);
+	}
+	
 	@ResponseStatus(HttpStatus.NOT_FOUND)
 	@ExceptionHandler({ RequestFailureException.class, NotFoundException.class })
 	public void return404(Exception ex, HttpServletResponse response)
