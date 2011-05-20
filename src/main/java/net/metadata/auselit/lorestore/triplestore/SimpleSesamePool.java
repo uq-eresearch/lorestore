@@ -19,13 +19,13 @@ public final class SimpleSesamePool implements TripleStoreConnectorFactory {
 
 	private final BlockingQueue<ModelSet> connections;
 	private final TripleStoreConnectorFactory cf;
-	private int numConnections = 5;
+	private int poolSize = 5;
 	
 	public SimpleSesamePool(TripleStoreConnectorFactory cf) throws InterruptedException {
 		this.cf = cf;
-		this.connections = new ArrayBlockingQueue<ModelSet>(numConnections, false);
+		this.connections = new ArrayBlockingQueue<ModelSet>(poolSize, false);
 		
-		for (int i = 0; i < numConnections; i++) {
+		for (int i = 0; i < poolSize; i++) {
 			ModelSet theConnection = cf.retrieveConnection();
 			connections.add(theConnection);
 		}
@@ -51,9 +51,11 @@ public final class SimpleSesamePool implements TripleStoreConnectorFactory {
 	public void destroy() {
 		LOG.info("Closing repository connection");
 		try {
-			
-			ModelSet con = retrieveConnection();
-			con.close();
+			//FIXME: What happens if there is still a connection in use...
+			for (int i = 0; i < poolSize; i++) {
+				ModelSet con = retrieveConnection();
+				con.close();
+			}
 		} catch (InterruptedException e) {
 			LOG.error("Unable to close connection", e);
 		}
