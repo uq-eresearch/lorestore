@@ -5,10 +5,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
-import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.StringReader;
 import java.util.Map;
@@ -266,7 +263,7 @@ public class OREControllerTest {
 	public void postWithNoAuth() throws Exception {
 		InputStream in = new ByteArrayInputStream(
 				CommonTestRecords.SIMPLE_ORE_EXAMPLE.getBytes());
-		OREResponse response = authController.post(in);
+		authController.post(in);
 	}
 	
 	@Test
@@ -275,14 +272,14 @@ public class OREControllerTest {
 		
 		InputStream in = new ByteArrayInputStream(
 				CommonTestRecords.SIMPLE_ORE_EXAMPLE.getBytes());
-		OREResponse response = authController.post(in);
+		authController.post(in);
 	}
 	
 	@Test(expected = AccessDeniedException.class)
 	public void postWithNoAuth2() throws Exception {
 		InputStream in = new ByteArrayInputStream(
 				CommonTestRecords.SIMPLE_ORE_EXAMPLE.getBytes());
-		OREResponse response = authController.post(in);
+		authController.post(in);
 	}
 	
 	
@@ -299,11 +296,11 @@ public class OREControllerTest {
 		
 		InputStream in = new ByteArrayInputStream(
 				CommonTestRecords.SIMPLE_ORE_EXAMPLE.getBytes());
-		OREResponse response = controller.put(createdId, in);
+		controller.put(createdId, in);
 		
 		in = new ByteArrayInputStream(
 				CommonTestRecords.SIMPLE_ORE_EXAMPLE.getBytes());
-		response = controller.put(createdId, in);
+		controller.put(createdId, in);
 	}
 	
 	@Test
@@ -315,7 +312,7 @@ public class OREControllerTest {
 		
 		exception.expect(AccessDeniedException.class);
 		exception.expectMessage("Authentication problem: request has no authentication object");
-		OREResponse response = authController.put(createdId, in);
+		authController.put(createdId, in);
 	}
 	
 	@Test
