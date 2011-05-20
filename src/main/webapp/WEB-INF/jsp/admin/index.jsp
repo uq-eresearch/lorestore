@@ -14,6 +14,7 @@
   		<li><a href="import">Import Data</a></li>
   		<li><a href="stats">Statistics</a></li>
   		<li><a href="wipeDatabase">Wipe Database</a></li>
+  		<li><a href="testQueries">Test Queries</a></li>
   	</ul>
   	
   </body>

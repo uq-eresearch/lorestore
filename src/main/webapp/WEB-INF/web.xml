@@ -48,6 +48,11 @@
 		<url-pattern>/ore/*</url-pattern>
 	</servlet-mapping>
 
+	<servlet-mapping>
+		<servlet-name>Ore</servlet-name>
+		<url-pattern>/oreadmin/*</url-pattern>
+	</servlet-mapping>
+	
 <!--
 	<servlet>
 		<servlet-name>OreAdmin</servlet-name>

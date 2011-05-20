@@ -51,10 +51,11 @@
 	<bean class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
 		<property name="mappings">
 			<value>
-               /admin/**=oreAdmin
-               /**=ore
+               /oreadmin/**=oreAdmin
+               /ore/**=ore
 			</value>
 		</property>
+		<property name="alwaysUseFullPath" value="true"/>
 		  <property name="interceptors">
 		    <list><ref bean="timingInterceptor"/></list>
 		  </property>
