@@ -2,7 +2,6 @@ package net.metadata.auselit.lorestore.servlet;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.Writer;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -11,7 +10,6 @@ import net.metadata.auselit.lorestore.exceptions.NotFoundException;
 import net.metadata.auselit.lorestore.exceptions.OREException;
 
 import org.apache.log4j.Logger;
-import org.openrdf.rio.RDFFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -123,15 +121,6 @@ public class OREController {
 			throws NotFoundException, InterruptedException {
 		uh.delete(oreId);
 		return new ResponseEntity<String>("", HttpStatus.NO_CONTENT);
-	}
-
-	@RequestMapping(value = "/export")
-	public void export(HttpServletResponse response) throws Exception {
-		response.setContentType(RDFFormat.TRIG.getDefaultMIMEType());
-		String filename = "export." + RDFFormat.TRIG.getDefaultFileExtension();
-		response.setHeader("Content-Disposition", "attachment; filename="+filename);
-		Writer outputWriter = response.getWriter();
-		qh.exportAll(outputWriter);
 	}
 	
 	@ResponseStatus(HttpStatus.NOT_FOUND)
