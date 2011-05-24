@@ -45,7 +45,7 @@
 	</bean>
 
     <bean id="timingInterceptor" class="net.metadata.auselit.lorestore.servlet.PerformanceHandlerIntercepter">
-    	<property name="logSlowerThan" value="10" />
+    	<property name="logSlowerThan" value="100" />
     </bean>
 
 	<bean class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
