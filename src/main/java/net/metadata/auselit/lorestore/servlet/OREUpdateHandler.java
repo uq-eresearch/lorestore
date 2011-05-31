@@ -107,18 +107,21 @@ public class OREUpdateHandler {
 		try {
 			container = cf.retrieveConnection();
 			URI objURI = container.createURI(occ.getBaseUri() + oreId);
+			if (!container.containsModel(objURI)) {
+				throw new NotFoundException("Cannot delete, object not found");
+			}
 
 			model = container.getModel(objURI);
 			CompoundObject co = new CompoundObjectImpl(model);
 			
 			ap.checkDelete(co);
 			
-			if (!container.containsModel(objURI)) {
-				throw new NotFoundException("Cannot delete, object not found");
-			}
 			container.removeModel(objURI);
 			container.commit();
 		} finally {
+			if (model != null) {
+				model.close();
+			}
 			cf.release(container);
 		}
 	}
