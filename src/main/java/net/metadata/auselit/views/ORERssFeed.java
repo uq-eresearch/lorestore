@@ -1,22 +1,18 @@
 package net.metadata.auselit.views;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.xml.parsers.DocumentBuilderFactory;
+
 import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.SimpleFormController;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Text;
-
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.transform.dom.DOMSource;
-
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
 
 public class ORERssFeed  {
 
@@ -29,8 +25,8 @@ public class ORERssFeed  {
 
         
         
-        List words = new ArrayList<String>();//(List) command.get("wordList");
-        for (Iterator it = words.iterator(); it.hasNext();) {
+        List<String> words = new ArrayList<String>();//(List) command.get("wordList");
+        for (Iterator<String> it = words.iterator(); it.hasNext();) {
             String nextWord = (String) it.next();
             Element wordNode = document.createElement("word");
             Text textNode = document.createTextNode(nextWord);
@@ -38,7 +34,7 @@ public class ORERssFeed  {
             root.appendChild(wordNode);
         }
         
-        DOMSource domSource = new DOMSource(root);
+//        DOMSource domSource = new DOMSource(root);
         
 		return null;
 	}

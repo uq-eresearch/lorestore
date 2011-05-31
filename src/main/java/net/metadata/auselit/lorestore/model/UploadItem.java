@@ -1,24 +1,32 @@
 package net.metadata.auselit.lorestore.model;
 
-import org.springframework.web.multipart.commons.CommonsMultipartFile;
+import org.springframework.web.multipart.MultipartFile;
 
+/**
+ * see http://www.ioncannon.net/programming/975/spring-3-file-upload-example/
+ * @author uqdayers
+ *
+ */
 public class UploadItem {
+	@Deprecated
 	private String name;
-	private CommonsMultipartFile fileData;
+	private MultipartFile fileData;
 
+	@Deprecated
 	public String getName() {
 		return name;
 	}
 
+	@Deprecated
 	public void setName(String name) {
 		this.name = name;
 	}
 
-	public CommonsMultipartFile getFileData() {
+	public MultipartFile getFileData() {
 		return fileData;
 	}
 
-	public void setFileData(CommonsMultipartFile fileData) {
+	public void setFileData(MultipartFile fileData) {
 		this.fileData = fileData;
 	}
 }
