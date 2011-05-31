@@ -7,7 +7,6 @@ import org.openrdf.repository.RepositoryConnection;
 import org.openrdf.repository.RepositoryException;
 import org.openrdf.repository.sail.SailRepository;
 import org.openrdf.repository.sail.SailRepositoryConnection;
-import org.openrdf.sail.memory.MemoryStore;
 import org.openrdf.sail.nativerdf.NativeStore;
 
 public class TestSesame {

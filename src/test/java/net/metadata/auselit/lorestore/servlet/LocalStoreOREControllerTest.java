@@ -1,7 +1,5 @@
 package net.metadata.auselit.lorestore.servlet;
 
-import java.io.ByteArrayOutputStream;
-
 import javax.xml.xpath.XPathFactory;
 
 import net.metadata.auselit.lorestore.access.AllowEverythingAccessPolicy;
@@ -13,8 +11,6 @@ import net.metadata.auselit.lorestore.util.UIDGenerator;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.ontoware.rdf2go.model.ModelSet;
-import org.openrdf.repository.Repository;
-import org.openrdf.repository.RepositoryConnection;
 
 public abstract class LocalStoreOREControllerTest extends OREControllerTest {
 
