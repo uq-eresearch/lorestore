@@ -1,17 +1,15 @@
-package net.metadata.auselit.lorestore.model;
+package net.metadata.auselit.lorestore.model.rdf2go;
 
 import static net.metadata.auselit.lorestore.common.OREConstants.AGGREGATION;
-import static net.metadata.auselit.lorestore.common.OREConstants.LORESTORE_USER;
 import static net.metadata.auselit.lorestore.common.OREConstants.DCTERMS_CREATED;
 import static net.metadata.auselit.lorestore.common.OREConstants.DCTERMS_MODIFIED;
 import static net.metadata.auselit.lorestore.common.OREConstants.DC_CREATOR;
+import static net.metadata.auselit.lorestore.common.OREConstants.LORESTORE_USER;
 import static net.metadata.auselit.lorestore.common.OREConstants.ORE_AGGREGATION_CLASS;
 import static net.metadata.auselit.lorestore.common.OREConstants.ORE_DESCRIBES_PROPERTY;
 import static net.metadata.auselit.lorestore.common.OREConstants.RDF_TYPE_PROPERTY;
-
-import javax.xml.datatype.XMLGregorianCalendar;
-
 import net.metadata.auselit.lorestore.exceptions.OREException;
+import net.metadata.auselit.lorestore.model.CompoundObject;
 
 import org.ontoware.aifbcommons.collection.ClosableIterator;
 import org.ontoware.rdf2go.model.Model;
@@ -99,7 +97,8 @@ public class CompoundObjectImpl implements CompoundObject {
 	private Resource findResourceMap() throws OREException {
 		QueryResultTable resultTable = model.sparqlSelect(String.format(
 				"select ?rem WHERE {?aggre <%1$s> <%2$s>. ?rem <%3$s> ?aggre}",
-				RDF_TYPE_PROPERTY, ORE_AGGREGATION_CLASS, ORE_DESCRIBES_PROPERTY));
+				RDF_TYPE_PROPERTY, ORE_AGGREGATION_CLASS,
+				ORE_DESCRIBES_PROPERTY));
 
 		for (QueryRow row : resultTable) {
 			return row.getValue("rem").asResource();
@@ -131,12 +130,14 @@ public class CompoundObjectImpl implements CompoundObject {
 	}
 
 	public void setUser(String newUser) throws OREException {
-		Node user = getUser();
-		if (user != null) {
-			throw new OREException("User already set, not allowed to update");
-		}
 		Resource resourceMap = findResourceMap();
-		model.addStatement(resourceMap, model.createURI(LORESTORE_USER),
+		URI lorestoreUserPred = model.createURI(LORESTORE_USER);
+
+		ClosableIterator<Statement> userStatements = model.findStatements(
+				resourceMap, lorestoreUserPred, Variable.ANY);
+		model.removeAll(userStatements);
+
+		model.addStatement(resourceMap, lorestoreUserPred,
 				model.createPlainLiteral(newUser));
 		model.commit();
 	}
@@ -164,12 +165,6 @@ public class CompoundObjectImpl implements CompoundObject {
 		return s;
 	}
 
-	public void setCreator(String userURI) {
-//		Resource rm = findResourceMap();
-		
-		
-	}
-
 	public String getOwnerId() {
 		try {
 			Node user = getUser();
@@ -177,33 +172,8 @@ public class CompoundObjectImpl implements CompoundObject {
 				return user.toString();
 			}
 		} catch (OREException e) {
-			
+
 		}
-		return null;
-	}
-
-	public void setOwnerId(String ownerURI) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public XMLGregorianCalendar getCreated() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public void setDatestamp(String propName, XMLGregorianCalendar timestamp) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public XMLGregorianCalendar getModified() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public XMLGregorianCalendar getDate() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 

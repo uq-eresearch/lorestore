@@ -6,7 +6,9 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
+import java.io.PrintStream;
 import java.io.StringReader;
 import java.util.Map;
 
@@ -18,6 +20,8 @@ import net.metadata.auselit.lorestore.exceptions.InvalidQueryParametersException
 import net.metadata.auselit.lorestore.exceptions.NotFoundException;
 import net.metadata.auselit.lorestore.exceptions.OREException;
 
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -36,6 +40,21 @@ import au.edu.diasb.chico.mvc.RequestFailureException;
 
 @RunWith(JUnit4.class)
 public class OREControllerTest extends OREControllerTestsBase {
+
+	private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+	private final ByteArrayOutputStream errContent = new ByteArrayOutputStream();
+
+	@Before
+	public void setUpStreams() {
+		System.setOut(new PrintStream(outContent));
+		System.setErr(new PrintStream(errContent));
+	}
+
+	@After
+	public void cleanUpStreams() {
+		System.setOut(null);
+		System.setErr(null);
+	}
 
 	@Rule
 	public ExpectedException exception = ExpectedException.none();
@@ -58,7 +77,7 @@ public class OREControllerTest extends OREControllerTestsBase {
 	}
 
 	@Test(expected = RequestFailureException.class)
-	public void postBadCompoundObject() throws Exception {
+	public void postBadCompoundObjectBrokenXML() throws Exception {
 		ByteArrayInputStream in = new ByteArrayInputStream(
 				CommonTestRecords.BAD_ORE_BROKEN_XML.getBytes());
 		controller.post(in);
@@ -66,7 +85,7 @@ public class OREControllerTest extends OREControllerTestsBase {
 	}
 
 	@Test(expected = OREException.class)
-	public void postBadCompoundObject2() throws Exception {
+	public void postBadCompoundObjectNoResourceMap() throws Exception {
 		ByteArrayInputStream in = new ByteArrayInputStream(
 				CommonTestRecords.BAD_ORE_NO_RESOURCEMAP.getBytes());
 		controller.post(in);
@@ -100,24 +119,37 @@ public class OREControllerTest extends OREControllerTestsBase {
 
 		controller.delete(createdId);
 
-		try {
-			controller.get(createdId);
-			fail("Object should have been deleted, method should have thrown exception");
-		} catch (NotFoundException e) {
-			// Expected
-		}
+		exception.expect(NotFoundException.class);
+		controller.get(createdId);
 
 		// check responses of get and delete pass (are 200), and then the second
 		// get should 404
 
 	}
 
+	/**
+	 * Can only PUT to a url with an existing URL
+	 * @throws Exception
+	 */
+	@Test(expected = OREException.class)
+	public void putBlankURL() throws Exception {
+		InputStream in = new ByteArrayInputStream(
+				CommonTestRecords.SIMPLE_ORE_EXAMPLE.getBytes());
+
+		controller.put("", in);
+	}
+
+
+	/**
+	 * Can only PUT to a url with an existing URL
+	 * @throws Exception
+	 */
 	@Test(expected = OREException.class)
 	public void putNonexistent() throws Exception {
 		InputStream in = new ByteArrayInputStream(
 				CommonTestRecords.SIMPLE_ORE_EXAMPLE.getBytes());
 
-		controller.put("", in);
+		controller.put("http://example.com/blergh", in);
 	}
 
 	@Test
@@ -130,32 +162,23 @@ public class OREControllerTest extends OREControllerTestsBase {
 
 	}
 
-	private String saveRecordToStore(String recordXML) throws Exception {
-		InputStream in = new ByteArrayInputStream(recordXML.getBytes());
-		OREResponse response = controller.post(in);
-
-		String id = findUIDFromResponse(response);
-
-		return id;
-
-	}
-
-	private String findUIDFromResponse(OREResponse response) {
-		// assertTrue(redirect.startsWith("redirect:"));
-		String redirect = response.getLocationHeader();
-		String createdId = redirect.substring(redirect.lastIndexOf("/") + 1);
-		return createdId;
-	}
-
+	/**
+	 * Refers to query only accepts valid URLs
+	 * @throws Exception
+	 */
 	@Test(expected = InvalidQueryParametersException.class)
 	public void queryRefersToEmpty() throws Exception {
 		controller.refersToQuery("");
 	}
 
-	// @Test(expected = InvalidQueryParametersException.class)
-	// public void queryRefersToInvalidURL() throws Exception {
-	// controller.refersToQuery("zxcv");
-	// }
+	/**
+	 * Refers to query only accepts valid URLs
+	 * @throws Exception
+	 */
+	@Test(expected = InvalidQueryParametersException.class)
+	public void queryRefersToInvalidURL() throws Exception {
+		controller.refersToQuery("zxcv");
+	}
 
 	@Test
 	public void queryRefersToNonExistentURL() throws Exception {
@@ -165,11 +188,6 @@ public class OREControllerTest extends OREControllerTestsBase {
 		Document document = parseXmlToDocument(body);
 		NodeList results = document.getElementsByTagName("result");
 		assertEquals(0, results.getLength());
-	}
-
-	private Document parseXmlToDocument(String xml) throws Exception {
-		return DocumentBuilderFactory.newInstance().newDocumentBuilder()
-				.parse(new InputSource(new StringReader(xml)));
 	}
 
 	@Test
@@ -229,6 +247,11 @@ public class OREControllerTest extends OREControllerTestsBase {
 		authController.put("http://nonexistant.example.com/ore/id", in);
 	}
 
+	/**
+	 * Test creating a compound object, ignoring any authorisations.
+	 * 
+	 * @throws Exception
+	 */
 	@Test
 	public void putSuccessful() throws Exception {
 		String createdId = saveRecordToStore(CommonTestRecords.SIMPLE_ORE_EXAMPLE);
@@ -242,6 +265,11 @@ public class OREControllerTest extends OREControllerTestsBase {
 		controller.put(createdId, in);
 	}
 
+	/**
+	 * A user without valid authorisation cannot create a compound object.
+	 * 
+	 * @throws Exception
+	 */
 	@Test
 	public void putWithNoAuth() throws Exception {
 		String createdId = saveRecordToStore(CommonTestRecords.SIMPLE_ORE_EXAMPLE);
@@ -255,6 +283,11 @@ public class OREControllerTest extends OREControllerTestsBase {
 		authController.put(createdId, in);
 	}
 
+	/**
+	 * A user with valid authorisation can create a compound object.
+	 * 
+	 * @throws Exception
+	 */
 	@Test
 	public void postThenPutWithAuth() throws Exception {
 		updateAuthenticationContext("bob", "http://example.com/user/bob",
@@ -270,6 +303,11 @@ public class OREControllerTest extends OREControllerTestsBase {
 		response = authController.put(recordId, in);
 	}
 
+	/**
+	 * Make sure that a user who doesn't own a compound object cannot overwrite one.
+	 * 
+	 * @throws Exception
+	 */
 	@Test
 	public void postThenPutWithChangedAuth() throws Exception {
 		updateAuthenticationContext("bob", "http://example.com/user/bob",
@@ -303,17 +341,47 @@ public class OREControllerTest extends OREControllerTestsBase {
 		String simpleOreExample = CommonTestRecords.SIMPLE_ORE_EXAMPLE;
 		InputStream in = new ByteArrayInputStream(simpleOreExample.getBytes());
 		OREResponse response = authController.post(in);
-		
-		checkUserInModel(response, userUri);
 
+		checkUserInModel(response, userUri);
 
 		String recordId = findUIDFromResponse(response);
 		in = new ByteArrayInputStream(simpleOreExample.getBytes());
 		response = authController.put(recordId, in);
-		
 
-//		checkUserInModel(response, userUri);
+		checkUserInModel(response, userUri);
+	}
 
+	/**
+	 * Make sure that the user credentials stored in the posted RDF are ignored,
+	 * and the actual logged in user is what is respected.
+	 * 
+	 * @throws Exception
+	 */
+	@Test
+	public void postWithNonMatchingUserUri() throws Exception {
+		String userUri = "http://example.com/user/bob";
+		updateAuthenticationContext("bob", userUri, new String[] { "ROLE_USER",
+				"ROLE_ORE" });
+		String simpleOreExample = CommonTestRecords.SIMPLE_ORE_EXAMPLE_WITH_OWNER;
+		InputStream in = new ByteArrayInputStream(simpleOreExample.getBytes());
+		OREResponse response = authController.post(in);
+
+		checkUserInModel(response, userUri);
+
+		String recordId = findUIDFromResponse(response);
+		in = new ByteArrayInputStream(simpleOreExample.getBytes());
+		response = authController.put(recordId, in);
+
+		checkUserInModel(response, userUri);
+	}
+
+	//
+	// Private Methods
+	//
+
+	private Document parseXmlToDocument(String xml) throws Exception {
+		return DocumentBuilderFactory.newInstance().newDocumentBuilder()
+				.parse(new InputSource(new StringReader(xml)));
 	}
 
 	private void checkUserInModel(OREResponse oreResponse, String userUri) {
@@ -326,30 +394,20 @@ public class OREControllerTest extends OREControllerTestsBase {
 
 		assertTrue(model.contains(Variable.ANY, userPred, userUri));
 	}
-	
-	/**
-	 * Make sure that the user credentials stored in the posted RDF are ignored,
-	 * and the actual logged in user is what is respected. 
-	 * @throws Exception
-	 */
-	@Test
-	public void postWithNonMatchingUserUri() throws Exception {
-		String userUri = "http://example.com/user/bob";
-		updateAuthenticationContext("bob", userUri, new String[] { "ROLE_USER",
-				"ROLE_ORE" });
-		String simpleOreExample = CommonTestRecords.SIMPLE_ORE_EXAMPLE_WITH_OWNER;
-		InputStream in = new ByteArrayInputStream(simpleOreExample.getBytes());
-		OREResponse response = authController.post(in);
-		
-		checkUserInModel(response, userUri);
 
+	private String saveRecordToStore(String recordXML) throws Exception {
+		InputStream in = new ByteArrayInputStream(recordXML.getBytes());
+		OREResponse response = controller.post(in);
 
-		String recordId = findUIDFromResponse(response);
-		in = new ByteArrayInputStream(simpleOreExample.getBytes());
-		response = authController.put(recordId, in);
-		
+		String id = findUIDFromResponse(response);
 
-//		checkUserInModel(response, userUri);
+		return id;
+	}
 
+	private String findUIDFromResponse(OREResponse response) {
+		// assertTrue(redirect.startsWith("redirect:"));
+		String redirect = response.getLocationHeader();
+		String createdId = redirect.substring(redirect.lastIndexOf("/") + 1);
+		return createdId;
 	}
 }

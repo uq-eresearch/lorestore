@@ -8,6 +8,8 @@ import org.springframework.http.ResponseEntity;
 import net.metadata.auselit.lorestore.servlet.OREControllerConfig;
 import net.metadata.auselit.lorestore.servlet.OREQueryHandler;
 import net.metadata.auselit.lorestore.servlet.OREUpdateHandler;
+import net.metadata.auselit.lorestore.servlet.rdf2go.RDF2GoOREQueryHandler;
+import net.metadata.auselit.lorestore.servlet.rdf2go.RDF2GoOREUpdateHandler;
 import net.metadata.auselit.lorestore.triplestore.MemoryTripleStoreConnectorFactory;
 import net.metadata.auselit.lorestore.triplestore.NativeTripleStoreConnectorFactory;
 import net.metadata.auselit.lorestore.triplestore.SimpleSesamePool;
@@ -119,12 +121,12 @@ public class SesamePerformanceTests {
 	public void setupQueryHandler() throws Exception {
 		occ = new OREControllerConfig();
 		occ.setContainerFactory(cf);
-		qh = new OREQueryHandler(occ);
+		qh = new RDF2GoOREQueryHandler(occ);
 	}
 	
 	public void loadData() throws Exception {
 		//do stuff
-		uh = new OREUpdateHandler(occ);
+		uh = new RDF2GoOREUpdateHandler(occ);
 		uh.wipeDatabase();
 		
 		BufferedInputStream stream = new BufferedInputStream(new FileInputStream(dataFile));

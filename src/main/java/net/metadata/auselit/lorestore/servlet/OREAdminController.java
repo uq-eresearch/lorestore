@@ -7,6 +7,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import net.metadata.auselit.lorestore.access.OREAccessPolicy;
 import net.metadata.auselit.lorestore.model.UploadItem;
+import net.metadata.auselit.lorestore.servlet.rdf2go.RDF2GoOREQueryHandler;
+import net.metadata.auselit.lorestore.servlet.rdf2go.RDF2GoOREUpdateHandler;
 
 import org.apache.log4j.Logger;
 import org.openrdf.rio.RDFFormat;
@@ -33,8 +35,8 @@ public class OREAdminController {
 
 	public OREAdminController(OREControllerConfig occ) {
 		this.occ = occ;
-		this.uh = new OREUpdateHandler(occ);
-		this.qh = new OREQueryHandler(occ);
+		this.uh = new RDF2GoOREUpdateHandler(occ);
+		this.qh = new RDF2GoOREQueryHandler(occ);
 		this.ap = occ.getAccessPolicy();
 	}
 

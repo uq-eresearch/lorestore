@@ -8,6 +8,8 @@ import javax.servlet.http.HttpServletResponse;
 import net.metadata.auselit.lorestore.exceptions.InvalidQueryParametersException;
 import net.metadata.auselit.lorestore.exceptions.NotFoundException;
 import net.metadata.auselit.lorestore.exceptions.OREException;
+import net.metadata.auselit.lorestore.servlet.rdf2go.RDF2GoOREQueryHandler;
+import net.metadata.auselit.lorestore.servlet.rdf2go.RDF2GoOREUpdateHandler;
 
 import org.apache.log4j.Logger;
 import org.springframework.http.HttpStatus;
@@ -33,8 +35,8 @@ public class OREController {
 
 	public OREController(OREControllerConfig occ) {
 		this.occ = occ;
-		this.qh = new OREQueryHandler(occ);
-		this.uh = new OREUpdateHandler(occ);
+		this.qh = new RDF2GoOREQueryHandler(occ);
+		this.uh = new RDF2GoOREUpdateHandler(occ);
 	}
 
 	@RequestMapping(value = "/", method = RequestMethod.POST)

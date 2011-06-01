@@ -6,7 +6,7 @@ import static org.junit.Assert.assertFalse;
 import java.io.ByteArrayInputStream;
 
 import net.metadata.auselit.lorestore.exceptions.OREException;
-import net.metadata.auselit.lorestore.model.CompoundObjectImpl;
+import net.metadata.auselit.lorestore.model.rdf2go.CompoundObjectImpl;
 
 import org.junit.Before;
 import org.junit.Test;

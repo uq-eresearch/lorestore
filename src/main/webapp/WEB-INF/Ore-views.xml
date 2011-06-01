@@ -7,5 +7,9 @@
     
     <bean id="ore" class="net.metadata.auselit.lorestore.servlet.OREResponseView"/>
     
+    <bean id="oreRss" class="org.springframework.web.servlet.view.xslt.XsltView">
+    	<property name="url" value="/WEB-INF/xsl/rss.xsl"/>
+    	<property name="indent" value="true" />
+    </bean>
     
 </beans>
