@@ -74,8 +74,9 @@ public class RDF2GoOREUpdateHandler implements OREUpdateHandler {
 					HttpServletResponse.SC_BAD_REQUEST, "Error reading RDF");
 		}
 
-		CompoundObject compoundObject = new CompoundObjectImpl(model);
-		compoundObject.assignURI(occ.getBaseUri() + uid);
+		CompoundObjectImpl compoundObject = new CompoundObjectImpl(model);
+		model.close();
+		compoundObject.assignURI(newUri.toString());
 
 		// TODO: needs to do stuff like maintaining the created/modified dates,
 		// and the creator
@@ -85,12 +86,12 @@ public class RDF2GoOREUpdateHandler implements OREUpdateHandler {
 		ModelSet ms = null;
 		try {
 			ms = cf.retrieveConnection();
-			ms.addModel(model);
+			ms.addModel(compoundObject.getModel(), newUri);
 			ms.commit();
 		} finally {
 			cf.release(ms);
 		}
-		OREResponse response = new OREResponse(model);
+		OREResponse response = new OREResponse(compoundObject.getModel());
 		response.setLocationHeaer(occ.getBaseUri() + uid);
 		response.setReturnStatus(201);
 		return response;
@@ -142,13 +143,16 @@ public class RDF2GoOREUpdateHandler implements OREUpdateHandler {
 			container = cf.retrieveConnection();
 			model = container.getModel(objURI);
 			if (model == null || model.isEmpty()) {
+				if (model != null)
+					model.close();
 				throw new OREException("Cannot update nonexistant object");
 			}
 
-			CompoundObject co = new CompoundObjectImpl(model);
+			CompoundObjectImpl co = new CompoundObjectImpl(model);
 			try {
 				ap.checkUpdate(co);
 			} finally {
+				co.getModel().close();
 				model.close();
 			}
 			
@@ -167,12 +171,16 @@ public class RDF2GoOREUpdateHandler implements OREUpdateHandler {
 			// dates,
 			// and the creator
 			String userURI = occ.getIdentityProvider().obtainUserURI();
-			CompoundObject compoundObject = new CompoundObjectImpl(model);
+			CompoundObjectImpl compoundObject = new CompoundObjectImpl(model);
+			model.close();
 			compoundObject.setUser(userURI);
 
 			container.removeModel(objURI);
-			container.addModel(model);
+			container.addModel(compoundObject.getModel(), objURI);
 			container.commit();
+			
+			model = compoundObject.getModel();
+			
 		} finally {
 			cf.release(container);
 		}

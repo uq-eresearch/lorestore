@@ -2,7 +2,6 @@ package net.metadata.auselit.lorestore.servlet.rdf2go;
 
 import static net.metadata.auselit.lorestore.common.OREConstants.SPARQL_RESULTS_XML;
 
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.Writer;
 
@@ -23,7 +22,9 @@ import org.openrdf.query.MalformedQueryException;
 import org.openrdf.query.QueryEvaluationException;
 import org.openrdf.query.QueryLanguage;
 import org.openrdf.query.TupleQuery;
+import org.openrdf.query.TupleQueryResult;
 import org.openrdf.query.TupleQueryResultHandlerException;
+import org.openrdf.query.impl.TupleQueryResultBuilder;
 import org.openrdf.query.resultio.sparqlxml.SPARQLResultsXMLWriter;
 import org.openrdf.repository.Repository;
 import org.openrdf.repository.RepositoryConnection;
@@ -36,7 +37,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.servlet.ModelAndView;
 
 /**
- * The RDF2GoOREQueryHandler class handles queries from the {@link OREController}.
+ * The RDF2GoOREQueryHandler class handles queries from the
+ * {@link OREController}.
  * 
  * @author uqdayers
  */
@@ -52,14 +54,18 @@ public class RDF2GoOREQueryHandler implements OREQueryHandler {
 		this.ap = occ.getAccessPolicy();
 	}
 
-	/* (non-Javadoc)
-	 * @see net.metadata.auselit.lorestore.servlet.rdf2go.OREQueryHandler#getOreObject(java.lang.String)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * net.metadata.auselit.lorestore.servlet.rdf2go.OREQueryHandler#getOreObject
+	 * (java.lang.String)
 	 */
 	@Override
 	public OREResponse getOreObject(String oreId) throws NotFoundException,
 			InterruptedException {
 		ModelSet container = cf.retrieveConnection();
-		Model model;
+		Model model = null;
 
 		// FIXME: should copy the model to a separate store, this currently
 		// maintains
@@ -70,6 +76,9 @@ public class RDF2GoOREQueryHandler implements OREQueryHandler {
 			URI uri = container.createURI(occ.getBaseUri() + oreId);
 			model = container.getModel(uri);
 			if (model == null || model.isEmpty()) {
+				if (model != null) {
+					model.close();
+				}
 				LOG.debug("Cannot find requested resource: " + oreId);
 				throw new NotFoundException("Cannot find resource: " + oreId);
 			}
@@ -81,8 +90,12 @@ public class RDF2GoOREQueryHandler implements OREQueryHandler {
 
 	}
 
-	/* (non-Javadoc)
-	 * @see net.metadata.auselit.lorestore.servlet.rdf2go.OREQueryHandler#browseQuery(java.lang.String)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * net.metadata.auselit.lorestore.servlet.rdf2go.OREQueryHandler#browseQuery
+	 * (java.lang.String)
 	 */
 	@Override
 	public ResponseEntity<String> browseQuery(String url)
@@ -107,26 +120,30 @@ public class RDF2GoOREQueryHandler implements OREQueryHandler {
 						"Supplied URL is invalid: " + url);
 			}
 		} finally {
-			connection.close();
+			cf.release(connection);
 		}
 
 	}
 
-	/* (non-Javadoc)
-	 * @see net.metadata.auselit.lorestore.servlet.rdf2go.OREQueryHandler#browseRSSQuery(java.lang.String)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * net.metadata.auselit.lorestore.servlet.rdf2go.OREQueryHandler#browseRSSQuery
+	 * (java.lang.String)
 	 */
 	@Override
 	public ModelAndView browseRSSQuery(String url) throws RepositoryException,
 			MalformedQueryException, QueryEvaluationException,
 			TupleQueryResultHandlerException, InterruptedException {
 		String queryString = generateBrowseQuery(url);
-		ModelAndView view = new ModelAndView("xslt");
+		ModelAndView mav = new ModelAndView("oreRss");
+		mav.addObject("browseURL", url);
+		
+		TupleQueryResult queryResult = runSparqlQueryIntoQR(queryString);
+		mav.addObject("queryResult", queryResult);
 
-		ByteArrayInputStream inputStream = new ByteArrayInputStream(
-				runSparqlQuery(queryString).getBytes());
-		view.addObject("xmlData", inputStream);
-
-		return view;
+		return mav;
 	}
 
 	/**
@@ -141,8 +158,12 @@ public class RDF2GoOREQueryHandler implements OREQueryHandler {
 		return responseHeaders;
 	}
 
-	/* (non-Javadoc)
-	 * @see net.metadata.auselit.lorestore.servlet.rdf2go.OREQueryHandler#searchQuery(java.lang.String, java.lang.String, java.lang.String)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * net.metadata.auselit.lorestore.servlet.rdf2go.OREQueryHandler#searchQuery
+	 * (java.lang.String, java.lang.String, java.lang.String)
 	 */
 	@Override
 	public ResponseEntity<String> searchQuery(String urlParam,
@@ -156,8 +177,12 @@ public class RDF2GoOREQueryHandler implements OREQueryHandler {
 				responseHeaders, HttpStatus.OK);
 	}
 
-	/* (non-Javadoc)
-	 * @see net.metadata.auselit.lorestore.servlet.rdf2go.OREQueryHandler#exploreQuery(java.lang.String)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * net.metadata.auselit.lorestore.servlet.rdf2go.OREQueryHandler#exploreQuery
+	 * (java.lang.String)
 	 */
 	@Override
 	public ResponseEntity<String> exploreQuery(String url)
@@ -212,6 +237,34 @@ public class RDF2GoOREQueryHandler implements OREQueryHandler {
 		}
 
 		return stream.toString();
+	}
+
+	private TupleQueryResult runSparqlQueryIntoQR(String queryString)
+			throws RepositoryException, MalformedQueryException,
+			InterruptedException, QueryEvaluationException,
+			TupleQueryResultHandlerException {
+		ModelSet container = null;
+		RepositoryConnection con = null;
+		TupleQueryResultBuilder resultBuilder = null;
+		try {
+			container = cf.retrieveConnection();
+			Repository rep = (Repository) container
+					.getUnderlyingModelSetImplementation();
+			con = rep.getConnection();
+			TupleQuery tupleQuery = con.prepareTupleQuery(QueryLanguage.SPARQL,
+					queryString);
+
+			resultBuilder = new TupleQueryResultBuilder();
+
+			tupleQuery.evaluate(resultBuilder);
+		} finally {
+			if (con != null)
+				con.close();
+			if (container != null)
+				cf.release(container);
+		}
+
+		return resultBuilder.getQueryResult();
 	}
 
 	protected String generateBrowseQuery(String escapedURL) {
@@ -335,8 +388,11 @@ public class RDF2GoOREQueryHandler implements OREQueryHandler {
 		return query;
 	}
 
-	/* (non-Javadoc)
-	 * @see net.metadata.auselit.lorestore.servlet.rdf2go.OREQueryHandler#getNumberTriples()
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see net.metadata.auselit.lorestore.servlet.rdf2go.OREQueryHandler#
+	 * getNumberTriples()
 	 */
 	@Override
 	public long getNumberTriples() throws InterruptedException {
@@ -348,8 +404,12 @@ public class RDF2GoOREQueryHandler implements OREQueryHandler {
 		}
 	}
 
-	/* (non-Javadoc)
-	 * @see net.metadata.auselit.lorestore.servlet.rdf2go.OREQueryHandler#exportAll(java.io.Writer)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * net.metadata.auselit.lorestore.servlet.rdf2go.OREQueryHandler#exportAll
+	 * (java.io.Writer)
 	 */
 	@Override
 	public void exportAll(Writer outputWriter) throws Exception {
