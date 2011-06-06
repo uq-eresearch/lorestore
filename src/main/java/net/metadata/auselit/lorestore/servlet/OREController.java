@@ -14,6 +14,7 @@ import net.metadata.auselit.lorestore.servlet.rdf2go.RDF2GoOREUpdateHandler;
 import org.apache.log4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -107,7 +108,7 @@ public class OREController {
 		return qh.exploreQuery(urlParam);
 	}
 
-	@RequestMapping(value = "/rss", params = "refersTo", method = RequestMethod.GET)
+	@RequestMapping(value = "/feed", params = "refersTo", method = RequestMethod.GET)
 	public ModelAndView rssRefersToQuery(
 			@RequestParam("refersTo") String urlParam) throws Exception {
 		if (urlParam == null || urlParam.isEmpty()) {
@@ -133,6 +134,16 @@ public class OREController {
 		response.sendError(HttpStatus.NOT_FOUND.value());
 	}
 
+	
+	@ResponseStatus(HttpStatus.FORBIDDEN)
+	@ExceptionHandler({ AccessDeniedException.class })
+	public void return403(AccessDeniedException ex, HttpServletResponse response) throws IOException {
+		LOG.debug("Handling Exception, returning 403: " + ex);
+		response.sendError(HttpStatus.FORBIDDEN.value(), ex.getMessage());
+	}
+	
+	
+	
 	public OREControllerConfig getControllerConfig() {
 		return occ;
 	}
