@@ -20,23 +20,25 @@
 	</developers>
 
 	<!-- Shared version number properties -->
+
 	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<spring-version>3.0.3.RELEASE</spring-version>
 		<sesame-version>2.3.2</sesame-version>
 		<chico-version>0.5-SNAPSHOT</chico-version>
 		<emmet-version>0.5-SNAPSHOT</emmet-version>
 	</properties>
 
-        <repositories>
-        <repository>
-           <id>semweb4j-repo</id>
-           <name>Semweb4j.org maven repo</name>
-           <url>http://semweb4j.org/repo/</url>
-           <releases>
-               <enabled>true</enabled>
-           </releases>
-        </repository>
-    </repositories>
+	<repositories>
+		<repository>
+			<id>semweb4j-repo</id>
+			<name>Semweb4j.org maven repo</name>
+			<url>http://semweb4j.org/repo/</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+		</repository>
+	</repositories>
 
 
 	<dependencies>
