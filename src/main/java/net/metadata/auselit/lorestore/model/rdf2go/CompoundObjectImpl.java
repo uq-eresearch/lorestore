@@ -21,17 +21,34 @@ import org.ontoware.rdf2go.model.node.Node;
 import org.ontoware.rdf2go.model.node.Resource;
 import org.ontoware.rdf2go.model.node.URI;
 import org.ontoware.rdf2go.model.node.Variable;
+import org.ontoware.rdf2go.util.ModelUtils;
+import org.openrdf.rdf2go.RepositoryModel;
+import org.openrdf.repository.RepositoryException;
+import org.openrdf.repository.sail.SailRepository;
+import org.openrdf.sail.memory.MemoryStore;
 
 public class CompoundObjectImpl implements CompoundObject {
 
 	private Model model;
 
 	public CompoundObjectImpl(Model model) {
-		this.model = model;
-		model.setAutocommit(false);
+		try {
+			SailRepository sailRepository = new SailRepository(new MemoryStore());
+			sailRepository.initialize();
+			
+			RepositoryModel internalModel = new RepositoryModel(sailRepository);
+			internalModel.open();
+			ModelUtils.copy(model, internalModel);
+			this.model = internalModel;
+			
+		} catch (RepositoryException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	public Model getModel() {
+		model.commit();
 		return model;
 	}
 
@@ -100,8 +117,12 @@ public class CompoundObjectImpl implements CompoundObject {
 				RDF_TYPE_PROPERTY, ORE_AGGREGATION_CLASS,
 				ORE_DESCRIBES_PROPERTY));
 
+		Resource res = null;
 		for (QueryRow row : resultTable) {
-			return row.getValue("rem").asResource();
+			res = row.getValue("rem").asResource();
+		}
+		if (res != null) {
+			return res;
 		}
 		throw new OREException("Invalid CompoundObject, no ResourceMap found");
 	}

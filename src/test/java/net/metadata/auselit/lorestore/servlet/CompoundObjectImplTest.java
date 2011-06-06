@@ -4,6 +4,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 
 import net.metadata.auselit.lorestore.exceptions.OREException;
 import net.metadata.auselit.lorestore.model.rdf2go.CompoundObjectImpl;
@@ -12,7 +14,14 @@ import org.junit.Before;
 import org.junit.Test;
 import org.ontoware.rdf2go.ModelFactory;
 import org.ontoware.rdf2go.RDF2Go;
+import org.ontoware.rdf2go.exception.ModelRuntimeException;
 import org.ontoware.rdf2go.model.Model;
+import org.ontoware.rdf2go.model.Syntax;
+import org.ontoware.rdf2go.model.node.URI;
+import org.openrdf.rdf2go.RepositoryModelSet;
+import org.openrdf.repository.RepositoryException;
+import org.openrdf.repository.sail.SailRepository;
+import org.openrdf.sail.memory.MemoryStore;
 
 public class CompoundObjectImplTest {
 
@@ -54,5 +63,36 @@ public class CompoundObjectImplTest {
 	public void getObjectOwner() {
 		String ownerId = co.getOwnerId();
 		assertEquals("http://doc.localhost/users/ore", ownerId);
+	}
+	
+	@Test
+	public void setObjectOwner() throws OREException {
+		String useruri = "http://austlit.edu.au/auselit/users/omad";
+		co.setUser(useruri);
+		
+		assertEquals(useruri, co.getUser().toString());
+	}
+	
+	
+	@Test
+	public void containerWithMultipleModels() throws ModelRuntimeException, IOException, RepositoryException, OREException {
+		InputStream inputStream = getClass().getClassLoader().getResourceAsStream("sample-compound-objects.trig");
+		SailRepository sailRepository = new SailRepository(new MemoryStore());
+		sailRepository.initialize();
+		
+		RepositoryModelSet modelSet = new RepositoryModelSet(sailRepository);
+		modelSet.open();
+		modelSet.readFrom(inputStream, Syntax.Trig);
+		
+		
+		
+		
+		URI uri = modelSet.createURI("http://doc.localhost/danno/ore/dfb45021-1a74-f7b7-eb46-8d0077f3c4bc");
+		Model model = modelSet.getModel(uri);
+		co = new CompoundObjectImpl(model);
+		
+//		System.out.println(co.getModel().serialize(Syntax.RdfXml));
+		assertEquals("Anna Gerber", co.getCreator());
+		
 	}
 }
