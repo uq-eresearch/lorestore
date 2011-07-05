@@ -25,8 +25,8 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<spring-version>3.0.3.RELEASE</spring-version>
 		<sesame-version>2.3.2</sesame-version>
-		<chico-version>0.5-SNAPSHOT</chico-version>
-		<emmet-version>0.5-SNAPSHOT</emmet-version>
+		<chico-version>0.5.1-SNAPSHOT</chico-version>
+		<emmet-version>0.5.1-SNAPSHOT</emmet-version>
 	</properties>
 
 	<repositories>
