@@ -211,7 +211,7 @@ public class OREControllerTest extends OREControllerTestsBase {
 
 	@Test
 	public void keywordSearch() throws Exception {
-		String body = controller.keywordSearch("test").getBody();
+		String body = controller.searchQuery("", "", "test", false).getBody();
 
 		assertNotNull(body);
 	}
@@ -326,6 +326,52 @@ public class OREControllerTest extends OREControllerTestsBase {
 		exception.expect(AccessDeniedException.class);
 		exception.expectMessage("You do not own this object");
 		response = authController.put(recordId, in);
+	}
+
+	/**
+	 * Make sure that an admin can overwrite a compound object they don't own.
+	 * 
+	 * @throws Exception
+	 */
+	@Test
+	public void postThenPutAsAdmin() throws Exception {
+		updateAuthenticationContext("bob", "http://example.com/user/bob",
+				new String[] { "ROLE_USER", "ROLE_ORE" });
+		InputStream in = new ByteArrayInputStream(
+				CommonTestRecords.SIMPLE_ORE_EXAMPLE.getBytes());
+		OREResponse response = authController.post(in);
+
+		String recordId = findUIDFromResponse(response);
+
+		updateAuthenticationContext("james", "http://example.com/user/james",
+				new String[] { "ROLE_USER", "ROLE_ORE", "ROLE_ADMIN" });
+		in = new ByteArrayInputStream(
+				CommonTestRecords.SIMPLE_ORE_EXAMPLE.getBytes());
+
+		response = authController.put(recordId, in);
+	}
+
+	/**
+	 * Make sure that an admin can delete a compound object they don't own.
+	 * 
+	 * @throws Exception
+	 */
+	@Test
+	public void postThenDeleteAsAdmin() throws Exception {
+		updateAuthenticationContext("bob", "http://example.com/user/bob",
+				new String[] { "ROLE_USER", "ROLE_ORE" });
+		InputStream in = new ByteArrayInputStream(
+				CommonTestRecords.SIMPLE_ORE_EXAMPLE.getBytes());
+		OREResponse response = authController.post(in);
+
+		String recordId = findUIDFromResponse(response);
+
+		updateAuthenticationContext("james", "http://example.com/user/james",
+				new String[] { "ROLE_USER", "ROLE_ORE", "ROLE_ADMIN" });
+		in = new ByteArrayInputStream(
+				CommonTestRecords.SIMPLE_ORE_EXAMPLE.getBytes());
+
+		authController.delete(recordId);
 	}
 
 	/**

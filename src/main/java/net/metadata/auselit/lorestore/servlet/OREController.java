@@ -73,29 +73,29 @@ public class OREController {
 		return qh.browseQuery(urlParam);
 	}
 
-	@RequestMapping(value = "/", params = { "refersTo", "matchpred", "matchval" }, method = RequestMethod.GET)
-	public ResponseEntity<String> searchQuery(
-			@RequestParam("refersTo") String urlParam,
-			@RequestParam("matchpred") String matchpred,
-			@RequestParam("matchval") String matchval) throws Exception {
-		if (urlParam == null || urlParam.isEmpty()) {
-			throw new InvalidQueryParametersException(
-					"Missing or empty query parameters");
-		}
-
-		return qh.searchQuery(urlParam, matchpred, matchval);
-	}
-
 	@RequestMapping(value = "/", params = { "matchval" }, method = RequestMethod.GET)
-	public ResponseEntity<String> keywordSearch(
-			@RequestParam("matchval") String matchval) throws Exception {
-		if (matchval == null || matchval.isEmpty()) {
-			throw new InvalidQueryParametersException(
-					"Missing or empty query parameters");
+	public ResponseEntity<String> searchQuery(
+			@RequestParam(value = "refersTo", defaultValue = "") String urlParam,
+			@RequestParam(value = "matchpred", defaultValue = "") String matchpred,
+			@RequestParam("matchval") String matchval,
+			@RequestParam(value = "includeAbstract", defaultValue = "false") Boolean includeAbstract) throws Exception {
+		if (includeAbstract) {
+			return qh.searchQueryIncludingAbstract(urlParam, matchpred, matchval);
+		} else {
+			return qh.searchQuery(urlParam, matchpred, matchval);
 		}
-
-		return qh.searchQuery(null, null, matchval);
 	}
+
+//	@RequestMapping(value = "/", params = { "matchval" }, method = RequestMethod.GET)
+//	public ResponseEntity<String> keywordSearch(
+//			@RequestParam("matchval") String matchval) throws Exception {
+//		if (matchval == null || matchval.isEmpty()) {
+//			throw new InvalidQueryParametersException(
+//					"Missing or empty query parameters");
+//		}
+//
+//		return qh.searchQuery(null, null, matchval);
+//	}
 
 	@RequestMapping(value = "/", params = "exploreFrom", method = RequestMethod.GET)
 	public ResponseEntity<String> exploreQuery(
@@ -107,7 +107,7 @@ public class OREController {
 
 		return qh.exploreQuery(urlParam);
 	}
-
+	
 	@RequestMapping(value = "/feed", params = "refersTo", method = RequestMethod.GET)
 	public ModelAndView rssRefersToQuery(
 			@RequestParam("refersTo") String urlParam) throws Exception {

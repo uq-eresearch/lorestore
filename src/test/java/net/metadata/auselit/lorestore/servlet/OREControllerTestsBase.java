@@ -48,6 +48,7 @@ public class OREControllerTestsBase {
 		DefaultOREAccessPolicy ap = new DefaultOREAccessPolicy();
 		ap.setReadAuthorities("ROLE_USER,ROLE_ANONYMOUS");
 		ap.setWriteAuthorities("ROLE_ORE");
+		ap.setAdminAuthorities("ROLE_ADMIN");
 		ap.afterPropertiesSet();
 		ap.setIdentityProvider(ip);
 		authReqdOCC.setAccessPolicy(ap);

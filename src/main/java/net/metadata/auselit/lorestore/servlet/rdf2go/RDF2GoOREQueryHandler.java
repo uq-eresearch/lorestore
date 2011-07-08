@@ -170,7 +170,20 @@ public class RDF2GoOREQueryHandler implements OREQueryHandler {
 			String matchpred, String matchval) throws RepositoryException,
 			MalformedQueryException, QueryEvaluationException,
 			TupleQueryResultHandlerException, InterruptedException {
-		String queryString = generateSearchQuery(urlParam, matchpred, matchval);
+		String queryString = generateSearchQuery(urlParam, matchpred, matchval, false);
+
+		HttpHeaders responseHeaders = getSparqlResultsHeaders();
+		return new ResponseEntity<String>(runSparqlQuery(queryString),
+				responseHeaders, HttpStatus.OK);
+	}
+	
+	
+	@Override
+	public ResponseEntity<String> searchQueryIncludingAbstract(String urlParam,
+			String matchpred, String matchval) throws RepositoryException,
+			MalformedQueryException, QueryEvaluationException,
+			TupleQueryResultHandlerException, InterruptedException {
+		String queryString = generateSearchQuery(urlParam, matchpred, matchval, true);
 
 		HttpHeaders responseHeaders = getSparqlResultsHeaders();
 		return new ResponseEntity<String>(runSparqlQuery(queryString),
@@ -239,6 +252,13 @@ public class RDF2GoOREQueryHandler implements OREQueryHandler {
 		return stream.toString();
 	}
 
+	/**
+	 * Run a SPARQL query returning the results object, which can be processed further
+	 * for example into RSS, instead of the sparqlXML format.
+	 *  
+	 * @param queryString
+	 * @return
+	 */
 	private TupleQueryResult runSparqlQueryIntoQR(String queryString)
 			throws RepositoryException, MalformedQueryException,
 			InterruptedException, QueryEvaluationException,
@@ -295,7 +315,7 @@ public class RDF2GoOREQueryHandler implements OREQueryHandler {
 	}
 
 	private String generateSearchQuery(String urlParam, String matchpred,
-			String matchval) {
+			String matchval, boolean includeAbstract) {
 		String escapedURL = "?u";
 		if (urlParam != null && !urlParam.isEmpty()) {
 			escapedURL = "<" + urlParam + ">";
@@ -311,15 +331,22 @@ public class RDF2GoOREQueryHandler implements OREQueryHandler {
 			filter = makeFilter(matchval);
 		}
 
-		String queryString = "select distinct ?g ?a ?m ?t ?v where {"
+		String queryString = "select distinct ?g ?a ?m ?t ?v " 
+				+ (includeAbstract ? "?ab" : "" )+ " where {"
 				+ " graph ?g {" + escapedURL + " " + predicate + " ?v ."
 				+ filter + "} ."
 				+ "{?g <http://purl.org/dc/elements/1.1/creator> ?a} ."
 				+ "{?g <http://purl.org/dc/terms/modified> ?m} ."
-				+ "OPTIONAL {?g <http://purl.org/dc/elements/1.1/title> ?t}}";
+				+ "OPTIONAL {?g <http://purl.org/dc/elements/1.1/title> ?t} ."
+				+ (includeAbstract ? "OPTIONAL {?g <http://purl.org/dc/terms/abstract> ?ab}" : "" )
+				+ "}";
 		return queryString;
 	}
 
+	// abstract search query
+	// used for trails
+	
+	
 	/**
 	 * Constructs a filter for a SPARQL query
 	 * 
@@ -430,5 +457,17 @@ public class RDF2GoOREQueryHandler implements OREQueryHandler {
 				cf.release(connection);
 			}
 		}
+	}
+
+	@Override
+	public ResponseEntity<String> sparqlQuery(String query)
+			throws RepositoryException, MalformedQueryException,
+			QueryEvaluationException, TupleQueryResultHandlerException,
+			InterruptedException {
+		ap.checkAdmin();
+
+		HttpHeaders responseHeaders = getSparqlResultsHeaders();
+		return new ResponseEntity<String>(runSparqlQuery(query),
+				responseHeaders, HttpStatus.OK);
 	}
 }

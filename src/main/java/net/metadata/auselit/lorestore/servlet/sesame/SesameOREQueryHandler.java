@@ -103,4 +103,22 @@ public class SesameOREQueryHandler implements OREQueryHandler {
 
 	}
 
+	@Override
+	public ResponseEntity<String> sparqlQuery(String query)
+			throws RepositoryException, MalformedQueryException,
+			QueryEvaluationException, TupleQueryResultHandlerException,
+			InterruptedException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public ResponseEntity<String> searchQueryIncludingAbstract(String urlParam,
+			String matchpred, String matchval) throws RepositoryException,
+			MalformedQueryException, QueryEvaluationException,
+			TupleQueryResultHandlerException, InterruptedException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

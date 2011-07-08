@@ -35,7 +35,7 @@ public interface OREQueryHandler {
 	 *            the url to search for
 	 * @return a direct http response, containing the result in sparqlXML format
 	 *         as well as setting the content type.
-	 * @throws InvalidQueryParametersException 
+	 * @throws InvalidQueryParametersException
 	 */
 	public ResponseEntity<String> browseQuery(String url)
 			throws RepositoryException, MalformedQueryException,
@@ -60,21 +60,48 @@ public interface OREQueryHandler {
 	 * @param urlParam
 	 * @param matchpred
 	 * @param matchval
-	 * @return a http response containing result in sparqlXML format
+	 * @return a http response containing results in sparqlXML format
 	 */
-	public ResponseEntity<String> searchQuery(String urlParam,
-			String matchpred, String matchval) throws RepositoryException,
-			MalformedQueryException, QueryEvaluationException,
-			TupleQueryResultHandlerException, InterruptedException;
-
+	ResponseEntity<String> searchQuery(String urlParam, String matchpred,
+			String matchval)
+			throws RepositoryException, MalformedQueryException,
+			QueryEvaluationException, TupleQueryResultHandlerException,
+			InterruptedException;
+	
+	/**
+	 * Handles a search query, includes the abstract field if present
+	 * 
+	 * @param urlParam
+	 * @param matchpred
+	 * @param matchval
+	 * @return a http response containing results in sparqlXML format
+	 */
+	ResponseEntity<String> searchQueryIncludingAbstract(String urlParam, String matchpred,
+			String matchval)
+			throws RepositoryException, MalformedQueryException,
+			QueryEvaluationException, TupleQueryResultHandlerException,
+			InterruptedException;
+	
 	/**
 	 * LORE explore results for a url
 	 * 
 	 * @param url
 	 *            the url to find explore results for
-	 * @return a http response containing result in sparqlXML format
+	 * @return a http response containing results in sparqlXML format
 	 */
 	public ResponseEntity<String> exploreQuery(String url)
+			throws RepositoryException, MalformedQueryException,
+			QueryEvaluationException, TupleQueryResultHandlerException,
+			InterruptedException;
+
+	/**
+	 * SPARQL Endpoint
+	 * 
+	 * @param query
+	 *            the SPARQL query to execute
+	 * @return a http response containing results in sparqlXML format
+	 */
+	public ResponseEntity<String> sparqlQuery(String query)
 			throws RepositoryException, MalformedQueryException,
 			QueryEvaluationException, TupleQueryResultHandlerException,
 			InterruptedException;
