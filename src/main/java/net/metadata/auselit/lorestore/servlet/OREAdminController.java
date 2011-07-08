@@ -6,6 +6,7 @@ import java.io.Writer;
 import javax.servlet.http.HttpServletResponse;
 
 import net.metadata.auselit.lorestore.access.OREAccessPolicy;
+import net.metadata.auselit.lorestore.exceptions.InvalidQueryParametersException;
 import net.metadata.auselit.lorestore.model.UploadItem;
 import net.metadata.auselit.lorestore.servlet.rdf2go.RDF2GoOREQueryHandler;
 import net.metadata.auselit.lorestore.servlet.rdf2go.RDF2GoOREUpdateHandler;
@@ -13,6 +14,7 @@ import net.metadata.auselit.lorestore.servlet.rdf2go.RDF2GoOREUpdateHandler;
 import org.apache.log4j.Logger;
 import org.openrdf.rio.RDFFormat;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -20,6 +22,7 @@ import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import au.edu.diasb.chico.mvc.RequestFailureException;
@@ -68,7 +71,7 @@ public class OREAdminController {
 		String originalFilename = uploadItem.getFileData().getOriginalFilename();
 		uh.bulkImport(fileData, originalFilename);
 
-		return "redirect:/ore/admin/";
+		return "redirect:/oreadmin/";
 	}
 	
 	@RequestMapping(value = "/stats", method = RequestMethod.GET)
@@ -99,6 +102,22 @@ public class OREAdminController {
 		response.setHeader("Content-Disposition", "attachment; filename="+filename);
 		Writer outputWriter = response.getWriter();
 		qh.exportAll(outputWriter);
+	}
+
+	@RequestMapping(value = "/sparqlPage")
+	public String sparqlPage() {
+		ap.checkAdmin();
+		return "admin/sparqlPage";
+	}
+
+	@RequestMapping(value = "/sparql", params = "sparql", method = RequestMethod.GET)
+	public ResponseEntity<String> sparqlQuery(@RequestParam("sparql") String sparqlQuery) throws Exception {
+		if (sparqlQuery == null || sparqlQuery.isEmpty()) {
+			throw new InvalidQueryParametersException(
+					"Missing or empty query parameters");
+		}
+		
+		return qh.sparqlQuery(sparqlQuery);
 	}
 	
 	@ResponseStatus(HttpStatus.UNAUTHORIZED)

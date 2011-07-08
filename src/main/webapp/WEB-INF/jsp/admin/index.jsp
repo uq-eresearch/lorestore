@@ -15,6 +15,7 @@
   		<li><a href="stats">Statistics</a></li>
   		<li><a href="wipeDatabase">Wipe Database</a></li>
   		<li><a href="testQueries">Test Queries</a></li>
+  		<li><a href="sparqlPage">SPARQL Query</a></li>
   	</ul>
   	
   </body>
