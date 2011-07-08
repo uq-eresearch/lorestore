@@ -38,13 +38,24 @@ public class DefaultOREAccessPolicy implements OREAccessPolicy, InitializingBean
 		ac.checkAuthority(null, writeAuthorities);
 	}
 
+	/**
+	 * Allowed if user is an admin or has write authority and owns the object
+	 */
 	public void checkUpdate( CompoundObject obj) {
+		if (ac.hasAuthority(null, adminAuthorities)) {
+			return;
+		}
 		Authentication auth = ac.checkAuthority(null, writeAuthorities);
 		checkObjectOwner(obj, auth);
 
 	}
-
+	/**
+	 * Allowed if user is an admin or has write authority and owns the object
+	 */
 	public void checkDelete( CompoundObject obj) {
+		if (ac.hasAuthority(null, adminAuthorities)) {
+			return;
+		}
 		Authentication auth = ac.checkAuthority(null, writeAuthorities);
 		checkObjectOwner(obj, auth);
 	}
