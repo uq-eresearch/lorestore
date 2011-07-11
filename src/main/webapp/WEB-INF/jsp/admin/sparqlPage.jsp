@@ -9,9 +9,8 @@
   </head>
   <body>
   	<h1>Test Queries</h1>
-  	<form method="get">
+  	<form method="get" action="sparql">
   		<fieldset>
-  			<legend>Refers To</legend>
   			
   			<p>
   				<label for="sparql" path="name">Sparql Query:</label>
