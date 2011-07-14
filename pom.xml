@@ -4,7 +4,7 @@
 	<groupId>net.metadata.auselit</groupId>
 	<artifactId>lorestore</artifactId>
 	<packaging>war</packaging>
-	<version>0.0.2-SNAPSHOT</version>
+	<version>0.0.3-SNAPSHOT</version>
 	<name>LoreStore</name>
 	<url>http://www.aus-e-lit.net/</url>
 	<developers>
@@ -25,8 +25,8 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<spring-version>3.0.3.RELEASE</spring-version>
 		<sesame-version>2.3.2</sesame-version>
-		<chico-version>0.5.1-SNAPSHOT</chico-version>
-		<emmet-version>0.5.1-SNAPSHOT</emmet-version>
+		<chico-version>0.5.1</chico-version>
+		<emmet-version>0.5.1</emmet-version>
 	</properties>
 
 	<repositories>
