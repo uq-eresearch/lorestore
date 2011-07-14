@@ -4,6 +4,8 @@ import static net.metadata.auselit.lorestore.common.OREConstants.AGGREGATION;
 import static net.metadata.auselit.lorestore.common.OREConstants.DCTERMS_CREATED;
 import static net.metadata.auselit.lorestore.common.OREConstants.DCTERMS_MODIFIED;
 import static net.metadata.auselit.lorestore.common.OREConstants.DC_CREATOR;
+import static net.metadata.auselit.lorestore.common.OREConstants.LORESTORE_LOCKED;
+import static net.metadata.auselit.lorestore.common.OREConstants.LORESTORE_PRIVATE;
 import static net.metadata.auselit.lorestore.common.OREConstants.LORESTORE_USER;
 import static net.metadata.auselit.lorestore.common.OREConstants.ORE_AGGREGATION_CLASS;
 import static net.metadata.auselit.lorestore.common.OREConstants.ORE_DESCRIBES_PROPERTY;
@@ -149,6 +151,14 @@ public class CompoundObjectImpl implements CompoundObject {
 				uri, Variable.ANY);
 		return lookupOneObject(it);
 	}
+	
+	public boolean isPrivate() {
+		return model.contains(Variable.ANY, model.createURI(LORESTORE_PRIVATE), Variable.ANY);
+	}
+	
+	public boolean isLocked() {
+		return model.contains(Variable.ANY, model.createURI(LORESTORE_LOCKED), Variable.ANY);
+	}
 
 	public void setUser(String newUser) throws OREException {
 		Resource resourceMap = findResourceMap();
@@ -198,4 +208,11 @@ public class CompoundObjectImpl implements CompoundObject {
 		return null;
 	}
 
+	/**
+	 * Close the internal model resources used by this compound object
+	 */
+	public void close() {
+		if (model != null)
+			model.close();
+	}
 }

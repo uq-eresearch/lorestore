@@ -1,5 +1,7 @@
 package net.metadata.auselit.lorestore.servlet.rdf2go;
 
+import static net.metadata.auselit.lorestore.common.OREConstants.LORESTORE_PRIVATE;
+import static net.metadata.auselit.lorestore.common.OREConstants.LORESTORE_USER;
 import static net.metadata.auselit.lorestore.common.OREConstants.SPARQL_RESULTS_XML;
 
 import java.io.ByteArrayOutputStream;
@@ -8,6 +10,7 @@ import java.io.Writer;
 import net.metadata.auselit.lorestore.access.OREAccessPolicy;
 import net.metadata.auselit.lorestore.exceptions.InvalidQueryParametersException;
 import net.metadata.auselit.lorestore.exceptions.NotFoundException;
+import net.metadata.auselit.lorestore.model.rdf2go.CompoundObjectImpl;
 import net.metadata.auselit.lorestore.servlet.OREController;
 import net.metadata.auselit.lorestore.servlet.OREControllerConfig;
 import net.metadata.auselit.lorestore.servlet.OREQueryHandler;
@@ -34,6 +37,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.servlet.ModelAndView;
 
 /**
@@ -66,7 +70,6 @@ public class RDF2GoOREQueryHandler implements OREQueryHandler {
 			InterruptedException {
 		ModelSet container = cf.retrieveConnection();
 		Model model = null;
-
 		// FIXME: should copy the model to a separate store, this currently
 		// maintains
 		// it's connection to the main triplestore via the opened connection,
@@ -82,14 +85,28 @@ public class RDF2GoOREQueryHandler implements OREQueryHandler {
 				LOG.debug("Cannot find requested resource: " + oreId);
 				throw new NotFoundException("Cannot find resource: " + oreId);
 			}
+			checkUserCanRead(model);
+		} catch (AccessDeniedException ex) {
+			// The model is normally closed after the response view is generated,
+			// but since an exception is thrown it must be closed here.
+			model.close();
+			throw ex;
 		} finally {
 			cf.release(container);
 		}
-		ap.checkRead(model);
 		return new OREResponse(model);
-
 	}
 
+	private void checkUserCanRead(Model m) {
+		CompoundObjectImpl compoundObject = new CompoundObjectImpl(m);
+		try {
+			ap.checkRead(compoundObject);
+		} finally {
+			compoundObject.close();
+		}
+	}
+
+	
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -125,13 +142,6 @@ public class RDF2GoOREQueryHandler implements OREQueryHandler {
 
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * net.metadata.auselit.lorestore.servlet.rdf2go.OREQueryHandler#browseRSSQuery
-	 * (java.lang.String)
-	 */
 	@Override
 	public ModelAndView browseRSSQuery(String url) throws RepositoryException,
 			MalformedQueryException, QueryEvaluationException,
@@ -139,7 +149,7 @@ public class RDF2GoOREQueryHandler implements OREQueryHandler {
 		String queryString = generateBrowseQuery(url);
 		ModelAndView mav = new ModelAndView("oreRss");
 		mav.addObject("browseURL", url);
-		
+
 		TupleQueryResult queryResult = runSparqlQueryIntoQR(queryString);
 		mav.addObject("queryResult", queryResult);
 
@@ -158,45 +168,34 @@ public class RDF2GoOREQueryHandler implements OREQueryHandler {
 		return responseHeaders;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * net.metadata.auselit.lorestore.servlet.rdf2go.OREQueryHandler#searchQuery
-	 * (java.lang.String, java.lang.String, java.lang.String)
-	 */
+
 	@Override
 	public ResponseEntity<String> searchQuery(String urlParam,
 			String matchpred, String matchval) throws RepositoryException,
 			MalformedQueryException, QueryEvaluationException,
 			TupleQueryResultHandlerException, InterruptedException {
-		String queryString = generateSearchQuery(urlParam, matchpred, matchval, false);
+		String queryString = generateSearchQuery(urlParam, matchpred, matchval,
+				false);
 
 		HttpHeaders responseHeaders = getSparqlResultsHeaders();
 		return new ResponseEntity<String>(runSparqlQuery(queryString),
 				responseHeaders, HttpStatus.OK);
 	}
-	
-	
+
 	@Override
 	public ResponseEntity<String> searchQueryIncludingAbstract(String urlParam,
 			String matchpred, String matchval) throws RepositoryException,
 			MalformedQueryException, QueryEvaluationException,
 			TupleQueryResultHandlerException, InterruptedException {
-		String queryString = generateSearchQuery(urlParam, matchpred, matchval, true);
+		String queryString = generateSearchQuery(urlParam, matchpred, matchval,
+				true);
 
 		HttpHeaders responseHeaders = getSparqlResultsHeaders();
 		return new ResponseEntity<String>(runSparqlQuery(queryString),
 				responseHeaders, HttpStatus.OK);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * net.metadata.auselit.lorestore.servlet.rdf2go.OREQueryHandler#exploreQuery
-	 * (java.lang.String)
-	 */
+
 	@Override
 	public ResponseEntity<String> exploreQuery(String url)
 			throws RepositoryException, MalformedQueryException,
@@ -253,9 +252,9 @@ public class RDF2GoOREQueryHandler implements OREQueryHandler {
 	}
 
 	/**
-	 * Run a SPARQL query returning the results object, which can be processed further
-	 * for example into RSS, instead of the sparqlXML format.
-	 *  
+	 * Run a SPARQL query returning the results object, which can be processed
+	 * further for example into RSS, instead of the sparqlXML format.
+	 * 
 	 * @param queryString
 	 * @return
 	 */
@@ -290,14 +289,22 @@ public class RDF2GoOREQueryHandler implements OREQueryHandler {
 	protected String generateBrowseQuery(String escapedURL) {
 		// Needs to match both www and non-www version of URL
 		String altURL = makeAltURL(escapedURL);
-		String query = "SELECT DISTINCT ?g ?a ?m ?t " + " WHERE { graph ?g {"
-				+ "{<" + escapedURL + "> ?p ?o .}" + " UNION " + "{?s ?p2 <"
-				+ escapedURL + ">}" + " UNION " + "{<" + altURL
-				+ "> ?p3 ?o2 .}" + " UNION " + "{?s2 ?p4 <" + altURL + ">}}. "
+		String userURI = occ.getIdentityProvider().obtainUserURI();
+		// @formatter:off
+		String query = "SELECT DISTINCT ?g ?a ?m ?t "
+				+ " WHERE { graph ?g {"
+				+ " {<" + escapedURL + "> ?p ?o .}"
+				+ " UNION {?s ?p2 <" + escapedURL + ">}"
+				+ " UNION {<" + altURL + "> ?p3 ?o2 .}"
+				+ " UNION {?s2 ?p4 <" + altURL+ ">}}. "
 				+ " {?g <http://purl.org/dc/elements/1.1/creator> ?a}."
 				+ " {?g <http://purl.org/dc/terms/modified> ?m}."
-				+ " OPTIONAL {?g <http://purl.org/dc/elements/1.1/title> ?t}}";
-
+				+ " OPTIONAL {?g <http://purl.org/dc/elements/1.1/title> ?t}."
+				+ " OPTIONAL {?g <" + LORESTORE_PRIVATE + "> ?priv}."
+				+ " OPTIONAL {?g <" + LORESTORE_USER + "> ?user}."
+				+ " FILTER (!bound(?priv) || (bound(?priv) && ?user = '" + userURI + "'))"
+				+ "}";
+		// @formatter:on
 		return query;
 	}
 
@@ -331,24 +338,29 @@ public class RDF2GoOREQueryHandler implements OREQueryHandler {
 			filter = makeFilter(matchval);
 		}
 
-		String queryString = "select distinct ?g ?a ?m ?t ?v " 
-				+ (includeAbstract ? "?ab" : "" )+ " where {"
-				+ " graph ?g {" + escapedURL + " " + predicate + " ?v ."
-				+ filter + "} ."
-				+ "{?g <http://purl.org/dc/elements/1.1/creator> ?a} ."
-				+ "{?g <http://purl.org/dc/terms/modified> ?m} ."
-				+ "OPTIONAL {?g <http://purl.org/dc/elements/1.1/title> ?t} ."
-				+ (includeAbstract ? "OPTIONAL {?g <http://purl.org/dc/terms/abstract> ?ab}" : "" )
+		String userURI = occ.getIdentityProvider().obtainUserURI();
+		// @formatter:off
+		String queryString = "select distinct ?g ?a ?m ?t ?v "
+				+ (includeAbstract ? "?ab" : "")
+				+ " where {"
+				+ "   graph ?g {" + escapedURL + " " + predicate + " ?v ."
+				+        filter
+				+ "   } ."
+				+   "{?g <http://purl.org/dc/elements/1.1/creator> ?a} ."
+				+   "{?g <http://purl.org/dc/terms/modified> ?m} ."
+				+   "OPTIONAL {?g <http://purl.org/dc/elements/1.1/title> ?t} ."
+				+   (includeAbstract ? "OPTIONAL {?g <http://purl.org/dc/terms/abstract> ?ab}." : "") 
+				+ " OPTIONAL {?g <" + LORESTORE_PRIVATE + "> ?priv}."
+				+ " OPTIONAL {?g <" + LORESTORE_USER + "> ?user}."
+				+ " FILTER (!bound(?priv) || (bound(?priv) && ?user = '" + userURI + "'))"
 				+ "}";
+		// @formatter:on
+		
 		return queryString;
 	}
 
-	// abstract search query
-	// used for trails
-	
-	
 	/**
-	 * Constructs a filter for a SPARQL query
+	 * Constructs a regex filter string for a SPARQL query
 	 * 
 	 * @param matchVal
 	 * @return
@@ -370,48 +382,57 @@ public class RDF2GoOREQueryHandler implements OREQueryHandler {
 	}
 
 	protected String generateExploreQuery(String escapedURI) {
+		// @formatter:off
+		String userURI = occ.getIdentityProvider().obtainUserURI();
 		String query = "PREFIX dc:<http://purl.org/dc/elements/1.1/> "
 				+ "PREFIX dcterms:<http://purl.org/dc/terms/>"
 				+ "PREFIX ore:<http://www.openarchives.org/ore/terms/> "
 				+ "PREFIX rdf:<http://www.w3.org/1999/02/22-rdf-syntax-ns#>"
 				+ "SELECT DISTINCT ?something ?somerel ?sometitle ?sometype ?creator ?modified ?anotherrel ?somethingelse WHERE {"
 				// Compound objects that contain this uri
-				+ "{?aggre ore:aggregates <"
-				+ escapedURI
-				+ "> . "
-				+ "?something ore:describes ?aggre . "
-				+ "?something a ?sometype . "
-				+ "OPTIONAL {?something dc:creator ?creator .} "
-				+ "OPTIONAL {?something dcterms:modified ?modified .} "
-				+ "OPTIONAL {?something dc:title ?sometitle .}}"
+				+ "{?aggre ore:aggregates <" + escapedURI + "> . "
+					+ "?something ore:describes ?aggre . "
+					+ "?something a ?sometype . "
+					+ "OPTIONAL {?something dc:creator ?creator .} "
+					+ "OPTIONAL {?something dcterms:modified ?modified .} "
+					+ "OPTIONAL {?something dc:title ?sometitle .}"
+					+ "OPTIONAL {?g <" + LORESTORE_PRIVATE + "> ?priv}. "
+					+ "OPTIONAL {?g <" + LORESTORE_USER + "> ?user}. "
+					+ "}"
 				// uris that have an asserted relationship to this uri
-				+ "UNION { ?something ?somerel <"
-				+ escapedURI
-				+ "> . "
-				+ "FILTER isURI(?something) ."
-				+ "FILTER (?somerel != ore:aggregates) . "
-				+ "FILTER (?somerel != rdf:type) . "
-				+ "OPTIONAL {?something a ?sometype} ."
-				+ "OPTIONAL {?something dc:title ?sometitle.} }"
+				+ "UNION { ?something ?somerel <" + escapedURI + "> . "
+					+ "FILTER isURI(?something) ."
+					+ "FILTER (?somerel != ore:aggregates) . "
+					+ "FILTER (?somerel != rdf:type) . "
+					+ "OPTIONAL {?something a ?sometype} ."
+					+ "OPTIONAL {?something dc:title ?sometitle.} "
+					+ "OPTIONAL {?g <" + LORESTORE_PRIVATE + "> ?priv}. "
+					+ "OPTIONAL {?g <" + LORESTORE_USER + "> ?user}. "
+					+ "}"
 				// uris that have an asserted relationships from this uri
-				+ "UNION {<"
-				+ escapedURI
-				+ "> ?somerel ?something . "
-				+ "FILTER isURI(?something). "
-				+ "FILTER (?somerel != rdf:type) . "
-				+ "FILTER (?somerel != ore:describes) . "
-				+ "OPTIONAL {?something a ?sometype} ."
-				+ "OPTIONAL {?something dc:title ?sometitle.}}"
+				+ "UNION {<" + escapedURI + "> ?somerel ?something . "
+					+ "FILTER isURI(?something). "
+					+ "FILTER (?somerel != rdf:type) . "
+					+ "FILTER (?somerel != ore:describes) . "
+					+ "OPTIONAL {?something a ?sometype} ."
+					+ "OPTIONAL {?something dc:title ?sometitle.}"
+					+ "OPTIONAL {?g <" + LORESTORE_PRIVATE + "> ?priv}. "
+					+ "OPTIONAL {?g <" + LORESTORE_USER + "> ?user}. "
+					+ "}"
 				// if this is a compound object, uris contained
-				+ "UNION {<"
-				+ escapedURI
-				+ "> ore:describes ?aggre ."
-				+ "?aggre ?somerel ?something . "
-				+ "FILTER isURI(?something) ."
-				+ "FILTER (?somerel != rdf:type) ."
-				+ "OPTIONAL {?something dc:title ?sometitle . } . "
-				+ "OPTIONAL {?something ?anotherrel ?somethingelse . FILTER isURI(?somethingelse)} . "
-				+ "OPTIONAL {?something a ?sometype}}}";
+				+ "UNION {<" + escapedURI + "> ore:describes ?aggre ."
+					+ "?aggre ?somerel ?something . "
+					+ "FILTER isURI(?something) ."
+					+ "FILTER (?somerel != rdf:type) ."
+					+ "OPTIONAL {?something dc:title ?sometitle . } . "
+					+ "OPTIONAL {?something ?anotherrel ?somethingelse . FILTER isURI(?somethingelse)} . "
+					+ "OPTIONAL {?something a ?sometype}"
+					+ "OPTIONAL {?g <" + LORESTORE_PRIVATE + "> ?priv}. "
+					+ "OPTIONAL {?g <" + LORESTORE_USER + "> ?user}. "
+					+ "}"
+				+ " FILTER (!bound(?priv) || (bound(?priv) && ?user = '" + userURI + "'))"
+				+ "}";
+		// @formatter:on
 		return query;
 	}
 

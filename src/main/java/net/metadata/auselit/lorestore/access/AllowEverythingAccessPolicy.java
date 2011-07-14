@@ -7,7 +7,7 @@ import org.ontoware.rdf2go.model.Model;
 
 public class AllowEverythingAccessPolicy implements OREAccessPolicy {
 
-	public void checkRead(Model res) {
+	public void checkRead(CompoundObject res) {
 
 	}
 

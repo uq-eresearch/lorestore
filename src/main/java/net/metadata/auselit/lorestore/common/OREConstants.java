@@ -38,6 +38,9 @@ public interface OREConstants {
     
     String LORESTORE_NS_URL = "http://auselit.metadata.net/lorestore/";
     String LORESTORE_USER = LORESTORE_NS_URL + "user";
+
+    String LORESTORE_PRIVATE = LORESTORE_NS_URL + "isPrivate";
+    String LORESTORE_LOCKED = LORESTORE_NS_URL + "isLocked";
     
 
 	String SPARQL_RESULTS_XML = "application/sparql-results+xml";

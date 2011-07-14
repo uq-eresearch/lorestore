@@ -327,6 +327,7 @@ public class OREControllerTest extends OREControllerTestsBase {
 		exception.expectMessage("You do not own this object");
 		response = authController.put(recordId, in);
 	}
+	
 
 	/**
 	 * Make sure that an admin can overwrite a compound object they don't own.
@@ -421,6 +422,28 @@ public class OREControllerTest extends OREControllerTestsBase {
 		checkUserInModel(response, userUri);
 	}
 
+	/**
+	 * Make sure that a locked object cannot be updated
+	 * @throws Exception
+	 */
+	@Test
+	public void postThenPutLocked() throws Exception {
+		updateAuthenticationContext("bob", "http://example.com/user/bob",
+				new String[] { "ROLE_USER", "ROLE_ORE" });
+
+		InputStream in = new ByteArrayInputStream(
+				CommonTestRecords.SIMPLE_ORE_LOCKED.getBytes());
+		OREResponse response = authController.post(in);
+
+		String recordId = findUIDFromResponse(response);
+		in = new ByteArrayInputStream(
+				CommonTestRecords.SIMPLE_ORE_LOCKED.getBytes());
+		
+		exception.expect(AccessDeniedException.class);
+		exception.expectMessage("Object is locked, must be administrator to modify");
+		authController.put(recordId, in);
+	}
+	
 	//
 	// Private Methods
 	//

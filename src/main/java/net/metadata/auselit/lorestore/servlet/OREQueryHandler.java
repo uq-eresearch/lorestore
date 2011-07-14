@@ -57,9 +57,10 @@ public interface OREQueryHandler {
 	/**
 	 * Handles a search query
 	 * 
-	 * @param urlParam
-	 * @param matchpred
-	 * @param matchval
+	 * @param urlParam A specific url that the compound object must reference
+	 * @param matchpred A predicate to match the value against
+	 * @param matchval a keyword string to either look for anywhere, or only 
+	 * for the supplied matchpred
 	 * @return a http response containing results in sparqlXML format
 	 */
 	ResponseEntity<String> searchQuery(String urlParam, String matchpred,
@@ -95,7 +96,7 @@ public interface OREQueryHandler {
 			InterruptedException;
 
 	/**
-	 * SPARQL Endpoint
+	 * SPARQL Endpoint, only supports SELECT queries
 	 * 
 	 * @param query
 	 *            the SPARQL query to execute

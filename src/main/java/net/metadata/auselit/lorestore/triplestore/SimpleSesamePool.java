@@ -54,7 +54,7 @@ public final class SimpleSesamePool implements TripleStoreConnectorFactory {
 	 * Shut down all the connections in the pool.
 	 */
 	public void destroy() {
-		LOG.info("Closing repository connection");
+		LOG.info("Closing repository connections");
 		try {
 			while (connections.size() > 0) {
 			//FIXME: What happens if there is still a connection in use...

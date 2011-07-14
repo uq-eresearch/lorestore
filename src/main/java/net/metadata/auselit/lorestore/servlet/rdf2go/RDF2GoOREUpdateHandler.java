@@ -82,6 +82,7 @@ public class RDF2GoOREUpdateHandler implements OREUpdateHandler {
 		// and the creator
 		String userURI = occ.getIdentityProvider().obtainUserURI();
 		compoundObject.setUser(userURI);
+		
 
 		ModelSet ms = null;
 		try {
@@ -127,9 +128,7 @@ public class RDF2GoOREUpdateHandler implements OREUpdateHandler {
 		}
 	}
 
-	/* (non-Javadoc)
-	 * @see net.metadata.auselit.lorestore.servlet.rdf2go.OREUpdateHandler#put(java.lang.String, java.io.InputStream)
-	 */
+
 	@Override
 	public OREResponse put(String oreId, InputStream inputRDF)
 			throws RequestFailureException, IOException, OREException,
@@ -137,32 +136,25 @@ public class RDF2GoOREUpdateHandler implements OREUpdateHandler {
 		ModelFactory mf = RDF2Go.getModelFactory();
 		URI objURI = mf.createModel().createURI(occ.getBaseUri() + oreId);
 
-		ModelSet container = null;
-		Model model = null;
+		Model newModel = null;
+		ModelSet container = cf.retrieveConnection();
 		try {
-			container = cf.retrieveConnection();
-			model = container.getModel(objURI);
-			if (model == null || model.isEmpty()) {
-				if (model != null)
-					model.close();
-				throw new OREException("Cannot update nonexistant object");
-			}
-
-			CompoundObjectImpl co = new CompoundObjectImpl(model);
+			String oldUserUri = null;
+			Model oldModel = container.getModel(objURI);
 			try {
-				ap.checkUpdate(co);
+				oldUserUri = checkUserCanUpdate(oldModel);
 			} finally {
-				co.getModel().close();
-				model.close();
+				oldModel.close();
 			}
 			
-			model = mf.createModel(objURI);
-			model.open();
+			newModel = mf.createModel(objURI);
+			newModel.open();
 
 			
 			try {
-				model.readFrom(inputRDF, Syntax.RdfXml, occ.getBaseUri());
+				newModel.readFrom(inputRDF, Syntax.RdfXml, occ.getBaseUri());
 			} catch (ModelRuntimeException e) {
+				newModel.close();
 				throw new RequestFailureException(
 						HttpServletResponse.SC_BAD_REQUEST, "Error reading RDF");
 			}
@@ -170,22 +162,39 @@ public class RDF2GoOREUpdateHandler implements OREUpdateHandler {
 			// TODO: needs to do stuff like maintaining the created/modified
 			// dates,
 			// and the creator
-			String userURI = occ.getIdentityProvider().obtainUserURI();
-			CompoundObjectImpl compoundObject = new CompoundObjectImpl(model);
-			model.close();
-			compoundObject.setUser(userURI);
+			CompoundObjectImpl compoundObject = new CompoundObjectImpl(newModel);
+			newModel.close();
+			compoundObject.setUser(oldUserUri);
+
+			newModel = compoundObject.getModel();
 
 			container.removeModel(objURI);
-			container.addModel(compoundObject.getModel(), objURI);
+			container.addModel(newModel, objURI);
 			container.commit();
 			
-			model = compoundObject.getModel();
 			
 		} finally {
 			cf.release(container);
 		}
 
-		return new OREResponse(model);
+		return new OREResponse(newModel);
+	}
+
+	private String checkUserCanUpdate(Model oldModel) throws OREException {
+		if (oldModel == null || oldModel.isEmpty()) {
+			if (oldModel != null)
+				oldModel.close();
+			throw new OREException("Cannot update non-existant object");
+		}
+		String oldUserUri = null;
+		CompoundObjectImpl co = new CompoundObjectImpl(oldModel);
+		try {
+			oldUserUri = co.getOwnerId();
+			ap.checkUpdate(co);
+		} finally {
+			co.close();
+		}
+		return oldUserUri;
 	}
 
 	/* (non-Javadoc)

@@ -1,5 +1,4 @@
 package net.metadata.auselit.lorestore.access;
-
 import net.metadata.auselit.lorestore.model.CompoundObject;
 
 import org.ontoware.rdf2go.model.Model;
@@ -29,9 +28,14 @@ public class DefaultOREAccessPolicy implements OREAccessPolicy, InitializingBean
         }
 	}
 	
-	public void checkRead(Model res) {
+	public void checkRead(CompoundObject obj) {
 		ac.checkAuthority(null, readAuthorities);
 
+		if (obj.isPrivate()) {
+			Authentication auth = ac.checkAuthority(null, readAuthorities);
+			checkObjectOwner(obj, auth);
+		}
+		
 	}
 
 	public void checkCreate( Model res) {
@@ -39,7 +43,7 @@ public class DefaultOREAccessPolicy implements OREAccessPolicy, InitializingBean
 	}
 
 	/**
-	 * Allowed if user is an admin or has write authority and owns the object
+	 * Allowed if user is an admin or (has write authority, owns the object, and the object isn't locked)
 	 */
 	public void checkUpdate( CompoundObject obj) {
 		if (ac.hasAuthority(null, adminAuthorities)) {
@@ -47,6 +51,7 @@ public class DefaultOREAccessPolicy implements OREAccessPolicy, InitializingBean
 		}
 		Authentication auth = ac.checkAuthority(null, writeAuthorities);
 		checkObjectOwner(obj, auth);
+		checkNotLocked(obj);
 
 	}
 	/**
@@ -74,6 +79,12 @@ public class DefaultOREAccessPolicy implements OREAccessPolicy, InitializingBean
 		
 	}
 
+	private void checkNotLocked(CompoundObject obj) {
+		if (obj.isLocked()) {
+			throw new AccessDeniedException("Object is locked, must be administrator to modify");
+		}
+	}
+	
 	public void checkAdmin() {
 		ac.checkAuthority(null, adminAuthorities);
 

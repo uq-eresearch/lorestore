@@ -86,17 +86,6 @@ public class OREController {
 		}
 	}
 
-//	@RequestMapping(value = "/", params = { "matchval" }, method = RequestMethod.GET)
-//	public ResponseEntity<String> keywordSearch(
-//			@RequestParam("matchval") String matchval) throws Exception {
-//		if (matchval == null || matchval.isEmpty()) {
-//			throw new InvalidQueryParametersException(
-//					"Missing or empty query parameters");
-//		}
-//
-//		return qh.searchQuery(null, null, matchval);
-//	}
-
 	@RequestMapping(value = "/", params = "exploreFrom", method = RequestMethod.GET)
 	public ResponseEntity<String> exploreQuery(
 			@RequestParam("exploreFrom") String urlParam) throws Exception {

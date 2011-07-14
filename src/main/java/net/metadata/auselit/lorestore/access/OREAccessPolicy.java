@@ -23,10 +23,10 @@ public interface OREAccessPolicy {
 	 * store and preparing the result container. An implementation may throw an
 	 * unchecked exception or modify the contents of the container.
 	 * 
-	 * @param res
-	 *            the result container.
+	 * @param obj
+	 *            The compound object requested to read
 	 */
-	void checkRead(Model res);
+	void checkRead(CompoundObject obj);
 
 	/**
 	 * Called for PUT and POST requests after preparing the result container and
