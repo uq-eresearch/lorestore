@@ -291,7 +291,7 @@ public class RDF2GoOREQueryHandler implements OREQueryHandler {
 		String altURL = makeAltURL(escapedURL);
 		String userURI = occ.getIdentityProvider().obtainUserURI();
 		// @formatter:off
-		String query = "SELECT DISTINCT ?g ?a ?m ?t "
+		String query = "SELECT DISTINCT ?g ?a ?m ?t ?priv"
 				+ " WHERE { graph ?g {"
 				+ " {<" + escapedURL + "> ?p ?o .}"
 				+ " UNION {?s ?p2 <" + escapedURL + ">}"
@@ -340,7 +340,7 @@ public class RDF2GoOREQueryHandler implements OREQueryHandler {
 
 		String userURI = occ.getIdentityProvider().obtainUserURI();
 		// @formatter:off
-		String queryString = "select distinct ?g ?a ?m ?t ?v "
+		String queryString = "select distinct ?g ?a ?m ?t ?v ?priv"
 				+ (includeAbstract ? "?ab" : "")
 				+ " where {"
 				+ "   graph ?g {" + escapedURL + " " + predicate + " ?v ."
@@ -396,8 +396,8 @@ public class RDF2GoOREQueryHandler implements OREQueryHandler {
 					+ "OPTIONAL {?something dc:creator ?creator .} "
 					+ "OPTIONAL {?something dcterms:modified ?modified .} "
 					+ "OPTIONAL {?something dc:title ?sometitle .}"
-					+ "OPTIONAL {?g <" + LORESTORE_PRIVATE + "> ?priv}. "
-					+ "OPTIONAL {?g <" + LORESTORE_USER + "> ?user}. "
+					+ "OPTIONAL {?something <" + LORESTORE_PRIVATE + "> ?priv}. "
+					+ "OPTIONAL {?something <" + LORESTORE_USER + "> ?user}. "
 					+ "}"
 				// uris that have an asserted relationship to this uri
 				+ "UNION { ?something ?somerel <" + escapedURI + "> . "
@@ -406,8 +406,6 @@ public class RDF2GoOREQueryHandler implements OREQueryHandler {
 					+ "FILTER (?somerel != rdf:type) . "
 					+ "OPTIONAL {?something a ?sometype} ."
 					+ "OPTIONAL {?something dc:title ?sometitle.} "
-					+ "OPTIONAL {?g <" + LORESTORE_PRIVATE + "> ?priv}. "
-					+ "OPTIONAL {?g <" + LORESTORE_USER + "> ?user}. "
 					+ "}"
 				// uris that have an asserted relationships from this uri
 				+ "UNION {<" + escapedURI + "> ?somerel ?something . "
@@ -416,8 +414,6 @@ public class RDF2GoOREQueryHandler implements OREQueryHandler {
 					+ "FILTER (?somerel != ore:describes) . "
 					+ "OPTIONAL {?something a ?sometype} ."
 					+ "OPTIONAL {?something dc:title ?sometitle.}"
-					+ "OPTIONAL {?g <" + LORESTORE_PRIVATE + "> ?priv}. "
-					+ "OPTIONAL {?g <" + LORESTORE_USER + "> ?user}. "
 					+ "}"
 				// if this is a compound object, uris contained
 				+ "UNION {<" + escapedURI + "> ore:describes ?aggre ."
@@ -427,8 +423,8 @@ public class RDF2GoOREQueryHandler implements OREQueryHandler {
 					+ "OPTIONAL {?something dc:title ?sometitle . } . "
 					+ "OPTIONAL {?something ?anotherrel ?somethingelse . FILTER isURI(?somethingelse)} . "
 					+ "OPTIONAL {?something a ?sometype}"
-					+ "OPTIONAL {?g <" + LORESTORE_PRIVATE + "> ?priv}. "
-					+ "OPTIONAL {?g <" + LORESTORE_USER + "> ?user}. "
+					+ "OPTIONAL {<" + escapedURI + "> <" + LORESTORE_PRIVATE + "> ?priv}. "
+					+ "OPTIONAL {<" + escapedURI + "> <" + LORESTORE_USER + "> ?user}. "
 					+ "}"
 				+ " FILTER (!bound(?priv) || (bound(?priv) && ?user = '" + userURI + "'))"
 				+ "}";
