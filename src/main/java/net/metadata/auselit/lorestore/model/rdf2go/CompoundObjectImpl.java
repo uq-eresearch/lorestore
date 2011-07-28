@@ -167,9 +167,10 @@ public class CompoundObjectImpl implements CompoundObject {
 		ClosableIterator<Statement> userStatements = model.findStatements(
 				resourceMap, lorestoreUserPred, Variable.ANY);
 		model.removeAll(userStatements);
-
-		model.addStatement(resourceMap, lorestoreUserPred,
-				model.createPlainLiteral(newUser));
+		if (newUser != null){
+			model.addStatement(resourceMap, lorestoreUserPred,
+					model.createPlainLiteral(newUser));
+		} 
 		model.commit();
 	}
 

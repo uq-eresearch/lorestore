@@ -15,6 +15,7 @@ import net.metadata.auselit.lorestore.servlet.OREResponse;
 import net.metadata.auselit.lorestore.servlet.OREUpdateHandler;
 import net.metadata.auselit.lorestore.triplestore.TripleStoreConnectorFactory;
 
+import org.apache.log4j.Logger;
 import org.ontoware.rdf2go.ModelFactory;
 import org.ontoware.rdf2go.RDF2Go;
 import org.ontoware.rdf2go.exception.ModelRuntimeException;
@@ -36,12 +37,14 @@ import au.edu.diasb.chico.mvc.RequestFailureException;
  * Based loosely on DannoUpdateHandler
  * 
  * @author uqdayers
+ * @author AnnaGerber
  */
 public class RDF2GoOREUpdateHandler implements OREUpdateHandler {
 
 	protected final OREControllerConfig occ;
 	private final TripleStoreConnectorFactory cf;
 	private OREAccessPolicy ap;
+	private final Logger LOG = Logger.getLogger(RDF2GoOREUpdateHandler.class);
 
 	public RDF2GoOREUpdateHandler(OREControllerConfig occ) {
 		this.occ = occ;
@@ -164,8 +167,11 @@ public class RDF2GoOREUpdateHandler implements OREUpdateHandler {
 			// and the creator
 			CompoundObjectImpl compoundObject = new CompoundObjectImpl(newModel);
 			newModel.close();
-			compoundObject.setUser(oldUserUri);
-
+			if (oldUserUri != null){
+				compoundObject.setUser(oldUserUri);
+			} else {
+				LOG.info("User is null for " + objURI);
+			}
 			newModel = compoundObject.getModel();
 
 			container.removeModel(objURI);
