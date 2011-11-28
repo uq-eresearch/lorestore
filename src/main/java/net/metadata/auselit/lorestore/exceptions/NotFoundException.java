@@ -1,6 +1,6 @@
 package net.metadata.auselit.lorestore.exceptions;
 
-public class NotFoundException extends OREException {
+public class NotFoundException extends LoreStoreException {
 	private static final long serialVersionUID = 4134073166938605565L;
 
 	public NotFoundException(String message) {

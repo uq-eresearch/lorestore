@@ -8,15 +8,15 @@ import au.edu.diasb.chico.mvc.AuthenticationContext;
 import au.edu.diasb.emmet.model.EmmetUser;
 import au.edu.diasb.emmet.model.EmmetUserWrapper;
 
-public class DefaultOREIdentityProvider implements OREIdentityProvider, InitializingBean {
+public class DefaultLoreStoreIdentityProvider implements LoreStoreIdentityProvider, InitializingBean {
 
     private AuthenticationContext authenticationContext;
     
-    public DefaultOREIdentityProvider() {
+    public DefaultLoreStoreIdentityProvider() {
     	
     }
     
-	public DefaultOREIdentityProvider(AuthenticationContext ac) {
+	public DefaultLoreStoreIdentityProvider(AuthenticationContext ac) {
 		this.authenticationContext = ac;
 	}
 	public String obtainUserURI() {

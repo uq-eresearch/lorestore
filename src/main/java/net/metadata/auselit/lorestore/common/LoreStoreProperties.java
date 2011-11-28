@@ -10,16 +10,15 @@ import au.edu.diasb.chico.config.ConfigurationProperties;
  * 
  * Based on DannoProperties
  * 
- * @author uqdayers
  */
-public class OREProperties extends ConfigurationProperties {
+public class LoreStoreProperties extends ConfigurationProperties {
 
 	private static final long serialVersionUID = 3290631375861688974L;
 
 	// These are properties in the property file
-    public static final String DEFAULT_RDF_STYLESHEET_PROP = "ore.defaultRDFStylesheet";
+    public static final String DEFAULT_RDF_STYLESHEET_PROP = "lorestore.oreStylesheet";
 
-    public OREProperties(Properties props) {
+    public LoreStoreProperties(Properties props) {
 		super(props);
 	}
 }

@@ -28,7 +28,7 @@ public abstract class LocalStoreOREControllerTest extends OREControllerTest {
 	}
 
 	private static OREController getController() throws InterruptedException {
-		OREControllerConfig occ = new OREControllerConfig();
+		LoreStoreControllerConfig occ = new LoreStoreControllerConfig();
 
 		NativeTripleStoreConnectorFactory cf = new NativeTripleStoreConnectorFactory();
 		cf.setDataDirPath("D:/temp/");

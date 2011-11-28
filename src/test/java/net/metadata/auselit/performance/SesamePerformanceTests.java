@@ -5,9 +5,9 @@ import java.io.FileInputStream;
 
 import org.springframework.http.ResponseEntity;
 
-import net.metadata.auselit.lorestore.servlet.OREControllerConfig;
-import net.metadata.auselit.lorestore.servlet.OREQueryHandler;
-import net.metadata.auselit.lorestore.servlet.OREUpdateHandler;
+import net.metadata.auselit.lorestore.servlet.LoreStoreControllerConfig;
+import net.metadata.auselit.lorestore.servlet.LoreStoreQueryHandler;
+import net.metadata.auselit.lorestore.servlet.LoreStoreUpdateHandler;
 import net.metadata.auselit.lorestore.servlet.rdf2go.RDF2GoOREQueryHandler;
 import net.metadata.auselit.lorestore.servlet.rdf2go.RDF2GoOREUpdateHandler;
 import net.metadata.auselit.lorestore.triplestore.MemoryTripleStoreConnectorFactory;
@@ -24,9 +24,9 @@ public class SesamePerformanceTests {
 	private String sesameIndexes = "spoc,posc,cspo,ocsp";
 //	private String sesameIndexes = "cspo";
 	private TripleStoreConnectorFactory cf;
-	private OREQueryHandler qh;
-	private OREUpdateHandler uh;
-	private OREControllerConfig occ;
+	private LoreStoreQueryHandler qh;
+	private LoreStoreUpdateHandler uh;
+	private LoreStoreControllerConfig occ;
 	private boolean printQueryResults = false;
 	
 	public static void main(String[] args) throws Exception {
@@ -119,7 +119,7 @@ public class SesamePerformanceTests {
 	}
 	
 	public void setupQueryHandler() throws Exception {
-		occ = new OREControllerConfig();
+		occ = new LoreStoreControllerConfig();
 		occ.setContainerFactory(cf);
 		qh = new RDF2GoOREQueryHandler(occ);
 	}

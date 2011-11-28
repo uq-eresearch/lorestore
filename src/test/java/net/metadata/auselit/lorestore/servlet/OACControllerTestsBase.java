@@ -13,12 +13,12 @@ import net.metadata.auselit.test.mocks.MockOREIdentityProvider;
 
 import org.junit.Before;
 
-public class OREControllerTestsBase {
+public class OACControllerTestsBase {
 
 	private TripleStoreConnectorFactory cf;
 	private MockOREIdentityProvider ip;
-	protected static OREController controller;
-	protected static OREController authController;
+	protected static OACController controller;
+	protected static OACController authController;
 	static XPath xPath;
 	LoreStoreControllerConfig noauthOCC;
 	LoreStoreControllerConfig authReqdOCC;
@@ -31,17 +31,17 @@ public class OREControllerTestsBase {
 		xPath = XPathFactory.newInstance().newXPath();
 	}
 
-	private OREController createController() throws InterruptedException {
+	private OACController createController() throws InterruptedException {
 		noauthOCC = new LoreStoreControllerConfig();
 		noauthOCC.setContainerFactory(cf);
 		noauthOCC.setAccessPolicy(new AllowEverythingAccessPolicy());
 		noauthOCC.setBaseUri("http://example.com/");
 		noauthOCC.setUidGenerator(new UIDGenerator());
 		noauthOCC.setIdentityProvider(new MockOREIdentityProvider());
-		return new OREController(noauthOCC);
+		return new OACController(noauthOCC);
 	}
 
-	private OREController createAuthController() throws Exception {
+	private OACController createAuthController() throws Exception {
 		authReqdOCC = new LoreStoreControllerConfig();
 		authReqdOCC.setContainerFactory(cf);
 		ip = new MockOREIdentityProvider();
@@ -56,7 +56,7 @@ public class OREControllerTestsBase {
 		authReqdOCC.setIdentityProvider(ip);
 		authReqdOCC.setBaseUri("http://example.com/");
 		authReqdOCC.setUidGenerator(new UIDGenerator());
-		return new OREController(authReqdOCC);
+		return new OACController(authReqdOCC);
 	}
 
 	protected void updateAuthenticationContext(String username, String uri,

@@ -1,13 +1,13 @@
 package net.metadata.auselit.lorestore.access;
 
-import net.metadata.auselit.lorestore.model.CompoundObject;
+import net.metadata.auselit.lorestore.model.NamedGraph;
 
 import org.ontoware.rdf2go.model.Model;
 
 
-public class AllowEverythingAccessPolicy implements OREAccessPolicy {
+public class AllowEverythingAccessPolicy implements LoreStoreAccessPolicy {
 
-	public void checkRead(CompoundObject res) {
+	public void checkRead(NamedGraph res) {
 
 	}
 
@@ -15,11 +15,11 @@ public class AllowEverythingAccessPolicy implements OREAccessPolicy {
 
 	}
 
-	public void checkUpdate( CompoundObject obj) {
+	public void checkUpdate( NamedGraph obj) {
 
 	}
 
-	public void checkDelete( CompoundObject obj) {
+	public void checkDelete( NamedGraph obj) {
 
 	}
 

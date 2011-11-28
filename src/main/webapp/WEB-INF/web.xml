@@ -38,21 +38,26 @@
 	
 	
 	<servlet>
-		<servlet-name>Ore</servlet-name>
+		<servlet-name>LoreStore</servlet-name>
 		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
   
 	<servlet-mapping>
-		<servlet-name>Ore</servlet-name>
+		<servlet-name>LoreStore</servlet-name>
 		<url-pattern>/ore/*</url-pattern>
 	</servlet-mapping>
 
 	<servlet-mapping>
-		<servlet-name>Ore</servlet-name>
+		<servlet-name>LoreStore</servlet-name>
 		<url-pattern>/oreadmin/*</url-pattern>
 	</servlet-mapping>
 	
+    <servlet-mapping>
+        <servlet-name>LoreStore</servlet-name>
+        <url-pattern>/oac/*</url-pattern>
+    </servlet-mapping>
+    
 <!--
 	<servlet>
 		<servlet-name>OreAdmin</servlet-name>

@@ -5,7 +5,7 @@ import java.io.Writer;
 
 import javax.servlet.http.HttpServletResponse;
 
-import net.metadata.auselit.lorestore.access.OREAccessPolicy;
+import net.metadata.auselit.lorestore.access.LoreStoreAccessPolicy;
 import net.metadata.auselit.lorestore.exceptions.InvalidQueryParametersException;
 import net.metadata.auselit.lorestore.model.UploadItem;
 import net.metadata.auselit.lorestore.servlet.rdf2go.RDF2GoOREQueryHandler;
@@ -31,12 +31,12 @@ import au.edu.diasb.chico.mvc.RequestFailureException;
 public class OREAdminController {
 	private final Logger LOG = Logger.getLogger(OREAdminController.class);
 
-	private final OREControllerConfig occ;
-	private OREUpdateHandler uh;
-	private OREQueryHandler qh;
-	private OREAccessPolicy ap;
+	private final LoreStoreControllerConfig occ;
+	private LoreStoreUpdateHandler uh;
+	private LoreStoreQueryHandler qh;
+	private LoreStoreAccessPolicy ap;
 
-	public OREAdminController(OREControllerConfig occ) {
+	public OREAdminController(LoreStoreControllerConfig occ) {
 		this.occ = occ;
 		this.uh = new RDF2GoOREUpdateHandler(occ);
 		this.qh = new RDF2GoOREQueryHandler(occ);
@@ -46,7 +46,7 @@ public class OREAdminController {
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String index(Model model) {
 		ap.checkAdmin();
-		model.addAttribute("someText", "Wow, lets see if this text makes it through!");
+		//model.addAttribute("someText", "Wow, lets see if this text makes it through!");
 		return "admin/index";
 	}
 	
@@ -126,7 +126,7 @@ public class OREAdminController {
 		LOG.debug("Handling RequestFailureException, returning 401");
 	}
 
-	public OREControllerConfig getControllerConfig() {
+	public LoreStoreControllerConfig getControllerConfig() {
 		return occ;
 	}
 }

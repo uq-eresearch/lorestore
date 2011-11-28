@@ -1,7 +1,7 @@
 package net.metadata.auselit.lorestore.servlet;
 
 import net.metadata.auselit.lorestore.servlet.OREController;
-import net.metadata.auselit.lorestore.servlet.OREControllerConfig;
+import net.metadata.auselit.lorestore.servlet.LoreStoreControllerConfig;
 
 import org.junit.Before;
 import org.junit.runner.RunWith;
@@ -40,14 +40,14 @@ public class OREControllerIntegrationTests {
 	private MockHttpServletResponse response;
 	private HandlerAdapter handlerAdapter;
 	private OREController controller;
-	private OREControllerConfig occ;
+	private LoreStoreControllerConfig occ;
 
 	@Before
 	public void setUp() throws Exception {
 		request = new MockHttpServletRequest();
 		response = new MockHttpServletResponse();
 		handlerAdapter = applicationContext.getBean(HandlerAdapter.class);
-		occ = applicationContext.getBean(OREControllerConfig.class);
+		occ = applicationContext.getBean(LoreStoreControllerConfig.class);
 		// I could get the controller from the context here
 		controller = new OREController(occ);
 	}

@@ -2,7 +2,7 @@ package net.metadata.auselit.lorestore.triplestore;
 
 import java.io.File;
 
-import net.metadata.auselit.lorestore.exceptions.OREDBConnectionException;
+import net.metadata.auselit.lorestore.exceptions.LoreStoreDBConnectionException;
 
 import org.ontoware.rdf2go.model.ModelSet;
 import org.openrdf.rdf2go.RepositoryModelSet;
@@ -45,7 +45,7 @@ public class MemoryTripleStoreConnectorFactory implements
 		try {
 			repo.initialize();
 		} catch (RepositoryException e) {
-			throw new OREDBConnectionException("Error creating in memory sesame store", e);
+			throw new LoreStoreDBConnectionException("Error creating in memory sesame store", e);
 		}
 	}
 	

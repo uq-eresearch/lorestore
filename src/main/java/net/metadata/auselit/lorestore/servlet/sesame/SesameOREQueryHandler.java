@@ -19,13 +19,13 @@ import org.springframework.web.servlet.ModelAndView;
 
 import net.metadata.auselit.lorestore.exceptions.InvalidQueryParametersException;
 import net.metadata.auselit.lorestore.exceptions.NotFoundException;
-import net.metadata.auselit.lorestore.servlet.OREQueryHandler;
+import net.metadata.auselit.lorestore.servlet.LoreStoreQueryHandler;
 import net.metadata.auselit.lorestore.servlet.OREResponse;
 
-public class SesameOREQueryHandler implements OREQueryHandler {
+public class SesameOREQueryHandler implements LoreStoreQueryHandler {
 
 	@Override
-	public OREResponse getOreObject(String oreId) throws NotFoundException,
+	public OREResponse getNamedGraphObject(String oreId) throws NotFoundException,
 			InterruptedException {
 
 		Repository myRepository = new SailRepository(new MemoryStore());
@@ -66,7 +66,7 @@ public class SesameOREQueryHandler implements OREQueryHandler {
 	}
 
 	@Override
-	public ModelAndView browseRSSQuery(String url) throws RepositoryException,
+	public ModelAndView browseAtomQuery(String url) throws RepositoryException,
 			MalformedQueryException, QueryEvaluationException,
 			TupleQueryResultHandlerException, InterruptedException {
 		// TODO Auto-generated method stub
@@ -117,6 +117,15 @@ public class SesameOREQueryHandler implements OREQueryHandler {
 			String matchpred, String matchval) throws RepositoryException,
 			MalformedQueryException, QueryEvaluationException,
 			TupleQueryResultHandlerException, InterruptedException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public ModelAndView annotatesQuery(String urlParam)
+			throws RepositoryException, MalformedQueryException,
+			QueryEvaluationException, TupleQueryResultHandlerException,
+			InterruptedException {
 		// TODO Auto-generated method stub
 		return null;
 	}

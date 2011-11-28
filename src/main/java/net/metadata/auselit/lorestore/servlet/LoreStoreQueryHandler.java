@@ -12,10 +12,10 @@ import org.openrdf.repository.RepositoryException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.servlet.ModelAndView;
 
-public interface OREQueryHandler {
+public interface LoreStoreQueryHandler {
 
 	/**
-	 * Finds a single compound object of id oreId.
+	 * Finds a single compound object or annotation of id ngId.
 	 * <p>
 	 * The object is wrapped in a ModelAndView
 	 * 
@@ -25,9 +25,11 @@ public interface OREQueryHandler {
 	 * @throws NotFoundException
 	 *             if the object doesn't exist here
 	 */
-	public OREResponse getOreObject(String oreId) throws NotFoundException,
+	public ModelAndView getNamedGraphObject(String ngId) throws NotFoundException,
 			InterruptedException;
+	
 
+	
 	/**
 	 * Finds all compound objects referring to the supplied URL
 	 * 
@@ -50,7 +52,7 @@ public interface OREQueryHandler {
 	 * @return a model containing a sparqlxml string and marked to be displayed
 	 *         by an 'rss' view
 	 */
-	public ModelAndView browseRSSQuery(String url) throws RepositoryException,
+	public ModelAndView browseAtomQuery(String url) throws RepositoryException,
 			MalformedQueryException, QueryEvaluationException,
 			TupleQueryResultHandlerException, InterruptedException;
 
@@ -63,12 +65,22 @@ public interface OREQueryHandler {
 	 * for the supplied matchpred
 	 * @return a http response containing results in sparqlXML format
 	 */
-	ResponseEntity<String> searchQuery(String urlParam, String matchpred,
+	public ResponseEntity<String> searchQuery(String urlParam, String matchpred,
 			String matchval)
 			throws RepositoryException, MalformedQueryException,
 			QueryEvaluationException, TupleQueryResultHandlerException,
 			InterruptedException;
 	
+	/**
+	 * Handles an annotates query
+	 * 
+	 * @param urlParam A specific url that the annotation must target
+	
+	 */
+	public ModelAndView annotatesQuery(String urlParam)
+			throws RepositoryException, MalformedQueryException,
+			QueryEvaluationException, TupleQueryResultHandlerException,
+			InterruptedException;
 	/**
 	 * Handles a search query, includes the abstract field if present
 	 * 
@@ -77,7 +89,7 @@ public interface OREQueryHandler {
 	 * @param matchval
 	 * @return a http response containing results in sparqlXML format
 	 */
-	ResponseEntity<String> searchQueryIncludingAbstract(String urlParam, String matchpred,
+	public ResponseEntity<String> searchQueryIncludingAbstract(String urlParam, String matchpred,
 			String matchval)
 			throws RepositoryException, MalformedQueryException,
 			QueryEvaluationException, TupleQueryResultHandlerException,

@@ -1,7 +1,7 @@
 package net.metadata.auselit.lorestore.servlet;
 
-import static net.metadata.auselit.lorestore.common.OREConstants.ORE_USE_STYLESHEET;
-import static net.metadata.auselit.lorestore.common.OREProperties.DEFAULT_RDF_STYLESHEET_PROP;
+import static net.metadata.auselit.lorestore.common.LoreStoreConstants.ORE_USE_STYLESHEET;
+import static net.metadata.auselit.lorestore.common.LoreStoreProperties.DEFAULT_RDF_STYLESHEET_PROP;
 import static net.metadata.auselit.lorestore.servlet.OREResponse.*;
 import static net.metadata.auselit.lorestore.servlet.OREResponse.RESPONSE_RDF_KEY;
 
@@ -33,7 +33,8 @@ public class OREResponseView extends BaseView {
     	Model responseRDF = (Model) map.get(RESPONSE_RDF_KEY);
         Properties props = (Properties) map.get(ORE_PROPS_KEY);
         String stylesheetParam = request.getParameter(ORE_USE_STYLESHEET);
-        String stylesheetURI = (stylesheetParam == null) ? null :
+        // FIXME: remove hardcoded stylesheet
+        String stylesheetURI = (stylesheetParam == null) ? "/lorestore/stylesheets/CompoundObjectDetail.xsl" :
                 (stylesheetParam.length() == 0) ? props.getProperty(DEFAULT_RDF_STYLESHEET_PROP, null) :
                     stylesheetParam;
         
@@ -96,7 +97,7 @@ public class OREResponseView extends BaseView {
     private OutputStream outputRDF(HttpServletResponse response,  
     		Model responseRDF, String stylesheetURL) 
     throws IOException {
-        response.setContentType("application/xml");
+        response.setContentType("application/rdf+xml");
         response.setCharacterEncoding("UTF-8");
         if (stylesheetURL == null) {
             OutputStream os = response.getOutputStream();

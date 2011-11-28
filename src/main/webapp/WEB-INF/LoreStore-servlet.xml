@@ -11,22 +11,34 @@
 	<bean name="ore" class="net.metadata.auselit.lorestore.servlet.OREController">
 		<constructor-arg ref="oreControllerConfig"/>
 	</bean>
-
+    <bean name="oac" class="net.metadata.auselit.lorestore.servlet.OACController">
+        <constructor-arg ref="oacControllerConfig"/>
+    </bean>
 	<bean name="oreAdmin" class="net.metadata.auselit.lorestore.servlet.OREAdminController">
 		<constructor-arg ref="oreControllerConfig"/>
 	</bean>
 	
-	<bean id="oreControllerConfig" class="net.metadata.auselit.lorestore.servlet.OREControllerConfig">
+	<bean id="oreControllerConfig" class="net.metadata.auselit.lorestore.servlet.LoreStoreControllerConfig">
 		<property name="containerFactory" ref="dbContainerPool"/>
 		<property name="accessPolicy" ref="oreAccessPolicy"/>
 		<property name="baseUri" value="${lorestore.baseurl}"/>
+        <property name="defaultStylesheet" value="${lorestore.oreStylesheet}"></property>
 		<property name="uidGenerator" ref="uidGenerator"/>
 		<property name="identityProvider" ref="identityProvider"/>
 	</bean>
     
+    <bean id="oacControllerConfig" class="net.metadata.auselit.lorestore.servlet.LoreStoreControllerConfig">
+        <property name="containerFactory" ref="dbContainerPool"/>
+        <property name="accessPolicy" ref="oreAccessPolicy"/>
+        <property name="baseUri" value="${lorestore.oacurl}"/>
+        <property name="defaultStylesheet" value="${lorestore.oacStylesheet}"/>
+        <property name="uidGenerator" ref="uidGenerator"/>
+        <property name="identityProvider" ref="identityProvider"/>
+    </bean>
+    
 	<bean id="xmlViewResolver" class="org.springframework.web.servlet.view.XmlViewResolver">
 		<property name="order" value="1"></property>
-		<property name="location" value="/WEB-INF/Ore-views.xml"></property>
+		<property name="location" value="/WEB-INF/LoreStore-views.xml"></property>
 	</bean>
 	
 	<bean id="xsltViewResolver" class="org.springframework.web.servlet.view.xslt.XsltViewResolver">
@@ -53,6 +65,7 @@
 			<value>
                /oreadmin/**=oreAdmin
                /ore/**=ore
+               /oac/**=oac
 			</value>
 		</property>
 		<property name="alwaysUseFullPath" value="true"/>
@@ -60,10 +73,7 @@
 		    <list><ref bean="timingInterceptor"/></list>
 		  </property>
 	</bean>
-	<!--	<bean id="dbContainerFactory" class="net.metadata.auselit.lorestore.triplestore.HttpTripleStoreConnectorFactory">
-			<property name="repositoryURL" value="http://localhost:8080/openrdf-sesame/repositories/lore"/>
-		</bean>
-		-->
+	
     
 	<bean id="dbContainerPool" class="net.metadata.auselit.lorestore.triplestore.SimpleSesamePool" destroy-method="destroy">
 		<constructor-arg ref="dbContainerFactory"></constructor-arg>
@@ -77,7 +87,7 @@
 	</bean>
 	-->
     
-	<bean id="oreAccessPolicy" class="net.metadata.auselit.lorestore.access.DefaultOREAccessPolicy">
+	<bean id="oreAccessPolicy" class="net.metadata.auselit.lorestore.access.DefaultLoreStoreAccessPolicy">
 		<property name="readAuthorities" value="ROLE_USER,ROLE_ANONYMOUS" />
 		<property name="writeAuthorities" value="ROLE_ORE" />
 		<property name="adminAuthorities" value="ROLE_ADMIN" />
@@ -95,7 +105,7 @@
 	<bean id="oreAuthenticationContext" 
 		class="au.edu.diasb.chico.mvc.DefaultAuthenticationContext"/>
           
-	<bean id="identityProvider" class="net.metadata.auselit.lorestore.access.DefaultOREIdentityProvider">
+	<bean id="identityProvider" class="net.metadata.auselit.lorestore.access.DefaultLoreStoreIdentityProvider">
 		<property name="authenticationContext" ref="oreAuthenticationContext"/>
 	</bean>
 	

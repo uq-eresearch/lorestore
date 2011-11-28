@@ -6,8 +6,10 @@
        default-lazy-init="true">
     
     <bean id="ore" class="net.metadata.auselit.lorestore.servlet.OREResponseView"/>
+    <bean id="oac" class="net.metadata.auselit.views.OACNamedGraphsView"/>
     
-    <bean id="oreRss" class="net.metadata.auselit.views.OREAtomFeedView" />
+    <bean id="oreAtom" class="net.metadata.auselit.views.OREAtomFeedView" />
+    <bean id="oacAtom" class="net.metadata.auselit.views.OACAtomFeedView" />
     
     <bean id="oreRssUnused" class="org.springframework.web.servlet.view.xslt.XsltView">
     	<property name="url" value="/WEB-INF/xsl/rss.xsl"/>

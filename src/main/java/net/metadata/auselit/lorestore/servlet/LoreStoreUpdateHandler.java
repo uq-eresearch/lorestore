@@ -4,44 +4,44 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import net.metadata.auselit.lorestore.exceptions.NotFoundException;
-import net.metadata.auselit.lorestore.exceptions.OREException;
+import net.metadata.auselit.lorestore.exceptions.LoreStoreException;
 import au.edu.diasb.chico.mvc.RequestFailureException;
 
-public interface OREUpdateHandler {
+public interface LoreStoreUpdateHandler {
 
 	/**
-	 * Handle POST requests; Used for creating new Compound Objects
+	 * Handle POST requests; Used for creating new Compound Objects and Annotations
 	 * 
 	 * @param request
 	 *            the servlet request
 	 * @return
 	 * @throws IOException
 	 * @throws RequestFailureException
-	 * @throws OREException
+	 * @throws LoreStoreException
 	 * @throws InterruptedException
 	 */
 	public OREResponse post(InputStream inputRDF)
-			throws RequestFailureException, IOException, OREException,
+			throws RequestFailureException, IOException, LoreStoreException,
 			InterruptedException;
 
-	public void delete(String oreId) throws NotFoundException,
+	public void delete(String objId) throws NotFoundException,
 			InterruptedException;
 
 	/**
-	 * Handle PUT requests; Used for updating existing compound objects
+	 * Handle PUT requests; Used for updating existing compound objects and annotations
 	 * 
-	 * A compound object must already exist for the supplied oreId, and the user
+	 * A compound object must already exist for the supplied objId, and the user
 	 * must be authorised to update it.
 	 * @param oreId 
 	 * @param inputRDF
 	 * @return
 	 */
-	public OREResponse put(String oreId, InputStream inputRDF)
-			throws RequestFailureException, IOException, OREException,
+	public OREResponse put(String objId, InputStream inputRDF)
+			throws RequestFailureException, IOException, LoreStoreException,
 			InterruptedException;
 
 	/**
-	 * Import a group of compound object resources. Must be supplied as RDF named graphs.
+	 * Import a group of resources. Must be supplied as RDF named graphs.
 	 * 
 	 * @param body
 	 * @param fileName

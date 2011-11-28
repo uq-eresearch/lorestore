@@ -1,22 +1,18 @@
 package net.metadata.auselit.lorestore.access;
 
-import net.metadata.auselit.lorestore.model.CompoundObject;
+import net.metadata.auselit.lorestore.model.NamedGraph;
 
 import org.ontoware.rdf2go.model.Model;
 
 
 /**
- * An OREAccessPolicy is exactly based upon DannoAccessPolicy, but I don't want
- * to depend on the servlet components of Danno.
- * 
- * A DannoAccessPolicy object implements fine-grained access control rules on
- * Annotea (and related) requests. A typical implementation will decide on the
+
+ * AccessPolicy implements fine-grained access control rules on
+ * requests. A typical implementation will decide on the
  * basis of the users' identity, authorities and other attributes, together with
  * details of the target object(s).
- * 
- * @author scrawley
  */
-public interface OREAccessPolicy {
+public interface LoreStoreAccessPolicy {
 
 	/**
 	 * Called for GET requests after fetching the object(s) from the triple
@@ -24,9 +20,9 @@ public interface OREAccessPolicy {
 	 * unchecked exception or modify the contents of the container.
 	 * 
 	 * @param obj
-	 *            The compound object requested to read
+	 *            The object requested to read
 	 */
-	void checkRead(CompoundObject obj);
+	void checkRead(NamedGraph obj);
 
 	/**
 	 * Called for PUT and POST requests after preparing the result container and
@@ -49,7 +45,7 @@ public interface OREAccessPolicy {
 	 *            the original version of the object as fetched from the triple
 	 *            store.
 	 */
-	void checkUpdate(CompoundObject obj);
+	void checkUpdate(NamedGraph obj);
 
 	/**
 	 * Called for DELETE requests prior to committing. An implementation may
@@ -59,7 +55,7 @@ public interface OREAccessPolicy {
 	 *            the original version of the object as fetched from the triple
 	 *            store.
 	 */
-	void checkDelete(CompoundObject obj);
+	void checkDelete(NamedGraph obj);
 
 	/**
 	 * Called for administrative requests to check that the request has the

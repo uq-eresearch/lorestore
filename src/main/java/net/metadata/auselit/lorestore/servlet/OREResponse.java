@@ -31,7 +31,7 @@ public class OREResponse extends ModelAndView {
 		return (Integer)this.getModelMap().get(RETURN_STATUS);
 	}
 	
-	public void setLocationHeaer(String locationHeader) {
+	public void setLocationHeader(String locationHeader) {
 		this.addObject(LOCATION_HEADER, locationHeader);
 	}
 	

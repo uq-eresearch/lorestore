@@ -37,6 +37,6 @@ public class OREResponseViewTest {
 		
 		view.render(mv.getModel(), request, response);
 		
-		assertEquals("application/xml", response.getContentType());
+		assertEquals("application/rdf+xml", response.getContentType());
 	}
 }

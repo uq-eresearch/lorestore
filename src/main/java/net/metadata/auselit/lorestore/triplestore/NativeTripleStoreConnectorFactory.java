@@ -2,7 +2,7 @@ package net.metadata.auselit.lorestore.triplestore;
 
 import java.io.File;
 
-import net.metadata.auselit.lorestore.exceptions.OREDBConnectionException;
+import net.metadata.auselit.lorestore.exceptions.LoreStoreDBConnectionException;
 
 import org.apache.log4j.Logger;
 import org.ontoware.rdf2go.model.ModelSet;
@@ -45,7 +45,7 @@ public class NativeTripleStoreConnectorFactory implements
 		try {
 			repo.initialize();
 		} catch (RepositoryException e) {
-			throw new OREDBConnectionException("Error creating persistent sesame store", e);
+			throw new LoreStoreDBConnectionException("Error creating persistent sesame store", e);
 		}
 	}
 	

@@ -1,8 +1,8 @@
 package net.metadata.auselit.test.mocks;
 
-import net.metadata.auselit.lorestore.access.OREIdentityProvider;
+import net.metadata.auselit.lorestore.access.LoreStoreIdentityProvider;
 
-public class MockOREIdentityProvider implements OREIdentityProvider {
+public class MockOREIdentityProvider implements LoreStoreIdentityProvider {
 
 	private String userURI = "http://example.com/fakeIdentityURI";
 	

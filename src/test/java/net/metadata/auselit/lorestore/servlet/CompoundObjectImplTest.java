@@ -7,7 +7,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-import net.metadata.auselit.lorestore.exceptions.OREException;
+import net.metadata.auselit.lorestore.exceptions.LoreStoreException;
 import net.metadata.auselit.lorestore.model.rdf2go.CompoundObjectImpl;
 
 import org.junit.Before;
@@ -39,20 +39,20 @@ public class CompoundObjectImplTest {
 	}
 
 	@Test
-	public void testGetResourceMapURL() throws OREException {
+	public void testGetResourceMapURL() throws LoreStoreException {
 		long beforeSize = co.getModel().size();
-		assertEquals(testRecordURL, co.getResourceMapURL());
+		assertEquals(testRecordURL, co.getURL());
 		assertEquals(beforeSize, co.getModel().size());
 	}
 
 	@Test
-	public void testAssignURI() throws OREException {
+	public void testAssignURI() throws LoreStoreException {
 		String newUri = "http://example.com/rem/rand-id-1928";
 		long beforeSize = co.getModel().size();
 		
 		co.assignURI(newUri);
 		
-		assertEquals(newUri, co.getResourceMapURL());
+		assertEquals(newUri, co.getURL());
 		String rdfxml = co.getModelAsRDFXML();
 
 		assertFalse(rdfxml.contains(testRecordURL));
@@ -66,7 +66,7 @@ public class CompoundObjectImplTest {
 	}
 	
 	@Test
-	public void setObjectOwner() throws OREException {
+	public void setObjectOwner() throws LoreStoreException {
 		String useruri = "http://austlit.edu.au/auselit/users/omad";
 		co.setUser(useruri);
 		
@@ -75,7 +75,7 @@ public class CompoundObjectImplTest {
 	
 	
 	@Test
-	public void containerWithMultipleModels() throws ModelRuntimeException, IOException, RepositoryException, OREException {
+	public void containerWithMultipleModels() throws ModelRuntimeException, IOException, RepositoryException, LoreStoreException {
 		InputStream inputStream = getClass().getClassLoader().getResourceAsStream("sample-compound-objects.trig");
 		SailRepository sailRepository = new SailRepository(new MemoryStore());
 		sailRepository.initialize();

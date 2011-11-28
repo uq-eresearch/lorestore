@@ -1,4 +1,5 @@
 package net.metadata.auselit.lorestore.access;
+import net.metadata.auselit.lorestore.model.NamedGraph;
 import net.metadata.auselit.lorestore.model.CompoundObject;
 
 import org.ontoware.rdf2go.model.Model;
@@ -10,10 +11,10 @@ import org.springframework.util.StringUtils;
 import au.edu.diasb.chico.mvc.AuthenticationContext;
 import au.edu.diasb.chico.mvc.DefaultAuthenticationContext;
 
-public class DefaultOREAccessPolicy implements OREAccessPolicy, InitializingBean {
+public class DefaultLoreStoreAccessPolicy implements LoreStoreAccessPolicy, InitializingBean {
 	
 	private AuthenticationContext ac;
-	private OREIdentityProvider ip;
+	private LoreStoreIdentityProvider ip;
 	private String[] adminAuthorities;
     private String[] readAuthorities;
     private String[] writeAuthorities;
@@ -24,11 +25,11 @@ public class DefaultOREAccessPolicy implements OREAccessPolicy, InitializingBean
             ac = new DefaultAuthenticationContext();
         }
         if (ip == null) {
-        	ip = new DefaultOREIdentityProvider(ac);
+        	ip = new DefaultLoreStoreIdentityProvider(ac);
         }
 	}
 	
-	public void checkRead(CompoundObject obj) {
+	public void checkRead(NamedGraph obj) {
 		ac.checkAuthority(null, readAuthorities);
 
 		if (obj.isPrivate()) {
@@ -45,7 +46,7 @@ public class DefaultOREAccessPolicy implements OREAccessPolicy, InitializingBean
 	/**
 	 * Allowed if user is an admin or (has write authority, owns the object, and the object isn't locked)
 	 */
-	public void checkUpdate( CompoundObject obj) {
+	public void checkUpdate( NamedGraph obj) {
 		if (ac.hasAuthority(null, adminAuthorities)) {
 			return;
 		}
@@ -57,7 +58,7 @@ public class DefaultOREAccessPolicy implements OREAccessPolicy, InitializingBean
 	/**
 	 * Allowed if user is an admin or has write authority and owns the object
 	 */
-	public void checkDelete( CompoundObject obj) {
+	public void checkDelete( NamedGraph obj) {
 		if (ac.hasAuthority(null, adminAuthorities)) {
 			return;
 		}
@@ -65,7 +66,7 @@ public class DefaultOREAccessPolicy implements OREAccessPolicy, InitializingBean
 		checkObjectOwner(obj, auth);
 	}
 
-	private void checkObjectOwner(CompoundObject obj, Authentication auth) {
+	private void checkObjectOwner(NamedGraph obj, Authentication auth) {
 		String ownerId = obj.getOwnerId();
 		if (ownerId == null) {
 			return;
@@ -79,8 +80,8 @@ public class DefaultOREAccessPolicy implements OREAccessPolicy, InitializingBean
 		
 	}
 
-	private void checkNotLocked(CompoundObject obj) {
-		if (obj.isLocked()) {
+	private void checkNotLocked(NamedGraph obj) {
+		if (obj instanceof CompoundObject && ((CompoundObject)obj).isLocked()) {
 			throw new AccessDeniedException("Object is locked, must be administrator to modify");
 		}
 	}
@@ -136,11 +137,11 @@ public class DefaultOREAccessPolicy implements OREAccessPolicy, InitializingBean
             StringUtils.commaDelimitedListToStringArray(writeAuthorities);
     }
 
-	public void setIdentityProvider(OREIdentityProvider ip) {
+	public void setIdentityProvider(LoreStoreIdentityProvider ip) {
 		this.ip = ip;
 	}
 
-	public OREIdentityProvider getIdentityProvider() {
+	public LoreStoreIdentityProvider getIdentityProvider() {
 		return ip;
 	}
 }
