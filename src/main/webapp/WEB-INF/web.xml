@@ -4,10 +4,9 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
 
-	<display-name>LORESTORE</display-name>
+	<display-name>lorestore</display-name>
 	<description>
-    LoreStore provides a REST like interface for store ORE resource maps and OAC annotations.
-    Emmet is used for user authentication and management.
+    lorestore provides a REST like interface for storing ORE resource maps and OAC annotations
     </description>
 
 
@@ -61,7 +60,7 @@
         <url-pattern>/oac/*</url-pattern>
     </servlet-mapping>
     
-
+	<!-- Emmet is used for user authentication and management. -->
 	<servlet>
 		<servlet-name>Emmet</servlet-name>
 		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
@@ -74,13 +73,13 @@
 	</servlet-mapping>
 
 	<servlet>
-		<servlet-name>DemoWeb</servlet-name>
+		<servlet-name>LorestoreWeb</servlet-name>
 		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
 		<load-on-startup>3</load-on-startup>
 	</servlet>
 
 	<servlet-mapping>
-		<servlet-name>DemoWeb</servlet-name>
+		<servlet-name>LorestoreWeb</servlet-name>
 		<url-pattern>/</url-pattern>
 	</servlet-mapping>
     

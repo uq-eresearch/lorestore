@@ -23,9 +23,6 @@
             <!-- Lorestore Controller Configuration Properties -->
             <props>
 
-                <!-- This property gives the title of the site -->
-                <prop key="lorestore.site.title">${lorestore.site.title}</prop>
-                
                 <!-- This property gives the base URL  -->
                 <prop key="lorestore.base.url">http://${lorestore.hostname}/${lorestore.container}</prop>
                 
@@ -35,8 +32,6 @@
                 <!-- This property gives the host-relative container URL -->
                 <prop key="lorestore.container">/${lorestore.container}</prop>
 
-                
-
                 <!-- This property gives the URL of the directory containing stylesheets. -->
                 <prop key="lorestore.styles">/${lorestore.container}/stylesheets
                 </prop>
@@ -45,18 +40,7 @@
                 <prop key="lorestore.images">/${lorestore.container}/images
                 </prop>      
                 
-                <!-- This tells the taglib what the session cookie name is. -->
-                <prop key="sessionCookieName">JSESSIONID</prop>
-                
-                <!-- This tells the taglib if security is enabled. -->
-                <prop key="securityEnabled">#{ '${emmet.security}' == 'none' ? 'false' : 'true' }</prop>
-                
-                <!-- This is used by the taglib if https is enabled. -->
-                <prop key="httpsEnabled">${httpsEnabled}</prop>
-                
-                <!-- This tells the taglib where a returnTo button does if all else fails. -->
-                <prop key="defaultReturnTo">http://${lorestore.hostname}/${lorestore.container}</prop>
-            </props>
+               </props>
             </array>
         </property>
     </bean>

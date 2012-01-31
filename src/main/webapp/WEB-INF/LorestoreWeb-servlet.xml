@@ -11,7 +11,7 @@
     <import resource="Emmet-security.xml"/>
     <import resource="Emmet-profileSchema.xml"/>
     
-    <bean name="demoWebController" class="au.edu.diasb.chico.mvc.WebController">
+    <bean name="lorestoreWebController" class="au.edu.diasb.chico.mvc.WebController">
         <property name="propertiesList">
             <list>
                 <ref bean="emmetProps"/>
@@ -27,7 +27,6 @@
                 <property name="sourceCollectionTree">
                     <list>
                         <ref bean="emmetJspContentPatterns"/>
-                        <ref bean="lorestoreJspContentPatterns"/>
                     </list>
                 </property>
             </bean>
@@ -47,7 +46,7 @@
     <bean class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
         <property name="mappings">
             <value>
-                /*=demoWebController
+                /*=lorestoreWebController
             </value>
         </property>
     </bean>
@@ -59,7 +58,7 @@
              Under the covers, this will re-dispatch to fetch the actual JSP file.
      -->
 
-    <bean id="demoWebResolver" class="org.springframework.web.servlet.view.BeanNameViewResolver">
+    <bean id="lorestoreWebResolver" class="org.springframework.web.servlet.view.BeanNameViewResolver">
         <property name="order" value="0"/>
     </bean>
     <bean id="contentView" class="au.edu.diasb.chico.mvc.ContentView"/>

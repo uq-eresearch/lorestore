@@ -5,26 +5,13 @@
     default-lazy-init="true">
 
     <!-- 
-        This config file defines two lists of patterns that define Lorestore's 
+        This config file defines lists of patterns that define Lorestore's 
         default contribution to the site's web content via its XxxWeb-servlet.xml.
     -->
-
-    <bean id="lorestoreJspContentPatterns" class="org.springframework.beans.factory.config.ListFactoryBean">
-        <property name="sourceList">
-            <list>
-                <!-- Note: the first group is significant in this regex; 
-                     see javadoc for the chico WebController class. -->
-                <value>/([^/]+)\.html</value>
-                <value>/(import/[^/]+)\.html</value>
-                <value>/(stylesheets/oaicat)\.xsl</value>
-            </list>
-        </property>
-    </bean>
-    
+      
     <bean id="lorestorePlainContentPatterns" class="org.springframework.beans.factory.config.ListFactoryBean">
         <property name="sourceList">
             <list>
-               <value>/images/.+</value>
                <value>/stylesheets/.+</value>
                <value>/flintsparql/.+</value>
             </list>
