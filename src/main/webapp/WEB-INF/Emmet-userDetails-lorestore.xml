@@ -26,17 +26,17 @@
 			<list>
 				<props>
 					<prop key="userName">admin</prop>
-					<prop key="password.password">admin</prop>
+					<prop key="password.password">adminpwd</prop>
 					<prop key="identity.uri">http://openannotation.metadata.net/lorestore/users/admin</prop>
                     <prop key="identity.domain">primary</prop>
-					<prop key="authorities">ROLE_USER,ROLE_ADMIN,ROLE_ORE</prop>
+					<prop key="authorities">ROLE_USER,ROLE_ADMIN,ROLE_ANNOTATOR,ROLE_ORE</prop>
 				</props>
 				<props>
-					<prop key="userName">test</prop>
-					<prop key="password.password">test</prop>
-					<prop key="identity.uri">http://openannotation.metadata.net/lorestore/users/test</prop>
+					<prop key="userName">user</prop>
+					<prop key="password.password">userpwd</prop>
+					<prop key="identity.uri">http://openannotation.metadata.net/lorestore/users/user</prop>
                     <prop key="identity.domain">primary</prop>
-					<prop key="authorities">ROLE_USER,ROLE_OAI,ROLE_ORE</prop>
+					<prop key="authorities">ROLE_USER,ROLE_ANNOTATOR,ROLE_ORE</prop>
 				</props>
 			</list>
 		</property>

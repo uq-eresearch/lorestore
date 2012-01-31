@@ -31,18 +31,19 @@
         <sec:intercept-url pattern="/*.html" filters="none" />
         <sec:intercept-url pattern="/images/*" filters="none" />
         <sec:intercept-url pattern="/stylesheets/*" filters="none" />
-        <sec:intercept-url pattern="*" access="ROLE_ANY" />
+        <sec:intercept-url pattern="*" access="ROLE_ANY" requires-channel="https"/>
         <sec:remember-me user-service-ref="userDetailsService"
-        				 services-alias="rememberMeService"/>
-        <sec:access-denied-handler error-page="/emmetDenied.html"/>
+              services-alias="rememberMeService"/>
+        <sec:access-denied-handler error-page="/${emmet.path}/emmetDenied.html"/>
         <sec:anonymous />
         <sec:form-login 
               authentication-failure-handler-ref="authenticationFailureHandler"
-              login-page="${emmet.url.secure}/secure/ohlogin.html" 
-              default-target-url="${emmet.url}/account/loggedIn.html"/>
+              login-page="#{('${emmet.security}' != 'none' and '${httpsEnabled}' == 'true') ?
+                            'https' : 'http'}://${emmet.hostname}/${emmet.container}/secure/login.html" 
+              default-target-url="#{emmetProps['emmet.default.loggedIn']}"/>
         <sec:openid-login 
               authentication-failure-handler-ref="authenticationFailureHandler"
-              default-target-url="${emmet.url}/account/loggedIn.html" 
+              default-target-url="#{emmetProps['emmet.default.loggedIn']}" 
               user-service-ref="userDetailsService">
             <sec:attribute-exchange>
                 <sec:openid-attribute name="email" 
@@ -63,12 +64,20 @@
         <sec:custom-filter before="FILTER_SECURITY_INTERCEPTOR"
             ref="filterSecurityInterceptor" />
         <sec:custom-filter before="LOGOUT_FILTER" ref="hybridLogoutFilter"/>
+        <sec:custom-filter position="BASIC_AUTH_FILTER" ref="basicAuthenticationFilter" />
     </sec:http>
+    
+    <!-- Add a filter to accept HTTP BASIC authentication, but do not include an entry point
+         This means that we never ask for basic authentication, but do accept it. -->
+    <bean id="basicAuthenticationFilter" class="org.springframework.security.web.authentication.www.BasicAuthenticationFilter">
+        <property name="ignoreFailure" value="true"/>
+        <property name="authenticationManager" ref="authenticationManager" />
+    </bean>
     
     <bean id="authenticationFailureHandler" 
           class="au.edu.diasb.springsecurity.RedirectPreservingUrlAuthenticationFailureHandler">
-       <property name="defaultFailureUrl"
-                 value="${emmet.url.secure}/secure/ohlogin.html"/>
+       <property name="defaultFailureUrl" value="/secure/login.html"/>
+       <property name="useForward" value="true"/>
     </bean>
     
     <sec:authentication-manager alias="authenticationManager">
@@ -82,14 +91,17 @@
     
     <bean id="loginUrlEntryPoint"
           class="au.edu.diasb.springsecurity.LoginUrlAuthenticationEntryPoint">
-        <property name="forceHttps" value="false"/>
-        <property name="loginFormUrl" value="${emmet.url.secure}/secure/ohlogin.html"/>
+        <property name="forceHttps" value="true"/>
+        <property name="loginFormUrl" 
+                  value="#{('${emmet.security}' != 'none' and '${httpsEnabled}' == 'true') ?
+                            'https' : 'http'}://${emmet.hostname}/${emmet.container}/secure/login.html"/>
     </bean>
     <bean id="restfulEntryPoint"
           class="au.edu.diasb.springsecurity.Http401AuthenticationEntryPoint">
         <property name="requestCache" ref="requestCache"/>
         <property name="wwwAuthenticate" 
-            value="Redirect ${emmet.url.secure}/secure/ohlogin.html"/>
+            value="Redirect #{('${emmet.security}' != 'none' and '${httpsEnabled}' == 'true') ?
+                            'https' : 'http'}://${emmet.hostname}/${emmet.container}/secure/login.html"/>
     </bean>
     <bean id="forbiddenEntryPoint"
           class="org.springframework.security.web.authentication.Http403ForbiddenEntryPoint">
@@ -104,7 +116,7 @@
         <constructor-arg ref="hybridLogoutSuccessHandler"/>
         <constructor-arg>
             <array>
-            	<ref bean="rememberMeService"/>
+                <ref bean="rememberMeService"/>
                 <ref bean="logoutHandler"/>
             </array>
         </constructor-arg>
@@ -116,19 +128,20 @@
             <list>
                 <bean class="au.edu.diasb.springsecurity.openid.OpenIDLogoutSuccessHandler">
                     <property name="logoutSuccessUrl" 
-                        value="${emmet.url}/cannotLogout.html"/>
+                        value="http://${emmet.hostname}/${emmet.container}/cannotLogout.html"/>
                 </bean>
                 <bean class="au.edu.diasb.springsecurity.UserPasswordLogoutSuccessHandler">
                     <property name="logoutSuccessUrl" 
-                        value="${emmet.url}/loggedOut.html"/>
+                        value="#{emmetProps['emmet.default.loggedOut']}"/>
                 </bean>
                 <bean class="au.edu.diasb.springsecurity.UnknownLogoutSuccessHandler">
                     <property name="logoutSuccessUrl" 
-                        value="${emmet.url}/cannotLogout.html"/>
+                        value="http://${emmet.hostname}/${emmet.container}/cannotLogout.html"/>
                 </bean>
             </list>
         </property>
-        <property name="notLoggedInUrl" value="${emmet.url}/notLoggedIn.html"/>
+        <property name="notLoggedInUrl"
+                  value="http://${emmet.hostname}/${emmet.container}/notLoggedIn.html"/>
     </bean>
 	
 	<import resource="OpenID.xml"/>
@@ -137,7 +150,6 @@
           class="au.edu.diasb.chico.config.ListFactoryBean">
         <property name="sourceList" ref="openidProviderConfigs"/>
     </bean>
-
     
     <import resource="Emmet-commonAuthorization.xml"/>
 

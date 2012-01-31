@@ -1,0 +1,14 @@
+<html>
+<head>
+  <title>lorestore password reset</title>
+</head>
+<body>
+  <h2>lorestore password reset</h2>
+  <p>
+    Follow the following link to reset your lorestore password:  
+  </p>
+  <p>
+    <a href="${url}">Continue</a>
+  </p>
+</body>
+</html>

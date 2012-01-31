@@ -1,26 +1,42 @@
-<%@ include file="/WEB-INF/jsp/oreInclude.jsp" %>
+<%@ include file="/WEB-INF/jsp/oreBasicInclude.jsp"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ page contentType="text/html; charset=UTF-8" %>
-
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
+<!DOCTYPE html>
+<html lang="en">
   <head>
-    <title>LoreStore Server</title>
+    <title>Clear Repository</title>
+    <%@ include file="/WEB-INF/jsp/header.jsp" %>
   </head>
-  <body>
-  	<h1>LoreStore Wipe</h1>
+  <body>  
+  	<%@ include file="/WEB-INF/jsp/menu.jsp" %>
+    <div class="container">
+      <div class="content">
+        <div class="page-header">
+          <h1>Clear Repository</h1>
+        </div>
+        <div class="row">
+          <div class="span10">
+          <ul class="breadcrumb">
+		     	 <li><a href="../index.html">Home</a> <span class="divider">/</span></li>
+				 <li><a href="../oreadmin/">Content management</a> <span class="divider">/</span></li>
+			 	 <li class="active">Clear repository</li>
+		     </ul>
+
   	<form method="post" enctype="multipart/form-data">
   		<fieldset>
-  			<legend>Wipe Triplestore</legend>
-  			
   			<p>
-  				This will wipe all data from the LoreStore!
+  				Please confirm that you wish to remove all data from the LoreStore repository.<br/> This action cannot be undone.
             </p>
-            
             <p>
-            	<input type="submit"/>
+            	<button class="btn danger" type="submit">Clear Repository</button>
+                <a href="../oreadmin/"><button class="btn" type="button">Cancel</button></a>
             </p>
   		</fieldset>
   	</form>
+  </div>
+      </div>
+      <%@ include file="/WEB-INF/jsp/footer.jsp" %>
+    </div>
   </body>
+</body>
 </html>

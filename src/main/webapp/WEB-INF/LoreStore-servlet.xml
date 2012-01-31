@@ -4,21 +4,13 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans
 	http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
-
-	<import resource="siteTailoring.xml" />
     
-	<!-- the application context definition for the oreservlet DispatcherServlet -->
-	<bean name="ore" class="net.metadata.auselit.lorestore.servlet.OREController">
-		<constructor-arg ref="oreControllerConfig"/>
-	</bean>
-    <bean name="oac" class="net.metadata.auselit.lorestore.servlet.OACController">
-        <constructor-arg ref="oacControllerConfig"/>
-    </bean>
-	<bean name="oreAdmin" class="net.metadata.auselit.lorestore.servlet.OREAdminController">
-		<constructor-arg ref="oreControllerConfig"/>
-	</bean>
-	
-	<bean id="oreControllerConfig" class="net.metadata.auselit.lorestore.servlet.LoreStoreControllerConfig">
+    <import resource="Lorestore-content.xml"/>
+	<import resource="Lorestore-common.xml"/>
+    <import resource="Emmet-common.xml"/>
+    
+	<import resource="siteTailoring.xml" />
+    	<bean id="oreControllerConfig" class="net.metadata.openannotation.lorestore.servlet.LoreStoreControllerConfig">
 		<property name="containerFactory" ref="dbContainerPool"/>
 		<property name="accessPolicy" ref="oreAccessPolicy"/>
 		<property name="baseUri" value="${lorestore.baseurl}"/>
@@ -26,8 +18,21 @@
 		<property name="uidGenerator" ref="uidGenerator"/>
 		<property name="identityProvider" ref="identityProvider"/>
 	</bean>
+	
+	<!-- the application context definition for the oreservlet DispatcherServlet -->
+	<bean name="ore" class="net.metadata.openannotation.lorestore.servlet.OREController">
+		<constructor-arg ref="oreControllerConfig"/>
+	</bean>
+    <bean name="oac" class="net.metadata.openannotation.lorestore.servlet.OACController">
+        <constructor-arg ref="oacControllerConfig"/>
+    </bean>
+	<bean name="oreAdmin" class="net.metadata.openannotation.lorestore.servlet.OREAdminController">
+		<constructor-arg ref="oreControllerConfig"/>
+	</bean>
+	
+
     
-    <bean id="oacControllerConfig" class="net.metadata.auselit.lorestore.servlet.LoreStoreControllerConfig">
+    <bean id="oacControllerConfig" class="net.metadata.openannotation.lorestore.servlet.LoreStoreControllerConfig">
         <property name="containerFactory" ref="dbContainerPool"/>
         <property name="accessPolicy" ref="oreAccessPolicy"/>
         <property name="baseUri" value="${lorestore.oacurl}"/>
@@ -56,7 +61,7 @@
 		<property name="suffix" value=".jsp"></property>    
 	</bean>
 
-    <bean id="timingInterceptor" class="net.metadata.auselit.lorestore.servlet.PerformanceHandlerIntercepter">
+    <bean id="timingInterceptor" class="net.metadata.openannotation.lorestore.servlet.PerformanceHandlerIntercepter">
     	<property name="logSlowerThan" value="100" />
     </bean>
 
@@ -75,19 +80,19 @@
 	</bean>
 	
     
-	<bean id="dbContainerPool" class="net.metadata.auselit.lorestore.triplestore.SimpleSesamePool" destroy-method="destroy">
+	<bean id="dbContainerPool" class="net.metadata.openannotation.lorestore.triplestore.SimpleSesamePool" destroy-method="destroy">
 		<constructor-arg ref="dbContainerFactory"></constructor-arg>
 	</bean>
     
-	<bean id="dbContainerFactory" class="net.metadata.auselit.lorestore.triplestore.NativeTripleStoreConnectorFactory">
+	<bean id="dbContainerFactory" class="net.metadata.openannotation.lorestore.triplestore.NativeTripleStoreConnectorFactory">
 		<property name="dataDirPath" value="${lorestore.datadir}"/>
 	</bean>
  <!--
-	<bean id="dbContainerFactory" class="net.metadata.auselit.lorestore.triplestore.MemoryTripleStoreConnectorFactory">
+	<bean id="dbContainerFactory" class="net.metadata.openannotation.lorestore.triplestore.MemoryTripleStoreConnectorFactory">
 	</bean>
 	-->
     
-	<bean id="oreAccessPolicy" class="net.metadata.auselit.lorestore.access.DefaultLoreStoreAccessPolicy">
+	<bean id="oreAccessPolicy" class="net.metadata.openannotation.lorestore.access.DefaultLoreStoreAccessPolicy">
 		<property name="readAuthorities" value="ROLE_USER,ROLE_ANONYMOUS" />
 		<property name="writeAuthorities" value="ROLE_ORE" />
 		<property name="adminAuthorities" value="ROLE_ADMIN" />
@@ -99,13 +104,13 @@
 -->
 	</bean>
 	
-	<bean id="uidGenerator" class="net.metadata.auselit.lorestore.util.UIDGenerator">
+	<bean id="uidGenerator" class="net.metadata.openannotation.lorestore.util.UIDGenerator">
 	</bean>
 	
 	<bean id="oreAuthenticationContext" 
 		class="au.edu.diasb.chico.mvc.DefaultAuthenticationContext"/>
           
-	<bean id="identityProvider" class="net.metadata.auselit.lorestore.access.DefaultLoreStoreIdentityProvider">
+	<bean id="identityProvider" class="net.metadata.openannotation.lorestore.access.DefaultLoreStoreIdentityProvider">
 		<property name="authenticationContext" ref="oreAuthenticationContext"/>
 	</bean>
 	

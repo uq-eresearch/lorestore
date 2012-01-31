@@ -1,22 +1,36 @@
-<%@ include file="/WEB-INF/jsp/oreInclude.jsp" %>
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ include file="/WEB-INF/jsp/oreBasicInclude.jsp"%>
 <%@ page contentType="text/html; charset=UTF-8" %>
-
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
+<!DOCTYPE html>
+<html lang="en">
   <head>
-    <title>LoreStore Server</title>
+    <title>${sitename} Content Management</title>
+    <%@ include file="/WEB-INF/jsp/header.jsp" %>
   </head>
-  <body>
-  	<h1>LoreStore Administration</h1>
-  	<p>${someText}</p>
-  	<ul>
-  		<li><a href="import">Import Data</a></li>
-  		<li><a href="stats">Statistics</a></li>
-  		<li><a href="wipeDatabase">Wipe Database</a></li>
-  		<li><a href="testQueries">Test Queries</a></li>
-  		<li><a href="sparqlPage">SPARQL Query</a></li>
-  	</ul>
-  	
+  <body>  
+	<%@ include file="/WEB-INF/jsp/menu.jsp" %>
+    <div class="container">
+      <div class="content">
+        <div class="page-header">
+          <h1>Content Management</h1>
+        </div>
+        <div class="row">
+        
+          <div class="span10">
+	          <ul class="breadcrumb">
+		     	 <li><a href="../index.html">Home</a> <span class="divider">/</span></li>
+			 	 <li class="active">Content management</li>
+		     </ul>
+			 <ul>
+          		<li><a href="import.html">Import Data</a></li>
+          		<li><a href="stats.html">Repository Statistics</a></li>
+          		<li><a href="wipeDatabase.html">Clear Repository</a></li>
+          		<li><a href="sparqlPage.html">SPARQL Query</a></li>
+          	</ul>      
+		</div>
+      </div>
+      </div>
+      <%@ include file="/WEB-INF/jsp/footer.jsp" %>
+    </div>
   </body>
+</body>
 </html>

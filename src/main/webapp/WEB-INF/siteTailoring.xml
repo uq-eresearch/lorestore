@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+    
+    <!-- These beans perform generic site tailoring.
+    
+         As defined in this file, the tailorings are specified in two
+         properties files in the /WEB-INF/classes directory.
+         
+         * The 'substitution.properties' files define values to be substituted
+           for placeholders in the wiring files (e.g. '${hostname}') with the
+           properties in the file taking the form:
+           
+               placeholder=value
+               
+         * The 'override.properties' files define values that replace properties
+           in the wiring files.  The properties in the file taking the form:
+           
+               beanname.propname=value
+           
+         The overrides are processed first, so that an override property value
+         can contain a placeholder.
+         
+    -->
+    
+    <!-- Note that we are using a custom version of PropertyOverrideConfigurer! -->
+    <bean id="poc"
+        class="au.edu.diasb.chico.config.PropertyOverrideConfigurer">
+        <property name="order" value="1"/>
+        <!-- Setting 'ignoreInvalidKeys' to 'true' allows us to share the same
+             override.properties files across multiple servlets without worrying
+             that certain servlets don't contain certain named beans.  -->
+        <property name="ignoreInvalidKeys" value="true"/>
+        <property name="ignoreResourceNotFound" value="true"/>
+        <property name="locations">
+            <list>
+                <value>classpath:override.properties</value>
+                <value>classpath:local-lorestore-override.properties</value>
+            </list>
+        </property>
+    </bean>
+    
+    <!-- Note that we are using a custom version of PropertyPlaceholderConfigurer! -->
+    <bean id="ppc"
+        class="au.edu.diasb.chico.config.PropertyPlaceholderConfigurer">
+        <property name="order" value="2"/>
+        <property name="ignoreResourceNotFound" value="true"/>
+        <property name="locations">
+            <list>
+                <value>classpath:build.properties</value>
+                <value>classpath:default-emmet-substitution.properties</value>
+                <value>classpath:substitution.properties</value>
+                <value>classpath:local-lorestore-substitution.properties</value>
+            </list>
+        </property>
+    </bean>
+    
+    
+</beans>

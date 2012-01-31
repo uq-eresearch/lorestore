@@ -1,11 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<web-app version="2.4"
+<web-app id="LoreStoreOAC" version="2.4" 
 	xmlns="http://java.sun.com/xml/ns/j2ee"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee 
-	http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd" >
-	
+	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
+
+	<display-name>LORESTORE</display-name>
+	<description>
+    LoreStore provides a REST like interface for store ORE resource maps and OAC annotations.
+    Emmet is used for user authentication and management.
+    </description>
+
+
 	<!--START: CONTEXT PARAMS-->
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
@@ -13,14 +18,13 @@
 	</context-param>
 	<context-param>
 		<param-name>contextConfigProperties</param-name>
-		<param-value>classpath:build.properties,classpath:default-emmet-substitution.properties,classpath:default-danno-substitution.properties,classpath:default-dannotate-substitution.properties,classpath:substitution.properties</param-value>
+		<param-value>classpath:build.properties,classpath:default-emmet-substitution.properties,classpath:substitution.properties</param-value>
 	</context-param>
 
 	<listener>
 		<listener-class>au.edu.diasb.chico.config.ContextLoaderListener</listener-class>
 	</listener>
 
- 
 	<filter>
 		<filter-name>Encoding Filter</filter-name>
 		<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
@@ -35,8 +39,6 @@
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
 	
-	
-	
 	<servlet>
 		<servlet-name>LoreStore</servlet-name>
 		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
@@ -47,7 +49,8 @@
 		<servlet-name>LoreStore</servlet-name>
 		<url-pattern>/ore/*</url-pattern>
 	</servlet-mapping>
-
+  
+  
 	<servlet-mapping>
 		<servlet-name>LoreStore</servlet-name>
 		<url-pattern>/oreadmin/*</url-pattern>
@@ -58,18 +61,7 @@
         <url-pattern>/oac/*</url-pattern>
     </servlet-mapping>
     
-<!--
-	<servlet>
-		<servlet-name>OreAdmin</servlet-name>
-		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
-		<load-on-startup>1</load-on-startup>
-	</servlet>
-  
-	<servlet-mapping>
-		<servlet-name>OreAdmin</servlet-name>
-		<url-pattern>/oreadmin/*</url-pattern>
-	</servlet-mapping>
--->
+
 	<servlet>
 		<servlet-name>Emmet</servlet-name>
 		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
@@ -80,18 +72,18 @@
 		<servlet-name>Emmet</servlet-name>
 		<url-pattern>/emmet.svc</url-pattern>
 	</servlet-mapping>
-  
+
 	<servlet>
-		<servlet-name>EmmetWeb</servlet-name>
+		<servlet-name>DemoWeb</servlet-name>
 		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
-		<load-on-startup>1</load-on-startup>
+		<load-on-startup>3</load-on-startup>
 	</servlet>
 
 	<servlet-mapping>
-		<servlet-name>EmmetWeb</servlet-name>
-		<url-pattern>*.html</url-pattern>
+		<servlet-name>DemoWeb</servlet-name>
+		<url-pattern>/</url-pattern>
 	</servlet-mapping>
-	
+    
 	<!--START: SECURITY-->
 	<filter>
 		<filter-name>springSecurityFilterChain</filter-name>
@@ -102,13 +94,10 @@
 		<filter-name>springSecurityFilterChain</filter-name>
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
-	
-	
-	<!--START: WELCOME PAGE-->
+
+	<!--START: WELCOME-->
 	<welcome-file-list>
-		<welcome-file>
-      index.jsp
-		</welcome-file>
+		<welcome-file>index.html</welcome-file>
 	</welcome-file-list>
 
 </web-app>

@@ -1,32 +1,50 @@
-<%@ include file="/WEB-INF/jsp/oreInclude.jsp" %>
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ include file="/WEB-INF/jsp/oreBasicInclude.jsp"%>
 <%@ page contentType="text/html; charset=UTF-8" %>
-
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<!DOCTYPE html>
+<html lang="en">
   <head>
-    <title>LoreStore Server</title>
+    <title>lorestore import</title>
+    <%@ include file="/WEB-INF/jsp/header.jsp" %>
   </head>
-  <body>
-  	<h1>LoreStore Import</h1>
-  	<form:form modelAttribute="uploadItem" method="post" enctype="multipart/form-data">
-  		<fieldset>
-  			<legend>Import File</legend>
-  			
-  			<p>
-  				<form:label for="filetype" path="name">Name</form:label>
-  				<form:input path="name"/>
-  			</p>
-  			
-	        <p>
-                <form:label for="fileData" path="fileData">File</form:label><br/>
-                <form:input path="fileData" type="file"/>
-            </p>
-            
-            <p>
-            	<input type="submit"/>
-            </p>
-  		</fieldset>
-  	</form:form>
+  <body>  
+  	<%@ include file="/WEB-INF/jsp/menu.jsp" %>
+    <div class="container">
+      <div class="content">
+        <div class="page-header">
+          <h1>Import Data</h1>
+        </div>
+        <div class="row">
+          <div class="span10">
+          <ul class="breadcrumb">
+		     	 <li><a href="../index.html">Home</a> <span class="divider">/</span></li>
+				 <li><a href="../oreadmin/">Content management</a> <span class="divider">/</span></li>
+			 	 <li class="active">Import data</li>
+		     </ul>
+
+  
+		  	<form:form modelAttribute="uploadItem" method="post" enctype="multipart/form-data">
+		  		<fieldset>
+		  			<table>
+	            	<tr>
+	                    <td><form:label for="filetype" path="name">Name</form:label></td>
+	                    <td><form:input path="name"/></td>
+	                </tr>
+		  				
+		  			<tr>
+		                <td><form:label for="fileData" path="fileData">File</form:label></td>
+		                <td><form:input path="fileData" type="file"/></td>
+		            </tr>
+		            <tr>
+		            	<td colspan="2"><input class="btn primary" type="submit"/></td>
+		            </tr>
+		           </table>
+		  		</fieldset>
+		  	</form:form>
+      </div>
+      </div>
+      <%@ include file="/WEB-INF/jsp/footer.jsp" %>
+    </div>
   </body>
+</body>
 </html>

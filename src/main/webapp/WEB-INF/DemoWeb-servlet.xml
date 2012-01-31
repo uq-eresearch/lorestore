@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+    <import resource="Lorestore-content.xml"/>
+	<import resource="Lorestore-common.xml"/>
+    <import resource="Emmet-common.xml"/>
+    <import resource="Emmet-content.xml"/>
+    <import resource="Emmet-security.xml"/>
+    <import resource="Emmet-profileSchema.xml"/>
+    
+    <bean name="demoWebController" class="au.edu.diasb.chico.mvc.WebController">
+        <property name="propertiesList">
+            <list>
+                <ref bean="emmetProps"/>
+				<ref bean="lorestoreProps"/>
+                <map>
+                    <entry key="domainRegistry" value-ref="domainRegistry"/>
+                    <entry key="profileSchema" value-ref="profileSchema"/>
+                </map>
+            </list>
+        </property>
+        <property name="jspPatterns">
+            <bean class="au.edu.diasb.chico.config.ListFactoryBean">
+                <property name="sourceCollectionTree">
+                    <list>
+                        <ref bean="emmetJspContentPatterns"/>
+                        <ref bean="lorestoreJspContentPatterns"/>
+                    </list>
+                </property>
+            </bean>
+        </property>
+        <property name="plainPatterns">
+            <bean class="au.edu.diasb.chico.config.ListFactoryBean">
+                <property name="sourceCollectionTree">
+                    <list>
+                        <ref bean="emmetPlainContentPatterns"/>
+                        <ref bean="lorestorePlainContentPatterns"/>
+                    </list>
+                </property>
+            </bean>
+        </property>
+    </bean>
+
+    <bean class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
+        <property name="mappings">
+            <value>
+                /*=demoWebController
+            </value>
+        </property>
+    </bean>
+    
+    <!-- View resolution:
+         1)  Any ModelAndView with viewName 'contentView' will be sent to ContentView
+             which will deliver content from a file or from a "content" property.
+         2)  Anything else is sent to JstlView after mangling the view name into a JSP file name.
+             Under the covers, this will re-dispatch to fetch the actual JSP file.
+     -->
+
+    <bean id="demoWebResolver" class="org.springframework.web.servlet.view.BeanNameViewResolver">
+        <property name="order" value="0"/>
+    </bean>
+    <bean id="contentView" class="au.edu.diasb.chico.mvc.ContentView"/>
+    
+    <bean id="jstlViewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="order" value="1"/>
+        <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"></property>
+        <property name="prefix" value="/WEB-INF/jsp/"></property>
+        <property name="suffix" value=".jsp"></property>        
+    </bean>
+</beans>
