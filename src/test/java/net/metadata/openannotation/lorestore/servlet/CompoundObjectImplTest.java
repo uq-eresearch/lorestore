@@ -1,4 +1,4 @@
-package net.metadata.auselit.lorestore.servlet;
+package net.metadata.openannotation.lorestore.servlet;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -7,8 +7,8 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-import net.metadata.auselit.lorestore.exceptions.LoreStoreException;
-import net.metadata.auselit.lorestore.model.rdf2go.CompoundObjectImpl;
+import net.metadata.openannotation.lorestore.exceptions.LoreStoreException;
+import net.metadata.openannotation.lorestore.model.rdf2go.CompoundObjectImpl;
 
 import org.junit.Before;
 import org.junit.Test;

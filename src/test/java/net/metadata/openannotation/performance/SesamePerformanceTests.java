@@ -1,19 +1,19 @@
-package net.metadata.auselit.performance;
+package net.metadata.openannotation.performance;
 
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;
 
 import org.springframework.http.ResponseEntity;
 
-import net.metadata.auselit.lorestore.servlet.LoreStoreControllerConfig;
-import net.metadata.auselit.lorestore.servlet.LoreStoreQueryHandler;
-import net.metadata.auselit.lorestore.servlet.LoreStoreUpdateHandler;
-import net.metadata.auselit.lorestore.servlet.rdf2go.RDF2GoOREQueryHandler;
-import net.metadata.auselit.lorestore.servlet.rdf2go.RDF2GoOREUpdateHandler;
-import net.metadata.auselit.lorestore.triplestore.MemoryTripleStoreConnectorFactory;
-import net.metadata.auselit.lorestore.triplestore.NativeTripleStoreConnectorFactory;
-import net.metadata.auselit.lorestore.triplestore.SimpleSesamePool;
-import net.metadata.auselit.lorestore.triplestore.TripleStoreConnectorFactory;
+import net.metadata.openannotation.lorestore.servlet.LoreStoreControllerConfig;
+import net.metadata.openannotation.lorestore.servlet.LoreStoreQueryHandler;
+import net.metadata.openannotation.lorestore.servlet.LoreStoreUpdateHandler;
+import net.metadata.openannotation.lorestore.servlet.rdf2go.RDF2GoOREQueryHandler;
+import net.metadata.openannotation.lorestore.servlet.rdf2go.RDF2GoOREUpdateHandler;
+import net.metadata.openannotation.lorestore.triplestore.MemoryTripleStoreConnectorFactory;
+import net.metadata.openannotation.lorestore.triplestore.NativeTripleStoreConnectorFactory;
+import net.metadata.openannotation.lorestore.triplestore.SimpleSesamePool;
+import net.metadata.openannotation.lorestore.triplestore.TripleStoreConnectorFactory;
 
 public class SesamePerformanceTests {
 

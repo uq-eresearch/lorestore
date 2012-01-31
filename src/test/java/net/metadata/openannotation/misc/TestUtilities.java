@@ -1,4 +1,4 @@
-package net.metadata.auselit.misc;
+package net.metadata.openannotation.misc;
 
 import java.io.IOException;
 import java.io.InputStream;

@@ -1,4 +1,4 @@
-package net.metadata.auselit.lorestore.servlet;
+package net.metadata.openannotation.lorestore.servlet;
 
 /**
  * This class defines some test ORE records.

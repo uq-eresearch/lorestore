@@ -1,6 +1,6 @@
-package net.metadata.auselit.test.mocks;
+package net.metadata.openannotation.test.mocks;
 
-import net.metadata.auselit.lorestore.access.LoreStoreIdentityProvider;
+import net.metadata.openannotation.lorestore.access.LoreStoreIdentityProvider;
 
 public class MockOREIdentityProvider implements LoreStoreIdentityProvider {
 

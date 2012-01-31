@@ -18,7 +18,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package net.metadata.auselit.test.mocks;
+package net.metadata.openannotation.test.mocks;
 
 import java.sql.Timestamp;
 import java.util.Collection;

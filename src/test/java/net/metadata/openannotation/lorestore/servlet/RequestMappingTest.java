@@ -1,4 +1,6 @@
-package net.metadata.auselit.lorestore.servlet;
+package net.metadata.openannotation.lorestore.servlet;
+
+import net.metadata.openannotation.lorestore.servlet.OREController;
 
 import org.easymock.EasyMock;
 import org.junit.Before;

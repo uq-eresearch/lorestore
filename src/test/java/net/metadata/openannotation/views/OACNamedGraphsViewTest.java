@@ -1,14 +1,15 @@
-package net.metadata.auselit.views;
+package net.metadata.openannotation.views;
 
 import java.io.ByteArrayInputStream;
 
 import static org.junit.Assert.*;
 
-import net.metadata.auselit.lorestore.servlet.CommonTestRecords;
-import net.metadata.auselit.lorestore.servlet.OREResponse;
-import net.metadata.auselit.lorestore.servlet.OREResponseView;
-import net.metadata.auselit.lorestore.triplestore.MemoryTripleStoreConnectorFactory;
-import net.metadata.auselit.misc.TestUtilities;
+import net.metadata.openannotation.lorestore.servlet.CommonTestRecords;
+import net.metadata.openannotation.lorestore.servlet.OREResponse;
+import net.metadata.openannotation.lorestore.servlet.OREResponseView;
+import net.metadata.openannotation.lorestore.triplestore.MemoryTripleStoreConnectorFactory;
+import net.metadata.openannotation.misc.TestUtilities;
+import net.metadata.openannotation.views.OACNamedGraphsView;
 
 
 import org.junit.Before;
@@ -77,7 +78,7 @@ public class OACNamedGraphsViewTest {
 	public void renderJson() throws Exception {
 		request.addHeader("Accept", "application/json");
 		view.render(mv.getModel(), request, response);
-		System.out.print(response.getContentAsString());
+		//System.out.print(response.getContentAsString());
 		assertEquals("application/json", response.getContentType());
 	}
 }

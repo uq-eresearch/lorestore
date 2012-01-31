@@ -1,8 +1,9 @@
-package net.metadata.auselit.lorestore.servlet;
+package net.metadata.openannotation.lorestore.servlet;
 
 import java.io.FileInputStream;
 
-import net.metadata.auselit.lorestore.model.UploadItem;
+import net.metadata.openannotation.lorestore.model.UploadItem;
+import net.metadata.openannotation.lorestore.servlet.OREAdminController;
 
 import org.junit.Before;
 import org.junit.Test;

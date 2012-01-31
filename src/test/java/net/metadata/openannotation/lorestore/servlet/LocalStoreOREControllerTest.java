@@ -1,12 +1,14 @@
-package net.metadata.auselit.lorestore.servlet;
+package net.metadata.openannotation.lorestore.servlet;
 
 import javax.xml.xpath.XPathFactory;
 
-import net.metadata.auselit.lorestore.access.AllowEverythingAccessPolicy;
-import net.metadata.auselit.lorestore.triplestore.NativeTripleStoreConnectorFactory;
-import net.metadata.auselit.lorestore.triplestore.SimpleSesamePool;
-import net.metadata.auselit.lorestore.triplestore.TripleStoreConnectorFactory;
-import net.metadata.auselit.lorestore.util.UIDGenerator;
+import net.metadata.openannotation.lorestore.access.AllowEverythingAccessPolicy;
+import net.metadata.openannotation.lorestore.servlet.LoreStoreControllerConfig;
+import net.metadata.openannotation.lorestore.servlet.OREController;
+import net.metadata.openannotation.lorestore.triplestore.NativeTripleStoreConnectorFactory;
+import net.metadata.openannotation.lorestore.triplestore.SimpleSesamePool;
+import net.metadata.openannotation.lorestore.triplestore.TripleStoreConnectorFactory;
+import net.metadata.openannotation.lorestore.util.UIDGenerator;
 
 import org.junit.Before;
 import org.junit.BeforeClass;

@@ -1,4 +1,4 @@
-package net.metadata.auselit.lorestore.servlet;
+package net.metadata.openannotation.lorestore.servlet;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -15,10 +15,11 @@ import java.util.Map;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.parsers.DocumentBuilderFactory;
 
-import net.metadata.auselit.lorestore.common.LoreStoreConstants;
-import net.metadata.auselit.lorestore.exceptions.InvalidQueryParametersException;
-import net.metadata.auselit.lorestore.exceptions.NotFoundException;
-import net.metadata.auselit.lorestore.exceptions.LoreStoreException;
+import net.metadata.openannotation.lorestore.common.LoreStoreConstants;
+import net.metadata.openannotation.lorestore.exceptions.InvalidQueryParametersException;
+import net.metadata.openannotation.lorestore.exceptions.LoreStoreException;
+import net.metadata.openannotation.lorestore.exceptions.NotFoundException;
+import net.metadata.openannotation.lorestore.servlet.OREResponse;
 
 import org.junit.After;
 import org.junit.Before;

@@ -1,7 +1,7 @@
-package net.metadata.auselit.lorestore.servlet;
+package net.metadata.openannotation.lorestore.servlet;
 
-import net.metadata.auselit.lorestore.servlet.OREController;
-import net.metadata.auselit.lorestore.servlet.LoreStoreControllerConfig;
+import net.metadata.openannotation.lorestore.servlet.LoreStoreControllerConfig;
+import net.metadata.openannotation.lorestore.servlet.OREController;
 
 import org.junit.Before;
 import org.junit.runner.RunWith;

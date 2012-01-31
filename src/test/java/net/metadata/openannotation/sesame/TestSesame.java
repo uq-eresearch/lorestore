@@ -1,4 +1,4 @@
-package net.metadata.auselit.sesame;
+package net.metadata.openannotation.sesame;
 
 import org.junit.Rule;
 import org.junit.Test;

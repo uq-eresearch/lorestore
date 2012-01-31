@@ -1,15 +1,17 @@
-package net.metadata.auselit.lorestore.servlet;
+package net.metadata.openannotation.lorestore.servlet;
 
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathFactory;
 
-import net.metadata.auselit.lorestore.access.AllowEverythingAccessPolicy;
-import net.metadata.auselit.lorestore.access.DefaultLoreStoreAccessPolicy;
-import net.metadata.auselit.lorestore.triplestore.MemoryTripleStoreConnectorFactory;
-import net.metadata.auselit.lorestore.triplestore.TripleStoreConnectorFactory;
-import net.metadata.auselit.lorestore.util.UIDGenerator;
-import net.metadata.auselit.test.mocks.MockAuthenticationContext;
-import net.metadata.auselit.test.mocks.MockOREIdentityProvider;
+import net.metadata.openannotation.lorestore.access.AllowEverythingAccessPolicy;
+import net.metadata.openannotation.lorestore.access.DefaultLoreStoreAccessPolicy;
+import net.metadata.openannotation.lorestore.servlet.LoreStoreControllerConfig;
+import net.metadata.openannotation.lorestore.servlet.OREController;
+import net.metadata.openannotation.lorestore.triplestore.MemoryTripleStoreConnectorFactory;
+import net.metadata.openannotation.lorestore.triplestore.TripleStoreConnectorFactory;
+import net.metadata.openannotation.lorestore.util.UIDGenerator;
+import net.metadata.openannotation.test.mocks.MockAuthenticationContext;
+import net.metadata.openannotation.test.mocks.MockOREIdentityProvider;
 
 import org.junit.Before;
 

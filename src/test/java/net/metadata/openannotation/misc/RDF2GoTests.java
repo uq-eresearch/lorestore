@@ -1,11 +1,11 @@
-package net.metadata.auselit.misc;
+package net.metadata.openannotation.misc;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.io.ByteArrayInputStream;
 
-import net.metadata.auselit.lorestore.servlet.CommonTestRecords;
+import net.metadata.openannotation.lorestore.servlet.CommonTestRecords;
 
 import org.junit.Before;
 import org.junit.Test;

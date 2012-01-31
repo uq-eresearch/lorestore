@@ -1,11 +1,11 @@
-package net.metadata.auselit.lorestore.servlet;
+package net.metadata.openannotation.lorestore.servlet;
 
 import java.io.ByteArrayInputStream;
 import static org.junit.Assert.*;
 
-import net.metadata.auselit.lorestore.servlet.OREResponse;
-import net.metadata.auselit.lorestore.servlet.OREResponseView;
-import net.metadata.auselit.misc.TestUtilities;
+import net.metadata.openannotation.lorestore.servlet.OREResponse;
+import net.metadata.openannotation.lorestore.servlet.OREResponseView;
+import net.metadata.openannotation.misc.TestUtilities;
 
 
 import org.junit.Before;
