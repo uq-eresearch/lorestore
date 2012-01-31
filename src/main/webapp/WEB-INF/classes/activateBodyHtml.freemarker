@@ -5,11 +5,10 @@
 <body>
   <h2>lorestore account activation</h2>
   <p>
-    Click the following link to continue the process of activating your 
-    new lorestore account:  
+    Activate your lorestore account by visiting the following link in your web browser: 
   </p>
   <p>
-    <a href="${url}">Continue</a>
+    <a href="${url}">Activate account</a>
   </p>
 </body>
 </html>
