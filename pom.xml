@@ -1,7 +1,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>net.metadata.auselit</groupId>
+	<groupId>net.metadata.openannotation</groupId>
 	<artifactId>lorestore</artifactId>
 	<packaging>war</packaging>
 	<version>0.0.3-SNAPSHOT</version>
@@ -17,6 +17,15 @@
 				<role>Developer</role>
 			</roles>
 		</developer>
+        <developer>
+            <id>anna.gerber</id>
+            <name>Anna Gerbers</name>
+            <email>a.gerber@uq.edu.au</email>
+            <url>http://www.itee.uq.edu.au/~agerber/</url>
+            <roles>
+                <role>Developer</role>
+            </roles>
+        </developer>
 	</developers>
 
 	<!-- Shared version number properties -->
@@ -131,6 +140,12 @@
 			<groupId>commons-fileupload</groupId>
 			<artifactId>commons-fileupload</artifactId>
 			<version>1.2.2</version>
+		</dependency>
+		<dependency>
+			<groupId>net.metadata.emmet</groupId>
+			<artifactId>emmet.webapp</artifactId>
+			<version>${emmet-version}</version>
+			<type>war</type>
 		</dependency>
 	</dependencies>
 
