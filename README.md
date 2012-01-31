@@ -1,3 +1,6 @@
+lorestore
+=========
+
 The Open Annotation lorestore Web Application was developed at the UQ ITEE eResearch Lab: http://itee.uq.edu.au/~eresearch
 
 About
@@ -5,13 +8,14 @@ About
 
 The webapp provides services for storing OAC annotations and ORE Resource Map bodies and targets.
 We use the web app for our Open Annotation service at 
-http://openannotation.metadata.net/lorestore
+[http://openannotation.metadata.net/lorestore](http://openannotation.metadata.net/lorestore)
 
-The source code for the lorestore webapp is available from https://github.com/uq-eresearch/lorestore/
+The source code for the lorestore webapp is available from [GitHub](https://github.com/uq-eresearch/lorestore/)
 
 
 Packaging
 ----------
+
 Apache Maven is used for dependency management and building the web app. 
 
 The web app can be configured via  override.properties, substitution.properties and xml files in WEB-INF/
@@ -42,10 +46,10 @@ Basic steps to deploy lorestore using default configuration on Unix-based system
 
 1. Create a mysql database 'lorestore' accessed by user 'lorestore' using password 'lorestorepwd'
 
-mysql> create database lorestore;
-mysql> grant all privileges on lorestore.* to 'lorestore'@'localhost' identified by 'lorestorepwd'; 
+`mysql> create database lorestore;`
+`mysql> grant all privileges on lorestore.* to 'lorestore'@'localhost' identified by 'lorestorepwd'; `
 
-2. Create directory /usr/local/lorestore with appropriate file permissions
+2. Create directory `/usr/local/lorestore` with appropriate file permissions
 
 3. Deploy war file to Apache Tomcat running on localhost port 8080
 
@@ -67,6 +71,6 @@ The file format supported for export and import is Trig; resource maps and annot
 
 History
 -------
-This web app is derivative of the Aus-e-Lit webapp, by the same developers:
+This web app is derivative of the [Aus-e-Lit webapp](https://github.com/auselit/webapp), by the same developers:
 
- https://github.com/auselit/webapp
+
