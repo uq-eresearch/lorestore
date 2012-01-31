@@ -25,9 +25,9 @@ We use eclipse to import lorestore into the workspace as a Maven project (using 
 We build the war file via an eclipse Maven run configuration equivalent to the following command:
 mvn clean package
 
-To configure the eclipse run configuration, set basedir to ${workspace_loc:/lorestore} and goals to 'clean package'.
+To configure the eclipse run configuration, set basedir to `${workspace_loc:/lorestore}` and goals to `clean package`.
 
-The resulting war file will be lorestore/target/lorestore.war
+The resulting war file will be `lorestore/target/lorestore.war`
 
 
 Deployment
@@ -39,7 +39,7 @@ Emmet creates required tables when run for the first time.
 
 You will also need to create a directory to which the web app server has write access, for storing the lorestore Sesame RDF repository. 
 
-The location of the data directory, Emmet database name and access details, default hostname and port etc are configured through properties in the substitution.properties file in src/main/webapp/WEB-INF/classes
+The location of the data directory, Emmet database name and access details, default hostname and port etc are configured through properties in the substitution.properties file in `src/main/webapp/WEB-INF/classes`
 To override these values after the war file has been built, create a file named 'local-lorestore-substitution.properties' containing the new values, and place it in the Tomcat lib directory.
 
 Basic steps to deploy lorestore using default configuration on Unix-based systems (e.g. Linux, Mac OSX):
@@ -49,14 +49,14 @@ Basic steps to deploy lorestore using default configuration on Unix-based system
 `mysql> create database lorestore;`
 `mysql> grant all privileges on lorestore.* to 'lorestore'@'localhost' identified by 'lorestorepwd'; `
 
-2. Create directory `/usr/local/lorestore` with appropriate file permissions
+2. Create directory `/usr/share/lorestore` with appropriate file permissions
 
 3. Deploy war file to Apache Tomcat running on localhost port 8080
 
 
 User accounts
 -------------
-Default user accounts are configured in src/main/webapp/WEB-INF/Emmet-userDetails-lorestore.xml
+Default user accounts are configured in `src/main/webapp/WEB-INF/Emmet-userDetails-lorestore.xml`
 These default accounts will be created by Emmet on first run, and are ignored on subsequent deployments. 
 Use the User Management tools within the web app to create or configure user accounts or alternatively, 
 modify the default user details file, drop all tables from the Emmet database and reload the webapp to reload user accounts
