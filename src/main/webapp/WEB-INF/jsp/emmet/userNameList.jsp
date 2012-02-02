@@ -23,7 +23,7 @@
 			 	 <li class="active">User account index</li>
 		     </ul>
 		
-              <table class="ud0">
+              <table class="table">
                 <% int n = 0; %>
             	<c:forEach items="${userNameList}" var="userName">
             		<tr class="tr<%= ++n%2 %>">

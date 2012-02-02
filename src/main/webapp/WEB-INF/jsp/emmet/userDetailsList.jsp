@@ -23,7 +23,7 @@
 			 	 <li class="active">Account detail summary</li>
 		     </ul>
 			 
-          <table class="ud0">
+          <table class="table">
             <thead>
                 <tr class="tr3">
                     <th>UserName</th>

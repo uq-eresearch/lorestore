@@ -29,7 +29,7 @@
               <form action="${emmet}" method="post">
               <input type="hidden" name="action" value="initiateMyPasswordReset">
               <br>&nbsp;
-              <table>
+              <table class="table">
             	<tr>
                     <td>Enter your user name or registered email address</td>
                     <td><input type="text" name="userNameOrEmail"></td>

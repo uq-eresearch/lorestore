@@ -25,7 +25,7 @@
   
 		  	<form:form modelAttribute="uploadItem" method="post" enctype="multipart/form-data">
 		  		<fieldset>
-		  			<table>
+		  			<table class="table">
 	            	<tr>
 	                    <td><form:label for="filetype" path="name">Name</form:label></td>
 	                    <td><form:input path="name"/></td>

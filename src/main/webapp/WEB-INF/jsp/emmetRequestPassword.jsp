@@ -18,7 +18,7 @@
           <div class="span10">
     		<form action="${originalUrl}" method="post">
              <chico:hiddenInputs map="${pageContext.request.parameterMap}" exclude="oldPassword"/>
-             <table>
+             <table class="table">
               <tr>
                 <td colspan="2">${message}</td>
               </tr>

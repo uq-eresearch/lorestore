@@ -26,7 +26,7 @@
          </p>
          <p>${message}
          </p>
-         <table>
+         <table class="table">
           <tr>
             <td><button class="btn btn-primary" onclick="doTryAgain();">Try again</button></td>
           </tr>

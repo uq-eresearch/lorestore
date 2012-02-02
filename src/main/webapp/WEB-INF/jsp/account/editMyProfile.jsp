@@ -27,7 +27,7 @@
   <p>To set a profile property, enter the property name and value,
      and then click the button below. </p>
   <form action="${emmet}" method="post">
-  <table>
+  <table class="table">
 	<tr>
         <td>Profile property</td>
         <td>

@@ -36,7 +36,7 @@
                          value="${recaptchaResponse}">
               </c:if>
               <br>&nbsp;
-              <table>
+              <table class="table">
               <tr>
                     <td>Desired username</td>
                     <td><input type="text" name="userName"></td>

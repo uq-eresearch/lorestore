@@ -31,7 +31,7 @@
 		  <input type="hidden" name="userName" value="${userName}">
 		  <input type="hidden" name="resetCode" value="${resetCode}">
 		  <br>&nbsp;
-		  <table>
+		  <table class="table">
 			<tr>
 		        <td>New password</td>
 		        <td><input type="password" name="newPassword"></td>

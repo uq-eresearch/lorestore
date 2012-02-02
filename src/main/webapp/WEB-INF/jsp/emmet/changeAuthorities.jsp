@@ -26,7 +26,7 @@
 			 <p>Example authorities: {ROLE_USER}, {ROLE_ORE}, {ROLE_ANNOTATOR}</p>
           <form action="${emmet}" method="post">
           <input type="hidden" name="action" value="changeAuthorities">
-          <table>
+          <table class="table">
         	<tr>
                 <td>User identifier</td>
                 <td><input type="text" name="userName"></td>

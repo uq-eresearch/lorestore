@@ -29,7 +29,7 @@
 		     measure.</p>
 		  <form action="${emmet}" method="post">
 		  <input type="hidden" name="action" value="removeIdentity">
-		  <table>
+		  <table class="table">
 			<tr>
 		        <td>Current password</td>
 		        <td><input type="password" name="oldPassword"></td>

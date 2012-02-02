@@ -24,7 +24,7 @@
 		     </ul>
               <form action="${emmet}" method="get">
               <input type="hidden" name="action" value="showUserDetails">
-              <table>
+              <table class="table">
             	<tr>
                     <td>User identifier</td>
                     <td><input type="text" name="userName"></td>

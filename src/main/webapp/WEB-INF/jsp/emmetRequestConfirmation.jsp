@@ -24,7 +24,7 @@
              
          <form action="${originalUrl}" method="post">
          <chico:hiddenInputs map="${pageContext.request.parameterMap}" exclude="confirmed"/>
-         <table>
+         <table class="table">
           <tr>
             <td colspan="2">${message}</td>
           </tr>

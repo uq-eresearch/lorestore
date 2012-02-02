@@ -22,7 +22,7 @@
 				 <li><a href="${secure}/emmet/index.html">User account management</a> <span class="divider">/</span></li>
 			 	 <li class="active">Account details</li>
 		     </ul>
-              <table class="ud0 ud1">
+              <table class="table">
             	<tr class="tr1">
                     <td class="ud1">User identifier</td>
                     <td colspan="2" class="ud2">${userDetails.user.userName}</td>
@@ -73,7 +73,7 @@
                                 <input type="hidden" name="identityUri" value="${identity.identityUri}">
                                 <c:choose>
                                   <c:when test="${identity.domain == 'primary'}">
-                                    <button disabled="disabled" type="submit" class="btn-danger">Remove</button>
+                                    <button disabled="disabled" type="submit" class="btn btn-danger">Remove</button>
                                   </c:when>
                                   <c:otherwise>
                                     <button type="submit" class="btn btn-danger">Remove</button>

@@ -31,7 +31,7 @@
              password.  <!--The link will be valid for ${timeout} minutes.--></p>
           <form action="${emmet}" method="post">
           <input type="hidden" name="action" value="initiatePasswordReset">
-          <table>
+          <table class="table">
         	<tr>
                 <td>User identifier</td>
                 <td><input type="text" name="userName"></td>

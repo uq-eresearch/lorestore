@@ -26,7 +26,7 @@
 		     </ul>
   
 
-		  <table class="ud0 ud1">
+		  <table class="table">
 			<tr class="tr1">
 		        <td class="ud1">User identifier</td>
 		        <td colspan="2" class="ud2">${userDetails.user.userName}</td>
@@ -80,6 +80,7 @@
 		        </tr>
 		    </c:forEach>
 		  </table>
+        </div>
   </div>
       </div>
       <%@ include file="/WEB-INF/jsp/footer.jsp" %>

@@ -16,6 +16,7 @@
       <div class="content">
         <div class="page-header">
           <h1>Change Password</h1>
+        </div>
         <div class="row">
           <div class="span10">
           	 <ul class="breadcrumb">
@@ -29,7 +30,7 @@
      Your current password is required as an additional security measure.</p>
   <form action="${emmet}" method="post">
   <input type="hidden" name="action" value="changePassword">
-  <table>
+  <table class="table">
 	<tr>
         <td>Current password</td>
         <td><input type="password" name="oldPassword"></td>
@@ -51,7 +52,7 @@
     </tr>
   </table>
   </form>
- 
+ </div>
       </div>
       </div>
       <%@ include file="/WEB-INF/jsp/footer.jsp" %>

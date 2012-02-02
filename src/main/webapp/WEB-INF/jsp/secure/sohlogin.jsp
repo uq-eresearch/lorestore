@@ -24,7 +24,7 @@
 </c:choose>
 <h3>Login with Username and Password</h3>
 <form name='f' action='${sitecontainer}/j_spring_security_check' method='POST'>
- <table>
+ <table class="table">
     <tr><td>User:</td><td><input class="em-input" type='text' name='j_username' value='' size='40'></td></tr>
     <tr><td>Password:</td><td><input class="em-input" type='password' name='j_password' size='40'/></td></tr>
     <tr><td><input type='checkbox' name='_spring_security_remember_me'/></td>
@@ -57,7 +57,7 @@
       onclick='setOpenIDUrl("https://www.myspace.com")'/>
  <img style='vertical-align: middle' src='${images}/flickr.png' alt='use Flickr'
       onclick='setOpenIDUrl("https://www.flickr.com")'/>
- <table>
+ <table class="table">
     <tr><td>OpenID URL:</td><td><input id='openid-url' type='text' name='openid_identifier' size='40'/></td></tr>
     <tr><td><input type='checkbox' name='_spring_security_remember_me'></td>
         <td>Remember me on this computer.</td></tr>
