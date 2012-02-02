@@ -23,7 +23,11 @@
 	<listener>
 		<listener-class>au.edu.diasb.chico.config.ContextLoaderListener</listener-class>
 	</listener>
-
+	
+    <listener>
+        <listener-class>net.metadata.openannotation.lorestore.servlet.ContextDestroyedListener</listener-class>
+    </listener>
+    
 	<filter>
 		<filter-name>Encoding Filter</filter-name>
 		<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
