@@ -27,8 +27,8 @@
     <sec:http access-decision-manager-ref="accessDecisionManager"
               entry-point-ref="dispatchingEntryPoint"
               security-context-repository-ref="securityContextRepository">
-        <sec:intercept-url pattern="/" filters="none" />
-        <sec:intercept-url pattern="/*.html" filters="none" />
+        <sec:intercept-url pattern="/" access="IS_AUTHENTICATED_ANONYMOUSLY,ROLE_ANY" />
+        <sec:intercept-url pattern="/*.html" access="IS_AUTHENTICATED_ANONYMOUSLY,ROLE_ANY" />
         <sec:intercept-url pattern="/images/*" filters="none" />
         <sec:intercept-url pattern="/stylesheets/*" filters="none" />
         <sec:intercept-url pattern="*" access="ROLE_ANY" requires-channel="https"/>
@@ -40,10 +40,10 @@
               authentication-failure-handler-ref="authenticationFailureHandler"
               login-page="#{('${emmet.security}' != 'none' and '${httpsEnabled}' == 'true') ?
                             'https' : 'http'}://${emmet.hostname}/${emmet.container}/secure/login.html" 
-              default-target-url="#{emmetProps['emmet.default.loggedIn']}"/>
+              default-target-url="http://${emmet.hostname}/${emmet.container}/loggedIn.html"/>
         <sec:openid-login 
               authentication-failure-handler-ref="authenticationFailureHandler"
-              default-target-url="#{emmetProps['emmet.default.loggedIn']}" 
+              default-target-url="http://${emmet.hostname}/${emmet.container}/loggedIn.html" 
               user-service-ref="userDetailsService">
             <sec:attribute-exchange>
                 <sec:openid-attribute name="email" 
