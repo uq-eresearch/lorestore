@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans-3.0.xsd"
+    default-lazy-init="true">
+    
+    <!-- This wiring file defines the schema for a site's Emmet profile properties.
+         The recommended way to tailor the schema is by overlaying this file. -->
+
+    <import resource="siteTailoring.xml" />
+    
+    <bean id="profileSchema" class="au.edu.diasb.emmet.model.EmmetProfileSchema">
+        <property name="authoritiesRegistry" ref="authoritiesRegistry"/>
+        <property name="reCaptcha" ref="emmetRecaptcha"/>
+        <property name="schema">
+            <map>
+                <entry>
+                    <key><value>affiliation</value></key>
+                    <props>
+                        <prop key="name">Affiliation</prop>
+                        <prop key="description">User's affiliation</prop>
+                        <prop key="read">ROLE_ADMIN,ROLE_SERVICE,ROLE_USER</prop>
+                        <prop key="write">ROLE_ADMIN,ROLE_USER+IS_TARGET_USER</prop>
+                    </props>
+                </entry>
+                <entry>
+                    <key><value>reputation</value></key>
+                    <props>
+                        <prop key="name">Reputation</prop>
+                        <prop key="description">User's reputation on this site</prop>
+                        <prop key="read">ROLE_ADMIN,ROLE_SERVICE,ROLE_USER</prop>
+                        <prop key="write">ROLE_ADMIN,ROLE_SERVICE</prop>
+                    </props>
+                </entry>
+                <entry>
+                    <key><value>badges</value></key>
+                    <props>
+                        <prop key="name">Badges</prop>
+                        <prop key="description">User's awarded "badges"</prop>
+                        <prop key="read">ROLE_ADMIN,ROLE_SERVICE,ROLE_USER</prop>
+                        <prop key="write">ROLE_ADMIN,ROLE_SERVICE</prop>
+                    </props>
+                </entry>
+            </map>
+        </property>
+    </bean>
+</beans>

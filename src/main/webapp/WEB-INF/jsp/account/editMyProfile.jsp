@@ -27,6 +27,8 @@
   <p>To set a profile property, enter the property name and value,
      and then click the button below. </p>
   <form action="${emmet}" method="post">
+    <input type="hidden" name="action" value="setProperty">
+    <input type="hidden" name="userName" value="<security:authentication property="principal.username"/>">
   <table class="table">
 	<tr>
         <td>Profile property</td>
