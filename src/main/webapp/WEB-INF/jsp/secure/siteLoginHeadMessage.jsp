@@ -1,5 +1,4 @@
 <%-- This can be replaced / overlaid with a site-specific message --%>
 <p>
-  If you have a registered account with this site, you can login by entering the
-  username and password below, and clicking 'Login'.
+  Sign in to lorestore or <a target="_blank" href="${secure}/selfRegister.html">register for an account</a>
 </p>
