@@ -38,7 +38,7 @@
             </tr>
             <tr>
         		<td colspan="2" class="bt0">
-            					<button class="btn primary" type="submit">Reset Password</button>
+            					<button class="btn btn-primary" type="submit">Reset Password</button>
                                 <a href="index.html"><button class="btn" type="button">Cancel</button></a>
                 </td>
             </tr>

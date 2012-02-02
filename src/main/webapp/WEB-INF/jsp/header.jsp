@@ -5,9 +5,8 @@
   <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
 <![endif]-->
 <!-- Le styles -->
-<link href="${styles}/bootstrap.min.css" rel="stylesheet">
-<link href="${styles}/lorestore.css" rel="stylesheet">
-<!--link rel="shortcut icon" href="images/favicon.ico"-->
-<script type="text/javascript" src="${secure}/jquery-1.5.2.min.js"></script>
+<link type="text/css" href="${styles}/bootstrap.min.css" rel="stylesheet">
+<link type="text/css" href="${styles}/lorestore.css" rel="stylesheet">
+<script type="text/javascript" src="${secure}/jquery-1.7.1.min.js"></script>
 <script type="text/javascript" src="${secure}/bootstrap-dropdown.js"></script>
     

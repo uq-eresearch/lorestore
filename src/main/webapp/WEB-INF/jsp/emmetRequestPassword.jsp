@@ -26,7 +26,7 @@
                 <td>Password:</td>
                 <td><input type="password" name="oldPassword"></input></td>
                 <td>
-                  <button class="btn primary" type="submit">Continue</button>
+                  <button class="btn btn-primary" type="submit">Continue</button>
 				  <a href="index.html"><button class="btn" type="button">Cancel</button></a>
                 </td>
               </tr>

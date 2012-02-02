@@ -30,7 +30,7 @@
           </tr>
           <tr>
             <td>
-              <button class="btn primary" type="submit" name="confirmed" value="yes">Confirm</button>
+              <button class="btn btn-primary" type="submit" name="confirmed" value="yes">Confirm</button>
               <a href="index.html"><button class="btn" type="button">Cancel</button></a>
 
             </td>

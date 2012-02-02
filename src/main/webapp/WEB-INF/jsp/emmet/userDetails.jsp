@@ -73,10 +73,10 @@
                                 <input type="hidden" name="identityUri" value="${identity.identityUri}">
                                 <c:choose>
                                   <c:when test="${identity.domain == 'primary'}">
-                                    <button disabled="disabled" type="submit" class="btn danger">Remove</button>
+                                    <button disabled="disabled" type="submit" class="btn-danger">Remove</button>
                                   </c:when>
                                   <c:otherwise>
-                                    <button type="submit" class="btn danger">Remove</button>
+                                    <button type="submit" class="btn btn-danger">Remove</button>
                                   </c:otherwise>
                                 </c:choose>
                             </form>

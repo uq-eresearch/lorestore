@@ -48,7 +48,7 @@
 		    </tr>
 		    <tr>
 				<td colspan="2" class="bt0">
-				<button class="btn primary" type="submit">Remove identity</button>
+				<button class="btn btn-danger" type="submit">Remove identity</button>
 		        <a href="index.html"><button class="btn" type="button">Cancel</button></a>
 		        </td>
 		    </tr>

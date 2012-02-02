@@ -55,7 +55,7 @@
                 </tr>
                 <tr>
 			<td class="bt0" colspan="2">
-            		<button class="btn primary" type="submit">Register Account</button>
+            		<button class="btn btn-primary" type="submit">Register Account</button>
                     <a href="index.html"><button class="btn" type="button">Cancel</button></a>
 
                     </td>

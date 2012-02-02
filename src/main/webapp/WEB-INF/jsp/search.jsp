@@ -21,14 +21,14 @@
         <fieldset>
             <label for="annoInput">Annotates:&nbsp;</label>
             <input class="xlarge" id="annoInput" name="annotates" size="60" type="text">
-            <input type="submit" class="btn primary" value="Search">
+            <input type="submit" class="btn btn-primary" value="Search">
         </fieldset>
       </form>
         <form action="oac/">
         <fieldset>
             <label for="annoInput">Keyword:&nbsp;</label>
             <input class="xlarge" id="annoInput" name="matchval" size="60" type="text">
-            <input type="submit" class="btn primary" value="Search">
+            <input type="submit" class="btn btn-primary" value="Search">
         </fieldset>
       </form>
          <h2>Resource maps</h2>
@@ -36,18 +36,17 @@
         <fieldset>
             <label for="refersToInput">Refers to:&nbsp;</label>
               <input class="xlarge" id="refersToInput" name="refersTo" size="30" type="text">
-            <input type="submit" class="btn primary" value="Search">
+            <input type="submit" class="btn btn-primary" value="Search">
         </fieldset>
       </form>
       <form action="ore/">
         <fieldset>
             <label for="refersToInput">Keyword:&nbsp;</label>
               <input class="xlarge" id="refersToInput" name="matchval" size="30" type="text">
-            <input type="submit" class="btn primary" value="Search">
+            <input type="submit" class="btn btn-primary" value="Search">
         </fieldset>
       </form>
           </div>
-          <%@ include file="sidebar.jsp" %>
       </div>
       </div>
       <%@ include file="footer.jsp" %>

@@ -28,7 +28,7 @@
          </p>
          <table>
           <tr>
-            <td><button class="btn primary" onclick="doTryAgain();">Try again</button></td>
+            <td><button class="btn btn-primary" onclick="doTryAgain();">Try again</button></td>
           </tr>
          </table>
           </div>
