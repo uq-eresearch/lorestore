@@ -28,7 +28,9 @@
 		        Please use the "Change My Password" or "Reset My Password" function
 		        to set a new password.</p>
 		    </c:if>
+		    <p>Manage <a href="${secure}/account/index.html">your account</a></p>
           </div>
+          
       </div>
       </div>
       <%@ include file="footer.jsp" %>

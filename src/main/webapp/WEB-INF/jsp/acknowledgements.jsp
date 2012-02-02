@@ -34,7 +34,6 @@
 				<li><a href="https://github.com/uq-eresearch/lorestore">lorestore on GitHub</a></li>
 			</ul>
           </div>
-          <%@ include file="sidebar.jsp" %>
       </div>
       </div>
       <%@ include file="footer.jsp" %>
