@@ -16,6 +16,7 @@
       <div class="content">
         <div class="page-header">
           <h1>Remove Identity</h1>
+        </div>
         <div class="row">
           <div class="span10">
           	 <ul class="breadcrumb">
@@ -54,7 +55,7 @@
 		    </tr>
 		  </table>
 		  </form>
-           
+        </div>
 		
       </div>
       </div>
