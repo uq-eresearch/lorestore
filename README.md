@@ -57,10 +57,9 @@ Basic steps to deploy lorestore using default configuration on Unix-based system
 User accounts
 -------------
 Default user accounts are configured in `src/main/webapp/WEB-INF/Emmet-userDetails-lorestore.xml`
-These default accounts will be created by Emmet on first run, and are ignored on subsequent deployments. 
-Use the User Management tools within the web app to create or configure user accounts or alternatively, 
-modify the default user details file, drop all tables from the Emmet database and reload the webapp to reload user accounts
-during testing or development.
+These accounts will be created by Emmet on first run, and by default are ignored on subsequent deployments. 
+Refer to the `newTables` property in the userDetails configuration file to modify this behaviour.
+Use the User Management tools within the web app to create or configure user accounts.
 
 Backup
 ------

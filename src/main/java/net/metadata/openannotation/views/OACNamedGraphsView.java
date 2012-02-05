@@ -95,21 +95,22 @@ public class OACNamedGraphsView extends BaseView {
 	        // to the content types that we use needs to be soft, and a lot smarter.
 	        try {
 	            if (annotations != null) {
-	            	if (isAcceptable(MimeTypes.XML_MIMETYPE, request) || isAcceptable("application/trix",request)) {
-	            		// Trix is preferred format as it has named graph support
-	            		// TODO: remove hardcoding to stylesheets - load from properties
-	            		/*stylesheetURI = (stylesheetParam == null || stylesheetParam.length() == 0) 
-	            				? "/lorestore/stylesheets/OACTrix-to-HTML.xsl" : stylesheetParam;
-	            				*/
+	            	if (isAcceptable(MimeTypes.XML_RDF, request) || isAcceptable("text/html",request)) {	
+	                	stylesheetURI = (stylesheetParam == null || stylesheetParam.length() == 0) ?
+	                			"/lorestore/stylesheets/OAC.xsl" : stylesheetParam;
+	                	os = outputRDF(response, annotations, stylesheetURI, Syntax.RdfXml);
+	                	if (isAcceptable("text/html",request)){
+	                		// we don't provide HTML as yet, so return XML with stylesheet instead
+	                		response.setContentType(MimeTypes.XML_MIMETYPE);
+	                	} else {
+	                		response.setContentType(MimeTypes.XML_RDF);
+	                	}
+	        	        response.setCharacterEncoding("UTF-8");
+	                } else if (isAcceptable(MimeTypes.XML_MIMETYPE, request) || isAcceptable("application/trix",request)) {
+	            		// TriX is preferred format as it has named graph support
+	                	// TODO: add default stylesheet for TriX
 	            		os = outputRDF(response, annotations, stylesheetURI, Syntax.Trix);
 	         	        response.setContentType(MimeTypes.XML_MIMETYPE);
-	        	        response.setCharacterEncoding("UTF-8");
-	                } else if (isAcceptable(MimeTypes.XML_RDF, request)) {
-	                	/*stylesheetURI = (stylesheetParam == null || stylesheetParam.length() == 0) 
-    						? "/lorestore/stylesheets/OACRDFXML-to-HTML.xsl" : stylesheetParam;
-    						*/
-	                	os = outputRDF(response, annotations, stylesheetURI, Syntax.RdfXml);
-	         	        response.setContentType(MimeTypes.XML_RDF);
 	        	        response.setCharacterEncoding("UTF-8");
 	                } else if (isAcceptable("application/x-trig", request)){
 	                	os = outputRDF(response, annotations, null, Syntax.Trig);
@@ -119,7 +120,7 @@ public class OACNamedGraphsView extends BaseView {
 	                	response.setContentType("application/json");
 	                } else {
 	                    response.sendError(HttpServletResponse.SC_NOT_ACCEPTABLE,
-	                            "Request response only available in Trix, RDF+XML and Trig formats");
+	                            "Request response only available in Trix, RDF+XML, Trig and JSON formats");
 	                }
 	            } else {
 	                logger.error("No content has been set");
@@ -130,9 +131,14 @@ public class OACNamedGraphsView extends BaseView {
 	            if (os != null) {
 	                os.close();
 	            }
-	            /*if (annotations != null) {
-	            	annotations.close();
-	            }*/
+	            if (annotations != null){
+	            	try {
+	            		annotations.commit();
+	            		annotations.close();
+	            	} catch (Exception e){
+	            		logger.error("OACNamedGraphsView " + e.getMessage());
+	            	};
+	            }
 	        }
 	 }
 
@@ -144,14 +150,14 @@ public class OACNamedGraphsView extends BaseView {
 	            OutputStream os = response.getOutputStream();
 	            annotations.writeTo(os,syntax);
 	            return os;
-	        } /*else {
+	        } else {
 
 	            // I considered tweaking the RDF serializers to add the stylesheet processing
 	            // instruction.  Sesame would support this, but it would be difficult with Jena.
 	            // Instead, we serialize to a StringBuffer and do some simple surgery to insert
 	            // the required stuff.
 	            StringWriter sw = new StringWriter();
-	            annotations.writeTo(sw, Syntax.Trix);
+	            annotations.writeTo(sw, syntax);
 	            StringBuffer sb = sw.getBuffer();
 	            // The insertion point will be immediately after the '?>' of the xml declaration
 	            // (if present) or at the start of the document.
@@ -177,8 +183,6 @@ public class OACNamedGraphsView extends BaseView {
 	            os.write(sb.toString().getBytes());
 	            return os;
 	        }
-	        */
-	        return null;
 	    }
 	 private OutputStream outputJSON(HttpServletResponse response, ModelSet annotations) 
 	    throws IOException {

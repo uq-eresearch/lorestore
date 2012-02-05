@@ -47,7 +47,9 @@
     padding-left: 19px;
     border-left: 1px solid #eee;
   }
-
+  section {
+    margin-bottom:30px;
+  }
   footer {
   margin-top:5px;
   }

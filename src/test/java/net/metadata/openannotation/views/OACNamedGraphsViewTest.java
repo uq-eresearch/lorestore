@@ -56,7 +56,7 @@ public class OACNamedGraphsViewTest {
 
 	@Test
 	public void renderTrix() throws Exception {
-		
+		request.addHeader("Accept", "application/trix");
 		view.render(mv.getModel(), request, response);
 		//System.out.print(response.getContentAsString());
 		assertEquals("application/xml", response.getContentType());

@@ -20,18 +20,55 @@
             <section id="crud">
 				
                 <h2>CRUD API</h2>
-				<small>Create, read, update and delete resource maps and annotations</small>
 				<hr>
 				
-			<p>ORE Resource Maps and OAC Annotations are stored within lorestore as RDF Named Graphs, hence they share a REST-based API for Create, Read, Update and Delete (CRUD).</p>
+			<p>Resource Maps and Annotations share a REST-based API for Create, Read, Update and Delete (CRUD).</p>
 			
 			<h3 id="create">Create</h3>
-    		<p>Issue a PUT request to <code>${secure}/ore/</code> to create a resource map.</p> 
-			<p>Issue a PUT request to <code>${secure}/oac/</code> to create an annotation.</p> 
+    		<p>Issue a POST request to <code>${secure}/ore/</code> to create a resource map.</p> 
+			<p>Issue a POST request to <code>${secure}/oac/</code> to create an annotation.</p> 
 			<p><span class="label label-info">Preconditions</span> Must be authenticated</p>
-			<p>The contents of the request should be the RDF for the Resource Map or Annotation.</p>
-			<p>As the URI for the object will be unknown until after the create request succeeds, use <code>${secure}/ore/#unsaved</code> as the Resource Map identifier.</p> 
-			<p>Returns HTTP status code 201 and the RDF/XML of the new object on success</p>
+			<p>Send the RDF/XML for the Resource Map or Annotation as the content of the request.</p>
+			<p>As the URI for the object will be unknown until after the create request succeeds, use any dummy value for the Resource Map or Annotation identifier and it will be replaced by lorestore, e.g:</p>
+            <pre class="pre prettyprint">
+&lt;rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" 
+    xmlns:ore="http://www.openarchives.org/ore/terms/"&gt;
+    &lt;ore:ResourceMap rdf:about="${secure}/ore/dummy"&gt;
+        &lt;ore:describes rdf:resource="${secure}/ore/dummy#aggregation"/&gt;
+        
+    &lt;/ore:ResourceMap&gt;
+    &lt;ore:Aggregation rdf:about="${secure}/ore/dummy#aggregation"/&gt;
+    &lt;!-- ... etc ... --&gt;
+&lt;/rdf:RDF&gt;                
+            </pre>
+            <pre class="pre prettyprint">
+&lt;rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" 
+    xmlns:dc="http://purl.org/dc/elements/1.1/" 
+    xmlns:oac="http://www.openannotation.org/ns/"&gt;
+    &lt;oac:Annotation rdf:about="${secure}/oac/dummy"&gt;
+        &lt;oac:hasBody rdf:resource="urn:uuid:4F390D25-41DF-475D-8140-6153CA6E330D"/&gt;
+        &lt;oac:hasTarget rdf:resource="http://example.org/target"/&gt;
+        &lt;dc:title&gt;My Annotation&lt;/dc:title&gt;
+        &lt;!-- ... etc ... --&gt;
+    &lt;/oac:Annotation&gt;
+&lt;/rdf:RDF&gt;
+            </pre>
+            <p>Returns HTTP status code 201 and the RDF/XML of the new object on success</p>
+            <p>Example:</p>
+            <pre class="pre prettyprint">
+var xhr = new XMLHttpRequest();
+xhr.open("POST","${secure}/oac/");
+xhr.onreadystatechange= function(){
+    if (xhr.readyState == 4) {
+        if (xhr.status == 201) { 
+            // success
+        } 
+    }
+};
+xhr.setRequestHeader("Content-Type", "application/rdf+xml");
+xhr.send(annoRDF);
+            </pre>
+			
 			
 			<h3 id="read">Read</h3>
 			<p>Issue a GET request to the URI that identifies the Annotation or Resource Map.<br/>
@@ -53,22 +90,22 @@ xhr.send(null);
 			<h3 id="update">Update</h3>
 			
 			<p>Issue a PUT request to the URI that identifies the Annotation or Resource Map. 
-				The contents of the request should be the updated RDF for the object.
+				Send the updated RDF for the object as the content of the request.
 			</p>
 			<p><span class="label label-info">Preconditions</span> Must be authenticated using the account that owns the object or as an administrator</p>
 			
 			<p>Any owner or modified date properties provided in the update will be ignored as these are managed by lorestore.</p>
             <p>Update requests will fail if the object has been marked as locked, except for users with administrator privileges.</p>
-            <p>Returns HTTP status code 200 on success</p>
+            <p>Returns HTTP status code 200 on success.</p>
 			
 			<h3 id="delete">Delete</h3>
 			<p>Issue a DELETE request to the resource map or annotation URI</p>
 			<p><span class="label label-info">Preconditions</span> Must be authenticated using the account that owns the object or as an administrator</p>
-			
+			<p>Returns HTTP status code 204 on success.</p>
 			<p>Example:</p>
 			<pre class="pre prettyprint">
 var xhr = new XMLHttpRequest();
-xhr.open("DELETE", "${secure}/ore/123456789");  
+xhr.open("DELETE", "${secure}/oac/123456789");  
 xhr.onreadystatechange= function(){
     if (xhr.readyState == 4) {
         if (xhr.status == 204) { 
@@ -78,6 +115,7 @@ xhr.onreadystatechange= function(){
 };
 xhr.send(null);
 			</pre>
+            
 			<h3 id="auth">Sign in</h3>
             <p>Some API operations require authentication.</p>
             <p>lorestore uses Emmet to manage authentication, which supports a number of standard authentication schemes.
@@ -181,7 +219,9 @@ Ext.Ajax.request({
                 &lt;uri&gt;${secure}/ore/123456789;/uri&gt;
             &lt;/binding&gt;
             &lt;binding name='m'&gt;
-                &lt;literal datatype='http://www.w3.org/2001/XMLSchema#date'&gt;2009-11-17&lt;/literal&gt;
+                &lt;literal datatype='http://www.w3.org/2001/XMLSchema#date'&gt;
+                2009-11-17
+                &lt;/literal&gt;
             &lt;/binding&gt;
             &lt;binding name='t'&gt;
                 &lt;literal&gt;Lawson Papers&lt;/literal&gt;
@@ -226,7 +266,7 @@ Ext.Ajax.request({
     &lt;results&gt;
         &lt;result&gt;
             &lt;binding name='sometitle'&gt;
-                &lt;literal&gt;School of Information Technology and Electrical Engineering - The University of Queensland, Australia&lt;/literal&gt;
+                &lt;literal&gt;UQ ITEE&lt;/literal&gt;
             &lt;/binding&gt;
             &lt;binding name='somerel'&gt;
                 &lt;uri&gt;http://www.openarchives.org/ore/terms/aggregates&lt;/uri&gt;
@@ -242,7 +282,8 @@ Ext.Ajax.request({
 			
 			<h3 id="oac">Annotations</h3>
 			<h4>annotates</h4>
-			<p>Fetch annotations that annotate a given web resource (also fetches replies if the queried resource is itself an annotation). Results are returned in TriX format.</p>
+			<p>Fetch annotations that annotate a given web resource (also fetches replies if the queried resource is itself an annotation). Results are returned in TriX, TriG, RDF/XML or JSON format, depending on the Accept header. 
+                Use TriX or TriG format if scoping of arbitrary RDF data stored with annotations is important, as these formats have Named Graph support. For RDF/XML the results are flattened into a single graph.</p>
 			<p><code>GET ${secure}/oac/?annotates=http%3A%2F%2Fwww.example.org</code></p>
 			
 			</section>
@@ -254,11 +295,32 @@ Ext.Ajax.request({
 			<p>Example query returns the identifier for all annotations:</p>
 			<p><code>${secure}/oreadmin/sparql?sparql=SELECT+*+WHERE+%7B%3Fa+a+%3Chttp%3A%2F%2Fwww.openannotation.org%2Fns%2FAnnotation%3E%7D</code></p>
 			<p>Administrators can also use the <a href="${secure}/oreadmin/sparqlPage.html">SPARQL Query UI</a> to develop queries.</p>
+            
 			</section>
 			<section id="user">
 				<h2>User Management API</h2>
+                <hr>
 				<p>Refer to the <a href="http://metadata.net/sites/emmet-0.6-SNAPSHOT/webapis.html">Emmet web API documentation</a> for details of the user management API.</p>
+          
 			</section>
+            <section id="content">
+                <h2>Content formats</h2>
+                <hr>
+                <p>Resource Maps must conform to the <a href="http://www.openarchives.org/ore/1.0/toc.html">OAI-ORE</a> specification.</p>
+                <p>Annotations must conform to the <a href="http://www.openannotation.org/spec/beta/">OAC data model</a></p>
+                <p>Annotations and Resource Maps are stored as Named Graphs. Arbitrary RDF data can be included in the RDF/XML submitted to lorestore via a create or update request, and it will be stored in the same graph.
+                <h3>Properties</h3>
+                <p>The following properties are used by lorestore:</p>
+                <dl>
+                    <dt>lorestore:user</dt>
+                    <dd>Resource Map or Annotation property.<br>This property is managed by lorestore.<br>The value of the property is the URI that identifies the user account that owns the object</dd>
+                    <dt>lorestore:isPrivate</dt>
+                    <dd>Resource Map or Annotation boolean property.<br>When true, indicates that the object is only visible to the account that owns the object</dd>
+                    <dt>lorestore:isLocked</dt>
+                    <dd>Resource Map boolean property.<br>When true, the Resource Map can not be modified (except by an admin account)</dd>
+                </dl>
+                <p>The lorestore namespace is <code>http://auselit.metadata.net/lorestore/</code></p>
+            </section>
           </div>
           <div class="span2 sidebarmenu">
 			<h2>Index</h2>
@@ -281,6 +343,7 @@ Ext.Ajax.request({
 				</li>
 				<li><a href="#sparql">SPARQL endpoint</a></li>
 				<li><a href="#user">User Management</a></li>
+                <li><a href="#content">Content formats</a></li>
 			</ul>
 		  </div>
       </div>
