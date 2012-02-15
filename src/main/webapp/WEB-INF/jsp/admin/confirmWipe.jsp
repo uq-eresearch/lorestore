@@ -28,7 +28,7 @@
   				Please confirm that you wish to remove all data from the LoreStore repository.<br/> This action cannot be undone.
             </p>
             <p>
-            	<button class="btn btn-danger" type="submit">Clear Repository</button>
+            	<button class="btn btn-danger" type="submit"><i class="icon-trash icon-white"></i> Clear Repository</button>
                 <a href="../oreadmin/"><button class="btn" type="button">Cancel</button></a>
             </p>
   		</fieldset>

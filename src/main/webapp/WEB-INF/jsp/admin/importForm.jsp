@@ -36,7 +36,7 @@
 		                <td><form:input path="fileData" type="file"/></td>
 		            </tr>
 		            <tr>
-		            	<td colspan="2"><input class="btn btn-primary" type="submit"/></td>
+		            	<td colspan="2"><button class="btn btn-primary" type="submit">Import</button></td>
 		            </tr>
 		           </table>
 		  		</fieldset>

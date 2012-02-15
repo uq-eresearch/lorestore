@@ -21,42 +21,27 @@
     <xsl:strip-space elements="*"/>
     
 
-    
     <!--  viewurl is prefixed to URLs to provide link to view nested compound objects -->
     <xsl:param name="viewurl"/>  
     
     <xsl:template match="/">
     	<html>
     	<head><title>Compound Object</title></head>
-    	<style type="text/css">
-#trailcarousel {display:block; border:none; width: 100%;}
-.disclaimer {padding-top:1em; color: #51666b; border-top: 1px dashed #dce0e1; font-size:smaller;}
-h1, h2 {font-size:normal;  font-style:italic; font-size:130%;}
-h1{color: #cc0000; border-bottom: 1px solid #cc0000; padding-bottom: 1em;}
-h2 {font-weight:bold;color: #51666b;border-top: 1px dashed #dce0e1; padding-top:1em;font-size:110%;}
-.Imageicon {background-image: url(/common/images/fedsearch/image.png);}
-.StillImageicon {background-image: url(/common/images/fedsearch/image.png);}
-.MovingImageicon{background-image: url(/common/images/fedsearch/film.png);}
-.Filmicon {background-image: url(/common/images/fedsearch/film.png);}
-.pdficon {background-image: url(/common/images/fedsearch/file_acrobat.gif);}
-.Soundicon {background-image: url(/common/images/fedsearch/page_sound.gif);}
-.Dataseticon {background-image: url(/common/images/fedsearch/database_table.png);}
-.Collectionicon {background-image: url(/common/images/fedsearch/page_white_stack.png);}
-.Texticon{background-image: url(/common/images/fedsearch/page_white_text.png);}
-.PhysicalObjecticon {background-image: url(/common/images/fedsearch/chair.png);}
-.Softwareicon {background-image: url(/common/images/fedsearch/application.png);}
-.Serviceicon {background-image: url(/common/images/fedsearch/server-network.png);}
-.InteractiveResourceicon {background-image: url(/common/images/fedsearch/map_cursor.png);}
-.Eventicon {background-image: url(/common/images/fedsearch/alarm-clock-select.png);}
-.prop {font-weight:bold;color:#51666b;}
-A:link {TEXT-DECORATION: none; color: #d5801e }
-A:visited {color: #749abd;TEXT-DECORATION: none}
-A:hover {COLOR: #CC0000; TEXT-DECORATION: underline}
-    	</style>
-    	<body>
-    	<div style='padding:1em'>
+    	   <link type="text/css" rel="stylesheet" href="../stylesheets/bootstrap.min.css"/>
+    	   <link type="text/css" rel="stylesheet" href="../stylesheets/lorestore.css"/>
+    	<body style="padding-top:40px">
+    	<div class="navbar navbar-fixed-top">
+            <div class="navbar-inner">
+                <div class="container">
+                    <a class="brand" href="../index.html"><img src="../images/lorestorelogo.png"/></a>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+        <div class="content">
         <xsl:apply-templates select="//rdf:Description[ore:describes]"/>
         <xsl:apply-templates select="//rdf:Description/rdf:type[@rdf:resource='http://www.openannotation.org/ns/Annotation']"/>
+        </div>
         </div>
         </body></html>  
     </xsl:template>

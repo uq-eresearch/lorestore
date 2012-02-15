@@ -55,7 +55,7 @@
                         <form action="${emmet}" method="post">
                             <input type="hidden" name="action" value="removeUser"> 
                             <input type="hidden" name="userName" value="${userDetails.user.userName}">
-                            <button type="submit" class="btn btn-danger">Remove</button>
+                            <button type="submit" class="btn btn-danger"><i class="icon-trash icon-white"></i> Remove</button>
                         </form>
                     </td>
                     <td>
