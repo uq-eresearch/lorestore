@@ -12,7 +12,7 @@
 	<%@ include file="menu.jsp" %>
     <div class="container">
       <div class="content">
-        <div class="page-header">
+        <div class="page-header main-page-header">
           
           <h1>Annotation and Resource Map Repository Service</h1>
         </div>

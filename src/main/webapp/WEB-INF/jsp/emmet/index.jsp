@@ -11,7 +11,7 @@
 	<%@ include file="/WEB-INF/jsp/menu.jsp" %>
     <div class="container">
       <div class="content">
-        <div class="page-header">
+        <div class="page-header main-page-header">
           <h1>User Account Management Tools</h1>
         </div>
         <div class="row">
