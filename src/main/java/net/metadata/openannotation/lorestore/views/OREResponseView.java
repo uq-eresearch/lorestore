@@ -1,6 +1,6 @@
-package net.metadata.openannotation.lorestore.servlet;
+package net.metadata.openannotation.lorestore.views;
 
-import static net.metadata.openannotation.lorestore.common.LoreStoreConstants.ORE_USE_STYLESHEET;
+import static net.metadata.openannotation.lorestore.common.LoreStoreConstants.LORESTORE_USE_STYLESHEET;
 import static net.metadata.openannotation.lorestore.common.LoreStoreProperties.DEFAULT_RDF_STYLESHEET_PROP;
 import static net.metadata.openannotation.lorestore.servlet.OREResponse.*;
 
@@ -31,7 +31,7 @@ public class OREResponseView extends BaseView {
     throws IOException {
     	Model responseRDF = (Model) map.get(RESPONSE_RDF_KEY);
         Properties props = (Properties) map.get(ORE_PROPS_KEY);
-        String stylesheetParam = request.getParameter(ORE_USE_STYLESHEET);
+        String stylesheetParam = request.getParameter(LORESTORE_USE_STYLESHEET);
         // FIXME: remove hardcoded stylesheet
         String stylesheetURI = (stylesheetParam == null) ? "/lorestore/stylesheets/CompoundObjectDetail.xsl" :
                 (stylesheetParam.length() == 0) ? props.getProperty(DEFAULT_RDF_STYLESHEET_PROP, null) :
@@ -45,10 +45,16 @@ public class OREResponseView extends BaseView {
         try {
             if (responseRDF != null) {
             	if (isAcceptable(MimeTypes.XML_RDF_MIMETYPES, request)) { 
+                    
+                    if (isAcceptable(MimeTypes.XML_MIMETYPE, request)){
+                    	response.setContentType(MimeTypes.XML_MIMETYPE);
+                    } else {
+                    	response.setContentType(MimeTypes.XML_RDF);
+                    }
                     os = outputRDF(response, responseRDF, stylesheetURI);
                 } else {
                     response.sendError(HttpServletResponse.SC_NOT_ACCEPTABLE,
-                            "Request response is only available as application/xml");
+                            "Request response is only available as RDF/XML");
                 }
             } else if (props != null) {
                 if (isAcceptable(MimeTypes.XML_MIMETYPE, request)) {
@@ -87,7 +93,7 @@ public class OREResponseView extends BaseView {
 
 	private OutputStream outputProps(HttpServletResponse response, Properties props) 
     throws IOException {
-        response.setContentType("application/xml");
+        response.setContentType(MimeTypes.XML_MIMETYPE);
         OutputStream os = response.getOutputStream();
         props.storeToXML(os, "Lorestore properties", "UTF-8");
         return os;
@@ -96,7 +102,6 @@ public class OREResponseView extends BaseView {
     private OutputStream outputRDF(HttpServletResponse response,  
     		Model responseRDF, String stylesheetURL) 
     throws IOException {
-        response.setContentType("application/rdf+xml");
         response.setCharacterEncoding("UTF-8");
         if (stylesheetURL == null) {
             OutputStream os = response.getOutputStream();

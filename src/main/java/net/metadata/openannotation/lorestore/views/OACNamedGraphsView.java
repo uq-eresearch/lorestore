@@ -1,34 +1,16 @@
-package net.metadata.openannotation.views;
+package net.metadata.openannotation.lorestore.views;
 
-import static net.metadata.openannotation.lorestore.common.LoreStoreConstants.DC_CREATOR;
-import static net.metadata.openannotation.lorestore.common.LoreStoreConstants.DC_TITLE;
-import static net.metadata.openannotation.lorestore.common.LoreStoreConstants.OAC_ANNOTATION_CLASS;
-import static net.metadata.openannotation.lorestore.common.LoreStoreConstants.OAC_DATA_ANNOTATION_CLASS;
-import static net.metadata.openannotation.lorestore.common.LoreStoreConstants.OAC_REPLY_CLASS;
-import static net.metadata.openannotation.lorestore.common.LoreStoreConstants.OAC_TARGET_PROPERTY;
-import static net.metadata.openannotation.lorestore.common.LoreStoreConstants.ORE_USE_STYLESHEET;
-import static net.metadata.openannotation.lorestore.common.LoreStoreProperties.DEFAULT_RDF_STYLESHEET_PROP;
-import static net.metadata.openannotation.lorestore.servlet.OREResponse.ORE_PROPS_KEY;
-import static net.metadata.openannotation.lorestore.servlet.OREResponse.RESPONSE_RDF_KEY;
-
+import static net.metadata.openannotation.lorestore.common.LoreStoreConstants.LORESTORE_USE_STYLESHEET;
 
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.io.StringReader;
 import java.io.StringWriter;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
-import java.util.Properties;
-
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
@@ -36,34 +18,14 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
-import net.metadata.openannotation.lorestore.model.rdf2go.OACAnnotationImpl;
-import net.metadata.openannotation.lorestore.servlet.OREResponseView;
-
 import org.apache.log4j.Logger;
 import org.apache.xerces.parsers.DOMParser;
-import org.ontoware.aifbcommons.collection.ClosableIterator;
-import org.ontoware.rdf2go.model.Model;
 import org.ontoware.rdf2go.model.ModelSet;
-import org.ontoware.rdf2go.model.QueryResultTable;
-import org.ontoware.rdf2go.model.QueryRow;
-import org.ontoware.rdf2go.model.Statement;
 import org.ontoware.rdf2go.model.Syntax;
-import org.ontoware.rdf2go.model.node.Node;
-import org.ontoware.rdf2go.model.node.Resource;
-import org.ontoware.rdf2go.util.TypeConverter;
-import org.openrdf.model.Literal;
-import org.openrdf.model.URI;
-import org.openrdf.query.BindingSet;
-import org.openrdf.query.TupleQueryResult;
-import org.springframework.web.servlet.view.feed.AbstractAtomFeedView;
 import org.xml.sax.InputSource;
 
 import au.edu.diasb.chico.mvc.BaseView;
 import au.edu.diasb.chico.mvc.MimeTypes;
-
-import com.sun.syndication.feed.atom.Entry;
-import com.sun.syndication.feed.atom.Feed;
-import com.sun.syndication.feed.atom.Person;
 
 public class OACNamedGraphsView extends BaseView {
 	 	public OACNamedGraphsView() {
@@ -83,7 +45,7 @@ public class OACNamedGraphsView extends BaseView {
 	    		
 	    	}
 	    	logger.debug("render merged output annotations: ");
-	        String stylesheetParam = request.getParameter(ORE_USE_STYLESHEET);
+	        String stylesheetParam = request.getParameter(LORESTORE_USE_STYLESHEET);
 	        /*String stylesheetURI = (stylesheetParam == null) ? null :
 	                (stylesheetParam.length() == 0) ? props.getProperty(DEFAULT_RDF_STYLESHEET_PROP, null) :
 	                    stylesheetParam;
@@ -93,21 +55,23 @@ public class OACNamedGraphsView extends BaseView {
 	        OutputStream os = null;
 	        // FIXME the mapping of 'accept' types to formats that we understand and hence
 	        // to the content types that we use needs to be soft, and a lot smarter.
+	        // Think about using ContentNegotiatingViewResolver
 	        try {
 	            if (annotations != null) {
-	            	if (isAcceptable(MimeTypes.XML_RDF, request) || isAcceptable("text/html",request)) {	
+            		// TriX or Trig are preferred format as they have named graph support,
+	            	// however RDF/XML is the default
+	            	if (isAcceptable(MimeTypes.XML_RDF_MIMETYPES, request)) {	
 	                	stylesheetURI = (stylesheetParam == null || stylesheetParam.length() == 0) ?
 	                			"/lorestore/stylesheets/OAC.xsl" : stylesheetParam;
 	                	os = outputRDF(response, annotations, stylesheetURI, Syntax.RdfXml);
-	                	if (isAcceptable("text/html",request)){
-	                		// we don't provide HTML as yet, so return XML with stylesheet instead
+	                	if (isAcceptable(MimeTypes.XML_MIMETYPE, request)){
+	                		// we don't provide HTML as yet, use XML with stylesheet instead
 	                		response.setContentType(MimeTypes.XML_MIMETYPE);
 	                	} else {
 	                		response.setContentType(MimeTypes.XML_RDF);
 	                	}
 	        	        response.setCharacterEncoding("UTF-8");
-	                } else if (isAcceptable(MimeTypes.XML_MIMETYPE, request) || isAcceptable("application/trix",request)) {
-	            		// TriX is preferred format as it has named graph support
+	                } else if (isAcceptable("application/trix",request)) {
 	                	// TODO: add default stylesheet for TriX
 	            		os = outputRDF(response, annotations, stylesheetURI, Syntax.Trix);
 	         	        response.setContentType(MimeTypes.XML_MIMETYPE);

@@ -5,16 +5,10 @@
            http://www.springframework.org/schema/beans/spring-beans-3.0.xsd"
        default-lazy-init="true">
     
-    <bean id="ore" class="net.metadata.openannotation.lorestore.servlet.OREResponseView"/>
-    <bean id="oac" class="net.metadata.openannotation.views.OACNamedGraphsView"/>
-    
-    <bean id="oreAtom" class="net.metadata.openannotation.views.OREAtomFeedView" />
-    <bean id="oacAtom" class="net.metadata.openannotation.views.OACAtomFeedView" />
-    
-    <bean id="oreRssUnused" class="org.springframework.web.servlet.view.xslt.XsltView">
-    	<property name="url" value="/WEB-INF/xsl/rss.xsl"/>
-    	<property name="indent" value="true" />
-        <property name="sourceKey" value="xmlData" />
-    </bean>
+    <bean id="ore" class="net.metadata.openannotation.lorestore.views.OREResponseView"/>
+    <bean id="oac" class="net.metadata.openannotation.lorestore.views.OACNamedGraphsView"/>
+    <bean id="sparqlxml" class="net.metadata.openannotation.lorestore.views.SPARQLXMLView"/>
+    <bean id="oreAtom" class="net.metadata.openannotation.lorestore.views.OREAtomFeedView" />
+    <bean id="oacAtom" class="net.metadata.openannotation.lorestore.views.OACAtomFeedView" />
     
 </beans>

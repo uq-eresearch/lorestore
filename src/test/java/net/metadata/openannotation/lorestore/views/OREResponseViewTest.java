@@ -1,12 +1,12 @@
-package net.metadata.openannotation.lorestore.servlet;
+package net.metadata.openannotation.lorestore.views;
+
+import static org.junit.Assert.assertEquals;
 
 import java.io.ByteArrayInputStream;
-import static org.junit.Assert.*;
 
+import net.metadata.openannotation.lorestore.servlet.CommonTestRecords;
 import net.metadata.openannotation.lorestore.servlet.OREResponse;
-import net.metadata.openannotation.lorestore.servlet.OREResponseView;
 import net.metadata.openannotation.misc.TestUtilities;
-
 
 import org.junit.Before;
 import org.junit.Test;
@@ -37,6 +37,6 @@ public class OREResponseViewTest {
 		
 		view.render(mv.getModel(), request, response);
 		
-		assertEquals("application/rdf+xml", response.getContentType());
+		assertEquals("application/xml", response.getContentType());
 	}
 }

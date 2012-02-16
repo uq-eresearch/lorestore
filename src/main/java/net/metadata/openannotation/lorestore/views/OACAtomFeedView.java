@@ -1,4 +1,4 @@
-package net.metadata.openannotation.views;
+package net.metadata.openannotation.lorestore.views;
 
 import static net.metadata.openannotation.lorestore.common.LoreStoreConstants.DC_TITLE;
 
@@ -29,7 +29,7 @@ public class OACAtomFeedView extends AbstractAtomFeedView {
 	@Override
 	protected void buildFeedMetadata(Map<String, Object> model, Feed feed,
 			HttpServletRequest request) {
-		feed.setTitle("Annotations for " + (String)model.get("browseURL"));
+		feed.setTitle("Annotations for " + (String) model.get("browseURL"));
 		
 	}
 

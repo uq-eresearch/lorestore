@@ -1,4 +1,4 @@
-package net.metadata.openannotation.views;
+package net.metadata.openannotation.lorestore.views;
 
 import java.util.List;
 import java.util.Map;

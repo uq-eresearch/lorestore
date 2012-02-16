@@ -3,7 +3,7 @@ package net.metadata.openannotation.lorestore.common;
 
 public interface LoreStoreConstants {
 
-	String ORE_USE_STYLESHEET = "oreUseStylesheet";
+	String LORESTORE_USE_STYLESHEET = "stylesheet";
 	
 	String ORE_SYNTAX_URL = "http://www.openarchives.org/ore/terms/";
 	String OAC_SYNTAX_URL = "http://www.openannotation.org/ns/";

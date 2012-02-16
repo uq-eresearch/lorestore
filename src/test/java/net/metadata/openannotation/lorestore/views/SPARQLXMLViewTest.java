@@ -1,23 +1,10 @@
-package net.metadata.openannotation.views;
+package net.metadata.openannotation.lorestore.views;
 
-import java.io.ByteArrayInputStream;
-
-import static org.junit.Assert.*;
-
+import static org.junit.Assert.assertEquals;
 import net.metadata.openannotation.lorestore.servlet.CommonTestRecords;
-import net.metadata.openannotation.lorestore.servlet.LoreStoreResponse;
-import net.metadata.openannotation.lorestore.triplestore.MemoryTripleStoreConnectorFactory;
-import net.metadata.openannotation.lorestore.views.OACNamedGraphsView;
-import net.metadata.openannotation.lorestore.views.LoreStoreResponseView;
-import net.metadata.openannotation.lorestore.views.SPARQLXMLView;
-import net.metadata.openannotation.misc.TestUtilities;
-
 
 import org.junit.Before;
 import org.junit.Test;
-import org.ontoware.rdf2go.RDF2Go;
-import org.ontoware.rdf2go.model.Model;
-import org.ontoware.rdf2go.model.ModelSet;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.web.servlet.ModelAndView;
