@@ -235,14 +235,14 @@ Ext.Ajax.request({
 &lt;/sparql&gt;
 			</pre>
 			<h4>matchpred</h4>
-			<p>Must be used in combination with <code>matchval</code>. Returns resource maps where the value of the specified predicate contains <code>matchval</code>. Provide an empty string for matchval to match all possible values.</p>
+			<p>Returns resource maps containing <code>matchpred</code> (anywhere within the named graph, e.g. as a property of the map or aggregation or of one of the aggregated resources). When used with <code>matchval</code>, where the value of the specified predicate contains <code>matchval</code>.</p>
+            <p>Example: find resource maps with any subject</p>
+            <p><code>GET ${secure}/ore/?&matchpred=http%3A%2F%2Fpurl.org%2Fdc%2Felements%2F1.1%2Fsubject</code></p>
 			<p>Example combining matchpred and matchval: Find all resource maps by a particular creator</p>
 			<p>
             <code>GET ${secure}/ore/?matchval=Jane+Doe&matchpred=http%3A%2F%2Fpurl.org%2Fdc%2Felements%2F1.1%2Fcreator</code>
             </p>
-            <p>Example: find resource maps with any subject</p>
-			<p><code>GET ${secure}/ore/?matchval=&matchpred=http%3A%2F%2Fpurl.org%2Fdc%2Felements%2F1.1%2Fsubject</code></p>
-			
+            
 			<h4>exploreFrom</h4>
 			<p>Get related resources and resource maps (used by LORE explore view) for a given URI. 
 				For convenience, if the exploreFrom URI is a resource map, results are returned for both the resource map and its aggregation.</p>
