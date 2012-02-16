@@ -202,7 +202,7 @@ public abstract class CommonTestRecords {
 	public static final String BAD_OAC_BROKEN_XML = 
 		"<rdf:RDF xmlns:cnt=\"http://www.w3.org/2008/content#\" xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\" xmlns:dc=\"http://purl.org/dc/elements/1.1/\" xmlns:dc10=\"http://purl.org/dc/elements/1.1/\" xmlns:dcterms=\"http://purl.org/dc/terms/\"  xmlns:foaf=\"http://xmlns.com/foaf/0.1/\"  xmlns:xhtml=\"http://www.w3.org/1999/xhtml\"  xmlns:http=\"http://www.w3.org/1999/xx/http#\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema#\" xmlns:oac=\"http://www.openannotation.org/ns/\" xmlns:owl=\"http://www.w3.org/2002/07/owl#\" xmlns:rdfs=\"http://www.w3.org/2000/01/rdf-schema#\" xmlns:austlit=\"http://austlit.edu.au/owl/austlit.owl#\" xmlns:lorestore=\"http://auselit.metadata.net/lorestore/\" xmlns:rda=\"http://RDVocab.info/Elements/\" xmlns:lore=\"http://austlit.edu.au/owl/austlitore.owl#\" xmlns:amino=\"http://www.co-ode.org/ontologies/amino-acid/2005/10/11/amino-acid.owl#\">"
 		+ "<oac:Body rdf:about=\"URN:uuid:e199e350-0eaf-11e1-be50-0800200c9a66\">"
-		+ "<rdf:type rdf:resource=\"cnt:ContentAsXML\">"
+		+ "<rdf:type rdf:resource=\"http://www.w3.org/2008/content#ContentAsXML\">"
 		+ "<cnt:rest rdf:parseType=\"Literal\">"
 		+ "<html xmlns=\"http://www.w3.org/1999/xhtml\" lang=\"en\" xml:lang=\"en\">"
 		+ "<head><title>This is me</title></head>"
@@ -223,7 +223,7 @@ public abstract class CommonTestRecords {
 	public static final String BAD_OAC_NO_ANNOTATION = 
 		"<rdf:RDF xmlns:cnt=\"http://www.w3.org/2008/content#\" xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\" xmlns:dc=\"http://purl.org/dc/elements/1.1/\" xmlns:dc10=\"http://purl.org/dc/elements/1.1/\" xmlns:dcterms=\"http://purl.org/dc/terms/\"  xmlns:foaf=\"http://xmlns.com/foaf/0.1/\"  xmlns:xhtml=\"http://www.w3.org/1999/xhtml\"  xmlns:http=\"http://www.w3.org/1999/xx/http#\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema#\" xmlns:oac=\"http://www.openannotation.org/ns/\" xmlns:owl=\"http://www.w3.org/2002/07/owl#\" xmlns:rdfs=\"http://www.w3.org/2000/01/rdf-schema#\" xmlns:austlit=\"http://austlit.edu.au/owl/austlit.owl#\" xmlns:lorestore=\"http://auselit.metadata.net/lorestore/\" xmlns:rda=\"http://RDVocab.info/Elements/\" xmlns:lore=\"http://austlit.edu.au/owl/austlitore.owl#\" xmlns:amino=\"http://www.co-ode.org/ontologies/amino-acid/2005/10/11/amino-acid.owl#\">"
 		+ "<oac:Body rdf:about=\"URN:uuid:e199e350-0eaf-11e1-be50-0800200c9a66\">"
-		+ "<rdf:type rdf:resource=\"cnt:ContentAsXML\"/>"
+		+ "<rdf:type rdf:resource=\"http://www.w3.org/2008/content#ContentAsXML\"/>"
 		+ "<cnt:rest rdf:parseType=\"Literal\">"
 		+ "<html xmlns=\"http://www.w3.org/1999/xhtml\" lang=\"en\" xml:lang=\"en\">"
 		+ "<head><title>This is me</title></head>"
@@ -244,7 +244,7 @@ public abstract class CommonTestRecords {
 	public static final String OAC_INLINE_BODY = 
 		"<rdf:RDF xmlns:cnt=\"http://www.w3.org/2008/content#\" xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\" xmlns:dc=\"http://purl.org/dc/elements/1.1/\" xmlns:dc10=\"http://purl.org/dc/elements/1.1/\" xmlns:dcterms=\"http://purl.org/dc/terms/\"  xmlns:foaf=\"http://xmlns.com/foaf/0.1/\"  xmlns:xhtml=\"http://www.w3.org/1999/xhtml\"  xmlns:http=\"http://www.w3.org/1999/xx/http#\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema#\" xmlns:oac=\"http://www.openannotation.org/ns/\" xmlns:owl=\"http://www.w3.org/2002/07/owl#\" xmlns:rdfs=\"http://www.w3.org/2000/01/rdf-schema#\" xmlns:austlit=\"http://austlit.edu.au/owl/austlit.owl#\" xmlns:lorestore=\"http://auselit.metadata.net/lorestore/\" xmlns:rda=\"http://RDVocab.info/Elements/\" xmlns:lore=\"http://austlit.edu.au/owl/austlitore.owl#\" xmlns:amino=\"http://www.co-ode.org/ontologies/amino-acid/2005/10/11/amino-acid.owl#\">"
 		+ "<oac:Body rdf:about=\"URN:uuid:e199e350-0eaf-11e1-be50-0800200c9a66\">"
-		+ "<rdf:type rdf:resource=\"cnt:ContentAsXML\"/>"
+		+ "<rdf:type rdf:resource=\"http://www.w3.org/2008/content#ContentAsXML\"/>"
 		+ "<cnt:rest rdf:parseType=\"Literal\">"
 		+ "<html xmlns=\"http://www.w3.org/1999/xhtml\" lang=\"en\" xml:lang=\"en\">"
 		+ "<head><title>This is me</title></head>"
@@ -265,7 +265,7 @@ public abstract class CommonTestRecords {
 	public static final String OAC_WITH_PROPS = 
 		"<rdf:RDF xmlns:cnt=\"http://www.w3.org/2008/content#\" xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\" xmlns:dc=\"http://purl.org/dc/elements/1.1/\" xmlns:dc10=\"http://purl.org/dc/elements/1.1/\" xmlns:dcterms=\"http://purl.org/dc/terms/\"  xmlns:foaf=\"http://xmlns.com/foaf/0.1/\"  xmlns:xhtml=\"http://www.w3.org/1999/xhtml\"  xmlns:http=\"http://www.w3.org/1999/xx/http#\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema#\" xmlns:oac=\"http://www.openannotation.org/ns/\" xmlns:owl=\"http://www.w3.org/2002/07/owl#\" xmlns:rdfs=\"http://www.w3.org/2000/01/rdf-schema#\" xmlns:austlit=\"http://austlit.edu.au/owl/austlit.owl#\" xmlns:lorestore=\"http://auselit.metadata.net/lorestore/\" xmlns:rda=\"http://RDVocab.info/Elements/\" xmlns:lore=\"http://austlit.edu.au/owl/austlitore.owl#\" xmlns:amino=\"http://www.co-ode.org/ontologies/amino-acid/2005/10/11/amino-acid.owl#\">"
 		+ "<oac:Body rdf:about=\"URN:uuid:e199e350-0eaf-11e1-be50-0800200c9a66\">"
-		+ "<rdf:type rdf:resource=\"cnt:ContentAsXML\"/>"
+		+ "<rdf:type rdf:resource=\"http://www.w3.org/2008/content#ContentAsXML\"/>"
 		+ "<cnt:rest rdf:parseType=\"Literal\">"
 		+ "<html xmlns=\"http://www.w3.org/1999/xhtml\" lang=\"en\" xml:lang=\"en\">"
 		+ "<head><title>This is me</title></head>"
@@ -289,7 +289,7 @@ public abstract class CommonTestRecords {
 	public static final String OAC_WITH_OWNER = 
 		"<rdf:RDF xmlns:cnt=\"http://www.w3.org/2008/content#\" xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\" xmlns:dc=\"http://purl.org/dc/elements/1.1/\" xmlns:dc10=\"http://purl.org/dc/elements/1.1/\" xmlns:dcterms=\"http://purl.org/dc/terms/\"  xmlns:foaf=\"http://xmlns.com/foaf/0.1/\"  xmlns:xhtml=\"http://www.w3.org/1999/xhtml\"  xmlns:http=\"http://www.w3.org/1999/xx/http#\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema#\" xmlns:oac=\"http://www.openannotation.org/ns/\" xmlns:owl=\"http://www.w3.org/2002/07/owl#\" xmlns:rdfs=\"http://www.w3.org/2000/01/rdf-schema#\" xmlns:austlit=\"http://austlit.edu.au/owl/austlit.owl#\" xmlns:lorestore=\"http://auselit.metadata.net/lorestore/\" xmlns:rda=\"http://RDVocab.info/Elements/\" xmlns:lore=\"http://austlit.edu.au/owl/austlitore.owl#\" xmlns:amino=\"http://www.co-ode.org/ontologies/amino-acid/2005/10/11/amino-acid.owl#\">"
 		+ "<oac:Body rdf:about=\"URN:uuid:e199e350-0eaf-11e1-be50-0800200c9a66\">"
-		+ "<rdf:type rdf:resource=\"cnt:ContentAsXML\"/>"
+		+ "<rdf:type rdf:resource=\"http://www.w3.org/2008/content#ContentAsXML\"/>"
 		+ "<cnt:rest rdf:parseType=\"Literal\">"
 		+ "<html xmlns=\"http://www.w3.org/1999/xhtml\" lang=\"en\" xml:lang=\"en\">"
 		+ "<head><title>This is me</title></head>"
@@ -308,4 +308,19 @@ public abstract class CommonTestRecords {
         + "<dcterms:isPartOf resource=\"http://itee.uq.edu.au/~agerber/\"/>"
         + "</rdf:Description>"
         + "</rdf:RDF>";
+	public static final String EMPTY_SPARQL_RESULT = 
+		"<?xml version='1.0' encoding='UTF-8'?>"
+		+ "<sparql xmlns='http://www.w3.org/2005/sparql-results#'>"
+		+ "<head>"
+		+ "<variable name='g'/>"
+		+ "<variable name='a'/>"
+		+ "<variable name='m'/>"
+		+ "<variable name='t'/>"
+		+ "<variable name='v'/>"
+		+ "<variable name='priv'/>"
+		+ "</head>"
+		+ "<results>"
+		+ "</sparql>";
+		
+	
 }
