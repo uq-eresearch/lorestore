@@ -30,21 +30,20 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import au.edu.diasb.chico.mvc.RequestFailureException;
 
 @Controller
-public class OREAdminController {
-	private final Logger LOG = Logger.getLogger(OREAdminController.class);
+public class LoreStoreAdminController {
+	private final Logger LOG = Logger.getLogger(LoreStoreAdminController.class);
 
 	private final LoreStoreControllerConfig occ;
 	private LoreStoreUpdateHandler uh;
 	private LoreStoreQueryHandler qh;
-	private LoreStoreUpdateHandler ouh;
+
 	private LoreStoreQueryHandler oqh;
 	private LoreStoreAccessPolicy ap;
 
-	public OREAdminController(LoreStoreControllerConfig occ) {
+	public LoreStoreAdminController(LoreStoreControllerConfig occ) {
 		this.occ = occ;
 		this.uh = new RDF2GoOREUpdateHandler(occ);
 		this.qh = new RDF2GoOREQueryHandler(occ);
-		this.ouh = new RDF2GoOACUpdateHandler(occ);
 		this.oqh = new RDF2GoOACQueryHandler(occ);
 		this.ap = occ.getAccessPolicy();
 	}
@@ -92,6 +91,12 @@ public class OREAdminController {
 	public String confirmWipe() throws RequestFailureException {
 		ap.checkAdmin();
 		return "admin/confirmWipe";
+	}
+	
+	@RequestMapping(value = "/deleteGraph.html", method = RequestMethod.GET)
+	public String deleteGraph() throws RequestFailureException {
+		ap.checkAdmin();
+		return "admin/deleteGraph";
 	}
 	
 	@RequestMapping(value = "/wipeDatabase.html", method = RequestMethod.POST)

@@ -26,7 +26,7 @@
     <bean name="oac" class="net.metadata.openannotation.lorestore.servlet.OACController">
         <constructor-arg ref="oacControllerConfig"/>
     </bean>
-	<bean name="oreAdmin" class="net.metadata.openannotation.lorestore.servlet.OREAdminController">
+	<bean name="oreAdmin" class="net.metadata.openannotation.lorestore.servlet.LoreStoreAdminController">
 		<constructor-arg ref="oreControllerConfig"/>
 	</bean>
 	

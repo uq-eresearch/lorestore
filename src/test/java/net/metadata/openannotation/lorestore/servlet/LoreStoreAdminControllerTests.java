@@ -3,7 +3,7 @@ package net.metadata.openannotation.lorestore.servlet;
 import java.io.FileInputStream;
 
 import net.metadata.openannotation.lorestore.model.UploadItem;
-import net.metadata.openannotation.lorestore.servlet.OREAdminController;
+import net.metadata.openannotation.lorestore.servlet.LoreStoreAdminController;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -14,13 +14,13 @@ import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.BindingResult;
 
 @RunWith(JUnit4.class)
-public class OREAdminControllerTests extends OREControllerTestsBase {
+public class LoreStoreAdminControllerTests extends OREControllerTestsBase {
 
-	private OREAdminController oreAdminController;
+	private LoreStoreAdminController oreAdminController;
 
 	@Before
 	public void adminControllerSetup() {
-		oreAdminController = new OREAdminController(noauthOCC);
+		oreAdminController = new LoreStoreAdminController(noauthOCC);
 	}
 
 	private static final String TEST_FILE = "D:/export.trig";
