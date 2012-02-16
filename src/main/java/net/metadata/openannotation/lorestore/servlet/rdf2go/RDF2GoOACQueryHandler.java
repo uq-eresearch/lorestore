@@ -129,33 +129,13 @@ public class RDF2GoOACQueryHandler extends AbstractRDF2GoQueryHandler {
 	}
 
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * net.metadata.openannotation.lorestore.servlet.rdf2go.OREQueryHandler#browseQuery
-	 * (java.lang.String)
-	 * Runs sparql query to get matches, then processes them to return OAC XML
-	 * 
-	 */
-	@Override
-	public ResponseEntity<String> browseQuery(String url)
-			throws RepositoryException, MalformedQueryException,
-			QueryEvaluationException, TupleQueryResultHandlerException,
-			InterruptedException, InvalidQueryParametersException {
-		checkURLIsValid(url);
-		String queryString = generateBrowseQuery(url);
-		
-		HttpHeaders responseHeaders = getSparqlResultsHeaders();
-		return new ResponseEntity<String>(runSparqlQuery(queryString),
-				responseHeaders, HttpStatus.OK);
-	}
 
 	
 	@Override
-	public ModelAndView annotatesQuery(String urlParam) throws RepositoryException,
+	public ModelAndView refersToQuery(String urlParam) throws RepositoryException,
 			MalformedQueryException, QueryEvaluationException,
-			TupleQueryResultHandlerException, InterruptedException {
+			TupleQueryResultHandlerException, InterruptedException, InvalidQueryParametersException {
+		checkURLIsValid(urlParam);
 		String queryString = generateBrowseQuery(urlParam);
 
 		ModelAndView mav = new ModelAndView("oac");

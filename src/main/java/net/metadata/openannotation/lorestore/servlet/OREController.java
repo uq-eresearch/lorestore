@@ -62,23 +62,25 @@ public class OREController {
 		return oreuh.put(oreId, in);
 	}
 
+	
+	
 	@RequestMapping(value = "/", params = "refersTo", method = RequestMethod.GET)
-	public ResponseEntity<String> refersToQuery(
+	public ModelAndView refersToQuery(
 			@RequestParam("refersTo") String urlParam) throws Exception {
 		if (urlParam == null || urlParam.isEmpty()) {
 			throw new InvalidQueryParametersException(
 					"Missing or empty query parameters");
 		}
-
-		return oreqh.browseQuery(urlParam);
+		return oreqh.refersToQuery(urlParam);
 	}
 
 	@RequestMapping(value = "/", params = { "matchval" }, method = RequestMethod.GET)
-	public ResponseEntity<String> searchQuery(
+	public ModelAndView searchQuery(
 			@RequestParam(value = "refersTo", defaultValue = "") String urlParam,
 			@RequestParam(value = "matchpred", defaultValue = "") String matchpred,
 			@RequestParam("matchval") String matchval,
 			@RequestParam(value = "includeAbstract", defaultValue = "false") Boolean includeAbstract) throws Exception {
+		LOG.info("searchQuery " + urlParam + " " + matchval + " " + matchpred + " " + includeAbstract);
 		if (includeAbstract) {
 			return oreqh.searchQueryIncludingAbstract(urlParam, matchpred, matchval);
 		} else {
@@ -86,6 +88,19 @@ public class OREController {
 		}
 	}
 
+	@RequestMapping(value = "/", params = { "matchpred" }, method = RequestMethod.GET)
+	public ModelAndView searchPredQuery(
+			@RequestParam(value = "refersTo", defaultValue = "") String urlParam,
+			@RequestParam("matchpred") String matchpred,
+			@RequestParam(value = "matchval", defaultValue = "") String matchval,
+			@RequestParam(value = "includeAbstract", defaultValue = "false") Boolean includeAbstract) throws Exception {
+		if (includeAbstract) {
+			return oreqh.searchQueryIncludingAbstract(urlParam, matchpred, matchval);
+		} else {
+			return oreqh.searchQuery(urlParam, matchpred, matchval);
+		}
+	}
+	
 	@RequestMapping(value = "/", params = "exploreFrom", method = RequestMethod.GET)
 	public ResponseEntity<String> exploreQuery(
 			@RequestParam("exploreFrom") String urlParam) throws Exception {

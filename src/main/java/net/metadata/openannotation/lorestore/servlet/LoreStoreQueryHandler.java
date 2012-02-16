@@ -29,20 +29,6 @@ public interface LoreStoreQueryHandler {
 			InterruptedException;
 	
 
-	
-	/**
-	 * Finds all compound objects referring to the supplied URL
-	 * 
-	 * @param url
-	 *            the url to search for
-	 * @return a direct http response, containing the result in sparqlXML format
-	 *         as well as setting the content type.
-	 * @throws InvalidQueryParametersException
-	 */
-	public ResponseEntity<String> browseQuery(String url)
-			throws RepositoryException, MalformedQueryException,
-			QueryEvaluationException, TupleQueryResultHandlerException,
-			InterruptedException, InvalidQueryParametersException;
 
 	/**
 	 * Finds all compound objects referring to the supplied URL, returns a
@@ -65,7 +51,7 @@ public interface LoreStoreQueryHandler {
 	 * for the supplied matchpred
 	 * @return a http response containing results in sparqlXML format
 	 */
-	public ResponseEntity<String> searchQuery(String urlParam, String matchpred,
+	public ModelAndView searchQuery(String urlParam, String matchpred,
 			String matchval)
 			throws RepositoryException, MalformedQueryException,
 			QueryEvaluationException, TupleQueryResultHandlerException,
@@ -77,10 +63,10 @@ public interface LoreStoreQueryHandler {
 	 * @param urlParam A specific url that the annotation must target
 	
 	 */
-	public ModelAndView annotatesQuery(String urlParam)
+	public ModelAndView refersToQuery(String urlParam)
 			throws RepositoryException, MalformedQueryException,
 			QueryEvaluationException, TupleQueryResultHandlerException,
-			InterruptedException;
+			InterruptedException, InvalidQueryParametersException;
 	/**
 	 * Handles a search query, includes the abstract field if present
 	 * 
@@ -89,7 +75,7 @@ public interface LoreStoreQueryHandler {
 	 * @param matchval
 	 * @return a http response containing results in sparqlXML format
 	 */
-	public ResponseEntity<String> searchQueryIncludingAbstract(String urlParam, String matchpred,
+	public ModelAndView searchQueryIncludingAbstract(String urlParam, String matchpred,
 			String matchval)
 			throws RepositoryException, MalformedQueryException,
 			QueryEvaluationException, TupleQueryResultHandlerException,

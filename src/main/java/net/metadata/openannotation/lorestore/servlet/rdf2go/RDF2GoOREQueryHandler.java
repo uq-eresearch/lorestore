@@ -3,38 +3,20 @@ package net.metadata.openannotation.lorestore.servlet.rdf2go;
 import static net.metadata.openannotation.lorestore.common.LoreStoreConstants.LORESTORE_PRIVATE;
 import static net.metadata.openannotation.lorestore.common.LoreStoreConstants.LORESTORE_USER;
 import static net.metadata.openannotation.lorestore.common.LoreStoreConstants.ORE_RESOURCEMAP_CLASS;
-import static net.metadata.openannotation.lorestore.common.LoreStoreConstants.SPARQL_RESULTS_XML;
-
-import java.io.ByteArrayOutputStream;
-import java.io.Writer;
-
-import net.metadata.openannotation.lorestore.access.LoreStoreAccessPolicy;
 import net.metadata.openannotation.lorestore.exceptions.InvalidQueryParametersException;
-import net.metadata.openannotation.lorestore.exceptions.NotFoundException;
 import net.metadata.openannotation.lorestore.model.rdf2go.CompoundObjectImpl;
 import net.metadata.openannotation.lorestore.servlet.LoreStoreControllerConfig;
 import net.metadata.openannotation.lorestore.servlet.OREController;
 
 import org.ontoware.rdf2go.model.Model;
-import org.ontoware.rdf2go.model.ModelSet;
-import org.ontoware.rdf2go.model.node.URI;
 import org.openrdf.query.MalformedQueryException;
 import org.openrdf.query.QueryEvaluationException;
-import org.openrdf.query.QueryLanguage;
-import org.openrdf.query.TupleQuery;
 import org.openrdf.query.TupleQueryResult;
 import org.openrdf.query.TupleQueryResultHandlerException;
-import org.openrdf.query.impl.TupleQueryResultBuilder;
-import org.openrdf.query.resultio.sparqlxml.SPARQLResultsXMLWriter;
-import org.openrdf.repository.Repository;
-import org.openrdf.repository.RepositoryConnection;
 import org.openrdf.repository.RepositoryException;
-import org.openrdf.rio.trig.TriGWriter;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.servlet.ModelAndView;
 
 /**
@@ -70,21 +52,15 @@ public class RDF2GoOREQueryHandler extends AbstractRDF2GoQueryHandler {
 		return mav;
 	}
 
-	
-
-	
 	@Override
-	public ResponseEntity<String> searchQueryIncludingAbstract(String urlParam,
-			String matchpred, String matchval) throws RepositoryException,
+	public ModelAndView refersToQuery(String urlParam) throws RepositoryException,
 			MalformedQueryException, QueryEvaluationException,
-			TupleQueryResultHandlerException, InterruptedException {
-		String queryString = generateSearchQuery(urlParam, matchpred, matchval,
-				true);
-
-		HttpHeaders responseHeaders = getSparqlResultsHeaders();
-		return new ResponseEntity<String>(runSparqlQuery(queryString),
-				responseHeaders, HttpStatus.OK);
+			TupleQueryResultHandlerException, InterruptedException, InvalidQueryParametersException {
+		checkURLIsValid(urlParam);
+		String queryString = generateBrowseQuery(urlParam);
+		return runSparqlQueryIntoMAV(queryString);
 	}
+
 
 
 	@Override

@@ -184,7 +184,7 @@ public class OREControllerTest extends OREControllerTestsBase {
 
 	@Test
 	public void queryRefersToNonExistentURL() throws Exception {
-		String body = controller.refersToQuery("http://omad.net/").getBody();
+		String body = (String) controller.refersToQuery("http://omad.net/").getModel().get("sparqlxml");
 		assertNotNull(body);
 
 		Document document = parseXmlToDocument(body);
@@ -198,7 +198,7 @@ public class OREControllerTest extends OREControllerTestsBase {
 		String createdId = saveRecordToStore(CommonTestRecords.SIMPLE_ORE_EXAMPLE);
 
 		// query for it
-		String body = controller.refersToQuery("http://omad.net/").getBody();
+		String body = (String) controller.refersToQuery("http://omad.net/").getModel().get("sparqlxml");
 
 		// check the results include the object
 		assertNotNull(body);
@@ -213,7 +213,7 @@ public class OREControllerTest extends OREControllerTestsBase {
 
 	@Test
 	public void keywordSearch() throws Exception {
-		String body = controller.searchQuery("", "", "test", false).getBody();
+		String body = (String) controller.searchQuery("", "", "test", false).getModel().get("sparqlxml");
 
 		assertNotNull(body);
 	}

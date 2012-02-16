@@ -70,20 +70,18 @@ public class OACController {
 					"Missing or empty query parameters");
 		}
 
-		return qh.annotatesQuery(urlParam);
+		return qh.refersToQuery(urlParam);
 	}
 
 	@RequestMapping(value = "/", params = { "matchval" }, method = RequestMethod.GET)
-	public ResponseEntity<String> searchQuery(
+	public ModelAndView searchQuery(
 			@RequestParam(value = "annotates", defaultValue = "") String urlParam,
 			@RequestParam(value = "matchpred", defaultValue = "") String matchpred,
 			@RequestParam("matchval") String matchval,
 			@RequestParam(value = "includeAbstract", defaultValue = "false") Boolean includeAbstract) throws Exception {
-		if (includeAbstract) {
-			return qh.searchQueryIncludingAbstract(urlParam, matchpred, matchval);
-		} else {
+		
 			return qh.searchQuery(urlParam, matchpred, matchval);
-		}
+		
 	}
 
 	

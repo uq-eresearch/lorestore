@@ -4,23 +4,17 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
-
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.PrintStream;
-import java.io.StringReader;
 import java.util.Map;
-
 import javax.servlet.http.HttpServletResponse;
-import javax.xml.parsers.DocumentBuilderFactory;
-
 import net.metadata.openannotation.lorestore.common.LoreStoreConstants;
 import net.metadata.openannotation.lorestore.exceptions.InvalidQueryParametersException;
 import net.metadata.openannotation.lorestore.exceptions.LoreStoreException;
 import net.metadata.openannotation.lorestore.exceptions.NotFoundException;
 import net.metadata.openannotation.lorestore.servlet.OREResponse;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -35,9 +29,6 @@ import org.ontoware.rdf2go.model.node.URI;
 import org.ontoware.rdf2go.model.node.Variable;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.servlet.ModelAndView;
-import org.w3c.dom.Document;
-import org.w3c.dom.NodeList;
-import org.xml.sax.InputSource;
 
 import au.edu.diasb.chico.mvc.RequestFailureException;
 
@@ -174,7 +165,7 @@ public class OACControllerTest extends OACControllerTestsBase {
 	 * Refers to (annotates) query only accepts valid URLs
 	 * @throws Exception
 	 */
-	@Test(expected = org.openrdf.query.MalformedQueryException.class)
+	@Test(expected = InvalidQueryParametersException.class)
 	public void queryRefersToInvalidURL() throws Exception {
 		controller.refersToQuery("zxcv");
 	}
@@ -206,7 +197,7 @@ public class OACControllerTest extends OACControllerTestsBase {
 
 	@Test
 	public void keywordSearch() throws Exception {
-		String body = controller.searchQuery("", "", "test", false).getBody();
+		String body = (String) controller.searchQuery("", "", "test", false).getModel().get("sparqlxml");
 
 		assertNotNull(body);
 	}

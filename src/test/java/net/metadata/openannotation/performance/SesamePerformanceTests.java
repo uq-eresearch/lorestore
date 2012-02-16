@@ -4,6 +4,7 @@ import java.io.BufferedInputStream;
 import java.io.FileInputStream;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.servlet.ModelAndView;
 
 import net.metadata.openannotation.lorestore.servlet.LoreStoreControllerConfig;
 import net.metadata.openannotation.lorestore.servlet.LoreStoreQueryHandler;
@@ -41,7 +42,6 @@ public class SesamePerformanceTests {
 		st.printMemoryUsage();
 		
 		System.out.println("Sesame Indexes: " + st.sesameIndexes);
-		st.trialBrowse("http://omad.net/about/");
 		st.trialKeywordSearch("Damien");
 		st.trialKeywordSearch("Anna");
 		st.trialExplore("http://omad.net/");
@@ -51,28 +51,15 @@ public class SesamePerformanceTests {
 		st.end();
 	}
 	
-	public void trialBrowse(String browseUrl) throws Exception {
-		System.out.println("trialBrowse");
-		for (int i = 0; i < numTests; i++) {
-			long startTime = System.currentTimeMillis();
-			ResponseEntity<String> browseQuery = qh.browseQuery(browseUrl);
-			if (printQueryResults)
-				System.out.println(browseQuery.getBody());
-			long stopTime = System.currentTimeMillis();
-			long elapsedTime = stopTime - startTime;
-			System.out.println(elapsedTime);
-		}
-	}
-	
 
 	
 	public void trialKeywordSearch(String searchString) throws Exception {
 		System.out.println("keyword: " + searchString);
 		for (int i = 0; i < numTests; i++) {
 			long startTime = System.currentTimeMillis();
-			ResponseEntity<String> searchQuery = qh.searchQuery(null, null, searchString);
+			ModelAndView searchQuery = qh.searchQuery(null, null, searchString);
 			if (printQueryResults)
-				System.out.println(searchQuery.getBody());
+				System.out.println(searchQuery.getModel().get("sparqlxml"));
 			long stopTime = System.currentTimeMillis();
 			long elapsedTime = stopTime - startTime;
 			System.out.println(elapsedTime);

@@ -1,6 +1,5 @@
 package net.metadata.openannotation.lorestore.servlet.rdf2go;
 
-import static net.metadata.openannotation.lorestore.common.LoreStoreConstants.RDF_RESULTS_XML;
 import static net.metadata.openannotation.lorestore.common.LoreStoreConstants.SPARQL_RESULTS_XML;
 
 import java.io.ByteArrayOutputStream;
@@ -67,10 +66,8 @@ public abstract class AbstractRDF2GoQueryHandler implements LoreStoreQueryHandle
 		ModelSet container = cf.retrieveConnection();
 		Model model = null;
 		// FIXME: should copy the model to a separate store, this currently
-		// maintains
-		// it's connection to the main triplestore via the opened connection,
-		// right
-		// through until the view has finished dealing with it.
+		// maintains its connection to the main triplestore via the opened connection,
+		// right through until the view has finished dealing with it.
 		try {
 			URI uri = container.createURI(occ.getBaseUri() + objId);
 			model = container.getModel(uri);
@@ -97,47 +94,25 @@ public abstract class AbstractRDF2GoQueryHandler implements LoreStoreQueryHandle
 	}
 	
 	@Override
-	public ModelAndView annotatesQuery(String urlParam)
+	public ModelAndView refersToQuery(String urlParam)
 			throws RepositoryException, MalformedQueryException,
 			QueryEvaluationException, TupleQueryResultHandlerException,
-			InterruptedException {
-		// TODO Auto-generated method stub
+			InterruptedException, InvalidQueryParametersException {
+		// Implemented in subclasses
 		return null;
 	}
 	
 	@Override
-	public ResponseEntity<String> searchQuery(String urlParam,
+	public ModelAndView searchQuery(String urlParam,
 			String matchpred, String matchval) throws RepositoryException,
 			MalformedQueryException, QueryEvaluationException,
 			TupleQueryResultHandlerException, InterruptedException {
 		String queryString = generateSearchQuery(urlParam, matchpred, matchval,
 				false);
-
-		HttpHeaders responseHeaders = getSparqlResultsHeaders();
-		return new ResponseEntity<String>(runSparqlQuery(queryString),
-				responseHeaders, HttpStatus.OK);
+		return runSparqlQueryIntoMAV(queryString);
 	}
 
 	
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * net.metadata.openannotation.lorestore.servlet.rdf2go.OREQueryHandler#browseQuery
-	 * (java.lang.String)
-	 */
-	@Override
-	public ResponseEntity<String> browseQuery(String url)
-			throws RepositoryException, MalformedQueryException,
-			QueryEvaluationException, TupleQueryResultHandlerException,
-			InterruptedException, InvalidQueryParametersException {
-		checkURLIsValid(url);
-		String queryString = generateBrowseQuery(url);
-
-		HttpHeaders responseHeaders = getSparqlResultsHeaders();
-		return new ResponseEntity<String>(runSparqlQuery(queryString),
-				responseHeaders, HttpStatus.OK);
-	}
 
 	protected void checkURLIsValid(String url)
 			throws InvalidQueryParametersException, InterruptedException {
@@ -158,14 +133,8 @@ public abstract class AbstractRDF2GoQueryHandler implements LoreStoreQueryHandle
 	public ModelAndView browseAtomQuery(String url) throws RepositoryException,
 			MalformedQueryException, QueryEvaluationException,
 			TupleQueryResultHandlerException, InterruptedException {
-		String queryString = generateBrowseQuery(url);
-		ModelAndView mav = new ModelAndView("oreRss");
-		mav.addObject("browseURL", url);
-
-		TupleQueryResult queryResult = runSparqlQueryIntoQR(queryString);
-		mav.addObject("queryResult", queryResult);
-
-		return mav;
+		// Implemented in subclasses
+		return null;
 	}
 
 	/**
@@ -178,33 +147,17 @@ public abstract class AbstractRDF2GoQueryHandler implements LoreStoreQueryHandle
 		responseHeaders.setContentType(MediaType
 				.parseMediaType(SPARQL_RESULTS_XML + ";charset=UTF-8"));
 		return responseHeaders;
-	}
-
-	/**
-	 * Creates the correct headers for returning oac results xml
-	 * 
-	 * @return headers object with correct content type and encoding
-	 */
-	protected HttpHeaders getRDFResultsHeaders() {
-		HttpHeaders responseHeaders = new HttpHeaders();
-		responseHeaders.setContentType(MediaType
-				.parseMediaType(RDF_RESULTS_XML + ";charset=UTF-8"));
-		return responseHeaders;
-	}
-	
+	}	
 	
 
 	@Override
-	public ResponseEntity<String> searchQueryIncludingAbstract(String urlParam,
+	public ModelAndView searchQueryIncludingAbstract(String urlParam,
 			String matchpred, String matchval) throws RepositoryException,
 			MalformedQueryException, QueryEvaluationException,
 			TupleQueryResultHandlerException, InterruptedException {
 		String queryString = generateSearchQuery(urlParam, matchpred, matchval,
 				true);
-
-		HttpHeaders responseHeaders = getSparqlResultsHeaders();
-		return new ResponseEntity<String>(runSparqlQuery(queryString),
-				responseHeaders, HttpStatus.OK);
+		return runSparqlQueryIntoMAV(queryString);
 	}
 
 
@@ -213,6 +166,7 @@ public abstract class AbstractRDF2GoQueryHandler implements LoreStoreQueryHandle
 			throws RepositoryException, MalformedQueryException,
 			QueryEvaluationException, TupleQueryResultHandlerException,
 			InterruptedException {
+		// Implemented in subclasses
 		return null;
 	}
 
@@ -258,7 +212,23 @@ public abstract class AbstractRDF2GoQueryHandler implements LoreStoreQueryHandle
 
 		return stream.toString();
 	}
-
+	
+	/**
+	 * Run a SPARQL query returning a ModelAndView object
+	 * 
+	 * @param queryString
+	 * @return
+	 */
+	protected ModelAndView runSparqlQueryIntoMAV(String queryString)
+		throws RepositoryException, MalformedQueryException,
+		InterruptedException, QueryEvaluationException,
+		TupleQueryResultHandlerException {
+		ModelAndView mav = new ModelAndView("sparqlxml");
+		String queryResult = runSparqlQuery(queryString);
+		mav.addObject("sparqlxml", queryResult);
+		return mav;
+	}
+	
 	/**
 	 * Run a SPARQL query returning the results object, which can be processed
 	 * further for example into RSS, instead of the sparqlXML format.

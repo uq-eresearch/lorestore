@@ -55,15 +55,6 @@ public class SesameOREQueryHandler implements LoreStoreQueryHandler {
 		return null;
 	}
 
-	@Override
-	public ResponseEntity<String> browseQuery(String url)
-			throws RepositoryException, MalformedQueryException,
-			QueryEvaluationException, TupleQueryResultHandlerException,
-			InterruptedException, InvalidQueryParametersException {
-
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 	@Override
 	public ModelAndView browseAtomQuery(String url) throws RepositoryException,
@@ -74,7 +65,7 @@ public class SesameOREQueryHandler implements LoreStoreQueryHandler {
 	}
 
 	@Override
-	public ResponseEntity<String> searchQuery(String urlParam,
+	public ModelAndView searchQuery(String urlParam,
 			String matchpred, String matchval) throws RepositoryException,
 			MalformedQueryException, QueryEvaluationException,
 			TupleQueryResultHandlerException, InterruptedException {
@@ -113,7 +104,7 @@ public class SesameOREQueryHandler implements LoreStoreQueryHandler {
 	}
 
 	@Override
-	public ResponseEntity<String> searchQueryIncludingAbstract(String urlParam,
+	public ModelAndView searchQueryIncludingAbstract(String urlParam,
 			String matchpred, String matchval) throws RepositoryException,
 			MalformedQueryException, QueryEvaluationException,
 			TupleQueryResultHandlerException, InterruptedException {
@@ -122,7 +113,7 @@ public class SesameOREQueryHandler implements LoreStoreQueryHandler {
 	}
 
 	@Override
-	public ModelAndView annotatesQuery(String urlParam)
+	public ModelAndView refersToQuery(String urlParam)
 			throws RepositoryException, MalformedQueryException,
 			QueryEvaluationException, TupleQueryResultHandlerException,
 			InterruptedException {
