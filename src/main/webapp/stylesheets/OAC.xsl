@@ -22,6 +22,19 @@
                 <script src="../prettify/prettify.js" type="text/javascript"></script>
                 <script src="../jquery-1.7.1.min.js" type="text/javascript"></script>
                 <script src="../bootstrap-tab.js" type="text/javascript"></script>
+                <script type="text/javascript">
+                    function downloadTrig(annoID) {
+                        jQuery.ajax({
+                            url: annoID,
+                            headers: { 
+                                Accept : "application/x-trig"
+                            },
+                            success: function(data, status, jqXHR){
+                                window.location.href='data:application/x-trig,' + encodeURIComponent(jqXHR.responseText);
+                            }
+                        });
+                    }
+                </script>
 			</head>
 			<body onload="prettyPrint()" style="padding-top:40px">
 				    <div class="navbar navbar-fixed-top">
@@ -126,10 +139,10 @@
 						<!--  TODO: display other annotation properties from the RDF -->
 						<xsl:for-each select="//rdf:Description[@rdf:about = $annoUri]/*">
 						<xsl:if test="local-name() != 'creator' and local-name() != 'created' and local-name() != 'modified' and local-name() != 'type' and local-name() != 'hasBody' and local-name() != 'hasTarget' and local-name() != 'title'">
-						  <strong><xsl:value-of select="local-name()"/>:&#160;</strong><xsl:value-of select="@rdf:resource | ."/>
+						  <p><strong><xsl:value-of select="local-name()"/>:&#160;</strong><xsl:value-of select="@rdf:resource | ."/></p>
 						</xsl:if>
 						</xsl:for-each>
-                        <p><a target="_blank" href="?annotates={@rdf:about}">Find replies</a></p>
+                        <p><a class="btn" target="_blank" href="../oac/?annotates={@rdf:about}">Find replies</a>&#160;&#160;<a class="btn" target="_blank" href="#" onclick="downloadTrig('{@rdf:about}')">Get TriG</a></p>
 						<hr/>
 					</xsl:for-each>
                 </div>
