@@ -20,13 +20,13 @@
     
     <xsl:strip-space elements="*"/>
     
-
+    
     <!--  viewurl is prefixed to URLs to provide link to view nested compound objects -->
     <xsl:param name="viewurl"/>  
     
     <xsl:template match="/">
     	<html>
-    	<head><title>Compound Object</title></head>
+    	   <head><title>Compound Object</title></head>
     	   <link type="text/css" rel="stylesheet" href="../stylesheets/bootstrap.min.css"/>
     	   <link type="text/css" rel="stylesheet" href="../stylesheets/lorestore.css"/>
     	<body style="padding-top:40px">
@@ -50,15 +50,17 @@
     <xsl:template match="rdf:Description[ore:describes]">
     	<xsl:variable name="about" select="@rdf:about"/>
     	<xsl:variable name="remtitle" select="//rdf:Description[@rdf:about=$about]/dc:title[1]"/>
+    	<div class="page-header main-page-header">
         <h1>
         	<!--  xsl:value-of select="java:aleg.ui.StylesheetFunctions.unescapeQuot($remtitle)"/-->
         	<xsl:value-of select="$remtitle"/>
         	<xsl:if test="not($remtitle)">Untitled Trail</xsl:if>
         </h1>          
+        </div>
         <xsl:for-each select="//rdf:Description[@rdf:about=$about]/*">
             <xsl:call-template name="displayProp"/>
         </xsl:for-each>
-        
+        <hr />
         <!--  list aggregated resources, use layout ordering if available -->
         <!--  xsl:variable name="firstResource" select="//rdf:Description[layout:first = '1']/@rdf:about"/-->
         <xsl:choose>
@@ -92,15 +94,15 @@
         	</xsl:otherwise>
         </xsl:choose>
         
-        <div class="disclaimer">
+        
         <p>
         <xsl:variable name="modified" select="//rdf:Description[@rdf:about=$about]/dcterms:modified"/>
         <xsl:variable name="created" select="//rdf:Description[@rdf:about=$about]/dcterms:created"/>
-        <xsl:if test="$created"><span style="font-size:smaller">Trail created <xsl:value-of select="$created"/>. </span></xsl:if>
-        <xsl:if test="$modified"><span style="font-size:smaller">Last modified <xsl:value-of select="$modified"/>.</span></xsl:if>
+        <xsl:if test="$created"><small>Trail created <xsl:value-of select="$created"/>. </small></xsl:if>
+        <xsl:if test="$modified"><small>Last modified <xsl:value-of select="$modified"/>.</small></xsl:if>
         </p>
-        <p>This content was sourced from the compound object identified as <xsl:value-of select="$about"/>. Use the View Source option in your browser to see the RDF/XML.</p>
-        </div>
+        <small>This content was sourced from the compound object identified as <xsl:value-of select="$about"/>. Use the View Source option in your browser to see the RDF/XML.</small>
+        
     </xsl:template>
 
     <!--  match aggregated resources when there is not layout ordering -->
@@ -134,6 +136,7 @@
                 <xsl:otherwise>Untitled Resource  (<xsl:value-of select="$res"/>)</xsl:otherwise>
             </xsl:choose>
         </xsl:variable>   
+        <div>
         <h2>
          <xsl:choose>
             <xsl:when test="//rdf:Description[@rdf:about=$res]/layout:isPlaceholder = 1">
@@ -146,15 +149,15 @@
                 </a>
             </xsl:when>
          	<xsl:when test="//rdf:Description[@rdf:about = $res]/rdf:type/@rdf:resource='http://www.openarchives.org/ore/terms/ResourceMap'">
-         		<img title="Nested Compound Object" src="/common/images/fedsearch/oaioreicon-sm.png"/>&#160;
+         		<img title="Nested Compound Object" src="../images/icons/oaioreicon-sm.png"/>&#160;
          		<a title="View as trail in new tab" target="_blank" class="url" href="{$viewurl}{$res}">
          			<xsl:value-of select="$displaytitle"/>
          		</a>
          	</xsl:when>
          	<xsl:when test="contains(//rdf:Description[@rdf:about=$res]/rdf:type/@rdf:resource,'nnotation')">
          		
-         		<img title="Annotation" src="/common/images/fedsearch/annotation.png"/>&#160;
-         		<a title="View annotation in new tab" target="_blank" class="url" href="{$res}?danno_useStylesheet=">
+         		<img title="Annotation" src="../images/icons/annotation.png"/>&#160;
+         		<a title="View annotation in new tab" target="_blank" class="url" href="{$res}">
          			<xsl:value-of select="$displaytitle"/>
          		</a>
          	</xsl:when>
@@ -168,6 +171,7 @@
          	</xsl:otherwise>
          </xsl:choose>
         </h2>
+        </div>
         <xsl:if test="contains($res,'ex=ShowWork') or contains($res,'ex=ShowAgent')">
                
         </xsl:if>
@@ -177,6 +181,7 @@
         	<xsl:call-template name="displayProp"/>
         </xsl:for-each>
         </p>
+        <hr/>
     </xsl:template>
 
     <xsl:template name="displayIcon">
@@ -196,7 +201,7 @@
 	    	</xsl:choose>
     	</xsl:variable>
     	<xsl:if test="$icon != ''">
-    	<img title="{$icon}" class="{$icon}icon" style='width:16px;height:16px;' src="/common/images/fedsearch/blank.gif"/>&#160;
+    	<img title="{$icon}" class="{$icon}icon" style='width:16px;height:16px;' src="../images/icons/blank.gif"/>&#160;
     	</xsl:if>
     </xsl:template>
     
@@ -226,7 +231,7 @@
                 		</script>
                 	</xsl:when>
                     <xsl:when test="text()">
-                        <!--  xsl:value-of select="java:aleg.ui.StylesheetFunctions.unescapeQuot(.)"/-->
+                        
                         <xsl:value-of select="."/>
                     </xsl:when>
                     <xsl:otherwise>
@@ -235,19 +240,7 @@
                     	<xsl:variable name="reftitle" select="//rdf:Description[@rdf:about = $ref]/dc:title"/>
                     	<xsl:variable name="reftype" select="//rdf:Description[@rdf:about = $ref]/rdf:type/@rdf:resource"/>
                     	<!--  modify link to add stylesheet for annotations or viewer for compound objects -->
-                    	<xsl:variable name="reflink">
-                    	   <xsl:choose>
-                    	   <xsl:when test="contains($reftype, 'nnotation')">
-                              <xsl:value-of select="$ref"/><xsl:text>?danno_useStylesheet=</xsl:text>
-                            </xsl:when>
-                            <xsl:when test="$reftype = 'http://www.openarchives.org/ore/terms/ResourceMap'">
-                                <xsl:value-of select="$viewurl"/><xsl:value-of select="$ref"/>
-                            </xsl:when>
-                            <xsl:otherwise>
-                                <xsl:value-of select="$ref"/>
-                            </xsl:otherwise>
-                    	   </xsl:choose>
-                    	</xsl:variable>
+                    	
                     	<xsl:choose>
                     	    <xsl:when test="$ref = 'http://auselit.metadata.net/lorestore/AustLitTrail'">AustLit Trail</xsl:when>
                     	    <xsl:when test="//rdf:Description[@rdf:about = $ref]/layout:isPlaceholder=1">
@@ -257,13 +250,13 @@
                     	       </xsl:choose>
                     	    </xsl:when>
                     	    <xsl:when test="starts-with($ref,'http://purl.org/dc/dcmitype/')">
-                               <a target="_blank" href="{$reflink}"><xsl:value-of select="substring-after($ref,'http://purl.org/dc/dcmitype/')"/></a>
+                               <a target="_blank" href="{$ref}"><xsl:value-of select="substring-after($ref,'http://purl.org/dc/dcmitype/')"/></a>
                             </xsl:when>
                     		<xsl:when test="$reftitle != ''">
-                    			<a target="_blank" href="{$reflink}"><xsl:value-of select="$reftitle"/><!--xsl:value-of select="java:aleg.ui.StylesheetFunctions.unescapeQuot($reftitle)"/--></a>
+                    			<a target="_blank" href="{$ref}"><xsl:value-of select="$reftitle"/><!--xsl:value-of select="java:aleg.ui.StylesheetFunctions.unescapeQuot($reftitle)"/--></a>
                     		</xsl:when>
                     		<xsl:when test="$ref">
-                    			<a target="_blank" href="{$reflink}"><xsl:value-of select="$ref"/></a>
+                    			<a target="_blank" href="{$ref}"><xsl:value-of select="$ref"/></a>
                     		</xsl:when>
                     		<xsl:otherwise>
                     			<xsl:value-of select="@*"/>

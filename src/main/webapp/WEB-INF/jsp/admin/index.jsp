@@ -26,7 +26,7 @@
           		<li><a href="wipeDatabase.html">Clear Repository</a></li>
                 <li><a href="deleteGraph.html">Delete a named graph</a></li>
           		<li><a href="sparqlPage.html">SPARQL Query</a></li>
-          	</ul>      
+          	</ul>
 		</div>
       </div>
       </div>
