@@ -105,27 +105,28 @@
 	                          <xsl:apply-templates select="//rdf:Description[@rdf:about=$bodyuri and cnt:rest]"/>
 	                          <xsl:if test="//rdf:Description[@rdf:about=$bodyuri and dcterms:creator]">
 	                          <xsl:variable name="bodycreator" select="//rdf:Description[@rdf:about=$bodyuri and dcterms:creator]"/>
-	                          <small>
+	                          <p><small>
 	                          <xsl:value-of select="//rdf:Description[@rdf:resource=$bodycreator/@rdf:resource or @rdf:nodeID=$bodycreator/@rdf:nodeID]/foaf:name"/>
 	                          </small>
+	                          </p>
 	                          </xsl:if>
 	                        <!--/blockquote-->
 	                        </xsl:when>
 	                        <xsl:otherwise>
-	                        <span class="label">Body</span>&#160;
+	                        <p><span class="label">Body</span>&#160;
 	                        <a target="_blank">
                                 <xsl:attribute name="href">
                                     <xsl:value-of select="@rdf:resource" />
                                 </xsl:attribute>
                                 <xsl:value-of select="@rdf:resource" />
                             </a>
+                            </p>
 	                        </xsl:otherwise>
 	                        </xsl:choose>
 						</xsl:for-each>
 						
 						
 						<p>
-              				
             				<xsl:for-each select="oac:hasTarget">
             				<span class="label">Target</span>&#160;
 							<a target="_blank">
@@ -161,7 +162,7 @@
           <li><a id="bt{$bodyId}" data-toggle="tab" href="#bp{$bodyId}">Presentation</a></li>
         </ul>
  
-		<div class="tab-content">
+		<div style="padding-bottom:0.5em" class="tab-content">
 		  <div class="tab-pane active" id="bs{$bodyId}">
 		      <pre class="pre prettyprint">
                 <xsl:value-of select="cnt:rest"/>
