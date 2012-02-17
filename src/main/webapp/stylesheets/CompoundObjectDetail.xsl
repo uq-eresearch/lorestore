@@ -1,5 +1,4 @@
 <?xml version="1.0"?> 
-<!--  displays a single compound object in detail as a trail -->
 <xsl:stylesheet version="1.0"
     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
     xmlns:dc="http://purl.org/dc/elements/1.1/"
@@ -19,10 +18,6 @@
     
     
     <xsl:strip-space elements="*"/>
-    
-    
-    <!--  viewurl is prefixed to URLs to provide link to view nested compound objects -->
-    <xsl:param name="viewurl"/>  
     
     <xsl:template match="/">
     	<html>
@@ -54,7 +49,7 @@
         <h1>
         	<!--  xsl:value-of select="java:aleg.ui.StylesheetFunctions.unescapeQuot($remtitle)"/-->
         	<xsl:value-of select="$remtitle"/>
-        	<xsl:if test="not($remtitle)">Untitled Trail</xsl:if>
+        	<xsl:if test="not($remtitle)">Untitled Resource Map</xsl:if>
         </h1>          
         </div>
         <xsl:for-each select="//rdf:Description[@rdf:about=$about]/*">
@@ -98,7 +93,7 @@
         <p>
         <xsl:variable name="modified" select="//rdf:Description[@rdf:about=$about]/dcterms:modified"/>
         <xsl:variable name="created" select="//rdf:Description[@rdf:about=$about]/dcterms:created"/>
-        <xsl:if test="$created"><small>Trail created <xsl:value-of select="$created"/>. </small></xsl:if>
+        <xsl:if test="$created"><small>Created <xsl:value-of select="$created"/>. </small></xsl:if>
         <xsl:if test="$modified"><small>Last modified <xsl:value-of select="$modified"/>.</small></xsl:if>
         </p>
         <small>This content was sourced from the compound object identified as <xsl:value-of select="$about"/>. Use the View Source option in your browser to see the RDF/XML.</small>
@@ -150,7 +145,7 @@
             </xsl:when>
          	<xsl:when test="//rdf:Description[@rdf:about = $res]/rdf:type/@rdf:resource='http://www.openarchives.org/ore/terms/ResourceMap'">
          		<img title="Nested Compound Object" src="../images/icons/oaioreicon-sm.png"/>&#160;
-         		<a title="View as trail in new tab" target="_blank" class="url" href="{$viewurl}{$res}">
+         		<a title="View in new tab" target="_blank" class="url" href="{$res}">
          			<xsl:value-of select="$displaytitle"/>
          		</a>
          	</xsl:when>
