@@ -87,8 +87,8 @@ public class RDF2GoOREQueryHandler extends AbstractRDF2GoQueryHandler {
 				+ " UNION {?s ?p2 <" + escapedURL + ">}"
 				+ " UNION {<" + altURL + "> ?p3 ?o2 .}"
 				+ " UNION {?s2 ?p4 <" + altURL+ ">}}. "
-				+ " {?g <http://purl.org/dc/elements/1.1/creator> ?a}."
-				+ " {?g <http://purl.org/dc/terms/modified> ?m}."
+				+ " OPTIONAL {?g <http://purl.org/dc/elements/1.1/creator> ?a}."
+				+ " OPTIONAL {?g <http://purl.org/dc/terms/modified> ?m}."
 				+ " OPTIONAL {?g <http://purl.org/dc/elements/1.1/title> ?t}."
 				+ " OPTIONAL {?g <" + LORESTORE_PRIVATE + "> ?priv}."
 				+ " OPTIONAL {?g <" + LORESTORE_USER + "> ?user}."
@@ -126,8 +126,8 @@ public class RDF2GoOREQueryHandler extends AbstractRDF2GoQueryHandler {
 				+ escapedURL + " " + predicate + " ?v ."
 				+        filter
 				+ "   } ."
-				+   "{?g <http://purl.org/dc/elements/1.1/creator> ?a} ."
-				+   "{?g <http://purl.org/dc/terms/modified> ?m} ."
+				+   "OPTIONAL {?g <http://purl.org/dc/elements/1.1/creator> ?a} ."
+				+   "OPTIONAL {?g <http://purl.org/dc/terms/modified> ?m} ."
 				+   "OPTIONAL {?g <http://purl.org/dc/elements/1.1/title> ?t} ."
 				+   (includeAbstract ? "OPTIONAL {?g <http://purl.org/dc/terms/abstract> ?ab}." : "") 
 				+ " OPTIONAL {?g <" + LORESTORE_PRIVATE + "> ?priv}."

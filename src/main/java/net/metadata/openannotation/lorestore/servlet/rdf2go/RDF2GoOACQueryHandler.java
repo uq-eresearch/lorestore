@@ -242,7 +242,7 @@ public class RDF2GoOACQueryHandler extends AbstractRDF2GoQueryHandler {
 				+ escapedURL + " " + predicate + " ?v ."
 				+        filter
 				+ "   } . "
-				+ " OPTIONAL {?g <http://purl.org/dc/elements/1.1/creator> ?a} . "
+				+ " OPTIONAL {?g <http://purl.org/dc/terms/creator> ?c . ?c <http://xmlns.com/foaf/0.1/name> ?a} . "
 				+ " OPTIONAL {?g <http://purl.org/dc/terms/modified> ?m} . "
 				+ " OPTIONAL {?g <http://purl.org/dc/elements/1.1/title> ?t} . "
 				+ " OPTIONAL {?g <" + LORESTORE_PRIVATE + "> ?priv}. "
