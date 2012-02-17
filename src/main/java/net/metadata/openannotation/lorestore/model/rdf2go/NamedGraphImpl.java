@@ -6,6 +6,12 @@ import static net.metadata.openannotation.lorestore.common.LoreStoreConstants.DC
 import static net.metadata.openannotation.lorestore.common.LoreStoreConstants.DC_CREATOR;
 import static net.metadata.openannotation.lorestore.common.LoreStoreConstants.LORESTORE_PRIVATE;
 import static net.metadata.openannotation.lorestore.common.LoreStoreConstants.LORESTORE_USER;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+
 import net.metadata.openannotation.lorestore.exceptions.LoreStoreException;
 import net.metadata.openannotation.lorestore.model.NamedGraph;
 
@@ -26,7 +32,10 @@ import org.openrdf.sail.memory.MemoryStore;
 public abstract class NamedGraphImpl implements NamedGraph {
 
 	protected Model model;
-
+	private static final String DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss";
+	private static DateFormat df = new SimpleDateFormat(DATE_FORMAT);
+	private static Calendar calendar;
+	
 	public NamedGraphImpl(Model model) {
 		try {
 			SailRepository sailRepository = new SailRepository(new MemoryStore());
@@ -35,7 +44,7 @@ public abstract class NamedGraphImpl implements NamedGraph {
 			internalModel.open();
 			ModelUtils.copy(model, internalModel);
 			this.model = internalModel;
-			
+			calendar = Calendar.getInstance();
 		} catch (RepositoryException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -98,7 +107,22 @@ public abstract class NamedGraphImpl implements NamedGraph {
 	protected Resource findObject() throws LoreStoreException {
 		return null;
 	}
+	
+	public void setDate(Date date, String datePred) throws LoreStoreException {
+		Resource obj = findObject();
+		URI datePredURI = model.createURI(datePred);
 
+		ClosableIterator<Statement> dateStatements = model.findStatements(obj, datePredURI, Variable.ANY);
+		model.removeAll(dateStatements);
+		if (date != null){
+			//Format date string to look like this: 2012-02-17T11:54:12+10:00
+			int tz = (calendar.get(Calendar.ZONE_OFFSET) + calendar.get(Calendar.DST_OFFSET)) / 60000;
+			String dateString = df.format(date) + String.format("%+03d:%02d", (tz / 60), (tz % 60));
+			model.addStatement(obj, datePredURI,
+					model.createDatatypeLiteral(dateString, model.createURI("http://purl.org/dc/terms/W3CDTF")));
+		} 
+		model.commit();
+	}
 	public void setUser(String newUser) throws LoreStoreException {
 		Resource obj = findObject();
 		URI lorestoreUserPred = model.createURI(LORESTORE_USER);

@@ -2,6 +2,7 @@ package net.metadata.openannotation.lorestore.servlet.rdf2go;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Date;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -29,6 +30,8 @@ import org.openrdf.repository.RepositoryConnection;
 import org.openrdf.rio.RDFFormat;
 
 import au.edu.diasb.chico.mvc.RequestFailureException;
+import static net.metadata.openannotation.lorestore.common.LoreStoreConstants.DCTERMS_CREATED;
+import static net.metadata.openannotation.lorestore.common.LoreStoreConstants.DCTERMS_MODIFIED;
 
 /**
  * The RDF2GoOREUpdateHandler class processes updates to compound object or annotation by
@@ -88,7 +91,9 @@ public abstract class AbstractRDF2GoUpdateHandler implements LoreStoreUpdateHand
 		// and the creator
 		String userURI = occ.getIdentityProvider().obtainUserURI();
 		obj.setUser(userURI);
-		
+		Date now = new Date();
+		obj.setDate(now, DCTERMS_CREATED);
+		obj.setDate(now, DCTERMS_MODIFIED);
 
 		ModelSet ms = null;
 		try {
@@ -175,6 +180,7 @@ public abstract class AbstractRDF2GoUpdateHandler implements LoreStoreUpdateHand
 			} else {
 				LOG.info("User is null for " + objURI);
 			}
+			obj.setDate(new Date(), DCTERMS_MODIFIED);
 			newModel = obj.getModel();
 
 			container.removeModel(objURI);
