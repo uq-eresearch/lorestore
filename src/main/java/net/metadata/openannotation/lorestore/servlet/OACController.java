@@ -108,7 +108,7 @@ public class OACController {
 	public void return404(Exception ex, HttpServletResponse response)
 			throws IOException {
 		LOG.debug("Handling Exception, returning 404" + ex);
-		response.sendError(HttpStatus.NOT_FOUND.value());
+		response.sendError(HttpStatus.NOT_FOUND.value(), ex.getMessage());
 	}
 
 	

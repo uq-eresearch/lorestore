@@ -61,19 +61,23 @@ public abstract class AbstractRDF2GoUpdateHandler implements LoreStoreUpdateHand
 		// TODO: probably should check after we've loaded the model,
 		// but at this stage, the security check ignores it anyway
 		ap.checkCreate(null);
-		
 		RepositoryModelFactory mf = new RepositoryModelFactory();
-
 		String uid = occ.getUidGenerator().newUID();
 		URI newUri = mf.createModel().createURI(occ.getBaseUri() + uid);
 		Model model = mf.createModel(newUri);
-
-		model.open();
 		try {
+			LOG.info("Opening model for " + newUri.toString());
+			model.open();
 			model.readFrom(inputRDF, Syntax.RdfXml, occ.getBaseUri());
 		} catch (ModelRuntimeException e) {
+			try{
+				LOG.debug("Model read failed " + e.getMessage());
+				model.close();
+			} catch (Exception e2){
+				// ignore
+			}
 			throw new RequestFailureException(
-					HttpServletResponse.SC_BAD_REQUEST, "Error reading RDF");
+					HttpServletResponse.SC_BAD_REQUEST, "Error reading RDF " + e.getMessage());
 		}
 
 		NamedGraphImpl obj = makeNewObject(model);
@@ -206,25 +210,29 @@ public abstract class AbstractRDF2GoUpdateHandler implements LoreStoreUpdateHand
 	 * @see net.metadata.openannotation.lorestore.servlet.rdf2go.OREUpdateHandler#bulkImport(java.io.InputStream, java.lang.String)
 	 */
 	@Override
-	public void bulkImport(InputStream body, String fileName) throws Exception {
+	public int bulkImport(InputStream body, String fileName) throws Exception {
 		RepositoryConnection con = null;
 		ModelSet modelSet = null;
+		int delta = 0;
 		try {
 			modelSet = cf.retrieveConnection();
 	
 			Repository rep = (Repository) modelSet
 					.getUnderlyingModelSetImplementation();
 			con = rep.getConnection();
+			long connectionSize = con.size();
 			con.setAutoCommit(false);
 			RDFFormat rdfFormat = RDFFormat.forFileName(fileName);
 			con.add(body, "", rdfFormat);
 			con.commit();
+			delta = (int) (con.size() - connectionSize);
 		} finally {
 			if (con != null)
 				con.close();
 			if (modelSet != null)
 				cf.release(modelSet);
 		}
+		return delta;
 	}
 	
 	protected NamedGraphImpl makeNewObject (Model model){

@@ -19,18 +19,20 @@
           <ul class="breadcrumb">
 		     	 <li><a href="../index.html">Home</a> <span class="divider">/</span></li>
 				 <li><a href="../oreadmin/">Content management</a> <span class="divider">/</span></li>
-			 	 <li class="active">Import data</li>
+			 	 <li class="active">Import bulk data</li>
 		     </ul>
-
-  
+            <%
+                if (request.getParameter("mymessage") != null) {
+                    out.println("<p>" + request.getParameter("mymessage") + "</p>");
+                } 
+            %>
+            <p>This function is provided to enable restoring the state of the underlying repository from data previously exported from lorestore. 
+                <br/>Data will be imported as-is directly to the triplestore and should be provided in a format that supports Named Graphs, such as TriG.
+            </p>
+                
 		  	<form:form modelAttribute="uploadItem" method="post" enctype="multipart/form-data">
 		  		<fieldset>
-		  			<table class="table">
-	            	<tr>
-	                    <td><form:label for="filetype" path="name">Name</form:label></td>
-	                    <td><form:input path="name"/></td>
-	                </tr>
-		  				
+		  			<table class="table">	
 		  			<tr>
 		                <td><form:label for="fileData" path="fileData">File</form:label></td>
 		                <td><form:input path="fileData" type="file"/></td>

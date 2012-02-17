@@ -204,10 +204,12 @@ public abstract class AbstractRDF2GoQueryHandler implements LoreStoreQueryHandle
 
 			tupleQuery.evaluate(resultsXMLWriter);
 		} finally {
-			if (con != null)
+			if (con != null){
 				con.close();
-			if (container != null)
+			}
+			if (container != null){
 				cf.release(container);
+			}
 		}
 
 		return stream.toString();

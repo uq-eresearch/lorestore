@@ -1,0 +1,22 @@
+
+<http://localhost:8080/lorestore/oac/00993BDB5D051BFF> {
+	<http://localhost:8080/lorestore/oac/00993BDB5D051BFF> a <http://www.openannotation.org/ns/Annotation> ;
+		<http://purl.org/dc/elements/1.1/title> "Test" ;
+		<http://purl.org/dc/terms/modified> "2011-10-07T12:48:11.761+10:00" ;
+		<http://purl.org/dc/terms/created> "2011-10-07T12:48:11.761+10:00" ;
+		<http://purl.org/dc/elements/1.1/language> "en" ;
+		<http://www.openannotation.org/ns/hasBody> <urn:uuid:0CB538F3-93CC-4112-A45A-77568B0E0C41> ;
+		<http://www.openannotation.org/ns/hasTarget> <http://www.austlit.edu.au/common/loredemo/asal/bullstory.html#xpointer(string-range(/html[1]/body[1]/div[1]/p[635], "", 26, 50))> ;
+		<http://purl.org/dc/terms/creator> <http://localhost:8080/lorestore/users/user> .
+	
+	<urn:uuid:0CB538F3-93CC-4112-A45A-77568B0E0C41> a <http://www.w3.org/2008/content#ContentAsXML> ;
+		<http://www.w3.org/2008/content#version> "1.0" ;
+		<http://www.w3.org/2008/content#declaredEncoding> "UTF-8" ;
+		<http://www.w3.org/2008/content#standalone> "yes" ;
+		<http://www.w3.org/2008/content#rest> "This is a sample annotation!" .
+	
+	<http://www.austlit.edu.au/common/loredemo/asal/bullstory.html#xpointer(string-range(/html[1]/body[1]/div[1]/p[635], "", 26, 50))> <http://purl.org/dc/terms/isPartOf> <http://www.austlit.edu.au/common/loredemo/asal/bullstory.html> .
+	
+	<http://localhost:8080/lorestore/users/user> a <http://xmlns.com/foaf/0.1/Agent> ;
+		<http://xmlns.com/foaf/0.1/name> "Anna Gerber" .
+}

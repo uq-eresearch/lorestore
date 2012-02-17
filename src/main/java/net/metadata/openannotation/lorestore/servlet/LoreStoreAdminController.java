@@ -3,6 +3,7 @@ package net.metadata.openannotation.lorestore.servlet;
 import java.io.InputStream;
 import java.io.Writer;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import net.metadata.openannotation.lorestore.access.LoreStoreAccessPolicy;
@@ -26,6 +27,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.support.SessionStatus;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.RedirectView;
 
 import au.edu.diasb.chico.mvc.RequestFailureException;
 
@@ -62,20 +66,34 @@ public class LoreStoreAdminController {
 	}
 	
 	@RequestMapping(value = "/import", method = RequestMethod.POST)
-	public String bulkImport(UploadItem uploadItem, BindingResult result) throws Exception {
+	public ModelAndView bulkImport(UploadItem uploadItem, BindingResult result) throws Exception {
 		ap.checkAdmin();
 		if (result.hasErrors()) {
+			ModelAndView redirectView = new ModelAndView(new RedirectView("oreadmin/importForm",false ,true, true));
+			String errorMessage = "";
 			for (ObjectError error : result.getAllErrors()) {
 				LOG.error("Error: " + error.getCode() +   " - " + error.getDefaultMessage());
-				return "admin/importForm";
+				errorMessage += error.getDefaultMessage() + "<br/>";				
 			}
+			redirectView.getModel().put("message", "Error: " + errorMessage);
+			return redirectView;
 		}
-		// Some type of file processing
-		InputStream fileData = uploadItem.getFileData().getInputStream();
-		String originalFilename = uploadItem.getFileData().getOriginalFilename();
-		uh.bulkImport(fileData, originalFilename);
-
-		return "redirect:/oreadmin/";
+		String message = "";
+		RedirectView rView = null;
+		try {
+			InputStream fileData = uploadItem.getFileData().getInputStream();
+			String originalFilename = uploadItem.getFileData().getOriginalFilename();
+			int delta = uh.bulkImport(fileData, originalFilename);
+			rView = new RedirectView("oreadmin",false ,true, true);
+			rView.getAttributesMap().put("delta", delta);
+			message = "Successfully imported data";
+		} catch (Exception e){
+			rView = new RedirectView("oreadmin/importForm",false ,true, true);
+			message = "Error importing data: " + e.getMessage();
+		}
+		rView.getAttributesMap().put("message", message);
+		ModelAndView redirectView = new ModelAndView(rView);
+		return redirectView;
 	}
 	
 	@RequestMapping(value = "/stats.html", method = RequestMethod.GET)
@@ -103,7 +121,7 @@ public class LoreStoreAdminController {
 	public String wipeDatabase() throws InterruptedException, RequestFailureException {
 		ap.checkAdmin();
 		uh.wipeDatabase();
-		return "redirect:/ore/admin/";
+		return "redirect:/oreadmin/";
 	}
 
 	@RequestMapping(value = "/export")

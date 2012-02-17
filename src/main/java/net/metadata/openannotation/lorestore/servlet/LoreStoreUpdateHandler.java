@@ -47,7 +47,7 @@ public interface LoreStoreUpdateHandler {
 	 * @param fileName
 	 * @throws Exception
 	 */
-	public void bulkImport(InputStream body, String fileName) throws Exception;
+	public int bulkImport(InputStream body, String fileName) throws Exception;
 
 	/**
 	 * <b>Danger:</b> Clears all data from the database

@@ -1,6 +1,7 @@
 package net.metadata.openannotation.lorestore.servlet;
 
 import java.io.FileInputStream;
+import java.io.InputStream;
 
 import net.metadata.openannotation.lorestore.model.UploadItem;
 import net.metadata.openannotation.lorestore.servlet.LoreStoreAdminController;
@@ -12,9 +13,11 @@ import org.junit.runners.JUnit4;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.servlet.ModelAndView;
+import static org.junit.Assert.assertNotNull;
 
 @RunWith(JUnit4.class)
-public class LoreStoreAdminControllerTests extends OREControllerTestsBase {
+public class LoreStoreAdminControllerTest extends OREControllerTestsBase {
 
 	private LoreStoreAdminController oreAdminController;
 
@@ -23,12 +26,10 @@ public class LoreStoreAdminControllerTests extends OREControllerTestsBase {
 		oreAdminController = new LoreStoreAdminController(noauthOCC);
 	}
 
-	private static final String TEST_FILE = "D:/export.trig";
-
 	@Test
 	public void bulkImport() throws Exception {
-		FileInputStream inputStream = new FileInputStream(TEST_FILE);
-
+		//FileInputStream inputStream = new FileInputStream(TEST_FILE);
+		InputStream inputStream = getClass().getClassLoader().getResourceAsStream("anno.trig");
 		MockMultipartFile mockMultipartFile = new MockMultipartFile("name",
 				"export.trig", "application/x-trig", inputStream);
 
@@ -36,7 +37,9 @@ public class LoreStoreAdminControllerTests extends OREControllerTestsBase {
 
 		UploadItem uploadItem = new UploadItem();
 		uploadItem.setFileData(mockMultipartFile);
+		
 		oreAdminController.bulkImport(uploadItem, bindingResult);
+		
 	}
 
 }
