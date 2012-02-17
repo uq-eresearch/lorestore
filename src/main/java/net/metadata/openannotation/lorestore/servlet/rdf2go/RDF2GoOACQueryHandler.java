@@ -164,7 +164,7 @@ public class RDF2GoOACQueryHandler extends AbstractRDF2GoQueryHandler {
 						}
 					} else {
 						result.addModel(model);
-						//allAnnotations.add(model);
+						model.close();
 					}
 				}
 					

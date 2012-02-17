@@ -33,7 +33,6 @@ import org.ontoware.rdf2go.model.impl.TriplePatternImpl;
 import org.ontoware.rdf2go.model.node.URI;
 import org.ontoware.rdf2go.model.node.Variable;
 import org.springframework.security.access.AccessDeniedException;
-import org.springframework.web.servlet.ModelAndView;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;

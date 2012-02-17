@@ -64,6 +64,7 @@ public class CompoundObjectImpl extends NamedGraphImpl implements CompoundObject
 					.findStatements(aggregationURI, Variable.ANY, Variable.ANY);
 			updateSubjectURI(aggregationStmts, newAggregationURI);
 		}
+		model.commit();
 	}
 
 	

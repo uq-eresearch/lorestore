@@ -154,30 +154,23 @@ public class OACNamedGraphsView extends BaseView {
 		 OutputStream os = response.getOutputStream();
 		 StringBuffer json = new StringBuffer();
 	     try{
-			DOMParser dp = new DOMParser();
-			ClassLoader cl = this.getClass().getClassLoader();
-		    java.io.InputStream in = cl.getResourceAsStream("OAC-to-JSON.xsl");
-		    Source xslt = new StreamSource(in);
-		    Transformer trans = TransformerFactory.newInstance().newTransformer(xslt);
-		    //annotations.dump();
-	     	//ClosableIterator<Model> itr = annotations.getModels();
-			//    while(itr.hasNext()){
-			    	
-			//     Model annoModel = (Model) itr.next();
-			 //    System.out.println("model is empty? " + annoModel.isEmpty());
-			     String rdfXML = annotations.serialize(Syntax.RdfXml);
-			     //logger.debug(rdfXML);
+			 DOMParser dp = new DOMParser();
+			 ClassLoader cl = this.getClass().getClassLoader();
+		     java.io.InputStream in = cl.getResourceAsStream("OAC-to-JSON.xsl");
+		     Source xslt = new StreamSource(in);
+		     Transformer trans = TransformerFactory.newInstance().newTransformer(xslt);
+		     String rdfXML = annotations.serialize(Syntax.RdfXml);
+		     
+		     
+		     // process Model to produce custom json format
+		     StringWriter writer = new StringWriter();
 			     
-			     // process Model to produce custom json format
-			     StringWriter writer = new StringWriter();
-				     
-				 dp.parse(new InputSource(new StringReader(rdfXML)));
-				 	
-				     
-				 trans.transform(new DOMSource(dp.getDocument()),  new StreamResult(writer));
-			     json.append(writer.toString());
-			   
-			//    }
+			 dp.parse(new InputSource(new StringReader(rdfXML)));
+			 	
+			     
+			 trans.transform(new DOMSource(dp.getDocument()),  new StreamResult(writer));
+		     json.append(writer.toString());
+
 	    } catch (Exception e){
 	    	 logger.debug(e.getMessage());
 	    }

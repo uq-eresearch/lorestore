@@ -60,6 +60,7 @@ public abstract class NamedGraphImpl implements NamedGraph {
 			model.removeStatement(s);
 		}
 		it.close();
+		model.commit();
 	}
 
 	public String getURL() throws LoreStoreException {
