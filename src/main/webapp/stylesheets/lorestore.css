@@ -28,7 +28,7 @@
   }
   /* Override whitespace for pre from bootstrap so it won't break SPARQL flint editor */
   pre{
-    white-space:nowrap;
+    white-space:pre;
   }
   .pre {
     white-space:pre-wrap;
