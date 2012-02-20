@@ -143,7 +143,7 @@
 						  <p><strong><xsl:value-of select="local-name()"/>:&#160;</strong><xsl:value-of select="@rdf:resource | ."/></p>
 						</xsl:if>
 						</xsl:for-each>
-                        <p><a class="btn" target="_blank" href="../oac/?annotates={@rdf:about}">Find replies</a>&#160;&#160;<a class="btn" target="_blank" href="#" onclick="downloadTrig('{@rdf:about}')">Get TriG</a></p>
+                        <p><a class="btn btn-mini" target="_blank" href="../oac/?annotates={@rdf:about}">Find replies</a>&#160;&#160;<a class="btn btn-mini" target="_blank" href="#" onclick="downloadTrig('{@rdf:about}')">Get TriG</a></p>
 						<hr/>
 					</xsl:for-each>
                 </div>
