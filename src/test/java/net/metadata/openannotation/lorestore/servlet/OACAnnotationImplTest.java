@@ -4,25 +4,15 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
 
 import net.metadata.openannotation.lorestore.exceptions.LoreStoreException;
-import net.metadata.openannotation.lorestore.model.rdf2go.CompoundObjectImpl;
 import net.metadata.openannotation.lorestore.model.rdf2go.OACAnnotationImpl;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.ontoware.rdf2go.ModelFactory;
 import org.ontoware.rdf2go.RDF2Go;
-import org.ontoware.rdf2go.exception.ModelRuntimeException;
 import org.ontoware.rdf2go.model.Model;
-import org.ontoware.rdf2go.model.Syntax;
-import org.ontoware.rdf2go.model.node.URI;
-import org.openrdf.rdf2go.RepositoryModelSet;
-import org.openrdf.repository.RepositoryException;
-import org.openrdf.repository.sail.SailRepository;
-import org.openrdf.sail.memory.MemoryStore;
 
 public class OACAnnotationImplTest {
 

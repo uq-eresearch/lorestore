@@ -1,8 +1,5 @@
 package net.metadata.openannotation.lorestore.servlet;
 
-import net.metadata.openannotation.lorestore.servlet.LoreStoreControllerConfig;
-import net.metadata.openannotation.lorestore.servlet.OREController;
-
 import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,8 +9,6 @@ import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.web.servlet.HandlerAdapter;
-
-import static org.springframework.test.web.ModelAndViewAssert.*;
 
 /**
  * 
@@ -48,8 +43,8 @@ public class OREControllerIntegrationTests {
 		response = new MockHttpServletResponse();
 		handlerAdapter = applicationContext.getBean(HandlerAdapter.class);
 		occ = applicationContext.getBean(LoreStoreControllerConfig.class);
-		// I could get the controller from the context here
 		controller = new OREController(occ);
 	}
-
+	
+	
 }
