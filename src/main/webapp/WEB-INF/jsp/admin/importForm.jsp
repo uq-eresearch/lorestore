@@ -28,6 +28,8 @@
             %>
             <p>This function is provided to enable restoring the state of the underlying repository from data previously exported from lorestore. 
                 <br/>Data will be imported as-is directly to the triplestore and should be provided in a format that supports Named Graphs, such as TriG.
+                <br/>Imported data adds to, but does not overwrite existing named graphs : to bulk replace existing objects, delete those objects from the repository first.
+                The file extension of the uploaded file must match the data format (e.g. <em>.trig</em> for TriG files).
             </p>
                 
 		  	<form:form modelAttribute="uploadItem" method="post" enctype="multipart/form-data">

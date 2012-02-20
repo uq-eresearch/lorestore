@@ -29,12 +29,21 @@
                 }
             %>
 			 <ul>
-          		<li><a href="import.html">Import Data</a></li>
-                <li><a href="export">Export Data</a></li>
-          		<li><a href="stats.html">Repository Statistics</a></li>
-          		<li><a href="wipeDatabase.html">Clear Repository</a></li>
-                <li><a href="deleteGraph.html">Delete a named graph</a></li>
-          		<li><a href="sparqlPage.html">SPARQL Query</a></li>
+			    <li><a href="deleteGraph.html">Delete a named graph</a></li>
+                <li><a href="updateGraph.html">Update a named graph</a></li>
+			 	<li>Bulk operations
+				 	<ul>
+	          		<li><a href="import.html">Import Data</a></li>
+	                <li><a href="export">Export Data</a></li>
+	          		<li><a href="wipeDatabase.html">Clear Repository</a></li>
+	          		</ul>
+          		</li>
+                <li>Queries
+	                <ul>
+	          		<li><a href="sparqlPage.html">SPARQL Query</a></li>
+	          		<li><a href="stats.html">Repository Statistics</a></li>
+	          		</ul>
+          		</li>
           	</ul>
 		</div>
       </div>

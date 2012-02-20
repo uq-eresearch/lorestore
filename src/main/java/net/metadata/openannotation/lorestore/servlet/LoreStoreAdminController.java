@@ -117,6 +117,12 @@ public class LoreStoreAdminController {
 		return "admin/deleteGraph";
 	}
 	
+	@RequestMapping(value = "/updateGraph.html", method = RequestMethod.GET)
+	public String updateGraph() throws RequestFailureException {
+		ap.checkAdmin();
+		return "admin/updateGraph";
+	}
+	
 	@RequestMapping(value = "/wipeDatabase.html", method = RequestMethod.POST)
 	public String wipeDatabase() throws InterruptedException, RequestFailureException {
 		ap.checkAdmin();

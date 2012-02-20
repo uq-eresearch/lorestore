@@ -4,7 +4,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>lorestore delete graph</title>
+    <title>lorestore delete named graph</title>
     <%@ include file="/WEB-INF/jsp/header.jsp" %>
     <script type="text/javascript" src="${secure}/bootstrap-alert.js"></script>
     <script type="text/javascript">
