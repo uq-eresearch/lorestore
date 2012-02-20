@@ -10,7 +10,8 @@
     <import resource="Emmet-common.xml"/>
     
 	<import resource="siteTailoring.xml" />
-    	<bean id="oreControllerConfig" class="net.metadata.openannotation.lorestore.servlet.LoreStoreControllerConfig">
+	
+    <bean id="oreControllerConfig" class="net.metadata.openannotation.lorestore.servlet.LoreStoreControllerConfig">
 		<property name="containerFactory" ref="dbContainerPool"/>
 		<property name="accessPolicy" ref="oreAccessPolicy"/>
 		<property name="baseUri" value="${lorestore.baseurl}"/>
@@ -18,21 +19,7 @@
 		<property name="uidGenerator" ref="uidGenerator"/>
 		<property name="identityProvider" ref="identityProvider"/>
 	</bean>
-	
-	<!-- the application context definition for the oreservlet DispatcherServlet -->
-	<bean name="ore" class="net.metadata.openannotation.lorestore.servlet.OREController">
-		<constructor-arg ref="oreControllerConfig"/>
-	</bean>
-    <bean name="oac" class="net.metadata.openannotation.lorestore.servlet.OACController">
-        <constructor-arg ref="oacControllerConfig"/>
-    </bean>
-	<bean name="oreAdmin" class="net.metadata.openannotation.lorestore.servlet.LoreStoreAdminController">
-		<constructor-arg ref="oreControllerConfig"/>
-	</bean>
-	
-
-    
-    <bean id="oacControllerConfig" class="net.metadata.openannotation.lorestore.servlet.LoreStoreControllerConfig">
+	<bean id="oacControllerConfig" class="net.metadata.openannotation.lorestore.servlet.LoreStoreControllerConfig">
         <property name="containerFactory" ref="dbContainerPool"/>
         <property name="accessPolicy" ref="oreAccessPolicy"/>
         <property name="baseUri" value="${lorestore.oacurl}"/>
@@ -41,19 +28,25 @@
         <property name="identityProvider" ref="identityProvider"/>
     </bean>
     
+	<!-- the application context definition for the oreservlet DispatcherServlet -->
+	<bean name="oac" class="net.metadata.openannotation.lorestore.servlet.OACController">
+        <constructor-arg ref="oacControllerConfig"/>
+    </bean>
+	<bean name="ore" class="net.metadata.openannotation.lorestore.servlet.OREController">
+		<constructor-arg ref="oreControllerConfig"/>
+	</bean>
+	<bean name="oreAdmin" class="net.metadata.openannotation.lorestore.servlet.LoreStoreAdminController">
+		<constructor-arg ref="oreControllerConfig"/>
+	</bean>
+	<bean name="placeholders" class="net.metadata.openannotation.lorestore.servlet.PlaceholderController">
+		<constructor-arg ref="oreControllerConfig"/>
+	</bean>
+    
 	<bean id="xmlViewResolver" class="org.springframework.web.servlet.view.XmlViewResolver">
 		<property name="order" value="1"></property>
 		<property name="location" value="/WEB-INF/LoreStore-views.xml"></property>
 	</bean>
 	
-	<bean id="xsltViewResolver" class="org.springframework.web.servlet.view.xslt.XsltViewResolver">
-		<property name="order" value="3"/>
-		<property name="viewClass" value="org.springframework.web.servlet.view.xslt.XsltView"/>
-		<property name="sourceKey" value="xmlData" /> 
-		<property name="suffix" value=".xsl" />
-		<property name="prefix" value="/WEB-INF/xsl/" />
-	</bean>
-    
 	<bean id="urlViewResolver" class="org.springframework.web.servlet.view.UrlBasedViewResolver">
 		<property name="order" value="2"/>
 		<property name="viewClass" value="org.springframework.web.servlet.view.JstlView"></property>
@@ -71,6 +64,7 @@
                /oreadmin/**=oreAdmin
                /ore/**=ore
                /oac/**=oac
+               /ids/**=placeholders
 			</value>
 		</property>
 		<property name="alwaysUseFullPath" value="true"/>

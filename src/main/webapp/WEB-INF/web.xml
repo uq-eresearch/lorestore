@@ -64,6 +64,11 @@
         <url-pattern>/oac/*</url-pattern>
     </servlet-mapping>
     
+    <servlet-mapping>
+        <servlet-name>LoreStore</servlet-name>
+        <url-pattern>/ids/*</url-pattern>
+    </servlet-mapping>
+    
 	<!-- Emmet is used for user authentication and management. -->
 	<servlet>
 		<servlet-name>Emmet</servlet-name>
