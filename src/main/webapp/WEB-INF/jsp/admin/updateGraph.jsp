@@ -17,7 +17,7 @@
     };
     lorestore.loadGraph = function() {
         var uri = jQuery('#updateID').val();
-        if (uri){
+        if (uri && !jQuery('#updateID').prop('disabled')){
         jQuery.ajax({
                 url: uri,
                 context: document.body,
@@ -40,21 +40,18 @@
             jQuery.ajax({
                 url: uri,
                 type: 'PUT',
-                data: cm.getValue(),
+                data: lorestore.cm.getValue(),
                 context: document.body,
                 success: function(data, status, xhr){
-                    jQuery('#successMessage').html("success");
                     jQuery('#successMessage').css('display','block');
                     
                 },
                 error: function(jqXHR, textStatus, errorThrown){
-                    jQuery('#failureMessage').html("<span class='label label-important'>" + textStatus + "</span> " + errorThrown);
-                    jQuery('#failureMessage').css('display','block');
+                    jQuery('#failMessage').html("<span class='label label-important'>" + textStatus + "</span> " + errorThrown);
+                    jQuery('#failMessage').css('display','block');
                 }
             });
-        } else {
-         jQuery('#emptyURIMessage').css('display','block');
-        }
+        } 
     };
     
     </script>
