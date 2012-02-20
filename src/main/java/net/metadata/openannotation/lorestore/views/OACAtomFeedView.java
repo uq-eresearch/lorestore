@@ -64,13 +64,14 @@ public class OACAtomFeedView extends AbstractAtomFeedView {
 				 entry.setAuthors(Collections.singletonList(person));
 		     }
 		    Node m = anno.getModifiedDate();
+		   
 		    if (m != null){
-		    	Date modDate = DatatypeConverter.parseDateTime(m.toString()).getTime();
+		    	Date modDate = DatatypeConverter.parseDateTime(m.asLiteral().getValue()).getTime();
 		    	entry.setModified(modDate);
 		     }
 		    Node c = anno.getCreatedDate();
 		    if (c != null){
-		    	Date cDate = DatatypeConverter.parseDateTime(m.toString()).getTime();
+		    	Date cDate = DatatypeConverter.parseDateTime(c.asLiteral().getValue()).getTime();
 		    	entry.setCreated(cDate);
 		    }
 		     
