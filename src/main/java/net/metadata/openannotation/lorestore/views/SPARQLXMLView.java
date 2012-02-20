@@ -5,24 +5,13 @@ import static net.metadata.openannotation.lorestore.common.LoreStoreConstants.LO
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
-import java.io.StringReader;
-import java.io.StringWriter;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.xml.transform.Source;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
-import javax.xml.transform.stream.StreamSource;
 
 import org.apache.log4j.Logger;
-import org.apache.xerces.parsers.DOMParser;
-import org.ontoware.rdf2go.model.ModelSet;
 import org.ontoware.rdf2go.model.Syntax;
-import org.xml.sax.InputSource;
 
 import au.edu.diasb.chico.mvc.BaseView;
 import au.edu.diasb.chico.mvc.MimeTypes;

@@ -2,7 +2,10 @@ package net.metadata.openannotation.lorestore.views;
 
 import static net.metadata.openannotation.lorestore.common.LoreStoreConstants.LORESTORE_USE_STYLESHEET;
 import static net.metadata.openannotation.lorestore.common.LoreStoreProperties.DEFAULT_RDF_STYLESHEET_PROP;
-import static net.metadata.openannotation.lorestore.servlet.OREResponse.*;
+import static net.metadata.openannotation.lorestore.servlet.OREResponse.LOCATION_HEADER;
+import static net.metadata.openannotation.lorestore.servlet.OREResponse.ORE_PROPS_KEY;
+import static net.metadata.openannotation.lorestore.servlet.OREResponse.RESPONSE_RDF_KEY;
+import static net.metadata.openannotation.lorestore.servlet.OREResponse.RETURN_STATUS;
 
 import java.io.IOException;
 import java.io.OutputStream;

@@ -36,7 +36,7 @@ public class OACNamedGraphsView extends BaseView {
 	    protected void renderMergedOutputModel(Map<String, Object> map, 
 	            HttpServletRequest request, HttpServletResponse response) 
 	    throws IOException {
-	 		logger.debug("Annotations render ");
+	 		logger.info("Annotations render");
 	 		ModelSet annotations = (ModelSet) map.get("annotations");
 	 		
 	 		

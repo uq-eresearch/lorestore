@@ -3,9 +3,6 @@ package net.metadata.openannotation.performance;
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;
 
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.servlet.ModelAndView;
-
 import net.metadata.openannotation.lorestore.servlet.LoreStoreControllerConfig;
 import net.metadata.openannotation.lorestore.servlet.LoreStoreQueryHandler;
 import net.metadata.openannotation.lorestore.servlet.LoreStoreUpdateHandler;
@@ -15,6 +12,8 @@ import net.metadata.openannotation.lorestore.triplestore.MemoryTripleStoreConnec
 import net.metadata.openannotation.lorestore.triplestore.NativeTripleStoreConnectorFactory;
 import net.metadata.openannotation.lorestore.triplestore.SimpleSesamePool;
 import net.metadata.openannotation.lorestore.triplestore.TripleStoreConnectorFactory;
+
+import org.springframework.web.servlet.ModelAndView;
 
 public class SesamePerformanceTests {
 

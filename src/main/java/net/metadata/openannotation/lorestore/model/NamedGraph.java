@@ -38,5 +38,6 @@ public interface NamedGraph {
 	 */
 	public boolean isPrivate();
 	
+	public void close();
 	
 }

@@ -2,6 +2,10 @@ package net.metadata.openannotation.lorestore.servlet.sesame;
 
 import java.io.Writer;
 
+import net.metadata.openannotation.lorestore.exceptions.NotFoundException;
+import net.metadata.openannotation.lorestore.servlet.LoreStoreQueryHandler;
+import net.metadata.openannotation.lorestore.servlet.OREResponse;
+
 import org.openrdf.model.Statement;
 import org.openrdf.model.URI;
 import org.openrdf.model.ValueFactory;
@@ -16,11 +20,6 @@ import org.openrdf.repository.sail.SailRepository;
 import org.openrdf.sail.memory.MemoryStore;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.servlet.ModelAndView;
-
-import net.metadata.openannotation.lorestore.exceptions.InvalidQueryParametersException;
-import net.metadata.openannotation.lorestore.exceptions.NotFoundException;
-import net.metadata.openannotation.lorestore.servlet.LoreStoreQueryHandler;
-import net.metadata.openannotation.lorestore.servlet.OREResponse;
 
 public class SesameOREQueryHandler implements LoreStoreQueryHandler {
 

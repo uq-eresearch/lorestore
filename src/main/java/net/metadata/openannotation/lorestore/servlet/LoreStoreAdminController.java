@@ -3,14 +3,12 @@ package net.metadata.openannotation.lorestore.servlet;
 import java.io.InputStream;
 import java.io.Writer;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import net.metadata.openannotation.lorestore.access.LoreStoreAccessPolicy;
 import net.metadata.openannotation.lorestore.exceptions.InvalidQueryParametersException;
 import net.metadata.openannotation.lorestore.model.UploadItem;
 import net.metadata.openannotation.lorestore.servlet.rdf2go.RDF2GoOACQueryHandler;
-import net.metadata.openannotation.lorestore.servlet.rdf2go.RDF2GoOACUpdateHandler;
 import net.metadata.openannotation.lorestore.servlet.rdf2go.RDF2GoOREQueryHandler;
 import net.metadata.openannotation.lorestore.servlet.rdf2go.RDF2GoOREUpdateHandler;
 
@@ -27,7 +25,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 

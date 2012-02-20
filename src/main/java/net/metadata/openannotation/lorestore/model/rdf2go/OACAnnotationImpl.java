@@ -5,8 +5,6 @@ import static net.metadata.openannotation.lorestore.common.LoreStoreConstants.OA
 import static net.metadata.openannotation.lorestore.common.LoreStoreConstants.OAC_DATA_ANNOTATION_CLASS;
 import static net.metadata.openannotation.lorestore.common.LoreStoreConstants.OAC_REPLY_CLASS;
 import static net.metadata.openannotation.lorestore.common.LoreStoreConstants.OAC_TARGET_PROPERTY;
-import static net.metadata.openannotation.lorestore.common.LoreStoreConstants.RDF_TYPE_PROPERTY;
-
 import net.metadata.openannotation.lorestore.exceptions.LoreStoreException;
 import net.metadata.openannotation.lorestore.model.NamedGraph;
 

@@ -1,5 +1,8 @@
 package net.metadata.openannotation.lorestore.servlet.rdf2go;
 
+import static net.metadata.openannotation.lorestore.common.LoreStoreConstants.DCTERMS_CREATED;
+import static net.metadata.openannotation.lorestore.common.LoreStoreConstants.DCTERMS_MODIFIED;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Date;
@@ -30,8 +33,6 @@ import org.openrdf.repository.RepositoryConnection;
 import org.openrdf.rio.RDFFormat;
 
 import au.edu.diasb.chico.mvc.RequestFailureException;
-import static net.metadata.openannotation.lorestore.common.LoreStoreConstants.DCTERMS_CREATED;
-import static net.metadata.openannotation.lorestore.common.LoreStoreConstants.DCTERMS_MODIFIED;
 
 /**
  * The RDF2GoOREUpdateHandler class processes updates to compound object or annotation by
@@ -123,18 +124,14 @@ public abstract class AbstractRDF2GoUpdateHandler implements LoreStoreUpdateHand
 			if (!container.containsModel(objURI)) {
 				throw new NotFoundException("Cannot delete, object not found");
 			}
-
 			model = container.getModel(objURI);
 			NamedGraph obj = makeNewObject(model);
-			
+			model.close();
 			ap.checkDelete(obj);
-			
+			obj.close();
 			container.removeModel(objURI);
 			container.commit();
 		} finally {
-			if (model != null) {
-				model.close();
-			}
 			cf.release(container);
 		}
 	}
@@ -170,9 +167,6 @@ public abstract class AbstractRDF2GoUpdateHandler implements LoreStoreUpdateHand
 						HttpServletResponse.SC_BAD_REQUEST, "Error reading RDF");
 			}
 
-			// TODO: needs to do stuff like maintaining the created/modified
-			// dates,
-			// and the creator
 			NamedGraphImpl obj = makeNewObject(newModel);
 			newModel.close();
 			if (oldUserUri != null){
