@@ -56,7 +56,8 @@
   footer {
   margin-top:5px;
   }
-  
+  [class^="icon-"],[class*=" icon-"]{background-image:url("../images/glyphicons-halflings.png");}
+  .icon-white{background-image:url("../images/glyphicons-halflings-white.png");}
   
 .Imageicon {background-image: url(../images/icons/image.png);}
 .StillImageicon {background-image: url(../images/icons/image.png);}
