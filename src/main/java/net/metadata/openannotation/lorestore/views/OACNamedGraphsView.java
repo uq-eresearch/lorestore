@@ -63,7 +63,7 @@ public class OACNamedGraphsView extends BaseView {
 	            	if (isAcceptable(MimeTypes.XML_RDF_MIMETYPES, request)) {	
 	                	stylesheetURI = (stylesheetParam == null || stylesheetParam.length() == 0) ?
 	                			"/lorestore/stylesheets/OAC.xsl" : stylesheetParam;
-	                	os = outputRDF(response, annotations, stylesheetURI, Syntax.RdfXml);
+	                	
 	                	if (isAcceptable(MimeTypes.XML_MIMETYPE, request)){
 	                		// we don't provide HTML as yet, use XML with stylesheet instead
 	                		response.setContentType(MimeTypes.XML_MIMETYPE);
@@ -71,17 +71,19 @@ public class OACNamedGraphsView extends BaseView {
 	                		response.setContentType(MimeTypes.XML_RDF);
 	                	}
 	        	        response.setCharacterEncoding("UTF-8");
+	        	        os = outputRDF(response, annotations, stylesheetURI, Syntax.RdfXml);
 	                } else if (isAcceptable("application/trix",request)) {
 	                	// TODO: add default stylesheet for TriX
-	            		os = outputRDF(response, annotations, stylesheetURI, Syntax.Trix);
 	         	        response.setContentType(MimeTypes.XML_MIMETYPE);
 	        	        response.setCharacterEncoding("UTF-8");
+	        	        os = outputRDF(response, annotations, stylesheetURI, Syntax.Trix);
 	                } else if (isAcceptable("application/x-trig", request)){
-	                	os = outputRDF(response, annotations, null, Syntax.Trig);
+	                	
 	                	response.setContentType("application/x-trig");
+	                	os = outputRDF(response, annotations, null, Syntax.Trig);
 	                } else if (isAcceptable("application/json",request)){
-	                	os = outputJSON(response, annotations);
 	                	response.setContentType("application/json");
+	                	os = outputJSON(response, annotations);
 	                } else {
 	                    response.sendError(HttpServletResponse.SC_NOT_ACCEPTABLE,
 	                            "Request response only available in Trix, RDF+XML, Trig and JSON formats");
@@ -93,6 +95,7 @@ public class OACNamedGraphsView extends BaseView {
 	            }
 	        } finally {
 	            if (os != null) {
+	            	os.flush();
 	                os.close();
 	            }
 	            if (annotations != null){

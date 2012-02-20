@@ -39,7 +39,6 @@ public class SPARQLXMLView extends BaseView {
 	            	if (isAcceptable(MimeTypes.XML_RDF_MIMETYPES, request)) {	
 	                	stylesheetURI = (stylesheetParam == null || stylesheetParam.length() == 0) ?
 	                			"/lorestore/stylesheets/SPARQLresult.xsl" : stylesheetParam;
-	                	os = outputRDF(response, result, stylesheetURI, Syntax.RdfXml);
 	                	if (isAcceptable(MimeTypes.XML_MIMETYPE, request)){
 	                		// we don't provide HTML as yet, use XML with stylesheet instead
 	                		response.setContentType(MimeTypes.XML_MIMETYPE);
@@ -47,6 +46,7 @@ public class SPARQLXMLView extends BaseView {
 	                		response.setContentType(MimeTypes.XML_RDF);
 	                	}
 	        	        response.setCharacterEncoding("UTF-8");
+	        	        os = outputRDF(response, result, stylesheetURI, Syntax.RdfXml);
 	                } else {
 	                    response.sendError(HttpServletResponse.SC_NOT_ACCEPTABLE,
 	                            "Request response only available in RDF+XML format");
@@ -58,6 +58,7 @@ public class SPARQLXMLView extends BaseView {
 	            }
 	        } finally {
 	            if (os != null) {
+	            	os.flush();
 	                os.close();
 	            }
 	        }
