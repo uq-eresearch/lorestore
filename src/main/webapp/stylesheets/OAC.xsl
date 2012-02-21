@@ -99,7 +99,10 @@
 						  <p><strong><xsl:value-of select="local-name()"/>:&#160;</strong><xsl:value-of select="@rdf:resource | ."/></p>
 						</xsl:if>
 						</xsl:for-each>
-                        <p><a class="btn btn-mini" target="_blank" href="../oac/?annotates={@rdf:about}">Find replies</a>&#160;&#160;<a class="btn btn-mini" target="_blank" href="#" onclick="downloadTrig('{@rdf:about}')">Get TriG</a></p>
+                        <p><a class="btn btn-mini" target="_blank" href="../oac/?annotates={@rdf:about}">Find replies</a>&#160;&#160;<a class="btn btn-mini" target="_blank" href="#" onclick="downloadTrig('{@rdf:about}')">Get TriG</a>
+                        &#160;&#160;<a class="btn btn-mini" target="_blank" href="#" onclick="downloadTrix('{@rdf:about}')">Get TriX</a>
+                        &#160;&#160;<a class="btn btn-mini" target="_blank" href="#" onclick="downloadRdfXml('{@rdf:about}')">Get RDF/XML</a>
+                        </p>
 						
 						</div>
 					</xsl:for-each>
@@ -118,6 +121,28 @@
                             },
                             success: function(data, status, jqXHR){
                                 window.location.href='data:application/x-trig,' + encodeURIComponent(jqXHR.responseText);
+                            }
+                        });
+                    }
+                    function downloadTrix(annoID) {
+                        jQuery.ajax({
+                            url: annoID,
+                            headers: { 
+                                Accept : "application/trix"
+                            },
+                            success: function(data, status, jqXHR){
+                                window.location.href='data:application/trix,' + encodeURIComponent(jqXHR.responseText);
+                            }
+                        });
+                    }
+                    function downloadRdfXml(annoID) {
+                        jQuery.ajax({
+                            url: annoID,
+                            headers: { 
+                                Accept : "application/rdf+xml"
+                            },
+                            success: function(data, status, jqXHR){
+                                window.location.href='data:application/rdf+xml,' + encodeURIComponent(jqXHR.responseText);
                             }
                         });
                     }
