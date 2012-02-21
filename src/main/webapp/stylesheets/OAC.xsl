@@ -172,9 +172,10 @@
 				<p style="margin-left:2em"><strong>isPartOf:&#160;</strong><a href="{$resourcePartOf/@rdf:resource}"><xsl:value-of select="$resourcePartOf/@rdf:resource"/></a></p>
 			</xsl:if>
 			<!-- creator property attached to body or target -->
-			<xsl:variable name="resourceCreator" select="//rdf:Description[@rdf:about=$resourceUri and dcterms:creator]"/>
+			<xsl:variable name="resourceCreator" select="//rdf:Description[@rdf:about=$resourceUri and dcterms:creator]/dcterms:creator"/>
+			
             <xsl:if test="$resourceCreator">
-                 <p style="margin-left:2em"><strong>creator:&#160;</strong><xsl:value-of select="//rdf:Description[@rdf:resource=$resourceCreator/@rdf:resource or @rdf:nodeID=$resourceCreator/@rdf:nodeID]/foaf:name"/></p>
+                 <p style="margin-left:2em"><strong>creator:&#160;</strong><xsl:value-of select="//rdf:Description[@rdf:about=$resourceCreator/@rdf:resource or @rdf:nodeID=$resourceCreator/@rdf:nodeID]/foaf:name"/></p>
              </xsl:if>
 		</div>				
 	</xsl:template>
