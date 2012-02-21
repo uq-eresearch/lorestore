@@ -9,11 +9,11 @@
 		<http://www.openannotation.org/ns/hasTarget> <http://www.austlit.edu.au/common/loredemo/asal/bullstory.html#xpointer(string-range(/html[1]/body[1]/div[1]/p[635], "", 26, 50))> ;
 		<http://purl.org/dc/terms/creator> <http://localhost:8080/lorestore/users/user> .
 	
-	<urn:uuid:0CB538F3-93CC-4112-A45A-77568B0E0C41> a <http://www.w3.org/2008/content#ContentAsXML> ;
-		<http://www.w3.org/2008/content#version> "1.0" ;
-		<http://www.w3.org/2008/content#declaredEncoding> "UTF-8" ;
-		<http://www.w3.org/2008/content#standalone> "yes" ;
-		<http://www.w3.org/2008/content#rest> "This is a sample annotation!" .
+	<urn:uuid:0CB538F3-93CC-4112-A45A-77568B0E0C41> a <http://www.w3.org/2011/content#ContentAsXML> ;
+		<http://www.w3.org/2011/content#version> "1.0" ;
+		<http://www.w3.org/2011/content#declaredEncoding> "UTF-8" ;
+		<http://www.w3.org/2011/content#standalone> "yes" ;
+		<http://www.w3.org/2011/content#rest> "This is a sample annotation!" .
 	
 	<http://www.austlit.edu.au/common/loredemo/asal/bullstory.html#xpointer(string-range(/html[1]/body[1]/div[1]/p[635], "", 26, 50))> <http://purl.org/dc/terms/isPartOf> <http://www.austlit.edu.au/common/loredemo/asal/bullstory.html> .
 	
