@@ -121,7 +121,7 @@
 </rdf:Description>
 
 <rdf:Description rdf:about="http://www.example.org/segdesc/1/example1.svg">
-	<rdf:type rdf:resource="http://www.example.org/ns/SVGConstraint"/>
+	<rdf:type rdf:resource="http://www.openannotation.org/ns/SvgConstraint"/>
 	<format xmlns="http://purl.org/dc/elements/1.1/">image/svg+xml</format>
 </rdf:Description>
 
@@ -143,7 +143,7 @@
 
 <rdf:Description rdf:about="urn:uuid:06c292b0-5c41-11e1-b86c-0800200c9a66">
 	<rdf:type rdf:resource="http://www.w3.org/2011/content#ContentAsXML"/>
-	<rdf:type rdf:resource="http://www.example.org/ns/SVGConstraint"/>
+	<rdf:type rdf:resource="http://www.openannotation.org/ns/SvgConstraint"/>
 	<format xmlns="http://purl.org/dc/elements/1.1/">image/svg+xml</format>
 	<version xmlns="http://www.w3.org/2011/content#">1.0</version>
 	<rest xmlns="http://www.w3.org/2011/content#">&lt;svg xmlns='http://www.w3.org/2000/svg' version='1.1'&gt;&lt;polygon points='200,10 250,190 160,210'/&gt;&lt;/svg&gt;</rest>
@@ -175,7 +175,7 @@
 </rdf:Description>
 
 <rdf:Description rdf:about="http://www.example.org/segdesc/1/example.svg">
-	<rdf:type rdf:resource="http://www.example.org/ns/SVGConstraint"/>
+	<rdf:type rdf:resource="http://www.openannotation.org/ns/SvgConstraint"/>
 </rdf:Description>
 
 <rdf:Description rdf:about="http://openannotation.metadata.net/lorestore/oac/HubbleRDFConstrainedBody">
