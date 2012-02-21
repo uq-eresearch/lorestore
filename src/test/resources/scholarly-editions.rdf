@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="/lorestore/stylesheets/OAC.xsl"?>
+
+<rdf:RDF
+	xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+
+<rdf:Description rdf:about="http://openannotation.metadata.net/lorestore/oac/SEExplanatoryNote">
+	<rdf:type rdf:resource="http://www.openannotation.org/ns/Annotation"/>
+	<rdf:type rdf:resource="http://www.example.org/lit-annotation-ns#ExplanatoryNote"/>
+	<hasTarget xmlns="http://www.openannotation.org/ns/" rdf:resource="http://austlit.edu.au/?ex=FullTextView&amp;docId=bulstor.xml;chunk.id=d29e2470;toc.depth=1;toc.id=d29e223"/>
+	<creator xmlns="http://purl.org/dc/terms/" rdf:resource="http://www.example.org/user/1"/>
+	<title xmlns="http://purl.org/dc/elements/1.1/">Young Ladies Journal</title>
+	<created xmlns="http://purl.org/dc/terms/">2010-09-15T18:25:12Z</created>
+	<hasBody xmlns="http://www.openannotation.org/ns/" rdf:resource="http://austlit.edu.au/auselit/annotea/body/1C41B1C9E18CEB63"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.example.org/user/1">
+	<rdf:type rdf:resource="http://xmlns.com/foaf/0.1/Agent"/>
+	<name xmlns="http://xmlns.com/foaf/0.1/">Roger Osborne</name>
+	<mbox xmlns="http://xmlns.com/foaf/0.1/">rosborne@example.edu</mbox>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://openannotation.metadata.net/lorestore/oac/SEReply">
+	<rdf:type rdf:resource="http://www.openannotation.org/ns/Reply"/>
+	<hasTarget xmlns="http://www.openannotation.org/ns/" rdf:resource="http://openannotation.metadata.net/lorestore/oac/SEExplanatoryNote"/>
+	<creator xmlns="http://purl.org/dc/terms/" rdf:resource="http://www.example.org/user/2"/>
+	<created xmlns="http://purl.org/dc/terms/">2010-09-16T13:43:27Z</created>
+	<hasBody xmlns="http://www.openannotation.org/ns/" rdf:resource="http://austlit.edu.au/auselit/annotea/body/2426C1B5462F96DD"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.example.org/user/2">
+	<rdf:type rdf:resource="http://xmlns.com/foaf/0.1/Agent"/>
+	<name xmlns="http://xmlns.com/foaf/0.1/">Anna Gerber</name>
+	<mbox xmlns="http://xmlns.com/foaf/0.1/">agerber@example.edu</mbox>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://openannotation.metadata.net/lorestore/oac/SENoteXPointer">
+	<rdf:type rdf:resource="http://www.openannotation.org/ns/Annotation"/>
+	<rdf:type rdf:resource="http://www.example.org/lit-annotation-ns#ExplanatoryNote"/>
+	<hasTarget xmlns="http://www.openannotation.org/ns/" rdf:resource="http://austlit.edu.au/?ex=FullTextView&amp;docId=bulstor.xml;chunk.id=d29e2470;toc.depth=1;toc.id=d29e223#xpointer(string-range(id(&quot;div-content&quot;)/table[2]/tbody[1]/tr[1]/td[1]/div[1]/p[35]/i[1], &quot;&quot;, 1, 22))"/>
+	<creator xmlns="http://purl.org/dc/terms/" rdf:resource="http://www.example.org/user/1"/>
+	<title xmlns="http://purl.org/dc/elements/1.1/">Young Ladies Journal</title>
+	<created xmlns="http://purl.org/dc/terms/">2010-09-15T18:25:12Z</created>
+	<hasBody xmlns="http://www.openannotation.org/ns/" rdf:resource="http://austlit.edu.au/auselit/annotea/body/1C41B1C9E18CEB63"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://openannotation.metadata.net/lorestore/oac/SEConstrainedTarget">
+	<rdf:type rdf:resource="http://www.openannotation.org/ns/Annotation"/>
+	<rdf:type rdf:resource="http://www.example.org/lit-annotation-ns#ExplanatoryNote"/>
+	<hasTarget xmlns="http://www.openannotation.org/ns/" rdf:resource="urn:uuid:be459980-c305-11e0-9ca8-0002a5d5c51b"/>
+	<creator xmlns="http://purl.org/dc/terms/" rdf:resource="http://www.example.org/user/1"/>
+	<title xmlns="http://purl.org/dc/elements/1.1/">Young Ladies Journal</title>
+	<created xmlns="http://purl.org/dc/terms/">2010-09-15T18:25:12Z</created>
+	<hasBody xmlns="http://www.openannotation.org/ns/" rdf:resource="http://austlit.edu.au/auselit/annotea/body/1C41B1C9E18CEB63"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="urn:uuid:be459980-c305-11e0-9ca8-0002a5d5c51b">
+	<rdf:type rdf:resource="http://www.openannotation.org/ns/ConstrainedTarget"/>
+	<constrains xmlns="http://www.openannotation.org/ns/" rdf:resource="http://austlit.edu.au/?ex=FullTextView&amp;docId=bulstor.xml;chunk.id=d29e2470;toc.depth=1;toc.id=d29e223"/>
+	<constrainedBy xmlns="http://www.openannotation.org/ns/" rdf:resource="urn:uuid:ce037220-c305-11e0-87ab-0002a5d5c51b"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="urn:uuid:ce037220-c305-11e0-87ab-0002a5d5c51b">
+	<rdf:type rdf:resource="http://www.openannotation.org/ns/PrefixSuffixConstraint"/>
+	<prefix xmlns="http://purl.org/ao/selectors/">needs in the </prefix>
+	<exact xmlns="http://purl.org/ao/selectors/">Young Ladies Journal,</exact>
+	<suffix xmlns="http://purl.org/ao/selectors/"> and— Heaven</suffix>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://openannotation.metadata.net/lorestore/oac/SEBodyProperties">
+	<rdf:type rdf:resource="http://www.openannotation.org/ns/Annotation"/>
+	<rdf:type rdf:resource="http://www.example.org/lit-annotation-ns#TextualNote"/>
+	<hasTarget xmlns="http://www.openannotation.org/ns/" rdf:resource="http://web.srv.adfa.edu.au/JITM/JL/JL%20PE/JL%20Preferred%20Perspective.html#xpointer(string-range(id(&quot;JL-PE.TE-22&quot;), &quot;&quot;, 495, 11))"/>
+	<creator xmlns="http://purl.org/dc/terms/" rdf:resource="http://www.example.org/user/4"/>
+	<title xmlns="http://purl.org/dc/elements/1.1/">thi trooper</title>
+	<created xmlns="http://purl.org/dc/terms/">2010-05-24T19:12.33Z</created>
+	<hasBody xmlns="http://www.openannotation.org/ns/" rdf:resource="http://web.srv.adfa.edu.au/JITM/JL/JL%20PE/JL%20PE/Ancillary/Textual%20Notes(PE).html#Annotations(PE).Note13"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://web.srv.adfa.edu.au/JITM/JL/JL%20PE/JL%20Preferred%20Perspective.html#xpointer(string-range(id(&quot;JL-PE.TE-22&quot;), &quot;&quot;, 495, 11))">
+	<rdf:type rdf:resource="http://www.openannotation.org/ns/Target"/>
+	<isPartOf xmlns="http://purl.org/dc/terms/" rdf:resource="http://web.srv.adfa.edu.au/JITM/JL/JL%20PE/JL%20Preferred%20Perspective.html"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://web.srv.adfa.edu.au/JITM/JL/JL%20PE/JL%20PE/Ancillary/Textual%20Notes(PE).html#Annotations(PE).Note13">
+	<rdf:type rdf:resource="http://www.openannotation.org/ns/Body"/>
+	<creator xmlns="http://purl.org/dc/terms/" rdf:resource="http://www.example.org/user/3"/>
+	<created xmlns="http://purl.org/dc/terms/">2005</created>
+	<isPartOf xmlns="http://purl.org/dc/terms/" rdf:resource="http://web.srv.adfa.edu.au/JITM/JL/JL%20PE/JL%20PE/Ancillary/Textual%20Notes(PE).html"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.example.org/user/4">
+	<name xmlns="http://xmlns.com/foaf/0.1/">Damien Ayers</name>
+	<mbox xmlns="http://xmlns.com/foaf/0.1/">dayers@example.edu</mbox>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.example.org/user/3">
+	<name xmlns="http://xmlns.com/foaf/0.1/">Paul Eggert</name>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://openannotation.metadata.net/lorestore/oac/SEMultipleTargets">
+	<rdf:type rdf:resource="http://www.openannotation.org/ns/Annotation"/>
+	<rdf:type rdf:resource="http://www.example.org/lit-annotation-ns#TextualNote"/>
+	<hasTarget xmlns="http://www.openannotation.org/ns/" rdf:resource="http://austlit.edu.au/---/OMYF/WBB_01_WR_OMYF.txt#char=2639,2651"/>
+	<hasTarget xmlns="http://www.openannotation.org/ns/" rdf:resource="http://acms.sl.nsw.gov.au/_DAMx/image/19/121/a1211001h.jpg#xywh=559,784,235,52"/>
+	<hasBody xmlns="http://www.openannotation.org/ns/" rdf:resource="http://www.example.org/body/AA6B8124C3A48BC1"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://austlit.edu.au/---/OMYF/WBB_01_WR_OMYF.txt#char=2639,2651">
+	<isPartOf xmlns="http://purl.org/dc/terms/" rdf:resource="http://austlit.edu.au/---/OMYF/WBB_01_WR_OMYF.txt"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://acms.sl.nsw.gov.au/_DAMx/image/19/121/a1211001h.jpg#xywh=559,784,235,52">
+	<isPartOf xmlns="http://purl.org/dc/terms/" rdf:resource="http://acms.sl.nsw.gov.au/_DAMx/image/19/121/a1211001h.jpg"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://openannotation.metadata.net/lorestore/oac/SEDataAnnotation">
+	<rdf:type rdf:resource="http://www.openannotation.org/ns/DataAnnotation"/>
+	<hasTarget xmlns="http://www.openannotation.org/ns/" rdf:resource="http://austlit.edu.au/common/loredemo/H1867A87.html#xpointer(string-range(/html[1]/body[1]/pre[1], &quot;&quot;, 82, 8))"/>
+	<hasBody xmlns="http://www.openannotation.org/ns/" rdf:resource="http://openannotation.metadata.net/lorestore/ore/SEDataAnnotationBody"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://openannotation.metadata.net/lorestore/ore/SEDataAnnotationBody">
+	<rdf:type rdf:resource="http://www.openannotation.org/ns/Body"/>
+	<format xmlns="http://purl.org/dc/elements/1.1/">application/rdf+xml</format>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://austlit.edu.au/common/loredemo/H1867A87.html#xpointer(string-range(/html[1]/body[1]/pre[1], &quot;&quot;, 82, 8))">
+	<rdf:type rdf:resource="http://www.openannotation.org/ns/Target"/>
+	<isPartOf xmlns="http://purl.org/dc/terms/" rdf:resource="http://austlit.edu.au/common/loredemo/H1867A87.html"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://austlit.edu.au/common/loredemo/I1883.html#xpointer(string-range(/html[1]/body[1]/pre[1], &quot;&quot;, 1, 82))">
+	<rdf:type rdf:resource="http://www.openannotation.org/ns/Target"/>
+	<isPartOf xmlns="http://purl.org/dc/terms/" rdf:resource="http://austlit.edu.au/common/loredemo/I1883.html"/>
+</rdf:Description>
+</rdf:RDF>

@@ -29,7 +29,7 @@
 	        foaf:mbox "agerber@example.edu" .
 }
 <http://localhost:8080/lorestore/oac/SENoteXPointer> {
-	<http://localhost:8080/lorestore/oac/SEExplanatoryNote> a oac:Annotation ;
+	<http://localhost:8080/lorestore/oac/SENoteXPointer> a oac:Annotation ;
 			a lit:ExplanatoryNote ;
 	        oac:hasBody <http://austlit.edu.au/auselit/annotea/body/1C41B1C9E18CEB63> ;
 	        oac:hasTarget <http://austlit.edu.au/?ex=FullTextView&docId=bulstor.xml;chunk.id=d29e2470;toc.depth=1;toc.id=d29e223#xpointer(string-range(id("div-content")/table[2]/tbody[1]/tr[1]/td[1]/div[1]/p[35]/i[1], "", 1, 22))> ;
