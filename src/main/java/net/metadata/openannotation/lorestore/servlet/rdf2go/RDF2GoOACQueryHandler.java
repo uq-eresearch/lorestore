@@ -194,10 +194,16 @@ public class RDF2GoOACQueryHandler extends AbstractRDF2GoQueryHandler {
 		// @formatter:off
 		String query = "SELECT DISTINCT ?g ?a ?m ?t ?priv"
 				+ " WHERE { graph ?g {"
+				// regular target
 				+ " {?anno <http://www.openannotation.org/ns/hasTarget> <" + escapedURL + "> .}"
-				+ " UNION {?anno <http://www.openannotation.org/ns/hasTarget> ?t . ?t <http://purl.org/dc/terms/isPartOf> <" + escapedURL + ">} "
 				+ " UNION {?anno <http://www.openannotation.org/ns/hasTarget> <" + altURL + "> .} "
-				+ " UNION {?anno <http://www.openannotation.org/ns/hasTarget> ?t . ?t <http://purl.org/dc/terms/isPartOf> <" + altURL+ ">}}. "
+				// target with media fragment
+				+ " UNION {?anno <http://www.openannotation.org/ns/hasTarget> ?t . ?t <http://purl.org/dc/terms/isPartOf> <" + escapedURL + ">} "
+				+ " UNION {?anno <http://www.openannotation.org/ns/hasTarget> ?t . ?t <http://purl.org/dc/terms/isPartOf> <" + altURL+ ">} "
+				// constrained target
+				+ " UNION {?anno <http://www.openannotation.org/ns/hasTarget> ?t . ?t <http://www.openannotation.org/ns/constrains> <" + escapedURL + ">} "
+				+ " UNION {?anno <http://www.openannotation.org/ns/hasTarget> ?t . ?t <http://www.openannotation.org/ns/constrains> <" + altURL + ">} "
+				+ "}."
 				+ " OPTIONAL {?g <http://purl.org/dc/elements/1.1/creator> ?a}."
 				+ " OPTIONAL {?g <http://purl.org/dc/terms/modified> ?m}."
 				+ " OPTIONAL {?g <http://purl.org/dc/elements/1.1/title> ?t}."
