@@ -30,7 +30,6 @@
 				
 			<p>The source code for lorestore is released as open source under the terms of the GPL 3.0:</p>
 			<ul>
-				<li><a href="https://github.com/uq-eresearch/oacwebapp">OAC web app on GitHub</a></li>
 				<li><a href="https://github.com/uq-eresearch/lorestore">lorestore on GitHub</a></li>
 			</ul>
           </div>
