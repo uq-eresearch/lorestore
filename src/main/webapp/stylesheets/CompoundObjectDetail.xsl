@@ -21,7 +21,7 @@
     
     <xsl:template match="/">
     	<html>
-    	   <head><title>Compound Object</title></head>
+    	   <head><title>Resource Map</title></head>
     	   <link type="text/css" rel="stylesheet" href="../stylesheets/bootstrap.min.css"/>
     	   <link type="text/css" rel="stylesheet" href="../stylesheets/lorestore.css"/>
     	<body style="padding-top:40px">
@@ -96,7 +96,7 @@
         <xsl:if test="$created"><small>Created <xsl:value-of select="$created"/>. </small></xsl:if>
         <xsl:if test="$modified"><small>Last modified <xsl:value-of select="$modified"/>.</small></xsl:if>
         </p>
-        <small>This content was sourced from the compound object identified as <xsl:value-of select="$about"/>. Use the View Source option in your browser to see the RDF/XML.</small>
+        <small>This content was sourced from the Resource Map identified as <xsl:value-of select="$about"/>. Use the View Source option in your browser to see the RDF/XML.</small>
         
     </xsl:template>
 
@@ -144,7 +144,7 @@
                 </a>
             </xsl:when>
          	<xsl:when test="//rdf:Description[@rdf:about = $res]/rdf:type/@rdf:resource='http://www.openarchives.org/ore/terms/ResourceMap'">
-         		<img title="Nested Compound Object" src="../images/icons/oaioreicon-sm.png"/>&#160;
+         		<img title="Nested Resource Map" src="../images/icons/oaioreicon-sm.png"/>&#160;
          		<a title="View in new tab" target="_blank" class="url" href="{$res}">
          			<xsl:value-of select="$displaytitle"/>
          		</a>
@@ -219,11 +219,11 @@
                 	    <xsl:variable name="apos">'</xsl:variable>
                 		<xsl:variable name="quot">"</xsl:variable>
                 		<xsl:variable name="translated" select="translate(.,$quot,$apos)"/>
-                		<script type="text/javascript">
+                		<!--  script type="text/javascript">
                 			<xsl:text>try{Ext.get('</xsl:text>
                 			<xsl:value-of select="$propid"/><xsl:text>').insertHtml("beforeBegin","</xsl:text><xsl:value-of select='$translated'/>
                 			<xsl:text>&lt;br/>");} catch (ex){} </xsl:text>
-                		</script>
+                		</script-->
                 	</xsl:when>
                     <xsl:when test="text()">
                         
