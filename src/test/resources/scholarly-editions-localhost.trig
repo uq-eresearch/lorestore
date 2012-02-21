@@ -1,0 +1,124 @@
+@prefix dc: <http://purl.org/dc/elements/1.1/> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix dcterms : <http://purl.org/dc/terms/> .
+@prefix oac: <http://www.openannotation.org/ns/> .
+@prefix cnt: <http://www.w3.org/2011/content#> .
+@prefix lit: <http://www.example.org/lit-annotation-ns#> .
+@prefix aos: <http://purl.org/ao/selectors/> .
+@prefix ore: <http://www.openarchives.org/ore/terms/> .
+<http://localhost:8080/lorestore/oac/SEExplanatoryNote> {
+	<http://localhost:8080/lorestore/oac/SEExplanatoryNote> a oac:Annotation ;
+		a lit:ExplanatoryNote ;
+        oac:hasBody <http://austlit.edu.au/auselit/annotea/body/1C41B1C9E18CEB63> ;
+        oac:hasTarget <http://austlit.edu.au/?ex=FullTextView&docId=bulstor.xml;chunk.id=d29e2470;toc.depth=1;toc.id=d29e223> ;
+        dc:title "Young Ladies Journal" ;
+        dcterms:created "2010-09-15T18:25:12Z" ;
+        dcterms:creator <http://www.example.org/user/1> .
+	<http://www.example.org/user/1> a foaf:Agent ;
+        foaf:name "Roger Osborne" ;
+        foaf:mbox "rosborne@example.edu" .
+}
+<http://localhost:8080/lorestore/oac/SEReply> {
+	<http://localhost:8080/lorestore/oac/SEReply> a oac:Reply ;
+	        oac:hasBody <http://austlit.edu.au/auselit/annotea/body/2426C1B5462F96DD> ;
+	        oac:hasTarget <http://localhost:8080/lorestore/oac/SEExplanatoryNote> ;
+	        dcterms:creator <http://www.example.org/user/2> ;
+	        dcterms:created "2010-09-16T13:43:27Z" .
+	<http://www.example.org/user/2> a foaf:Agent ;
+	        foaf:name "Anna Gerber" ;
+	        foaf:mbox "agerber@example.edu" .
+}
+<http://localhost:8080/lorestore/oac/SENoteXPointer> {
+	<http://localhost:8080/lorestore/oac/SEExplanatoryNote> a oac:Annotation ;
+			a lit:ExplanatoryNote ;
+	        oac:hasBody <http://austlit.edu.au/auselit/annotea/body/1C41B1C9E18CEB63> ;
+	        oac:hasTarget <http://austlit.edu.au/?ex=FullTextView&docId=bulstor.xml;chunk.id=d29e2470;toc.depth=1;toc.id=d29e223#xpointer(string-range(id("div-content")/table[2]/tbody[1]/tr[1]/td[1]/div[1]/p[35]/i[1], "", 1, 22))> ;
+	        dc:title "Young Ladies Journal" ;
+	        dcterms:created "2010-09-15T18:25:12Z" ;
+	        dcterms:creator <http://www.example.org/user/1> .
+	<http://austlit.edu.au/?ex=FullTextView&docId=bulstor.xml;chunk.id=d29e2470;toc.depth=1;toc.id=d29e223#xpointer(string-range(id("div-content")/table[2]/tbody[1]/tr[1]/td[1]/div[1]/p[35]/i[1], "", 1, 22))> dcterms:isPartOf <http://austlit.edu.au/?ex=FullTextView&docId=bulstor.xml;chunk.id=d29e2470;toc.depth=1;toc.id=d29e223> .
+	<http://www.example.org/user/1> a foaf:Agent ;
+	        foaf:name "Roger Osborne" ;
+	        foaf:mbox "rosborne@example.edu" .
+}
+<http://localhost:8080/lorestore/oac/SEConstrainedTarget> {
+	<http://localhost:8080/lorestore/oac/SEConstrainedTarget> a oac:Annotation ;
+			a lit:ExplanatoryNote ;
+	        oac:hasBody <http://austlit.edu.au/auselit/annotea/body/1C41B1C9E18CEB63> ;
+	        oac:hasTarget <urn:uuid:be459980-c305-11e0-9ca8-0002a5d5c51b> ;
+	        dc:title "Young Ladies Journal" ;
+	        dcterms:created "2010-09-15T18:25:12Z" ;
+	        dcterms:creator <http://www.example.org/user/1> .
+	<urn:uuid:be459980-c305-11e0-9ca8-0002a5d5c51b> a oac:ConstrainedTarget ;
+	        oac:constrains <http://austlit.edu.au/?ex=FullTextView&docId=bulstor.xml;chunk.id=d29e2470;toc.depth=1;toc.id=d29e223> ;
+	        oac:constrainedBy <urn:uuid:ce037220-c305-11e0-87ab-0002a5d5c51b> .
+	<urn:uuid:ce037220-c305-11e0-87ab-0002a5d5c51b> a oac:PrefixSuffixConstraint ;
+	        aos:prefix "needs in the " ;
+	        aos:exact "Young Ladies Journal," ;
+	        aos:suffix " and— Heaven" .
+	<http://www.example.org/user/1> a foaf:Agent ;
+	        foaf:name "Roger Osborne" ;
+	        foaf:mbox "rosborne@example.edu" .
+}
+<http://localhost:8080/lorestore/oac/SEBodyProperties> {
+	<http://localhost:8080/lorestore/oac/SEBodyProperties> a oac:Annotation ;
+			a lit:TextualNote ;
+	        oac:hasTarget <http://web.srv.adfa.edu.au/JITM/JL/JL%20PE/JL%20Preferred%20Perspective.html#xpointer(string-range(id("JL-PE.TE-22"), "", 495, 11))> ;
+	        oac:hasBody <http://web.srv.adfa.edu.au/JITM/JL/JL%20PE/JL%20PE/Ancillary/Textual%20Notes(PE).html#Annotations(PE).Note13> ;
+	        dcterms:created "2010-05-24T19:12.33Z" ;
+	        dc:title "thi trooper" ;
+	        dcterms:creator <http://www.example.org/user/4> .
+	<http://web.srv.adfa.edu.au/JITM/JL/JL%20PE/JL%20Preferred%20Perspective.html#xpointer(string-range(id("JL-PE.TE-22"), "", 495, 11))> a oac:Target ;
+	        dcterms:isPartOf <http://web.srv.adfa.edu.au/JITM/JL/JL%20PE/JL%20Preferred%20Perspective.html> .
+	<http://web.srv.adfa.edu.au/JITM/JL/JL%20PE/JL%20PE/Ancillary/Textual%20Notes(PE).html#Annotations(PE).Note13> a oac:Body ;
+	        dcterms:isPartOf <http://web.srv.adfa.edu.au/JITM/JL/JL%20PE/JL%20PE/Ancillary/Textual%20Notes(PE).html> ;
+	        dcterms:creator <http://www.example.org/user/3> ;
+	        dcterms:created "2005" .
+	<http://www.example.org/user/3> foaf:name "Paul Eggert" .
+	<http://www.example.org/user/4> foaf:name "Damien Ayers";
+	        foaf:mbox "dayers@example.edu" .
+}
+<http://localhost:8080/lorestore/oac/SEMultipleTargets> {
+	<http://localhost:8080/lorestore/oac/SEMultipleTargets> a oac:Annotation ;
+			a lit:TextualNote ;
+	        oac:hasTarget <http://austlit.edu.au/---/OMYF/WBB_01_WR_OMYF.txt#char=2639,2651> ;
+	        oac:hasTarget <http://acms.sl.nsw.gov.au/_DAMx/image/19/121/a1211001h.jpg#xywh=559,784,235,52> ;
+	        oac:hasBody <http://www.example.org/body/AA6B8124C3A48BC1> .
+	<http://acms.sl.nsw.gov.au/_DAMx/image/19/121/a1211001h.jpg#xywh=559,784,235,52> dcterms:isPartOf <http://acms.sl.nsw.gov.au/_DAMx/image/19/121/a1211001h.jpg> .
+	<http://austlit.edu.au/---/OMYF/WBB_01_WR_OMYF.txt#char=2639,2651> dcterms:isPartOf <http://austlit.edu.au/---/OMYF/WBB_01_WR_OMYF.txt> .
+}
+<http://localhost:8080/lorestore/oac/SEDataAnnotation> {
+	<http://localhost:8080/lorestore/oac/SEDataAnnotation> a oac:DataAnnotation ;
+	        oac:hasTarget <http://austlit.edu.au/common/loredemo/H1867A87.html#xpointer(string-range(/html[1]/body[1]/pre[1], "", 82, 8))> ;
+	        oac:hasTarget <http://austlit.edu.au/common/loredemo/H1867A87.html#xpointer(string-range(/html[1]/body[1]/pre[1], "", 82, 8))> ;
+	        oac:hasBody <http://localhost:8080/lorestore/ore/SEDataAnnotationBody> .
+	<http://austlit.edu.au/common/loredemo/H1867A87.html#xpointer(string-range(/html[1]/body[1]/pre[1], "", 82, 8))> a oac:Target ;
+	        dcterms:isPartOf <http://austlit.edu.au/common/loredemo/H1867A87.html> .
+	<http://austlit.edu.au/common/loredemo/I1883.html#xpointer(string-range(/html[1]/body[1]/pre[1], "", 1, 82))> a oac:Target ;
+	        dcterms:isPartOf <http://austlit.edu.au/common/loredemo/I1883.html> .
+	<http://localhost:8080/lorestore/ore/SEDataAnnotationBody> a oac:Body ;
+	        dc:format "application/rdf+xml" .
+}
+
+<http://localhost:8080/lorestore/ore/SEDataAnnotationBody> {
+	<http://localhost:8080/lorestore/ore/SEDataAnnotationBody> a ore:ResourceMap ;
+		ore:describes <http://localhost:8080/lorestore/ore/SEDataAnnotationBody#aggregation> ;
+		dcterms:creator <http://www.example.org/user/5> ;
+		dcterms:modified "2010-06-20T04:08:36Z" .
+	
+	<http://localhost:8080/lorestore/ore/SEDataAnnotationBody#aggregation> a ore:Aggregation ;
+		ore:aggregates <http://austlit.edu.au/common/loredemo/H1867A87.html#xpointer(string-range(/html[1]/body[1]/pre[1],%20%22%22,%2082,%208))> ;
+		ore:aggregates <http://austlit.edu.au/common/loredemo/I1883.html#xpointer(string-range(/html[1]/body[1]/pre[1],%20%22%22,%201,%2082))> ;
+		lit:variation-date "1882" ;
+		lit:variation-place "Adelaide" ;
+		lit:variation-agent "H.M. Martin".
+
+	<http://austlit.edu.au/common/loredemo/H1867A87.html#xpointer(string-range(/html[1]/body[1]/pre[1],%20%22%22,%2082,%208))> dc:format "text/html; charset=UTF-8" ;
+		dc:title "Ms A87 1867" .
+		
+	<http://www.example.org/user/5> foaf:name "Andrew Hyland" .
+	
+	<http://austlit.edu.au/common/loredemo/I1883.html#xpointer(string-range(/html[1]/body[1]/pre[1],%20%22%22,%201,%2082))> dc:format "text/html; charset=UTF-8" ;
+		lit:isVariantOf <http://austlit.edu.au/common/loredemo/H1867A87.html#xpointer(string-range(/html[1]/body[1]/pre[1],%20%22%22,%2082,%208))> ;
+		dc:title "1883" .
+}
