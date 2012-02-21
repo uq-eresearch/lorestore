@@ -1,0 +1,136 @@
+@prefix dc: <http://purl.org/dc/elements/1.1/> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix dcterms : <http://purl.org/dc/terms/> .
+@prefix oac: <http://www.openannotation.org/ns/> .
+@prefix cnt: <http://www.w3.org/2011/content#> .
+
+<http://openannotation.metadata.net/lorestore/oac/HubbleBaseline> {
+	<http://openannotation.metadata.net/lorestore/oac/HubbleBaseline> a oac:Annotation ;
+		oac:hasTarget <http://commons.wikimedia.org/wiki/File:Hubble_ultra_deep_field.jpg> ;
+		oac:hasBody <http://www.youtube.com/watch?v=fgg2tpUVbXQ> .
+	<http://commons.wikimedia.org/wiki/File:Hubble_ultra_deep_field.jpg> a oac:Target.
+	<http://www.youtube.com/watch?v=fgg2tpUVbXQ> a oac:Body.
+}
+
+<http://openannotation.metadata.net/lorestore/oac/HubbleAdditionalProperties> {
+	<http://openannotation.metadata.net/lorestore/oac/HubbleAdditionalProperties> a oac:Annotation ;
+		dc:title "Annotation of Hubble Deep Field Image" ;
+		dcterms:creator <http://www.example.org/user/jbloggs> ;
+		dcterms:created "2010-02-01T12:34:56.000+5:00" ;
+		oac:hasTarget <http://commons.wikimedia.org/wiki/File:Hubble_ultra_deep_field.jpg> ;
+		oac:hasBody <http://www.youtube.com/watch?v=fgg2tpUVbXQ> .	
+		
+	<http://commons.wikimedia.org/wiki/File:Hubble_ultra_deep_field.jpg> a oac:Target.
+	<http://www.youtube.com/watch?v=fgg2tpUVbXQ> a oac:Body.
+	
+	<http://www.example.org/user/jbloggs> a foaf:Agent ;
+		foaf:mbox "jbloggs@example.org" ;
+		foaf:name "Joe Bloggs" .
+}
+
+<http://openannotation.metadata.net/lorestore/oac/HubbleTypesAnnotation> {
+	<http://openannotation.metadata.net/lorestore/oac/HubbleTypesAnnotation> a oac:Annotation ;
+		oac:hasTarget <http://commons.wikimedia.org/wiki/File:Hubble_ultra_deep_field.jpg> ;
+		oac:hasBody <http://twitter.com/---/status/12665463062> .
+	<http://commons.wikimedia.org/wiki/File:Hubble_ultra_deep_field.jpg> a oac:Target.
+	<http://twitter.com/---/status/12665463062> a oac:Body.
+}
+
+<http://openannotation.metadata.net/lorestore/oac/HubbleTypesReply> {
+	<http://openannotation.metadata.net/lorestore/oac/HubbleTypesReply> a oac:Reply ;
+		oac:hasTarget <http://openannotation.metadata.net/lorestore/oac/HubbleTypesAnnotation> ;
+		oac:hasBody <http://twitter.com/---/status/12665505503> .
+}
+
+<http://openannotation.metadata.net/lorestore/oac/HubbleInlineBody> {
+	<http://openannotation.metadata.net/lorestore/oac/HubbleInlineBody> a oac:Annotation ;
+		oac:hasTarget <http://commons.wikimedia.org/wiki/File:Hubble_ultra_deep_field.jpg> ;
+		oac:hasBody <urn:uuid:074360F6-19F9-49A0-83BF-A07FEEF09D5D> .
+	<urn:uuid:074360F6-19F9-49A0-83BF-A07FEEF09D5D> a cnt:ContentAsText ;
+		cnt:characterEncoding "UTF-8" ;
+		cnt:chars "This image is very impressive!" .
+}
+
+<http://openannotation.metadata.net/lorestore/oac/HubbleMultipleTargets> {
+	<http://openannotation.metadata.net/lorestore/oac/HubbleMultipleTargets> a oac:Annotation ;
+		oac:hasTarget <http://commons.wikimedia.org/wiki/File:Hubble_ultra_deep_field.jpg> ;
+		oac:hasTarget <http://imgsrc.hubblesite.org/hu/db/images/hs-1996-01-a-full_tif.tif> ;
+		oac:hasBody <http://twitter.com/---/status/10994605527> .
+	<http://commons.wikimedia.org/wiki/File:Hubble_ultra_deep_field.jpg> a oac:Target.
+	<http://imgsrc.hubblesite.org/hu/db/images/hs-1996-01-a-full_tif.tif> a oac:Target.
+	<http://twitter.com/---/status/10994605527> a oac:Body.
+}
+
+<http://openannotation.metadata.net/lorestore/oac/HubbleMediaFragments> {
+	<http://openannotation.metadata.net/lorestore/oac/HubbleMediaFragments> a oac:Annotation ;
+		oac:hasTarget <http://commons.wikimedia.org/wiki/File:Hubble_ultra_deep_field.jpg#xywh=50,100,640,480> ;
+		oac:hasBody <http://twitter.com/---/status/6312261983> .
+	
+	<http://commons.wikimedia.org/wiki/File:Hubble_ultra_deep_field.jpg#xywh=50,100,640,480> a oac:Target ;
+		dcterms:isPartOf <http://commons.wikimedia.org/wiki/File:Hubble_ultra_deep_field.jpg> .
+	<http://twitter.com/---/status/6312261983> a oac:Body .
+}
+
+<http://openannotation.metadata.net/lorestore/oac/HubbleConstraints> {
+	<http://openannotation.metadata.net/lorestore/oac/HubbleConstraints> a oac:Annotation ;
+		oac:hasTarget <urn:uuid:3DC92A55-6315-49D5-98BD-D9DFB7ADA59E> ;
+		oac:hasBody <http://twitter.com/---/status/6312261983> .
+	<urn:uuid:3DC92A55-6315-49D5-98BD-D9DFB7ADA59E> a oac:ConstrainedTarget ;
+		oac:constrains <http://commons.wikimedia.org/wiki/File:Hubble_ultra_deep_field.jpg> ;
+		oac:constrainedBy <http://www.example.org/segdesc/1/example1.svg> .
+	<http://www.example.org/segdesc/1/example1.svg> a <http://www.example.org/ns/SVGConstraint> ;
+		dc:format "image/svg+xml" .
+	<http://twitter.com/---/status/6312261983> a oac:Body .
+}
+<http://openannotation.metadata.net/lorestore/oac/HubbleInlineConstraint> {
+	<http://openannotation.metadata.net/lorestore/oac/HubbleInlineConstraint> a oac:Annotation ;
+          oac:hasTarget <urn:uuid:98f77660-5c27-11e1-b86c-0800200c9a66> ;
+          oac:hasBody <http://twitter.com/---/status/6312261983> .
+	<urn:uuid:98f77660-5c27-11e1-b86c-0800200c9a66> a oac:ConstrainedTarget ;
+          oac:constrains <http://commons.wikimedia.org/wiki/File:Hubble_ultra_deep_field.jpg> ;
+          oac:constrainedBy <urn:uuid:06c292b0-5c41-11e1-b86c-0800200c9a66> .
+
+	<urn:uuid:06c292b0-5c41-11e1-b86c-0800200c9a66> a <http://www.example.org/ns/SVGConstraint> ;
+          a cnt:ContentAsXML ;
+          dc:format "image/svg+xml" ;
+          cnt:version "1.0" ;
+          cnt:rest "<svg xmlns='http://www.w3.org/2000/svg' version='1.1'><polygon points='200,10 250,190 160,210'/></svg>" ;
+          cnt:declaredEncoding "UTF-8" .
+
+	<http://twitter.com/---/status/6312261983> a oac:Body .
+}
+
+<http://openannotation.metadata.net/lorestore/oac/HubbleRDFConstraint> {
+	<http://openannotation.metadata.net/lorestore/oac/HubbleRDFConstraint> a oac:Annotation ;
+          oac:hasTarget <urn:uuid:87c0e070-5c27-11e1-b86c-0800200c9a66> ;
+          oac:hasBody <http://twitter.com/---/status/6312261983> .
+
+	<urn:uuid:87c0e070-5c27-11e1-b86c-0800200c9a66> a oac:ConstrainedTarget ;
+          oac:constrains <http://commons.wikimedia.org/wiki/File:Hubble_ultra_deep_field.jpg> ;
+          oac:constrainedBy <urn:uuid:db5d24a0-5c27-11e1-b86c-0800200c9a66> .
+
+	<urn:uuid:db5d24a0-5c27-11e1-b86c-0800200c9a66> a <http://www.example.org/ns/BoxConstraint> ;
+          <http://www.example.org/image/x> 100 ;
+          <http://www.example.org/image/y> 500 ;
+          <http://www.example.org/image/w> 250 ;
+          <http://www.example.org/image/h> 150 .
+	<http://twitter.com/---/status/6312261983> a oac:Body .
+}
+<http://openannotation.metadata.net/lorestore/oac/HubbleConstrainedBody> {
+	<http://openannotation.metadata.net/lorestore/oac/HubbleRDFConstrainedBody> a oac:Annotation ;
+	      oac:hasBody <urn:uuid:a96f0ca0-5c28-11e1-b86c-0800200c9a66> ;
+          oac:hasTarget <urn:uuid:c12f8630-5c28-11e1-b86c-0800200c9a66> .
+
+
+	<urn:uuid:a96f0ca0-5c28-11e1-b86c-0800200c9a66> a oac:ConstrainedBody ;
+          oac:constrains <http://www.youtube.com/watch?v=fgg2tpUVbXQ> ;
+          oac:constrainedBy <http://www.example.org/segdesc/1/example.npt> .
+
+	<urn:uuid:c12f8630-5c28-11e1-b86c-0800200c9a66> a oac:ConstrainedTarget ;
+          oac:constrains <http://commons.wikimedia.org/wiki/File:Hubble_ultra_deep_field.jpg> ;
+          oac:constrainedBy <http://www.example.org/segdesc/1/example.svg> .
+
+	<http://www.example.org/segdesc/1/example.svg> a <http://www.example.org/ns/SVGConstraint> .
+
+	<http://www.example.org/segdesc/1/example.npt> a <http://www.example.org/ns/NptConstraint> .
+}

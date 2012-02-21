@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="/lorestore/stylesheets/OAC.xsl"?>
+
+<rdf:RDF
+	xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+
+<rdf:Description rdf:about="http://openannotation.metadata.net/lorestore/oac/HubbleBaseline">
+	<rdf:type rdf:resource="http://www.openannotation.org/ns/Annotation"/>
+	<hasTarget xmlns="http://www.openannotation.org/ns/" rdf:resource="http://commons.wikimedia.org/wiki/File:Hubble_ultra_deep_field.jpg"/>
+	<hasBody xmlns="http://www.openannotation.org/ns/" rdf:resource="http://www.youtube.com/watch?v=fgg2tpUVbXQ"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://commons.wikimedia.org/wiki/File:Hubble_ultra_deep_field.jpg">
+	<rdf:type rdf:resource="http://www.openannotation.org/ns/Target"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.youtube.com/watch?v=fgg2tpUVbXQ">
+	<rdf:type rdf:resource="http://www.openannotation.org/ns/Body"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://commons.wikimedia.org/wiki/File:Hubble_ultra_deep_field.jpg">
+	<rdf:type rdf:resource="http://www.openannotation.org/ns/Target"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.youtube.com/watch?v=fgg2tpUVbXQ">
+	<rdf:type rdf:resource="http://www.openannotation.org/ns/Body"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://openannotation.metadata.net/lorestore/oac/HubbleAdditionalProperties">
+	<rdf:type rdf:resource="http://www.openannotation.org/ns/Annotation"/>
+	<hasTarget xmlns="http://www.openannotation.org/ns/" rdf:resource="http://commons.wikimedia.org/wiki/File:Hubble_ultra_deep_field.jpg"/>
+	<creator xmlns="http://purl.org/dc/terms/" rdf:resource="http://www.example.org/user/jbloggs"/>
+	<title xmlns="http://purl.org/dc/elements/1.1/">Annotation of Hubble Deep Field Image</title>
+	<created xmlns="http://purl.org/dc/terms/">2010-02-01T12:34:56.000+5:00</created>
+	<hasBody xmlns="http://www.openannotation.org/ns/" rdf:resource="http://www.youtube.com/watch?v=fgg2tpUVbXQ"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.example.org/user/jbloggs">
+	<rdf:type rdf:resource="http://xmlns.com/foaf/0.1/Agent"/>
+	<name xmlns="http://xmlns.com/foaf/0.1/">Joe Bloggs</name>
+	<mbox xmlns="http://xmlns.com/foaf/0.1/">jbloggs@example.org</mbox>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://commons.wikimedia.org/wiki/File:Hubble_ultra_deep_field.jpg">
+	<rdf:type rdf:resource="http://www.openannotation.org/ns/Target"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://openannotation.metadata.net/lorestore/oac/HubbleTypesAnnotation">
+	<rdf:type rdf:resource="http://www.openannotation.org/ns/Annotation"/>
+	<hasTarget xmlns="http://www.openannotation.org/ns/" rdf:resource="http://commons.wikimedia.org/wiki/File:Hubble_ultra_deep_field.jpg"/>
+	<hasBody xmlns="http://www.openannotation.org/ns/" rdf:resource="http://twitter.com/---/status/12665463062"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://twitter.com/---/status/12665463062">
+	<rdf:type rdf:resource="http://www.openannotation.org/ns/Body"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://openannotation.metadata.net/lorestore/oac/HubbleTypesReply">
+	<rdf:type rdf:resource="http://www.openannotation.org/ns/Reply"/>
+	<hasTarget xmlns="http://www.openannotation.org/ns/" rdf:resource="http://openannotation.metadata.net/lorestore/oac/HubbleTypesAnnotation"/>
+	<hasBody xmlns="http://www.openannotation.org/ns/" rdf:resource="http://twitter.com/---/status/12665505503"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://openannotation.metadata.net/lorestore/oac/HubbleInlineBody">
+	<rdf:type rdf:resource="http://www.openannotation.org/ns/Annotation"/>
+	<hasTarget xmlns="http://www.openannotation.org/ns/" rdf:resource="http://commons.wikimedia.org/wiki/File:Hubble_ultra_deep_field.jpg"/>
+	<hasBody xmlns="http://www.openannotation.org/ns/" rdf:resource="urn:uuid:074360F6-19F9-49A0-83BF-A07FEEF09D5D"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="urn:uuid:074360F6-19F9-49A0-83BF-A07FEEF09D5D">
+	<rdf:type rdf:resource="http://www.w3.org/2011/content#ContentAsText"/>
+	<characterEncoding xmlns="http://www.w3.org/2011/content#">UTF-8</characterEncoding>
+	<chars xmlns="http://www.w3.org/2011/content#">This image is very impressive!</chars>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://commons.wikimedia.org/wiki/File:Hubble_ultra_deep_field.jpg">
+	<rdf:type rdf:resource="http://www.openannotation.org/ns/Target"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://openannotation.metadata.net/lorestore/oac/HubbleMultipleTargets">
+	<rdf:type rdf:resource="http://www.openannotation.org/ns/Annotation"/>
+	<hasTarget xmlns="http://www.openannotation.org/ns/" rdf:resource="http://commons.wikimedia.org/wiki/File:Hubble_ultra_deep_field.jpg"/>
+	<hasTarget xmlns="http://www.openannotation.org/ns/" rdf:resource="http://imgsrc.hubblesite.org/hu/db/images/hs-1996-01-a-full_tif.tif"/>
+	<hasBody xmlns="http://www.openannotation.org/ns/" rdf:resource="http://twitter.com/---/status/10994605527"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://imgsrc.hubblesite.org/hu/db/images/hs-1996-01-a-full_tif.tif">
+	<rdf:type rdf:resource="http://www.openannotation.org/ns/Target"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://twitter.com/---/status/10994605527">
+	<rdf:type rdf:resource="http://www.openannotation.org/ns/Body"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://openannotation.metadata.net/lorestore/oac/HubbleMediaFragments">
+	<rdf:type rdf:resource="http://www.openannotation.org/ns/Annotation"/>
+	<hasTarget xmlns="http://www.openannotation.org/ns/" rdf:resource="http://commons.wikimedia.org/wiki/File:Hubble_ultra_deep_field.jpg#xywh=50,100,640,480"/>
+	<hasBody xmlns="http://www.openannotation.org/ns/" rdf:resource="http://twitter.com/---/status/6312261983"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://commons.wikimedia.org/wiki/File:Hubble_ultra_deep_field.jpg#xywh=50,100,640,480">
+	<rdf:type rdf:resource="http://www.openannotation.org/ns/Target"/>
+	<isPartOf xmlns="http://purl.org/dc/terms/" rdf:resource="http://commons.wikimedia.org/wiki/File:Hubble_ultra_deep_field.jpg"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://twitter.com/---/status/6312261983">
+	<rdf:type rdf:resource="http://www.openannotation.org/ns/Body"/>
+	<rdf:type rdf:resource="http://www.openannotation.org/ns/Body"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://openannotation.metadata.net/lorestore/oac/HubbleConstraints">
+	<rdf:type rdf:resource="http://www.openannotation.org/ns/Annotation"/>
+	<hasTarget xmlns="http://www.openannotation.org/ns/" rdf:resource="urn:uuid:3DC92A55-6315-49D5-98BD-D9DFB7ADA59E"/>
+	<hasBody xmlns="http://www.openannotation.org/ns/" rdf:resource="http://twitter.com/---/status/6312261983"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="urn:uuid:3DC92A55-6315-49D5-98BD-D9DFB7ADA59E">
+	<rdf:type rdf:resource="http://www.openannotation.org/ns/ConstrainedTarget"/>
+	<constrains xmlns="http://www.openannotation.org/ns/" rdf:resource="http://commons.wikimedia.org/wiki/File:Hubble_ultra_deep_field.jpg"/>
+	<constrainedBy xmlns="http://www.openannotation.org/ns/" rdf:resource="http://www.example.org/segdesc/1/example1.svg"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.example.org/segdesc/1/example1.svg">
+	<rdf:type rdf:resource="http://www.example.org/ns/SVGConstraint"/>
+	<format xmlns="http://purl.org/dc/elements/1.1/">image/svg+xml</format>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://twitter.com/---/status/6312261983">
+	<rdf:type rdf:resource="http://www.openannotation.org/ns/Body"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://openannotation.metadata.net/lorestore/oac/HubbleInlineConstraint">
+	<rdf:type rdf:resource="http://www.openannotation.org/ns/Annotation"/>
+	<hasTarget xmlns="http://www.openannotation.org/ns/" rdf:resource="urn:uuid:98f77660-5c27-11e1-b86c-0800200c9a66"/>
+	<hasBody xmlns="http://www.openannotation.org/ns/" rdf:resource="http://twitter.com/---/status/6312261983"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="urn:uuid:98f77660-5c27-11e1-b86c-0800200c9a66">
+	<rdf:type rdf:resource="http://www.openannotation.org/ns/ConstrainedTarget"/>
+	<constrains xmlns="http://www.openannotation.org/ns/" rdf:resource="http://commons.wikimedia.org/wiki/File:Hubble_ultra_deep_field.jpg"/>
+	<constrainedBy xmlns="http://www.openannotation.org/ns/" rdf:resource="urn:uuid:06c292b0-5c41-11e1-b86c-0800200c9a66"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="urn:uuid:06c292b0-5c41-11e1-b86c-0800200c9a66">
+	<rdf:type rdf:resource="http://www.w3.org/2011/content#ContentAsXML"/>
+	<rdf:type rdf:resource="http://www.example.org/ns/SVGConstraint"/>
+	<format xmlns="http://purl.org/dc/elements/1.1/">image/svg+xml</format>
+	<version xmlns="http://www.w3.org/2011/content#">1.0</version>
+	<rest xmlns="http://www.w3.org/2011/content#">&lt;svg xmlns='http://www.w3.org/2000/svg' version='1.1'&gt;&lt;polygon points='200,10 250,190 160,210'/&gt;&lt;/svg&gt;</rest>
+	<declaredEncoding xmlns="http://www.w3.org/2011/content#">UTF-8</declaredEncoding>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://twitter.com/---/status/6312261983">
+	<rdf:type rdf:resource="http://www.openannotation.org/ns/Body"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://openannotation.metadata.net/lorestore/oac/HubbleRDFConstraint">
+	<rdf:type rdf:resource="http://www.openannotation.org/ns/Annotation"/>
+	<hasTarget xmlns="http://www.openannotation.org/ns/" rdf:resource="urn:uuid:87c0e070-5c27-11e1-b86c-0800200c9a66"/>
+	<hasBody xmlns="http://www.openannotation.org/ns/" rdf:resource="http://twitter.com/---/status/6312261983"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="urn:uuid:87c0e070-5c27-11e1-b86c-0800200c9a66">
+	<rdf:type rdf:resource="http://www.openannotation.org/ns/ConstrainedTarget"/>
+	<constrains xmlns="http://www.openannotation.org/ns/" rdf:resource="http://commons.wikimedia.org/wiki/File:Hubble_ultra_deep_field.jpg"/>
+	<constrainedBy xmlns="http://www.openannotation.org/ns/" rdf:resource="urn:uuid:db5d24a0-5c27-11e1-b86c-0800200c9a66"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="urn:uuid:db5d24a0-5c27-11e1-b86c-0800200c9a66">
+	<rdf:type rdf:resource="http://www.example.org/ns/BoxConstraint"/>
+	<x xmlns="http://www.example.org/image/" rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">100</x>
+	<y xmlns="http://www.example.org/image/" rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">500</y>
+	<w xmlns="http://www.example.org/image/" rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">250</w>
+	<h xmlns="http://www.example.org/image/" rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">150</h>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.example.org/segdesc/1/example.svg">
+	<rdf:type rdf:resource="http://www.example.org/ns/SVGConstraint"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://openannotation.metadata.net/lorestore/oac/HubbleRDFConstrainedBody">
+	<rdf:type rdf:resource="http://www.openannotation.org/ns/Annotation"/>
+	<hasTarget xmlns="http://www.openannotation.org/ns/" rdf:resource="urn:uuid:c12f8630-5c28-11e1-b86c-0800200c9a66"/>
+	<hasBody xmlns="http://www.openannotation.org/ns/" rdf:resource="urn:uuid:a96f0ca0-5c28-11e1-b86c-0800200c9a66"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="urn:uuid:a96f0ca0-5c28-11e1-b86c-0800200c9a66">
+	<rdf:type rdf:resource="http://www.openannotation.org/ns/ConstrainedBody"/>
+	<constrains xmlns="http://www.openannotation.org/ns/" rdf:resource="http://www.youtube.com/watch?v=fgg2tpUVbXQ"/>
+	<constrainedBy xmlns="http://www.openannotation.org/ns/" rdf:resource="http://www.example.org/segdesc/1/example.npt"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="urn:uuid:c12f8630-5c28-11e1-b86c-0800200c9a66">
+	<rdf:type rdf:resource="http://www.openannotation.org/ns/ConstrainedTarget"/>
+	<constrains xmlns="http://www.openannotation.org/ns/" rdf:resource="http://commons.wikimedia.org/wiki/File:Hubble_ultra_deep_field.jpg"/>
+	<constrainedBy xmlns="http://www.openannotation.org/ns/" rdf:resource="http://www.example.org/segdesc/1/example.svg"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.example.org/segdesc/1/example.npt">
+	<rdf:type rdf:resource="http://www.example.org/ns/NptConstraint"/>
+</rdf:Description>
+
+</rdf:RDF>
