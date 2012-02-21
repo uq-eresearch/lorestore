@@ -78,7 +78,7 @@
 	<urn:uuid:3DC92A55-6315-49D5-98BD-D9DFB7ADA59E> a oac:ConstrainedTarget ;
 		oac:constrains <http://commons.wikimedia.org/wiki/File:Hubble_ultra_deep_field.jpg> ;
 		oac:constrainedBy <http://www.example.org/segdesc/1/example1.svg> .
-	<http://www.example.org/segdesc/1/example1.svg> a <http://www.openannotation.org/ns/SvgConstraint> ;
+	<http://www.example.org/segdesc/1/example1.svg> a <http://www.example.org/ns/SVGConstraint> ;
 		dc:format "image/svg+xml" .
 	<http://twitter.com/---/status/6312261983> a oac:Body .
 }
@@ -90,7 +90,7 @@
           oac:constrains <http://commons.wikimedia.org/wiki/File:Hubble_ultra_deep_field.jpg> ;
           oac:constrainedBy <urn:uuid:06c292b0-5c41-11e1-b86c-0800200c9a66> .
 
-	<urn:uuid:06c292b0-5c41-11e1-b86c-0800200c9a66> a <http://www.openannotation.org/ns/SvgConstraint> ;
+	<urn:uuid:06c292b0-5c41-11e1-b86c-0800200c9a66> a <http://www.example.org/ns/SVGConstraint> ;
           a cnt:ContentAsXML ;
           dc:format "image/svg+xml" ;
           cnt:version "1.0" ;
@@ -130,7 +130,7 @@
           oac:constrains <http://commons.wikimedia.org/wiki/File:Hubble_ultra_deep_field.jpg> ;
           oac:constrainedBy <http://www.example.org/segdesc/1/example.svg> .
 
-	<http://www.example.org/segdesc/1/example.svg> a <http://www.openannotation.org/ns/SvgConstraint> .
+	<http://www.example.org/segdesc/1/example.svg> a <http://www.example.org/ns/SVGConstraint> .
 
 	<http://www.example.org/segdesc/1/example.npt> a <http://www.example.org/ns/NptConstraint> .
 }
