@@ -19,22 +19,7 @@
 				<title>OAC Annotations/Replies</title>
 				<link type="text/css" rel="stylesheet" href="../stylesheets/bootstrap.min.css"/>
 				<link rel="stylesheet" href="../prettify/prettify.css" type="text/css"/>
-                <script src="../prettify/prettify.js" type="text/javascript"></script>
-                <script src="../jquery-1.7.1.min.js" type="text/javascript"></script>
-                <script src="../bootstrap-tab.js" type="text/javascript"></script>
-                <script type="text/javascript">
-                    function downloadTrig(annoID) {
-                        jQuery.ajax({
-                            url: annoID,
-                            headers: { 
-                                Accept : "application/x-trig"
-                            },
-                            success: function(data, status, jqXHR){
-                                window.location.href='data:application/x-trig,' + encodeURIComponent(jqXHR.responseText);
-                            }
-                        });
-                    }
-                </script>
+                
 			</head>
 			<body onload="prettyPrint()" style="padding-top:40px">
 				    <div class="navbar navbar-fixed-top">
@@ -46,7 +31,7 @@
 					</div>
 					<div class="container">
                     <div class="content">
-                    
+                    <script src="../jquery-1.7.1.min.js" type="text/javascript"></script>
                     <xsl:if test="count(/rdf:RDF/rdf:Description[contains(rdf:type/@rdf:resource,'openannotation.org')]) = 0">
                         <p style="margin-top:2em">No matching annotations</p>
                     </xsl:if>
@@ -149,6 +134,22 @@
                 </div>
                 <p><small>Use browser <em>View Page Source</em> to see underlying annotation RDF</small></p>
                 </div>
+                <script src="../prettify/prettify.js" type="text/javascript"></script>
+                
+                <script src="../bootstrap-tab.js" type="text/javascript"></script>
+                <script type="text/javascript">
+                    function downloadTrig(annoID) {
+                        jQuery.ajax({
+                            url: annoID,
+                            headers: { 
+                                Accept : "application/x-trig"
+                            },
+                            success: function(data, status, jqXHR){
+                                window.location.href='data:application/x-trig,' + encodeURIComponent(jqXHR.responseText);
+                            }
+                        });
+                    }
+                </script>
 			</body>
 		</html>
 
@@ -220,10 +221,6 @@
 			  });
 		  </script>
 		</div>
-        
-        
-    
-    
     </xsl:template>
     <xsl:template match="*">
     </xsl:template>

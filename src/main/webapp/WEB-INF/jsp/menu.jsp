@@ -1,8 +1,3 @@
-<script type="text/javascript">
-    jQuery(document).ready(function(){
-       jQuery('.dropdown-toggle').dropdown()
-    });
-</script>
 <div class="navbar navbar-fixed-top">
     <div class="navbar-inner">
         <div class="container">

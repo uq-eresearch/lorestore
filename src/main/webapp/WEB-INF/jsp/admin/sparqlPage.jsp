@@ -5,10 +5,6 @@
     <head>
         <title>SPARQL Query</title>
         <%@ include file="/WEB-INF/jsp/header.jsp" %>
-        <script type="text/javascript" src="/lorestore/flintsparql/lib/codemirror.js"></script>
-        <script type="text/javascript" src="/lorestore/flintsparql/sparqlmode_ll1.js"></script>
-        <script type="text/javascript" src="/lorestore/flintsparql/init-local.js"></script>
-        <script type="text/javascript" src="/lorestore/flintsparql/flint-editor.js"></script>
         <link rel="stylesheet" href="/lorestore/flintsparql/lib/codemirror.css"/>
         <link rel="stylesheet" href="/lorestore/flintsparql/css/sparqlcolors.css"/>
         <link rel="stylesheet" href="/lorestore/flintsparql/css/docs.css"/>
@@ -38,6 +34,10 @@
                 </div>
             </div>
             <%@ include file="/WEB-INF/jsp/footer.jsp" %>
+            <script type="text/javascript" src="/lorestore/flintsparql/lib/codemirror.js"></script>
+	        <script type="text/javascript" src="/lorestore/flintsparql/sparqlmode_ll1.js"></script>
+	        <script type="text/javascript" src="/lorestore/flintsparql/init-local.js"></script>
+	        <script type="text/javascript" src="/lorestore/flintsparql/flint-editor.js"></script>
         </div>
     </body>
 </html>

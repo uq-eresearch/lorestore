@@ -6,11 +6,7 @@
   <head>
 	<title>${sitename} User Account Operation - Input Error</title>
     <%@ include file="header.jsp" %>
-    <script type="text/javascript">
-        function doTryAgain() {
-            window.history.back();
-        };
-    </script>
+    
   </head>
   <body>  
 	<%@ include file="menu.jsp" %>
@@ -35,6 +31,11 @@
       </div>
       </div>
       <%@ include file="footer.jsp" %>
+      <script type="text/javascript">
+        function doTryAgain() {
+            window.history.back();
+        };
+      </script>
     </div>
   </body>
 </body>

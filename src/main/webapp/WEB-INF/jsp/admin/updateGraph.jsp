@@ -6,57 +6,7 @@
   <head>
     <title>lorestore update named graph</title>
     <%@ include file="/WEB-INF/jsp/header.jsp" %>
-    <script type="text/javascript" src="${secure}/bootstrap-alert.js"></script>
-    <script type="text/javascript">
-    var lorestore={};
-    lorestore.init = function(){
-        lorestore.cm = CodeMirror.fromTextArea(document.getElementById("rdfeditor"), {
-            mode: {name: "xml", alignCDATA: true},         
-            lineNumbers: true
-        }); 
-    };
-    lorestore.loadGraph = function() {
-        var uri = jQuery('#updateID').val();
-        if (uri && !jQuery('#updateID').prop('disabled')){
-        jQuery.ajax({
-                url: uri,
-                context: document.body,
-                success: function(data, status, xhr){
-                    lorestore.cm.setValue(xhr.responseText);
-                    jQuery('#updateID').prop('disabled',true);
-                },
-                error: function(jqXHR, textStatus, errorThrown){
-                    jQuery('#failMessage').html("<span class='label label-important'>" + textStatus + "</span> " + errorThrown);
-                    jQuery('#failureMessage').css('display','block');
-                }
-            });
-        } else {
-         jQuery('#emptyURIMessage').css('display','block');
-        }
-    };
-    lorestore.updateGraph = function(){
-        var uri = jQuery('#updateID').val();
-        if (uri){
-            jQuery.ajax({
-                url: uri,
-                type: 'PUT',
-                data: lorestore.cm.getValue(),
-                context: document.body,
-                success: function(data, status, xhr){
-                    jQuery('#successMessage').css('display','block');
-                    
-                },
-                error: function(jqXHR, textStatus, errorThrown){
-                    jQuery('#failMessage').html("<span class='label label-important'>" + textStatus + "</span> " + errorThrown);
-                    jQuery('#failMessage').css('display','block');
-                }
-            });
-        } 
-    };
-    
-    </script>
-    <script src="../flintsparql/lib/codemirror.js"></script>
-    <script src="../flintsparql/lib/xml.js"></script>
+
     <link rel="stylesheet" href="../flintsparql/lib/codemirror.css"/>
     <link rel="stylesheet" href="../flintsparql/lib/xml.css"/>
   </head>
@@ -98,6 +48,56 @@
       </div>
       </div>
       <%@ include file="/WEB-INF/jsp/footer.jsp" %>
+      <script type="text/javascript" src="${secure}/bootstrap-alert.js"></script>
+	  <script type="text/javascript">
+	    var lorestore={};
+	    lorestore.init = function(){
+	        lorestore.cm = CodeMirror.fromTextArea(document.getElementById("rdfeditor"), {
+	            mode: {name: "xml", alignCDATA: true},         
+	            lineNumbers: true
+	        }); 
+	    };
+	    lorestore.loadGraph = function() {
+	        var uri = jQuery('#updateID').val();
+	        if (uri && !jQuery('#updateID').prop('disabled')){
+	        jQuery.ajax({
+	                url: uri,
+	                context: document.body,
+	                success: function(data, status, xhr){
+	                	lorestore.cm.setValue(xhr.responseText);
+	                    jQuery('#updateID').prop('disabled',true);
+	                },
+	                error: function(jqXHR, textStatus, errorThrown){
+	                    jQuery('#failMessage').html("<span class='label label-important'>" + textStatus + "</span> " + errorThrown);
+	                    jQuery('#failureMessage').css('display','block');
+	                }
+	            });
+	        } else {
+	         jQuery('#emptyURIMessage').css('display','block');
+	        }
+	    };
+	    lorestore.updateGraph = function(){
+	        var uri = jQuery('#updateID').val();
+	        if (uri){
+	            jQuery.ajax({
+	                url: uri,
+	                type: 'PUT',
+	                data: lorestore.cm.getValue(),
+	                context: document.body,
+	                success: function(data, status, xhr){
+	                    jQuery('#successMessage').css('display','block');
+	                    
+	                },
+	                error: function(jqXHR, textStatus, errorThrown){
+	                    jQuery('#failMessage').html("<span class='label label-important'>" + textStatus + "</span> " + errorThrown);
+	                    jQuery('#failMessage').css('display','block');
+	                }
+	            });
+	        } 
+	    };
+    </script>
+    <script src="../flintsparql/lib/codemirror.js"></script>
+    <script src="../flintsparql/lib/xml.js"></script>
     </div>
   </body>
 </body>

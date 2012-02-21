@@ -6,29 +6,8 @@
   <head>
     <title>lorestore delete named graph</title>
     <%@ include file="/WEB-INF/jsp/header.jsp" %>
-    <script type="text/javascript" src="${secure}/bootstrap-alert.js"></script>
-    <script type="text/javascript">
-    function deleteGraph() {
-        var uri = jQuery('#deleteID').val();
-        if (uri){
-            jQuery.ajax({
-                url: uri,
-                type: 'DELETE',
-                context: document.body,
-                success: function(){
-                    jQuery('#deletedURI').text(uri);
-                    jQuery('#successMessage').css('display','block');
-                },
-                error: function(jqXHR, textStatus, errorThrown){
-                    jQuery('#failMessage').html("<span class='label label-important'>" + textStatus + "</span> " + errorThrown);
-                    jQuery('#failureMessage').css('display','block');
-                }
-            });
-        } else {
-         jQuery('#emptyURIMessage').css('display','block');
-        }
-    }
-    </script>
+    
+    
   </head>
   <body>  
   	<%@ include file="/WEB-INF/jsp/menu.jsp" %>
@@ -72,6 +51,29 @@
       </div>
       </div>
       <%@ include file="/WEB-INF/jsp/footer.jsp" %>
+      <script type="text/javascript" src="${secure}/bootstrap-alert.js"></script>
+      <script type="text/javascript">
+	    function deleteGraph() {
+	        var uri = jQuery('#deleteID').val();
+	        if (uri){
+	            jQuery.ajax({
+	                url: uri,
+	                type: 'DELETE',
+	                context: document.body,
+	                success: function(){
+	                    jQuery('#deletedURI').text(uri);
+	                    jQuery('#successMessage').css('display','block');
+	                },
+	                error: function(jqXHR, textStatus, errorThrown){
+	                    jQuery('#failMessage').html("<span class='label label-important'>" + textStatus + "</span> " + errorThrown);
+	                    jQuery('#failureMessage').css('display','block');
+	                }
+	            });
+	        } else {
+	         jQuery('#emptyURIMessage').css('display','block');
+	        }
+	    }
+	  </script>
     </div>
   </body>
 </body>
