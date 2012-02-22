@@ -8,7 +8,7 @@ About
 
 The webapp provides services for storing OAC annotations and ORE Resource Map bodies and targets.
 We use the web app for our Open Annotation service at 
-[http://openannotation.metadata.net/lorestore](http://openannotation.metadata.net/lorestore)
+[http://openannotation.metadata.net/lorestore/](http://openannotation.metadata.net/lorestore/)
 
 The source code for the lorestore webapp is available from [GitHub](https://github.com/uq-eresearch/lorestore/)
 
