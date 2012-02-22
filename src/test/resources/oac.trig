@@ -1,0 +1,119 @@
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+{
+	<http://www.openannotation.org/ns/> a owl:Ontology ;
+		owl:versionInfo "beta" .
+		
+	<http://www.openannotation.org/ns/Annotation> a rdfs:Class ;
+		rdfs:isDefinedBy <http://www.openannotation.org/ns/> ;
+		rdfs:comment "A document identified by an HTTP URI that describes, at least, the Body and Target resources involved in the annotation." ;
+		rdfs:label "Annotation" .
+		
+	<http://www.openannotation.org/ns/Target> a rdfs:Class ;
+		rdfs:isDefinedBy <http://www.openannotation.org/ns/> ;
+		rdfs:comment "The resource that is being annotated" ;
+		rdfs:label "Target" .
+		
+	<http://www.openannotation.org/ns/hasTarget> a rdf:Property ;
+		rdfs:domain <http://www.openannotation.org/ns/Annotation> ;
+		rdfs:range <http://www.openannotation.org/ns/Target> ;
+		rdfs:isDefinedBy <http://www.openannotation.org/ns/> ;
+		rdfs:comment "The relationship between Annotation and Target" ;
+		rdfs:label "hasTarget" .
+		
+	<http://www.openannotation.org/ns/Body> a rdfs:Class ;
+		rdfs:isDefinedBy <http://www.openannotation.org/ns/> ;
+		rdfs:comment "The Body is somehow about the Target resource. It is the information which is annotating the Target." ;
+		rdfs:label "Body" .
+		
+	<http://www.openannotation.org/ns/hasBody> a rdf:Property ;
+		rdfs:domain <http://www.openannotation.org/ns/Annotation> ;
+		rdfs:range <http://www.openannotation.org/ns/Body> ;
+		rdfs:isDefinedBy <http://www.openannotation.org/ns/> ;
+		rdfs:comment "The relationship between Annotation and Body" ;
+		rdfs:label "hasBody" .
+		
+	<http://www.openannotation.org/ns/annotates> a rdf:Property ;
+		rdfs:domain <http://www.openannotation.org/ns/Body> ;
+		rdfs:range <http://www.openannotation.org/ns/Target> ;
+		rdfs:isDefinedBy <http://www.openannotation.org/ns/> ;
+		rdfs:comment "The relationship between Body and Target" ;
+		rdfs:label "annotates" .
+		
+	<http://www.openannotation.org/ns/Reply> a rdfs:Class ;
+		rdfs:isDefinedBy <http://www.openannotation.org/ns/> ;
+		rdfs:comment "A subClass of Annotation which has another Annotation as its Target" ;
+		rdfs:subClassOf <http://www.openannotation.org/ns/Annotation> ;
+		rdfs:label "Reply" .
+		
+	<http://www.openannotation.org/ns/ConstrainedTarget> a rdfs:Class ;
+		rdfs:isDefinedBy <http://www.openannotation.org/ns/> ;
+		rdfs:comment "The ConstrainedTarget is the target of the annotation. It is constrained from another resource (the full resource, of which the target is a part) and constrained by a third resource, the Constraint." ;
+		rdfs:subClassOf <http://www.openannotation.org/ns/Target> ;
+		rdfs:label "ConstrainedTarget" .
+		
+	<http://www.openannotation.org/ns/ConstrainedBody> a rdfs:Class ;
+		rdfs:isDefinedBy <http://www.openannotation.org/ns/> ;
+		rdfs:subClassOf <http://www.openannotation.org/ns/Body> ;
+		rdfs:label "ConstrainedBody" .
+		
+	<http://www.openannotation.org/ns/constrains> a rdf:Property ;
+		rdfs:isDefinedBy <http://www.openannotation.org/ns/> ;
+		rdfs:comment "The relationship from the ConstrainedTarget or ConstrainedBody to the full resource being constrained" ;
+		rdfs:label "constrains" .
+		
+	<http://www.openannotation.org/ns/constrainedBy> a rdf:Property ;
+		rdfs:isDefinedBy <http://www.openannotation.org/ns/> ;
+		rdfs:comment "The relationship from the ConstrainedTarget or ConstrainedBody to the Constraint resource that describes how the full resource is constrained" ;
+		rdfs:label "constrainedBy" ;
+		rdfs:range <http://www.openannotation.org/ns/Constraint> .
+		
+	<http://www.openannotation.org/ns/Constraint> a rdfs:Class ;
+		rdfs:isDefinedBy <http://www.openannotation.org/ns/> ;
+		rdfs:comment "The Constraint is a resource which describes how to constrain another resource in a particular way." ;
+		rdfs:label "Constraint" .
+
+	<http://www.openannotation.org/ns/SvgConstraint> a rdfs:Class ;
+		rdfs:isDefinedBy <http://www.openannotation.org/ns/> ;
+		rdfs:subClassOf <http://www.openannotation.org/ns/Constraint> ;
+		rdfs:comment "A Constraint that, when dereferenced, provides an SVG XML element that should be overlaid on an Image to define the region of interest" ;
+		rdfs:label "SvgConstraint" .
+	
+	
+	<http://www.openannotation.org/ns/WebTimeConstraint> a rdfs:Class ;
+		rdfs:isDefinedBy <http://www.openannotation.org/ns/> ;
+		rdfs:subClassOf <http://www.openannotation.org/ns/Constraint> ;
+		rdfs:comment "A Constraint that records a timestamp of when the resource applies to the Annotation" ;
+		rdfs:label "WebTimeConstraint" .
+	
+	<http://www.openannotation.org/ns/when> a rdf:Property ;
+		rdfs:isDefinedBy <http://www.openannotation.org/ns/> ;
+		rdfs:comment "The timestamp at which the resource(s) should be interpreted. If attached to an Annotation, it refers to the Content and Targets. If attached to a ConstrainedResource, it refers to the resource which that resource constrains." ;
+		rdfs:range rdfs:Literal ;
+		rdfs:label "when" .
+	
+	<http://www.openannotation.org/ns/PrefixSuffixConstraint> a rdfs:Class ;
+		rdfs:isDefinedBy <http://www.openannotation.org/ns/> ;
+		rdfs:subClassOf <http://www.openannotation.org/ns/Constraint> ;
+		rdfs:comment "A Constraint for text that defines its selection in terms of the desired text, and a range of text before and after it" ;
+		rdfs:label "PrefixSuffixConstraint" .
+		
+	<http://www.openannotation.org/ns/OffsetRangeConstraint> a rdfs:Class ;
+		rdfs:isDefinedBy <http://www.openannotation.org/ns/> ;
+		rdfs:subClassOf <http://www.openannotation.org/ns/Constraint> ;
+		rdfs:comment "A Constraint for text that defines its selection in terms of a starting point within the document and a number of characters from that point" ;
+		rdfs:label "OffsetRangeConstraint" .
+		
+	<http://www.openannotation.org/ns/ContextConstraint> a rdfs:Class ;
+		rdfs:isDefinedBy <http://www.openannotation.org/ns/> ;
+		rdfs:subClassOf <http://www.openannotation.org/ns/Constraint> ;
+		rdfs:comment "A Constraint that selects the resource only in the context of the target of oac:inContextOf" ;
+		rdfs:label "ContextConstraint" .
+		
+	<http://www.openannotation.org/ns/inContextOf> a rdf:Property ;
+		rdfs:isDefinedBy <http://www.openannotation.org/ns/> ;
+		rdfs:label "inContextOf" .
+
+}
