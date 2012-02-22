@@ -10,6 +10,8 @@ import org.openrdf.rdf2go.RepositoryModelSet;
 import org.openrdf.repository.RepositoryException;
 import org.openrdf.repository.sail.SailRepository;
 import org.openrdf.repository.sail.SailRepositoryConnection;
+import org.openrdf.sail.inferencer.fc.DirectTypeHierarchyInferencer;
+import org.openrdf.sail.inferencer.fc.ForwardChainingRDFSInferencer;
 import org.openrdf.sail.nativerdf.NativeStore;
 
 /**
@@ -41,7 +43,7 @@ public class NativeTripleStoreConnectorFactory implements
 	private void initRepo() {
 		File dataDir = new File(dataDirPath);
 		NativeStore nativeStore = new NativeStore(dataDir, sesameIndexes);
-		repo = new SailRepository(nativeStore);
+		repo = new SailRepository(new DirectTypeHierarchyInferencer(new ForwardChainingRDFSInferencer(nativeStore)));
 		try {
 			repo.initialize();
 		} catch (RepositoryException e) {
