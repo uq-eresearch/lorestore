@@ -3,6 +3,7 @@ package net.metadata.openannotation.lorestore.servlet.rdf2go;
 import static net.metadata.openannotation.lorestore.common.LoreStoreConstants.LORESTORE_PRIVATE;
 import static net.metadata.openannotation.lorestore.common.LoreStoreConstants.LORESTORE_USER;
 import static net.metadata.openannotation.lorestore.common.LoreStoreConstants.OAC_ANNOTATION_CLASS;
+import static net.metadata.openannotation.lorestore.common.LoreStoreConstants.OAC_TARGET_PROPERTY;
 
 import java.util.ArrayList;
 
@@ -189,8 +190,7 @@ public class RDF2GoOACQueryHandler extends AbstractRDF2GoQueryHandler {
 		// Needs to match both www and non-www version of URL
 		String altURL = makeAltURL(escapedURL);
 		String userURI = occ.getIdentityProvider().obtainUserURI();
-		// get all annotations that target url (including parts of it - via isPartOf)
-		// FIXME: also get things targeted via constraints
+		// get all annotations that target url (including parts of it - via isPartOf and via constraints)
 		// @formatter:off
 		String query = "SELECT DISTINCT ?g ?a ?m ?t ?priv"
 				+ " WHERE { graph ?g {"
@@ -238,7 +238,9 @@ public class RDF2GoOACQueryHandler extends AbstractRDF2GoQueryHandler {
 		// @formatter:off
 		String queryString = "select distinct ?g ?a ?m ?t ?v ?priv"
 				+ " where {"
-				+ "   graph ?g {?g a <" + OAC_ANNOTATION_CLASS + "> ."
+				+ "   ?g a <" + OAC_ANNOTATION_CLASS + "> ."
+				+ "   graph ?g {?g <" + OAC_TARGET_PROPERTY + "> ?x ."
+				//+ "{?g a <" + OAC_ANNOTATION_CLASS + ">} UNION {?g a <" + OAC_REPLY_CLASS + ">} UNION {?g a <" + OAC_DATA_ANNOTATION_CLASS + ">}."
 				+ escapedURL + " " + predicate + " ?v ."
 				+        filter
 				+ "   } . "
