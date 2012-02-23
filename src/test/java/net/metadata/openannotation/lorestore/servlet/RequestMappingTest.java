@@ -170,8 +170,8 @@ public class RequestMappingTest {
 		EasyMock.verify(oreController);
 	}
 	@Test
-	public void rssRefersToQuery() throws Exception {
-		EasyMock.expect(oacController.rssRefersToQuery(exampleURI)).andReturn(null);
+	public void atomRefersToQuery() throws Exception {
+		EasyMock.expect(oacController.atomRefersToQuery(exampleURI)).andReturn(null);
 		EasyMock.replay(oacController);
 		
 		request.setRequestURI("/feed");

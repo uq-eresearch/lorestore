@@ -113,7 +113,7 @@ public class OREController {
 	}
 	
 	@RequestMapping(value = "/feed", params = "refersTo", method = RequestMethod.GET)
-	public ModelAndView rssRefersToQuery(
+	public ModelAndView atomRefersToQuery(
 			@RequestParam("refersTo") String urlParam) throws Exception {
 		if (urlParam == null || urlParam.isEmpty()) {
 			throw new InvalidQueryParametersException(

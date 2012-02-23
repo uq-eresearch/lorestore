@@ -32,11 +32,11 @@ public interface LoreStoreQueryHandler {
 
 	/**
 	 * Finds all compound objects referring to the supplied URL, returns a
-	 * response ready to be rendered as RSS.
+	 * response ready to be rendered as Atom.
 	 * 
 	 * @param url
 	 * @return a model containing a sparqlxml string and marked to be displayed
-	 *         by an 'rss' view
+	 *         by an atom view
 	 */
 	public ModelAndView browseAtomQuery(String url) throws RepositoryException,
 			MalformedQueryException, QueryEvaluationException,

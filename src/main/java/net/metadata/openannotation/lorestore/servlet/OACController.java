@@ -86,7 +86,7 @@ public class OACController {
 
 	
 	@RequestMapping(value = "/feed", params = "annotates", method = RequestMethod.GET)
-	public ModelAndView rssRefersToQuery(
+	public ModelAndView atomRefersToQuery(
 			@RequestParam("annotates") String urlParam) throws Exception {
 		if (urlParam == null || urlParam.isEmpty()) {
 			throw new InvalidQueryParametersException(
