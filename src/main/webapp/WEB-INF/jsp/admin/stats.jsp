@@ -20,14 +20,23 @@
 				 <li><a href="../oreadmin/">Content management</a> <span class="divider">/</span></li>
 			 	 <li class="active">Stats</li>
 		     </ul>
-			<p>Total number of triples:<br/>
-			<c:out value="${numTriples}"></c:out></p>
-			
-			<p>Total number of ORE Resource Maps:<br/>
-			<c:out value="${numResourceMaps}"></c:out></p>
-			
-			<p>Total number of OAC Annotations:<br/>
-			<c:out value="${numAnnotations}"></c:out></p>
+		     <table class="table">
+		     <tr>
+		     <td>
+			    <h2>Total number of triples: <c:out value="${numTriples}"></c:out></h2>
+				<p>Includes Annotations, Resource Maps and the schemas used to validate them</p>
+				
+		     </td>
+		     </tr>
+		     <td>
+		     	<p>Number of ORE Resource Maps: <c:out value="${numResourceMaps}"></c:out></p>
+		     </td>
+		     </tr>
+		     <tr>
+		     <td>
+		     	<p>Number of OAC Annotations: <c:out value="${numAnnotations}"></c:out></p>
+		     </td>
+		     </table>
           </div>
           
  <!-- Debug

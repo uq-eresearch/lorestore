@@ -4,6 +4,7 @@ import static net.metadata.openannotation.lorestore.common.LoreStoreConstants.LO
 import static net.metadata.openannotation.lorestore.common.LoreStoreConstants.LORESTORE_USER;
 import static net.metadata.openannotation.lorestore.common.LoreStoreConstants.OAC_ANNOTATION_CLASS;
 import static net.metadata.openannotation.lorestore.common.LoreStoreConstants.OAC_TARGET_PROPERTY;
+import static net.metadata.openannotation.lorestore.common.LoreStoreConstants.RDF_TYPE_PROPERTY;
 
 import java.util.ArrayList;
 
@@ -17,6 +18,7 @@ import net.metadata.openannotation.lorestore.triplestore.MemoryTripleStoreConnec
 import org.ontoware.rdf2go.model.Model;
 import org.ontoware.rdf2go.model.ModelSet;
 import org.ontoware.rdf2go.model.node.URI;
+import org.ontoware.rdf2go.model.node.Variable;
 import org.openrdf.query.BindingSet;
 import org.openrdf.query.MalformedQueryException;
 import org.openrdf.query.QueryEvaluationException;
@@ -258,9 +260,22 @@ public class RDF2GoOACQueryHandler extends AbstractRDF2GoQueryHandler {
 
 	@Override
 	public long getNumberNamedGraphs() throws InterruptedException {
-		return 0;
+		ModelSet modelSet = null;
+		Model defaultModel = null;
+		long numGraphs = 0;
+		try {
+			modelSet = cf.retrieveConnection();
+			defaultModel = modelSet.getDefaultModel();
+			numGraphs = defaultModel.countStatements(modelSet.createQuadPattern(Variable.ANY, Variable.ANY, modelSet.createURI(RDF_TYPE_PROPERTY), modelSet.createURI(OAC_ANNOTATION_CLASS)));
+		} catch (Exception e) {
+			LOG.debug(e.getMessage());
+		} finally {
+			if (defaultModel != null){
+				defaultModel.close();
+			}
+			cf.release(modelSet);
+		}
+		return numGraphs;
 	}
-
-
 	
 }

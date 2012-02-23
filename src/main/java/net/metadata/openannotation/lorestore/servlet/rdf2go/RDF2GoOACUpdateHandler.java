@@ -20,7 +20,7 @@ public class RDF2GoOACUpdateHandler extends AbstractRDF2GoUpdateHandler {
 		super(occ);
 	}
 
-	protected NamedGraphImpl makeNewObject (Model model){
+	protected NamedGraphImpl makeNewObject (Model model) {
 		return new OACAnnotationImpl(model);
 	}
 
