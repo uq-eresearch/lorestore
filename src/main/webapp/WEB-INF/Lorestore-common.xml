@@ -7,13 +7,6 @@
 
     <import resource="siteTailoring.xml" />
     
-    <!--
-        Only one of the following will be used, depending on the value of the 
-        dbContainerFactory and typeFactory aliases established by the tailoring 
-        file. Don't forget to configure the respective backend properties in 
-        the imported configuration file.
-    -->
-    
     <import resource="Emmet-common.xml" />
 
     <bean id="lorestoreProps" class="org.springframework.beans.factory.config.PropertiesFactoryBean">

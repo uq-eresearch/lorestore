@@ -42,14 +42,10 @@ public class OACNamedGraphsView extends BaseView {
 	 		
 	    	if (annotations == null || annotations.size() == 0){
 	    		logger.debug("Problem getting all annotations");
-	    		
 	    	}
 	    	logger.debug("render merged output annotations: ");
 	        String stylesheetParam = request.getParameter(LORESTORE_USE_STYLESHEET);
-	        /*String stylesheetURI = (stylesheetParam == null) ? null :
-	                (stylesheetParam.length() == 0) ? props.getProperty(DEFAULT_RDF_STYLESHEET_PROP, null) :
-	                    stylesheetParam;
-	        */
+	        
 	        String stylesheetURI = null;
 	        
 	        OutputStream os = null;
@@ -163,14 +159,12 @@ public class OACNamedGraphsView extends BaseView {
 		     Source xslt = new StreamSource(in);
 		     Transformer trans = TransformerFactory.newInstance().newTransformer(xslt);
 		     String rdfXML = annotations.serialize(Syntax.RdfXml);
-		     
-		     
+
 		     // process Model to produce custom json format
 		     StringWriter writer = new StringWriter();
 			     
 			 dp.parse(new InputSource(new StringReader(rdfXML)));
-			 	
-			     
+   
 			 trans.transform(new DOMSource(dp.getDocument()),  new StreamResult(writer));
 		     json.append(writer.toString());
 

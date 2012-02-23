@@ -40,12 +40,10 @@ public class HttpTripleStoreConnectorFactory implements
 	}
 
 	public void release(ModelSet connection) throws InterruptedException {
-		// TODO Auto-generated method stub
-		
+
 	}
 
 	public void destroy() {
-		// TODO Auto-generated method stub
 		
 	}
 }

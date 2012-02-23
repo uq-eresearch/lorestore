@@ -59,7 +59,6 @@ public class SesameOREQueryHandler implements LoreStoreQueryHandler {
 	public ModelAndView browseAtomQuery(String url) throws RepositoryException,
 			MalformedQueryException, QueryEvaluationException,
 			TupleQueryResultHandlerException, InterruptedException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
@@ -68,7 +67,6 @@ public class SesameOREQueryHandler implements LoreStoreQueryHandler {
 			String matchpred, String matchval) throws RepositoryException,
 			MalformedQueryException, QueryEvaluationException,
 			TupleQueryResultHandlerException, InterruptedException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
@@ -77,19 +75,16 @@ public class SesameOREQueryHandler implements LoreStoreQueryHandler {
 			throws RepositoryException, MalformedQueryException,
 			QueryEvaluationException, TupleQueryResultHandlerException,
 			InterruptedException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public long getNumberTriples() throws InterruptedException {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
 	public void exportAll(Writer outputWriter) throws Exception {
-		// TODO Auto-generated method stub
 
 	}
 
@@ -98,7 +93,6 @@ public class SesameOREQueryHandler implements LoreStoreQueryHandler {
 			throws RepositoryException, MalformedQueryException,
 			QueryEvaluationException, TupleQueryResultHandlerException,
 			InterruptedException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
@@ -107,7 +101,6 @@ public class SesameOREQueryHandler implements LoreStoreQueryHandler {
 			String matchpred, String matchval) throws RepositoryException,
 			MalformedQueryException, QueryEvaluationException,
 			TupleQueryResultHandlerException, InterruptedException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
@@ -116,7 +109,6 @@ public class SesameOREQueryHandler implements LoreStoreQueryHandler {
 			throws RepositoryException, MalformedQueryException,
 			QueryEvaluationException, TupleQueryResultHandlerException,
 			InterruptedException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 

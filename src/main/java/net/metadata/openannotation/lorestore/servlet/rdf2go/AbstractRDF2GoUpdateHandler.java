@@ -88,8 +88,7 @@ public abstract class AbstractRDF2GoUpdateHandler implements LoreStoreUpdateHand
 		model.close();
 		obj.assignURI(newUri.toString());
 
-		// TODO: needs to do stuff like maintaining the created/modified dates,
-		// and the creator
+		// Update created and modified dates
 		String userURI = occ.getIdentityProvider().obtainUserURI();
 		obj.setUser(userURI);
 		Date now = new Date();
