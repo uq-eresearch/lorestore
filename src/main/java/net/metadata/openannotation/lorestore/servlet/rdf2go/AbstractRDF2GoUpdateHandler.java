@@ -144,9 +144,10 @@ public abstract class AbstractRDF2GoUpdateHandler implements LoreStoreUpdateHand
 		URI objURI = mf.createModel().createURI(occ.getBaseUri() + objId);
 
 		Model newModel = null;
+		Model schemaModel = null;
 		ModelSet container = cf.retrieveConnection();
+		String oldUserUri = null;
 		try {
-			String oldUserUri = null;
 			Model oldModel = container.getModel(objURI);
 			try {
 				oldUserUri = checkUserCanUpdate(oldModel);
@@ -156,8 +157,7 @@ public abstract class AbstractRDF2GoUpdateHandler implements LoreStoreUpdateHand
 			
 			newModel = mf.createModel(objURI);
 			newModel.open();
-
-			
+	
 			try {
 				newModel.readFrom(inputRDF, Syntax.RdfXml, occ.getBaseUri());
 			} catch (ModelRuntimeException e) {
@@ -165,9 +165,26 @@ public abstract class AbstractRDF2GoUpdateHandler implements LoreStoreUpdateHand
 				throw new RequestFailureException(
 						HttpServletResponse.SC_BAD_REQUEST, "Error reading RDF");
 			}
-
+	
 			NamedGraphImpl obj = makeNewObject(newModel);
 			newModel.close();
+			
+			// Load schema model
+			String schema = occ.getDefaultSchema();
+			if (schema != null){
+				try {
+					
+					URI schemaURI = mf.createModel().createURI(schema);
+					schemaModel = container.getModel(schemaURI);
+					if (schemaModel != null){
+						obj.findValidObject(schemaModel);
+					}
+				} finally {
+					if (schemaModel != null){
+						schemaModel.close();
+					}
+				}
+			}
 			if (oldUserUri != null){
 				obj.setUser(oldUserUri);
 			} else {
@@ -175,16 +192,12 @@ public abstract class AbstractRDF2GoUpdateHandler implements LoreStoreUpdateHand
 			}
 			obj.setDate(new Date(), DCTERMS_MODIFIED);
 			newModel = obj.getModel();
-
 			container.removeModel(objURI);
 			container.addModel(newModel, objURI);
 			container.commit();
-			
-			
 		} finally {
 			cf.release(container);
 		}
-
 		return new OREResponse(newModel);
 	}
 

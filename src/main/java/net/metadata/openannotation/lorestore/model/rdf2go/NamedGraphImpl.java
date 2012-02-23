@@ -14,7 +14,7 @@ import java.util.Date;
 
 import net.metadata.openannotation.lorestore.exceptions.LoreStoreException;
 import net.metadata.openannotation.lorestore.model.NamedGraph;
-
+import org.apache.log4j.Logger;
 import org.ontoware.aifbcommons.collection.ClosableIterator;
 import org.ontoware.rdf2go.model.Model;
 import org.ontoware.rdf2go.model.Statement;
@@ -35,6 +35,7 @@ public abstract class NamedGraphImpl implements NamedGraph {
 	private static final String DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss";
 	private static DateFormat df = new SimpleDateFormat(DATE_FORMAT);
 	private static Calendar calendar;
+	protected final Logger LOG = Logger.getLogger(NamedGraphImpl.class);
 	
 	public NamedGraphImpl(Model model) {
 		try {
@@ -46,8 +47,7 @@ public abstract class NamedGraphImpl implements NamedGraph {
 			this.model = internalModel;
 			calendar = Calendar.getInstance();
 		} catch (RepositoryException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			LOG.debug(e.getMessage());
 		}
 	}
 
@@ -136,7 +136,18 @@ public abstract class NamedGraphImpl implements NamedGraph {
 		} 
 		model.commit();
 	}
-
+	
+	/**
+	 * Check whether the object is valid according to the schema
+	 * throws exception if not valid
+	 * 
+	 * @throws LoreStoreException
+	 */
+	public Resource findValidObject(Model schema) throws LoreStoreException {
+		// implemented in subclasses
+		return findObject();
+	}
+	
 	private Node lookupOneObject(ClosableIterator<Statement> it)
 			throws LoreStoreException {
 		Statement s = lookupOneStatement(it);

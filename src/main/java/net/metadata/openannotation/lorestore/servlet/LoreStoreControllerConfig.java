@@ -14,6 +14,7 @@ public class LoreStoreControllerConfig {
 	private UIDGenerator uidGenerator;
 	private LoreStoreIdentityProvider ip;
 	private String defaultStylesheet;
+	private String defaultSchema;
 
 	public void setAccessPolicy(LoreStoreAccessPolicy accessPolicy) {
 		this.accessPolicy = accessPolicy;
@@ -39,12 +40,13 @@ public class LoreStoreControllerConfig {
 	public void setBaseUri(String baseUri) {
 		this.baseUri = baseUri;
 	}
-	public String getDefaultStylesheet(){
-		return this.defaultStylesheet;
+	
+	public String getDefaultSchema(){
+		return this.defaultSchema;
 	}
 	
-	public void setDefaultStylesheet(String defaultStylesheet){
-		this.defaultStylesheet = defaultStylesheet;
+	public void setDefaultSchema(String defaultSchema) {
+		this.defaultSchema = defaultSchema;
 	}
 	
 	public void setUidGenerator(UIDGenerator uidGenerator) {

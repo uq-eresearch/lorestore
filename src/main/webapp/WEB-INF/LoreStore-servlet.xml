@@ -15,7 +15,7 @@
 		<property name="containerFactory" ref="dbContainerPool"/>
 		<property name="accessPolicy" ref="oreAccessPolicy"/>
 		<property name="baseUri" value="${lorestore.baseurl}"/>
-        <property name="defaultStylesheet" value="${lorestore.oreStylesheet}"></property>
+        <property name="defaultSchema" value="${lorestore.oreSchema}"></property>
 		<property name="uidGenerator" ref="uidGenerator"/>
 		<property name="identityProvider" ref="identityProvider"/>
 	</bean>
@@ -23,7 +23,7 @@
         <property name="containerFactory" ref="dbContainerPool"/>
         <property name="accessPolicy" ref="oreAccessPolicy"/>
         <property name="baseUri" value="${lorestore.oacurl}"/>
-        <property name="defaultStylesheet" value="${lorestore.oacStylesheet}"/>
+        <property name="defaultSchema" value="${lorestore.oacSchema}"></property>
         <property name="uidGenerator" ref="uidGenerator"/>
         <property name="identityProvider" ref="identityProvider"/>
     </bean>
@@ -80,11 +80,11 @@
     
 	<bean id="dbContainerFactory" class="net.metadata.openannotation.lorestore.triplestore.NativeTripleStoreConnectorFactory">
 		<property name="dataDirPath" value="${lorestore.datadir}"/>
+		<property name="oacSchemaFile" value="${lorestore.oacSchemaFile}"/>
+		<!--property name="oreSchemaFile" value="${lorestore.oreSchemaFile}"/-->
+		<property name="oacSchema" value="${lorestore.oacSchema}"/>
+		<property name="oreSchema" value="${lorestore.oreSchema}"/>
 	</bean>
- <!--
-	<bean id="dbContainerFactory" class="net.metadata.openannotation.lorestore.triplestore.MemoryTripleStoreConnectorFactory">
-	</bean>
-	-->
     
 	<bean id="oreAccessPolicy" class="net.metadata.openannotation.lorestore.access.DefaultLoreStoreAccessPolicy">
 		<property name="readAuthorities" value="ROLE_USER,ROLE_ANONYMOUS" />

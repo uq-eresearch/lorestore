@@ -1,11 +1,13 @@
 package net.metadata.openannotation.lorestore.triplestore;
 
 import java.io.File;
+import java.io.IOException;
 
 import net.metadata.openannotation.lorestore.exceptions.LoreStoreDBConnectionException;
 
 import org.apache.log4j.Logger;
 import org.ontoware.rdf2go.model.ModelSet;
+import org.ontoware.rdf2go.model.Syntax;
 import org.openrdf.rdf2go.RepositoryModelSet;
 import org.openrdf.repository.RepositoryException;
 import org.openrdf.repository.sail.SailRepository;
@@ -25,18 +27,35 @@ public class NativeTripleStoreConnectorFactory implements
 
 	private SailRepository repo;
 	private String dataDirPath;
+	private String oacSchemaFile = null;
+	private String oreSchemaFile = null;
+	private String oacSchema = null;
+	private String oreSchema = null;
 	private String sesameIndexes = "spoc,posc,cspo,ocsp";
 	
 	/**
 	 * Opens a new connection to the repository and returns it.
 	 */
 	public ModelSet retrieveConnection() {
+		LOG.info("retrieve connection");
 		if (repo == null) {
 			initRepo();
-		}
+		} 
+		
 		ModelSet connection = new RepositoryModelSet(repo);
 		connection.open();
 		connection.setAutocommit(false);
+		if (connection.size() == 0){
+			LOG.info("load schema");
+			// Populate empty repository with schema
+			if (oacSchemaFile != null && oacSchema != null){
+				loadSchema(connection, oacSchemaFile, oacSchema);
+			}
+			if (oreSchemaFile != null && oreSchema != null){
+				loadSchema(connection, oreSchemaFile, oreSchema);
+			}
+			connection.commit();
+		}
 		return connection;
 	}
 
@@ -83,7 +102,17 @@ public class NativeTripleStoreConnectorFactory implements
 			LOG.error("Error shutting down sail repository", e);
 		}
 	}
-
+	
+	private void loadSchema(ModelSet connection, String schemaFile, String baseUri){
+		try {
+			ClassLoader cl = this.getClass().getClassLoader();
+		    java.io.InputStream in = cl.getResourceAsStream(schemaFile);
+		    connection.readFrom(in, Syntax.Trig, baseUri);
+		} catch (IOException e){
+			LOG.debug("Unable to read schema file " + schemaFile + " " + e.getMessage());
+		}
+	}
+	
 	public void setDataDirPath(String dataDirPath) {
 		this.dataDirPath = dataDirPath;
 	}
@@ -91,11 +120,41 @@ public class NativeTripleStoreConnectorFactory implements
 	public String getDataDirPath() {
 		return dataDirPath;
 	}
-
+	
+	public void setOacSchemaFile(String oacSchemaFile){
+		this.oacSchemaFile = oacSchemaFile;
+	}
+	
+	public String getOacSchemaFile() {
+		return this.oacSchemaFile;
+	}
+	public void setOacSchema(String oacSchema){
+		this.oacSchema = oacSchema;
+	}
+	
+	public String getOacSchema() {
+		return this.oacSchema;
+	}
+	
 	public void setSesameIndexes(String sesameIndexes) {
 		this.sesameIndexes = sesameIndexes;
 	}
 
+	public void setOreSchemaFile(String oreSchemaFile){
+		this.oreSchemaFile = oreSchemaFile;
+	}
+	
+	public String getOreSchemaFile() {
+		return this.oreSchemaFile;
+	}
+	public void setOreSchema(String oreSchema){
+		this.oreSchema = oreSchema;
+	}
+	
+	public String getOreSchema() {
+		return this.oreSchema;
+	}
+	
 	public String getSesameIndexes() {
 		return sesameIndexes;
 	}

@@ -14,6 +14,8 @@ import net.metadata.openannotation.test.mocks.MockAuthenticationContext;
 import net.metadata.openannotation.test.mocks.MockOREIdentityProvider;
 
 import org.junit.Before;
+import org.ontoware.rdf2go.model.ModelSet;
+import org.ontoware.rdf2go.model.Syntax;
 
 public class OACControllerTestsBase {
 
@@ -31,6 +33,13 @@ public class OACControllerTestsBase {
 		controller = createController();
 		authController = createAuthController();
 		xPath = XPathFactory.newInstance().newXPath();
+		
+		// Load oac schema into repository
+		ClassLoader cl = this.getClass().getClassLoader();
+	    java.io.InputStream in = cl.getResourceAsStream("oac.trig");
+	    ModelSet connection = cf.retrieveConnection();
+	    connection.readFrom(in, Syntax.Trig, "http://www.openannotation.org/ns/");
+	    cf.release(connection);
 	}
 
 	private OACController createController() throws InterruptedException {
@@ -40,6 +49,7 @@ public class OACControllerTestsBase {
 		noauthOCC.setBaseUri("http://example.com/");
 		noauthOCC.setUidGenerator(new UIDGenerator());
 		noauthOCC.setIdentityProvider(new MockOREIdentityProvider());
+		noauthOCC.setDefaultSchema("http://www.openannotation.org/ns/");
 		return new OACController(noauthOCC);
 	}
 

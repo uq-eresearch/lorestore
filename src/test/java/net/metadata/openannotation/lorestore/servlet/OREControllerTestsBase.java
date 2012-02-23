@@ -40,6 +40,7 @@ public class OREControllerTestsBase {
 		noauthOCC.setBaseUri("http://example.com/");
 		noauthOCC.setUidGenerator(new UIDGenerator());
 		noauthOCC.setIdentityProvider(new MockOREIdentityProvider());
+		noauthOCC.setDefaultSchema("http://www.openarchives.org/ore/terms/");
 		return new OREController(noauthOCC);
 	}
 

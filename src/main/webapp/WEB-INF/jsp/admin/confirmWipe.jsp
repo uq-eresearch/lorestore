@@ -25,8 +25,12 @@
   	<form method="post" enctype="multipart/form-data">
   		<fieldset>
   			<p>
-  				Please confirm that you wish to remove all data from the LoreStore repository.<br/> This action cannot be undone.
+  				Please confirm that you wish to remove all data from the LoreStore repository.
+  				<br/><strong>This action cannot be undone.</strong> This will also clear the schema used for validation. 
+  				<br/>Reload the webapp after clearing the repository to automatically reload the schema, 
+  				 or import the schema manually from file.
             </p>
+            
             <p>
             	<button class="btn btn-danger" type="submit"><i class="icon-trash icon-white"></i> Clear Repository</button>
                 <a href="../oreadmin/"><button class="btn" type="button">Cancel</button></a>

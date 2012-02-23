@@ -2,8 +2,6 @@ package net.metadata.openannotation.lorestore.model.rdf2go;
 
 import static net.metadata.openannotation.lorestore.common.LoreStoreConstants.DCTERMS_CREATOR;
 import static net.metadata.openannotation.lorestore.common.LoreStoreConstants.OAC_ANNOTATION_CLASS;
-import static net.metadata.openannotation.lorestore.common.LoreStoreConstants.OAC_DATA_ANNOTATION_CLASS;
-import static net.metadata.openannotation.lorestore.common.LoreStoreConstants.OAC_REPLY_CLASS;
 import static net.metadata.openannotation.lorestore.common.LoreStoreConstants.OAC_TARGET_PROPERTY;
 import net.metadata.openannotation.lorestore.exceptions.LoreStoreException;
 import net.metadata.openannotation.lorestore.model.NamedGraph;
@@ -17,6 +15,12 @@ import org.ontoware.rdf2go.model.node.Node;
 import org.ontoware.rdf2go.model.node.Resource;
 import org.ontoware.rdf2go.model.node.URI;
 import org.ontoware.rdf2go.model.node.Variable;
+import org.ontoware.rdf2go.util.ModelUtils;
+import org.openrdf.rdf2go.RepositoryModel;
+import org.openrdf.repository.RepositoryException;
+import org.openrdf.repository.sail.SailRepository;
+import org.openrdf.sail.inferencer.fc.ForwardChainingRDFSInferencer;
+import org.openrdf.sail.memory.MemoryStore;
 
 public class OACAnnotationImpl extends NamedGraphImpl implements NamedGraph {
 
@@ -46,12 +50,43 @@ public class OACAnnotationImpl extends NamedGraphImpl implements NamedGraph {
 		
 		model.commit();
 	}
-	protected Resource findObject() throws LoreStoreException {
-		// bare minimum validation: annotation must be one of the OAC types and have at least one target
-		QueryResultTable resultTable = model.sparqlSelect(String.format(
-				"select ?anno WHERE {{?anno a <%1$s>} UNION {?anno a <%2$s>} UNION {?anno a <%3$s>}. ?anno <%4$s> ?target}",
-				 OAC_ANNOTATION_CLASS, OAC_REPLY_CLASS, OAC_DATA_ANNOTATION_CLASS, OAC_TARGET_PROPERTY));
 
+	public Resource findValidObject(Model schema) throws LoreStoreException {
+		RepositoryModel tempModel = null;
+		try {
+			// support inferencing
+			SailRepository sailRepository = new SailRepository(new ForwardChainingRDFSInferencer(new MemoryStore()));
+			sailRepository.initialize();
+			tempModel = new RepositoryModel(sailRepository);
+			tempModel.open();
+			// combine schema and internalModel to allow for type validation
+			ModelUtils.union(model, schema, tempModel);
+			// bare minimum validation: annotation must be one of the subtypes of oac:Annotation from the schema have at least one target
+			QueryResultTable resultTable = 
+					tempModel.sparqlSelect(String.format(
+							"select ?anno WHERE {?anno a <%1$s> . ?anno <%2$s> ?target}",
+							 OAC_ANNOTATION_CLASS, OAC_TARGET_PROPERTY));
+			Resource res = null;
+			for (QueryRow row : resultTable) {
+				res = row.getValue("anno").asResource();
+			}
+			if (res != null) {
+				return res;
+			}
+		} catch (RepositoryException e){
+			LOG.debug(e.getMessage());
+		} finally {
+			if (tempModel != null){
+				tempModel.close();
+			}
+		}
+		throw new LoreStoreException("Invalid OAC Annotation");
+	}
+	
+	protected Resource findObject() throws LoreStoreException {
+		// we don't use type to find the object because it may be a subclass and the internal model does not contain the OAC schema
+		QueryResultTable resultTable = model.sparqlSelect(String.format(
+				"select ?anno WHERE {?anno <%1$s> ?target}", OAC_TARGET_PROPERTY));
 		Resource res = null;
 		for (QueryRow row : resultTable) {
 			res = row.getValue("anno").asResource();
@@ -59,6 +94,7 @@ public class OACAnnotationImpl extends NamedGraphImpl implements NamedGraph {
 		if (res != null) {
 			return res;
 		}
+		
 		throw new LoreStoreException("Invalid OAC Annotation");
 	}
 

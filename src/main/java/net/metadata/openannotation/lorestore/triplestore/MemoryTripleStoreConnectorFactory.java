@@ -3,12 +3,15 @@ package net.metadata.openannotation.lorestore.triplestore;
 import java.io.File;
 
 import net.metadata.openannotation.lorestore.exceptions.LoreStoreDBConnectionException;
+import net.metadata.openannotation.lorestore.views.OACNamedGraphsView;
 
+import org.apache.log4j.Logger;
 import org.ontoware.rdf2go.model.ModelSet;
 import org.openrdf.rdf2go.RepositoryModelSet;
 import org.openrdf.repository.RepositoryException;
 import org.openrdf.repository.sail.SailRepository;
 import org.openrdf.repository.sail.SailRepositoryConnection;
+import org.openrdf.sail.inferencer.fc.ForwardChainingRDFSInferencer;
 import org.openrdf.sail.memory.MemoryStore;
 import org.springframework.beans.factory.InitializingBean;
 
@@ -17,16 +20,16 @@ public class MemoryTripleStoreConnectorFactory implements
 
 	private SailRepository repo;
 	private String dataDir;
-	private MemoryStore memoryStore;
-
+	private ForwardChainingRDFSInferencer memoryStore;
+	private Logger LOG = Logger.getLogger(OACNamedGraphsView.class);
 	public MemoryTripleStoreConnectorFactory() {
-		this.memoryStore = new MemoryStore();
+		this.memoryStore = new ForwardChainingRDFSInferencer(new MemoryStore());
 	}
 	
 	public void afterPropertiesSet() throws Exception {
 		if (dataDir != null) {
 			File dataLocation = new File(dataDir);
-			this.memoryStore = new MemoryStore(dataLocation);
+			this.memoryStore = new ForwardChainingRDFSInferencer(new MemoryStore(dataLocation));
 		}
 	}
 	
@@ -65,8 +68,7 @@ public class MemoryTripleStoreConnectorFactory implements
 			try {
 				repo.shutDown();
 			} catch (RepositoryException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				LOG.debug(e.getMessage());
 			}
 		}
 	}
