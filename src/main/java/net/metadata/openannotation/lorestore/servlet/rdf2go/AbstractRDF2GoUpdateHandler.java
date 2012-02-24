@@ -98,6 +98,22 @@ public abstract class AbstractRDF2GoUpdateHandler implements LoreStoreUpdateHand
 		ModelSet ms = null;
 		try {
 			ms = cf.retrieveConnection();
+			// Load schema model for validation
+			Model schemaModel = null;
+			String schema = occ.getDefaultSchema();
+			if (schema != null){
+				try {
+					URI schemaURI = mf.createModel().createURI(schema);
+					schemaModel = ms.getModel(schemaURI);
+					if (schemaModel != null){
+						obj.findValidObject(schemaModel);
+					}
+				} finally {
+					if (schemaModel != null){
+						schemaModel.close();
+					}
+				}
+			}
 			ms.addModel(obj.getModel(), newUri);
 			ms.commit();
 		} finally {
