@@ -117,7 +117,7 @@
 	<http://twitter.com/---/status/6312261983> a oac:Body .
 }
 <http://openannotation.metadata.net/lorestore/oac/HubbleConstrainedBody> {
-	<http://openannotation.metadata.net/lorestore/oac/HubbleRDFConstrainedBody> a oac:Annotation ;
+	<http://openannotation.metadata.net/lorestore/oac/HubbleConstrainedBody> a oac:Annotation ;
 	      oac:hasBody <urn:uuid:a96f0ca0-5c28-11e1-b86c-0800200c9a66> ;
           oac:hasTarget <urn:uuid:c12f8630-5c28-11e1-b86c-0800200c9a66> .
 
