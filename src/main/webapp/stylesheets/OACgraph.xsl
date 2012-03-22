@@ -22,9 +22,7 @@
                 <style type="text/css">
                     .annotation {padding-bottom:1em; border-bottom:1px dotted #eeeeee;}
                     .page-header {border-bottom: none;}
-                    tspan, text { max-width:40px; font-size:10px; overflow:hidden; text-overflow:ellipsis;
-                   /* white-space: pre; white-space: pre-wrap; white-space: pre-line; white-space: -moz-pre-wrap;*/
-                    };
+                    tspan, text { font-size:10px;};
                 </style>
                 <script type="text/javascript" src="../graphdracula/raphael-min.js"></script>
                 <script type="text/javascript" src="../graphdracula/dracula_graffle.js"></script>
@@ -36,6 +34,41 @@
                         $('#' + annoid + '-canvas').data('data-layouter').layout();
                         $('#' + annoid + '-canvas').data('data-renderer').draw();
                     };
+                    var renderFunc = function(r, n) {
+                        var frame, text, defaultColor, defaultStrokeColor;
+                        if (n.nodeType == "literal"){
+                            var rectLength = (n.label? (n.label.length * 7) : n.id.length * 7);
+                            frame = r.rect(n.point[0] - (rectLength / 2), n.point[1] - 13, rectLength, 34, 5);
+                            text = r.text(n.point[0], n.point[1] + 5, (n.label || n.id)); 
+                            defaultColor = "#999999";
+                        } else if (n.nodeType == "type") {
+                            var rectLength = (n.label? (n.label.length * 7) : n.id.length * 7);
+                            frame = r.rect(n.point[0] - (rectLength / 2), n.point[1] - 13, rectLength, 34);
+                            text = r.text(n.point[0], n.point[1] + 5, (n.label || n.id)); 
+                            defaultColor = "white";
+                            defaultStrokeColor = "black";
+                        } else {
+                            defaultColor = (n.nodeType == "target"? "red" : 
+                                (n.nodeType == "body"? "blue": 
+                                    (n.nodeType == "constraint"? "orange": 
+                                        (n.nodeType == "user"? "green" : 
+                                            "#eeeeee"))));
+                            frame = r.ellipse(0, 0, 30, 20);
+                            text = r.text(0, 30, n.label || n.id);
+                        }
+                        
+                        frame.attr({
+                            'fill': n.color || defaultColor,
+                            'stroke-width' : '1px',
+                            'stroke': n.color || defaultStrokeColor || defaultColor
+                          });
+                        var set = r.set()
+                          .push(
+                            frame, text
+                          );
+                        return set;
+                    };
+                    
                 </script>
             </head>
             <body style="padding-top:40px">
@@ -70,19 +103,18 @@
                         </h1>
                        </div>
                        </div>
-                       <!--  graph visualisation canvas -->
+                       <!--  graph visualization canvas -->
                        <div><button class="btn btn-mini" onclick="redraw('{$shortId}');">Redraw</button></div>
                        <div id="{$shortId}-canvas"></div>
                        <script type="text/javascript">
                         $(document).ready(function() {
-                            var width = 940; //$(document).width();
-                            var height = 600; //$(document).height();
+                            var width = 940;
+                            var height = 600;
                             var g = new Graph();
                             g.edgeFactory.template.style.directed = true;
-                            g.addNode("Annotation");
+                            g.addNode("Annotation", {render: renderFunc, color: "yellow"});
                             <xsl:call-template name="generateNodesAndEdges"/>
-                            
-                            var layouter = new Graph.Layout.Ordered(g, topological_sort(g));
+                            var layouter = new Graph.Layout.Spring(g);
                             var renderer = new Graph.Renderer.Raphael('<xsl:value-of select="$shortId"/>-canvas', g, width, height);
                             $('#<xsl:value-of select="$shortId"/>-canvas').data('data-layouter',layouter);
                                 
@@ -115,21 +147,33 @@
             <xsl:variable name="propName" select="name()"/>
             <xsl:choose>
                 <xsl:when test="$valref">
+                <!--  URI or URN -->
                     <xsl:variable name="displayName">
                         <xsl:choose>
                             <xsl:when test="starts-with($valref,'http://www.openannotation.org/ns')">oac:<xsl:value-of select="substring-after($valref,'http://www.openannotation.org/ns/')"/></xsl:when>
                             <xsl:when test="starts-with($valref,'http://www.w3.org/2011/content#')">cnt:<xsl:value-of select="substring-after($valref,'http://www.w3.org/2011/content#')"/></xsl:when>
                             <xsl:when test="starts-with($valref,'http://xmlns.com/foaf/0.1/')">foaf:<xsl:value-of select="substring-after($valref,'http://xmlns.com/foaf/0.1/')"/></xsl:when>
-                            <xsl:when test="starts-with($valref,'urn') and name()='hasBody'">body</xsl:when>
-                            <xsl:when test="starts-with($valref,'urn') and name()='hasTarget'">target</xsl:when>
-                            <xsl:when test="starts-with($valref,'urn') and name()='constrainedBy'">constraint</xsl:when>
+                            <xsl:when test="starts-with($valref,'urn') and local-name()='hasBody'">body</xsl:when>
+                            <xsl:when test="starts-with($valref,'urn') and local-name()='hasTarget'">target</xsl:when>
+                            <xsl:when test="starts-with($valref,'urn') and local-name()='constrainedBy'">constraint</xsl:when>
                             <xsl:when test="starts-with($valref,'http') and string-length($valref) &gt; 25">...<xsl:value-of select="substring(substring-after($valref,'http://'),(string-length($valref)-25))"/></xsl:when>
                             <xsl:otherwise><xsl:value-of select="$valref"/></xsl:otherwise>
                         </xsl:choose>
                     </xsl:variable>
-                    g.addNode("<xsl:value-of select="$valId"/>", {label: "<xsl:value-of select="translate($displayName,$quot,$apos)"/>"});
+                    <xsl:variable name="nodeType">
+                        <xsl:choose>
+                            <xsl:when test="local-name()='hasBody'">body</xsl:when>
+                            <xsl:when test="local-name()='hasTarget'">target</xsl:when>
+                            <xsl:when test="local-name()='constrainedBy'">constraint</xsl:when>
+                            <xsl:when test="local-name()='type'">type</xsl:when>
+                            <xsl:when test="local-name()='creator'">user</xsl:when>
+                            <xsl:otherwise></xsl:otherwise>
+                        </xsl:choose>
+                    </xsl:variable>
+                    g.addNode("<xsl:value-of select="$valId"/>", {render: renderFunc, nodeType: "<xsl:value-of select="$nodeType"/>", label: "<xsl:value-of select="translate($displayName,$quot,$apos)"/>"});
                 </xsl:when>
                 <xsl:otherwise>
+                <!--  literal -->
                     <xsl:variable name="val">
                         <xsl:choose>
                             <xsl:when test="name()='created' or name()='modified'">
@@ -139,7 +183,7 @@
                             <xsl:otherwise><xsl:value-of select="."/></xsl:otherwise>    
                         </xsl:choose>
                     </xsl:variable>
-                    g.addNode("<xsl:value-of select="$valId"/>", {label: "<xsl:value-of select="translate($val,$quot,$apos)"/>"});
+                    g.addNode("<xsl:value-of select="$valId"/>", {render: renderFunc, nodeType: "literal", label: "<xsl:value-of select="translate($val,$quot,$apos)"/>"});
                 </xsl:otherwise>
             </xsl:choose>
             <xsl:variable name="labelName">
