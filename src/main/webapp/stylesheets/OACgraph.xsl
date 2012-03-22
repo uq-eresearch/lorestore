@@ -105,6 +105,10 @@
     <xsl:template name="generateNodesAndEdges">
         <xsl:param name="context" select="."/>
         <xsl:param name="sourceName">Annotation</xsl:param>
+        <!--  used to escape quotes in labels -->
+        <xsl:variable name="apos">'  </xsl:variable>
+        <xsl:variable name="quot">"&#13;&#10;&#09;</xsl:variable>
+        
         <xsl:for-each select="$context/*[not(name()='rdf:type' and (@rdf:resource='http://www.openannotation.org/ns/Body' or @rdf:resource='http://www.openannotation.org/ns/Target'))]">
             <xsl:variable name="valref" select="@rdf:resource | @rdf:nodeID"/>
             <xsl:variable name="valId" select="generate-id()"/>
@@ -123,19 +127,19 @@
                             <xsl:otherwise><xsl:value-of select="$valref"/></xsl:otherwise>
                         </xsl:choose>
                     </xsl:variable>
-                    g.addNode("<xsl:value-of select="$valId"/>", {label: '<xsl:value-of select="$displayName"/>'});
+                    g.addNode("<xsl:value-of select="$valId"/>", {label: "<xsl:value-of select="translate($displayName,$quot,$apos)"/>"});
                 </xsl:when>
                 <xsl:otherwise>
-                <xsl:variable name="val">
-                    <xsl:choose>
-                        <xsl:when test="name()='created' or name()='modified'">
-                            <xsl:value-of select="substring(.,9,2)"/>/<xsl:value-of select="substring(.,6,2)"/>/<xsl:value-of select="substring(.,1,4)"/>
-                        </xsl:when>
-                        <xsl:when test="string-length(.) &gt; 25"><xsl:value-of select="substring(.,0,23)"/>...</xsl:when>
-                        <xsl:otherwise><xsl:value-of select="."/></xsl:otherwise>    
-                    </xsl:choose>
-                </xsl:variable>
-                    g.addNode("<xsl:value-of select="$valId"/>", {label: '<xsl:value-of select="$val"/>'});
+                    <xsl:variable name="val">
+                        <xsl:choose>
+                            <xsl:when test="name()='created' or name()='modified'">
+                                <xsl:value-of select="substring(.,9,2)"/>/<xsl:value-of select="substring(.,6,2)"/>/<xsl:value-of select="substring(.,1,4)"/>
+                            </xsl:when>
+                            <xsl:when test="string-length(.) &gt; 25"><xsl:value-of select="substring(.,0,23)"/>...</xsl:when>
+                            <xsl:otherwise><xsl:value-of select="."/></xsl:otherwise>    
+                        </xsl:choose>
+                    </xsl:variable>
+                    g.addNode("<xsl:value-of select="$valId"/>", {label: "<xsl:value-of select="translate($val,$quot,$apos)"/>"});
                 </xsl:otherwise>
             </xsl:choose>
             <xsl:variable name="labelName">
@@ -149,7 +153,8 @@
                 </xsl:choose>
                 <xsl:value-of select="name()"/>
             </xsl:variable>
-            g.addEdge("<xsl:value-of select="$sourceName"/>", "<xsl:value-of select="$valId"/>", {label : "<xsl:value-of select="$labelName"/>" });
+  
+            g.addEdge("<xsl:value-of select="$sourceName"/>", "<xsl:value-of select="$valId"/>", {label : "<xsl:value-of select="translate($labelName,$quot,$apos)"/>" });
             <xsl:call-template name="generateNodesAndEdges">
                 <xsl:with-param name="sourceName" select="$valId"/>
                 <xsl:with-param name="context" select="//rdf:Description[@rdf:about=$valref or @rdf:nodeID=$valref]"/>
