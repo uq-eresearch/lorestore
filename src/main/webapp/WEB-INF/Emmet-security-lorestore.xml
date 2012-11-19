@@ -47,17 +47,15 @@
               user-service-ref="userDetailsService">
             <sec:attribute-exchange>
                 <sec:openid-attribute name="email" 
-                     type="http://schema.openid.net/contact/email" 
-                     required="true" count="2"/>
+                     type="http://schema.openid.net/contact/email" count="2"/>
                 <sec:openid-attribute name="name" 
-                     type="http://schema.openid.net/namePerson/friendly"
-                     required="true"/>
+                     type="http://schema.openid.net/namePerson/friendly"/>
                 <sec:openid-attribute name="email2" 
-                     type="http://axschema.org/contact/email" required="true"/>
+                     type="http://axschema.org/contact/email"/>
                 <sec:openid-attribute name="firstName" 
-                     type="http://axschema.org/namePerson/first" required="true"/>
+                     type="http://axschema.org/namePerson/first"/>
                 <sec:openid-attribute name="lastName" 
-                     type="http://axschema.org/namePerson/last" required="true"/>
+                     type="http://axschema.org/namePerson/last"/>
             </sec:attribute-exchange>
         </sec:openid-login>
         <sec:session-management session-fixation-protection="migrateSession"/>
