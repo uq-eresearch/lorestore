@@ -17,7 +17,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 public class SesamePerformanceTests {
 
-	private String dataDirPath = "D:\\temp";
+	private String dataDirPath = "/tmp";
 	private String dataFile = "D:\\localhost9090export.trig";
 	private int numTests = 10;
 //	private String sesameIndexes = "spoc,posc,cspo";
