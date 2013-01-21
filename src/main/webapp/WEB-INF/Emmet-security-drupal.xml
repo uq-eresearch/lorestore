@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:sec="http://www.springframework.org/schema/security" 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+                        http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.0.xsd"
+    default-lazy-init="true">
+                    
+    <import resource="Emmet-passwordEncoder.xml"/>
+
+    <sec:http access-decision-manager-ref="accessDecisionManager"
+	          auto-config="false"
+              entry-point-ref="dispatchingEntryPoint"
+              security-context-repository-ref="securityContextRepository">
+        <sec:intercept-url pattern="/" access="IS_AUTHENTICATED_ANONYMOUSLY,ROLE_ANY" />
+        <sec:intercept-url pattern="/*.html" access="IS_AUTHENTICATED_ANONYMOUSLY,ROLE_ANY" />
+        <sec:intercept-url pattern="/images/*" filters="none" />
+        <sec:intercept-url pattern="/stylesheets/*" filters="none" />
+        <sec:intercept-url pattern="*" access="ROLE_ANY" requires-channel="https"/>
+        <sec:remember-me user-service-ref="userDetailsService"
+              services-alias="rememberMeService"/>
+        <sec:access-denied-handler error-page="/${emmet.path}/emmetDenied.html"/>
+        <sec:anonymous />
+        <sec:form-login 
+              authentication-failure-handler-ref="authenticationFailureHandler"
+              login-page="#{('${emmet.security}' != 'none' and '${httpsEnabled}' == 'true') ?
+                            'https' : 'http'}://${emmet.hostname}/${emmet.container}/secure/login.html" 
+              default-target-url="http://${emmet.hostname}/${emmet.container}/loggedIn.html"/>
+        <sec:session-management session-fixation-protection="migrateSession"/>
+        <sec:custom-filter before="FILTER_SECURITY_INTERCEPTOR"
+            ref="filterSecurityInterceptor" />
+        <sec:custom-filter ref="drupalFilter" before="FORM_LOGIN_FILTER" />
+        <sec:custom-filter before="LOGOUT_FILTER" ref="hybridLogoutFilter"/>
+        <sec:custom-filter position="BASIC_AUTH_FILTER" ref="basicAuthenticationFilter" />
+    </sec:http>
+    
+    <bean id="drupalFilter" class="net.metadata.openannotation.lorestore.security.drupal.DrupalAuthenticationFilter">
+        <property name="authenticationManager" ref="authenticationManager"/>
+        <property name="userDetailsService" ref="userDetailsService"/>
+        <property name="drupalDBConnection" ref="drupalDBConnection"/>
+    </bean>
+        
+    <!-- Add a filter to accept HTTP BASIC authentication, but do not include an entry point
+         This means that we never ask for basic authentication, but do accept it. -->
+    <bean id="basicAuthenticationFilter" class="org.springframework.security.web.authentication.www.BasicAuthenticationFilter">
+        <property name="ignoreFailure" value="true"/>
+        <property name="authenticationManager" ref="authenticationManager" />
+    </bean>
+    
+    <bean id="authenticationFailureHandler" 
+          class="au.edu.diasb.springsecurity.RedirectPreservingUrlAuthenticationFailureHandler">
+       <property name="defaultFailureUrl" value="/secure/login.html"/>
+       <property name="useForward" value="true"/>
+    </bean>
+    
+    <sec:authentication-manager alias="authenticationManager">
+        <sec:authentication-provider ref="drupalProvider"/>
+        <sec:authentication-provider ref="drupalExternalProvider"/>
+        <sec:authentication-provider user-service-ref="userDetailsService">
+            <sec:password-encoder base64="true" ref="passwordEncoder">
+                <sec:salt-source ref="saltSource"/>
+            </sec:password-encoder>
+        </sec:authentication-provider>
+        <!-- <sec:authentication-provider ref="drupalExternalProvider"/> -->
+    </sec:authentication-manager>
+    
+    <bean id="drupalProvider"
+		class="net.metadata.openannotation.lorestore.security.drupal.DrupalAuthenticationProvider">
+        <property name="userDetailsService" ref="userDetailsService"/>
+	</bean>
+	
+	<bean id="drupalExternalProvider"
+		class="net.metadata.openannotation.lorestore.security.drupal.DrupalExternalAuthenticationProvider">
+		<property name="providerConfigurations" ref="drupalProviderConfigs"/>
+	</bean>
+    
+    <bean id="loginUrlEntryPoint"
+          class="au.edu.diasb.springsecurity.LoginUrlAuthenticationEntryPoint">
+        <!-- <property name="forceHttps" value="true"/> -->
+        <property name="loginFormUrl" 
+                  value="#{('${emmet.security}' != 'none' and '${httpsEnabled}' == 'true') ?
+                            'https' : 'http'}://${emmet.hostname}/${emmet.container}/secure/login.html"/>
+    </bean>
+    <bean id="restfulEntryPoint"
+          class="au.edu.diasb.springsecurity.Http401AuthenticationEntryPoint">
+        <property name="requestCache" ref="requestCache"/>
+        <property name="wwwAuthenticate" 
+            value="Redirect #{('${emmet.security}' != 'none' and '${httpsEnabled}' == 'true') ?
+                            'https' : 'http'}://${emmet.hostname}/${emmet.container}/secure/login.html"/>
+    </bean>
+    <bean id="forbiddenEntryPoint"
+          class="org.springframework.security.web.authentication.Http403ForbiddenEntryPoint">
+    </bean>
+    
+    <bean id="hybridLogoutFilter" 
+        class="org.springframework.security.web.authentication.logout.LogoutFilter">
+        <constructor-arg ref="hybridLogoutSuccessHandler"/>
+        <constructor-arg>
+            <array>
+                <ref bean="rememberMeService"/>
+                <ref bean="logoutHandler"/>
+            </array>
+        </constructor-arg>
+    </bean>
+    
+    <bean id="hybridLogoutSuccessHandler" 
+        class="au.edu.diasb.springsecurity.HybridLogoutSuccessHandler">
+        <property name="handlers">
+            <list>
+                <bean class="net.metadata.openannotation.lorestore.security.drupal.DrupalLogoutSuccessHandler">
+                    <property name="logoutSuccessUrl" 
+                        value="http://${emmet.hostname}/${emmet.container}/cannotLogout.html"/>
+                </bean>
+                <bean class="au.edu.diasb.springsecurity.UserPasswordLogoutSuccessHandler">
+                    <property name="logoutSuccessUrl" 
+                        value="http://${emmet.hostname}/${emmet.container}/loggedOut.html"/>
+                </bean>
+                <bean class="au.edu.diasb.springsecurity.UnknownLogoutSuccessHandler">
+                    <property name="logoutSuccessUrl" 
+                        value="http://${emmet.hostname}/${emmet.container}/cannotLogout.html"/>
+                </bean>
+            </list>
+        </property>
+        <property name="notLoggedInUrl"
+                  value="http://${emmet.hostname}/${emmet.container}/notLoggedIn.html"/>
+    </bean>
+	
+	<import resource="Drupal.xml"/>
+	
+    <bean id="externalProviderConfigs" 
+          class="au.edu.diasb.chico.config.ListFactoryBean">
+        <property name="sourceList" ref="drupalProviderConfigs"/>
+    </bean>
+    
+    <import resource="Emmet-commonAuthorization.xml"/>
+
+</beans>
