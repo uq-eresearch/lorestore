@@ -64,7 +64,7 @@ public class DefaultLoreStoreAccessPolicy implements LoreStoreAccessPolicy, Init
 		}
 		Authentication auth = ac.checkAuthority(null, writeAuthorities);
 
-		if ("drupal".equals(security)) {
+		if (security != null && security.contains("drupal")) {
 			ArrayList<String> ownerIDs = new ArrayList<String>();
 			ArrayList<String> authIDs = new ArrayList<String>();
 			
@@ -111,7 +111,7 @@ public class DefaultLoreStoreAccessPolicy implements LoreStoreAccessPolicy, Init
 		}
 		Authentication auth = ac.checkAuthority(null, writeAuthorities);
 
-		if ("drupal".equals(security)) {
+		if (security != null && security.contains("drupal")) {
 			ArrayList<String> ownerIDs = new ArrayList<String>();
 			ArrayList<String> authIDs = new ArrayList<String>();
 			
@@ -155,7 +155,7 @@ public class DefaultLoreStoreAccessPolicy implements LoreStoreAccessPolicy, Init
 		}
 		String userUri = ip.obtainUserURI();
 		if (userUri == null) {
-			throw new AccessDeniedException("Ooopsie ... cannot establish your identity" + ownerId);
+			throw new AccessDeniedException("Ooops ... cannot establish your identity");
 		} else if (!ownerId.equals(userUri)) {
 			throw new AccessDeniedException("You do not own this object");
 		}

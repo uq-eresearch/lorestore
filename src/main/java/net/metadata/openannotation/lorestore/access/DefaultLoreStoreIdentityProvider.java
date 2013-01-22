@@ -1,5 +1,7 @@
 package net.metadata.openannotation.lorestore.access;
 
+import net.metadata.openannotation.lorestore.security.drupal.DrupalAuthenticationToken;
+
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.security.core.Authentication;
 import org.springframework.util.Assert;
@@ -7,6 +9,7 @@ import org.springframework.util.Assert;
 import au.edu.diasb.chico.mvc.AuthenticationContext;
 import au.edu.diasb.emmet.model.EmmetUser;
 import au.edu.diasb.emmet.model.EmmetUserWrapper;
+import au.edu.diasb.springsecurity.ExternalUserDetails;
 
 public class DefaultLoreStoreIdentityProvider implements LoreStoreIdentityProvider, InitializingBean {
 
@@ -24,7 +27,10 @@ public class DefaultLoreStoreIdentityProvider implements LoreStoreIdentityProvid
         Authentication auth = authenticationContext.getAuthentication(null);
         if (auth != null) {
             Object p = auth.getPrincipal();
-            if (p instanceof EmmetUserWrapper) {
+            
+            if (auth instanceof DrupalAuthenticationToken) {
+            	uri = "drupal:" + ((ExternalUserDetails) p).getUserId();
+            } else if (p instanceof EmmetUserWrapper) {
                 uri = ((EmmetUserWrapper) p).unwrap().getPrimaryUri();
             } else if (p instanceof EmmetUser) {
                 uri = ((EmmetUser) p).getPrimaryUri();
