@@ -10,5 +10,5 @@
     <bean id="sparqlxml" class="net.metadata.openannotation.lorestore.views.SPARQLXMLView"/>
     <bean id="oreAtom" class="net.metadata.openannotation.lorestore.views.OREAtomFeedView" />
     <bean id="oacAtom" class="net.metadata.openannotation.lorestore.views.OACAtomFeedView" />
-    
+    <bean id="exception" class="net.metadata.openannotation.lorestore.views.ExceptionView" />
 </beans>

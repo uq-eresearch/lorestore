@@ -117,5 +117,8 @@
         <!-- one of the properties available; the maximum file size in bytes -->
         <property name="maxUploadSize" value="50000000"/> <!-- 50Mb -->
     </bean>
-	
+    <!-- error resolver -->
+    <bean class="net.metadata.openannotation.lorestore.servlet.LoreStoreExceptionResolver">
+        <property name="order" value="0"/>
+    </bean> 
 </beans>

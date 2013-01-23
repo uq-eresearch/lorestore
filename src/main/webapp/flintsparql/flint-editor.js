@@ -88,7 +88,9 @@ function FlintEditor(container, imagesPath, config) {
 				$('#flint-dialog-okay-button').css('visibility', 'hidden');
 				$('#flint-dialog').css('visibility', 'hidden');
 				button = "Close";
-				closeAction();
+				if (typeof closeAction == 'function'){
+				    closeAction();
+				}
 			});
 			$('#flint-dialog-okay-button').click(function() {
 				try {
@@ -104,7 +106,9 @@ function FlintEditor(container, imagesPath, config) {
 				$('#flint-dialog-okay-button').css('visibility', 'hidden');
 				$('#flint-dialog').css('visibility', 'hidden');
 				button = "Close";
-				closeAction();
+				if (typeof closeAction == 'function'){
+				    closeAction();
+				}
 			});
 		};
 	}
@@ -2800,8 +2804,10 @@ function FlintEditor(container, imagesPath, config) {
 							if (XMLHttpRequest.status == 0) {
 								errorBox.show("The request was not sent. You may be offline");
 							} else {
+							
 								errorBox.show("Dataset Request: HTTP Status: "
-										+ XMLHttpRequest.status + "; " + textStatus);
+										+ XMLHttpRequest.status + "; "  + textStatus + 
+										"<br/>" + XMLHttpRequest.responseText);
 							}
 							resultsArea.showLoading(false);
 						},
