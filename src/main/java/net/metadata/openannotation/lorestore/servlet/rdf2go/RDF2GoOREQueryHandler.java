@@ -17,6 +17,7 @@ import org.openrdf.query.QueryEvaluationException;
 import org.openrdf.query.TupleQueryResult;
 import org.openrdf.query.TupleQueryResultHandlerException;
 import org.openrdf.repository.RepositoryException;
+import org.openrdf.rio.RDFHandlerException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -58,7 +59,7 @@ public class RDF2GoOREQueryHandler extends AbstractRDF2GoQueryHandler {
 	@Override
 	public ModelAndView refersToQuery(String urlParam) throws RepositoryException,
 			MalformedQueryException, QueryEvaluationException,
-			TupleQueryResultHandlerException, InterruptedException, InvalidQueryParametersException {
+			TupleQueryResultHandlerException, InterruptedException, InvalidQueryParametersException, RDFHandlerException {
 		checkURLIsValid(urlParam);
 		String queryString = generateBrowseQuery(urlParam);
 		return runSparqlQueryIntoMAV(queryString);
@@ -70,7 +71,7 @@ public class RDF2GoOREQueryHandler extends AbstractRDF2GoQueryHandler {
 	public ResponseEntity<String> exploreQuery(String url)
 			throws RepositoryException, MalformedQueryException,
 			QueryEvaluationException, TupleQueryResultHandlerException,
-			InterruptedException {
+			InterruptedException, RDFHandlerException {
 		String queryString = generateExploreQuery(url);
 
 		HttpHeaders responseHeaders = getSparqlResultsHeaders();

@@ -18,7 +18,10 @@ import org.apache.log4j.Logger;
 import org.ontoware.rdf2go.model.Model;
 import org.ontoware.rdf2go.model.ModelSet;
 import org.ontoware.rdf2go.model.node.URI;
+import org.openrdf.query.BooleanQuery;
+import org.openrdf.query.GraphQuery;
 import org.openrdf.query.MalformedQueryException;
+import org.openrdf.query.Query;
 import org.openrdf.query.QueryEvaluationException;
 import org.openrdf.query.QueryLanguage;
 import org.openrdf.query.TupleQuery;
@@ -29,6 +32,8 @@ import org.openrdf.query.resultio.sparqlxml.SPARQLResultsXMLWriter;
 import org.openrdf.repository.Repository;
 import org.openrdf.repository.RepositoryConnection;
 import org.openrdf.repository.RepositoryException;
+import org.openrdf.rio.RDFHandlerException;
+import org.openrdf.rio.rdfxml.RDFXMLWriter;
 import org.openrdf.rio.trig.TriGWriter;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -97,7 +102,7 @@ public abstract class AbstractRDF2GoQueryHandler implements LoreStoreQueryHandle
 	public ModelAndView refersToQuery(String urlParam)
 			throws RepositoryException, MalformedQueryException,
 			QueryEvaluationException, TupleQueryResultHandlerException,
-			InterruptedException, InvalidQueryParametersException {
+			InterruptedException, InvalidQueryParametersException, RDFHandlerException {
 		// Implemented in subclasses
 		return null;
 	}
@@ -106,7 +111,7 @@ public abstract class AbstractRDF2GoQueryHandler implements LoreStoreQueryHandle
 	public ModelAndView searchQuery(String urlParam,
 			String matchpred, String matchval) throws RepositoryException,
 			MalformedQueryException, QueryEvaluationException,
-			TupleQueryResultHandlerException, InterruptedException {
+			TupleQueryResultHandlerException, InterruptedException, RDFHandlerException {
 		String queryString = generateSearchQuery(urlParam, matchpred, matchval,
 				false);
 		return runSparqlQueryIntoMAV(queryString);
@@ -154,7 +159,7 @@ public abstract class AbstractRDF2GoQueryHandler implements LoreStoreQueryHandle
 	public ModelAndView searchQueryIncludingAbstract(String urlParam,
 			String matchpred, String matchval) throws RepositoryException,
 			MalformedQueryException, QueryEvaluationException,
-			TupleQueryResultHandlerException, InterruptedException {
+			TupleQueryResultHandlerException, InterruptedException, RDFHandlerException {
 		String queryString = generateSearchQuery(urlParam, matchpred, matchval,
 				true);
 		return runSparqlQueryIntoMAV(queryString);
@@ -165,7 +170,7 @@ public abstract class AbstractRDF2GoQueryHandler implements LoreStoreQueryHandle
 	public ResponseEntity<String> exploreQuery(String url)
 			throws RepositoryException, MalformedQueryException,
 			QueryEvaluationException, TupleQueryResultHandlerException,
-			InterruptedException {
+			InterruptedException, RDFHandlerException {
 		// Implemented in subclasses
 		return null;
 	}
@@ -182,11 +187,12 @@ public abstract class AbstractRDF2GoQueryHandler implements LoreStoreQueryHandle
 	 * @throws QueryEvaluationException
 	 * @throws TupleQueryResultHandlerException
 	 * @throws InterruptedException
+	 * @throws RDFHandlerException 
 	 */
 	protected String runSparqlQuery(String queryString)
 			throws RepositoryException, MalformedQueryException,
 			QueryEvaluationException, TupleQueryResultHandlerException,
-			InterruptedException {
+			InterruptedException, RDFHandlerException {
 		ModelSet container = null;
 		RepositoryConnection con = null;
 		ByteArrayOutputStream stream;
@@ -196,13 +202,19 @@ public abstract class AbstractRDF2GoQueryHandler implements LoreStoreQueryHandle
 					.getUnderlyingModelSetImplementation();
 			stream = new ByteArrayOutputStream();
 			con = rep.getConnection();
-			TupleQuery tupleQuery = con.prepareTupleQuery(QueryLanguage.SPARQL,
+			
+			Query query = con.prepareQuery(QueryLanguage.SPARQL,
 					queryString);
-
-			SPARQLResultsXMLWriter resultsXMLWriter = new SPARQLResultsXMLWriter(
-					stream);
-
-			tupleQuery.evaluate(resultsXMLWriter);
+			if (query instanceof TupleQuery){
+			    SPARQLResultsXMLWriter resultsXMLWriter = new SPARQLResultsXMLWriter(
+                                    stream);
+			    ((TupleQuery)query).evaluate(resultsXMLWriter);
+			} else if (query instanceof GraphQuery){
+			    RDFXMLWriter resultsWriter = new RDFXMLWriter(stream);
+			    ((GraphQuery)query).evaluate(resultsWriter);
+			} else if (query instanceof BooleanQuery) {
+			    return "" + ((BooleanQuery) query).evaluate();
+			}
 		} finally {
 			if (con != null){
 				con.close();
@@ -224,7 +236,7 @@ public abstract class AbstractRDF2GoQueryHandler implements LoreStoreQueryHandle
 	protected ModelAndView runSparqlQueryIntoMAV(String queryString)
 		throws RepositoryException, MalformedQueryException,
 		InterruptedException, QueryEvaluationException,
-		TupleQueryResultHandlerException {
+		TupleQueryResultHandlerException, RDFHandlerException {
 		ModelAndView mav = new ModelAndView("sparqlxml");
 		String queryResult = runSparqlQuery(queryString);
 		mav.addObject("sparqlxml", queryResult);
@@ -360,7 +372,7 @@ public abstract class AbstractRDF2GoQueryHandler implements LoreStoreQueryHandle
 	public ResponseEntity<String> sparqlQuery(String query)
 			throws RepositoryException, MalformedQueryException,
 			QueryEvaluationException, TupleQueryResultHandlerException,
-			InterruptedException {
+			InterruptedException, RDFHandlerException {
 		ap.checkAdmin();
 
 		HttpHeaders responseHeaders = getSparqlResultsHeaders();

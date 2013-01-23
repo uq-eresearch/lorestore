@@ -9,6 +9,7 @@ import org.openrdf.query.MalformedQueryException;
 import org.openrdf.query.QueryEvaluationException;
 import org.openrdf.query.TupleQueryResultHandlerException;
 import org.openrdf.repository.RepositoryException;
+import org.openrdf.rio.RDFHandlerException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -55,7 +56,7 @@ public interface LoreStoreQueryHandler {
 			String matchval)
 			throws RepositoryException, MalformedQueryException,
 			QueryEvaluationException, TupleQueryResultHandlerException,
-			InterruptedException;
+			InterruptedException, RDFHandlerException;
 	
 	/**
 	 * Handles an annotates query
@@ -66,7 +67,7 @@ public interface LoreStoreQueryHandler {
 	public ModelAndView refersToQuery(String urlParam)
 			throws RepositoryException, MalformedQueryException,
 			QueryEvaluationException, TupleQueryResultHandlerException,
-			InterruptedException, InvalidQueryParametersException;
+			InterruptedException, InvalidQueryParametersException, RDFHandlerException;
 	/**
 	 * Handles a search query, includes the abstract field if present
 	 * 
@@ -79,7 +80,7 @@ public interface LoreStoreQueryHandler {
 			String matchval)
 			throws RepositoryException, MalformedQueryException,
 			QueryEvaluationException, TupleQueryResultHandlerException,
-			InterruptedException;
+			InterruptedException, RDFHandlerException;
 	
 	/**
 	 * LORE explore results for a url
@@ -91,7 +92,7 @@ public interface LoreStoreQueryHandler {
 	public ResponseEntity<String> exploreQuery(String url)
 			throws RepositoryException, MalformedQueryException,
 			QueryEvaluationException, TupleQueryResultHandlerException,
-			InterruptedException;
+			InterruptedException, RDFHandlerException;
 
 	/**
 	 * SPARQL Endpoint, only supports SELECT queries
@@ -103,7 +104,7 @@ public interface LoreStoreQueryHandler {
 	public ResponseEntity<String> sparqlQuery(String query)
 			throws RepositoryException, MalformedQueryException,
 			QueryEvaluationException, TupleQueryResultHandlerException,
-			InterruptedException;
+			InterruptedException, RDFHandlerException;
 
 	/**
 	 * Counts the total number of triples stored
