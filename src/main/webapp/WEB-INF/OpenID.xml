@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:sec="http://www.springframework.org/schema/security" 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+                        http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.0.xsd"
+    default-lazy-init="true">
+    
+    <bean id="openidProviderConfigs" 
+          class="org.springframework.beans.factory.config.ListFactoryBean">
+        <property name="sourceList">
+            <list>
+                <bean class="au.edu.diasb.springsecurity.ExternalProviderConfiguration">
+                    <property name="domain" value="openid:google"/>
+                    <property name="defaultAuthorities" value="ROLE_USER, ROLE_ORE" />
+                    <property name="providerRegex" 
+                        value="https://www.google.com/accounts/o8/id\?.+" />
+                    <property name="preferredUserNameAttributes" 
+                        value="name,lastName,firstName,email2,email"/>
+                    <property name="iconUri"
+                        value="#{emmetProps.getProperty('emmet.images')}/google.png"/>
+                </bean>
+                <bean class="au.edu.diasb.springsecurity.ExternalProviderConfiguration">
+                    <property name="domain" value="openid:yahoo"/>
+                    <property name="defaultAuthorities" value="ROLE_USER" />
+                    <property name="providerRegex" 
+                        value="https://me.yahoo.com/.+" />
+                    <property name="preferredUserNameAttributes" 
+                        value="name,lastName,firstName,email2,email"/>
+                    <property name="iconUri"
+                        value="#{emmetProps.getProperty('emmet.images')}/yahoo.png"/>
+                </bean>
+            </list>
+        </property>
+    </bean>
+    
+
+</beans>

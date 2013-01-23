@@ -43,7 +43,21 @@
     padding: 20px 20px 10px;
     margin: -20px -20px 20px;
   }
-  
+  #flint-coolbar #flint-dataset-select {
+      width:100px;
+  }
+  #flint-title, #flint-editor #flint-toolbar {
+     display:none;
+  }
+ #flint-editor h2 {
+     padding-top:0;
+     padding-bottom:0;
+ }
+ #flint-editor input.flint-submit-button {
+    margin-top:4px;
+    margin-right:4px;
+    padding:4px;
+ }
   /* Give a quick and non-cross-browser friendly divider */
   .content .sidebarmenu {
     margin-left: 5px;

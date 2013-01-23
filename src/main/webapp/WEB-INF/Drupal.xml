@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:sec="http://www.springframework.org/schema/security" 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+                        http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.0.xsd"
+    default-lazy-init="true">
+    
+    <bean id="drupalProviderConfigs" 
+          class="org.springframework.beans.factory.config.ListFactoryBean">
+        <property name="sourceList">
+            <list>
+                <bean class="au.edu.diasb.springsecurity.ExternalProviderConfiguration">
+                    <property name="domain" value="drupal"/>
+                    <property name="defaultAuthorities" value="ROLE_USER, ROLE_ORE" />
+                    <property name="providerRegex" value=".+" />
+                    <property name="preferredUserNameAttributes" 
+                        value="name,lastName,firstName,email2,email"/>
+                    <property name="iconUri"
+                        value="#{emmetProps.getProperty('emmet.images')}/drupal.png"/>
+                </bean>
+            </list>
+        </property>
+    </bean>
+    
+    <bean id="drupalDBConnection" class="net.metadata.openannotation.lorestore.security.drupal.DrupalDBConnection">
+        <property name="database" value="${drupal.db}"/>
+        <property name="hostname" value="${drupal.db.hostname}"/>
+        <property name="username" value="${drupal.db.username}"/>
+        <property name="password" value="${drupal.db.password}"/>
+    </bean>
+
+</beans>
