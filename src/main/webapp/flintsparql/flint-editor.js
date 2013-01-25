@@ -304,7 +304,7 @@ function FlintEditor(container, imagesPath, config) {
 					"Key_16x16.png", true, function() {
 						editor.insertConstructQuery();
 					}));
-			newMenuItems.push(new FlintMenuItem("InsertQuery", "Insert",
+			/*newMenuItems.push(new FlintMenuItem("InsertQuery", "Insert",
 					"Insert_16x16.png", true, function() {
 						editor.insertInsertQuery();
 					}));
@@ -312,7 +312,7 @@ function FlintEditor(container, imagesPath, config) {
 					"DeleteQuery_16x16.png", true, function() {
 						editor.insertDeleteQuery();
 					}));
-
+			*/
 			var editMenuItems = [];
 			editMenuItems.push(new FlintMenuItem("Undo", "Undo", "Undo_16x16.png",
 					false, function() {
@@ -2805,8 +2805,8 @@ function FlintEditor(container, imagesPath, config) {
 								errorBox.show("The request was not sent. You may be offline");
 							} else {
 							
-								errorBox.show("Dataset Request: HTTP Status: "
-										+ XMLHttpRequest.status + "; "  + textStatus + 
+								errorBox.show("Error Status: "
+										+ XMLHttpRequest.status +  
 										"<br/>" + XMLHttpRequest.responseText);
 							}
 							resultsArea.showLoading(false);
