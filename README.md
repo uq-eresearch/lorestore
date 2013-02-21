@@ -73,3 +73,7 @@ History
 This web app is derivative of the [Aus-e-Lit webapp](https://github.com/auselit/webapp), by the same developers:
 
 
+
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/uq-eresearch/lorestore/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+
