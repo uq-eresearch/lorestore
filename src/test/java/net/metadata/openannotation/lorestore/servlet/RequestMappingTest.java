@@ -43,7 +43,7 @@ public class RequestMappingTest {
 		adapter = new AnnotationMethodHandlerAdapter();
 		request = new MockHttpServletRequest();
 		response = new MockHttpServletResponse();
-		
+		request.addHeader("Content-Type", "application/rdf+xml");
 		exampleURI = "http://example.com/";
 		exampleID = "asdn19";
 	}
@@ -85,7 +85,7 @@ public class RequestMappingTest {
 	
 	@Test
 	public void post() throws Exception {
-		EasyMock.expect(oreController.post(null)).andReturn(null);
+		EasyMock.expect(oreController.post(null, "application/rdf+xml")).andReturn(null);
 		EasyMock.replay(oreController);
 		
 		request.setRequestURI("/");
@@ -97,7 +97,7 @@ public class RequestMappingTest {
 	
 	@Test
 	public void put() throws Exception {
-		EasyMock.expect(oreController.put(exampleID, null)).andReturn(null);
+		EasyMock.expect(oreController.put(exampleID, null, "application/rdf+xml")).andReturn(null);
 		EasyMock.replay(oreController);
 		
 		request.setRequestURI("/" + exampleID);

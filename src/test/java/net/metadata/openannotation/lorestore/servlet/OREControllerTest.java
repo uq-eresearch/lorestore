@@ -70,7 +70,7 @@ public class OREControllerTest extends OREControllerTestsBase {
 	public void postEmpty() throws Exception {
 		InputStream in = new ByteArrayInputStream("".getBytes());
 		try {
-			controller.post(in);
+			controller.post(in, "application/rdf+xml");
 			fail("should have thrown exception");
 		} catch (RequestFailureException e) {
 			assertEquals(HttpServletResponse.SC_BAD_REQUEST, e.getStatus());
@@ -81,7 +81,7 @@ public class OREControllerTest extends OREControllerTestsBase {
 	public void postBadCompoundObjectBrokenXML() throws Exception {
 		ByteArrayInputStream in = new ByteArrayInputStream(
 				CommonTestRecords.BAD_ORE_BROKEN_XML.getBytes());
-		controller.post(in);
+		controller.post(in, "application/rdf+xml");
 		// expect 400 - bad request
 	}
 
@@ -89,7 +89,7 @@ public class OREControllerTest extends OREControllerTestsBase {
 	public void postBadCompoundObjectNoResourceMap() throws Exception {
 		ByteArrayInputStream in = new ByteArrayInputStream(
 				CommonTestRecords.BAD_ORE_NO_RESOURCEMAP.getBytes());
-		controller.post(in);
+		controller.post(in, "application/rdf+xml");
 		// expect 400 - bad request
 	}
 
@@ -97,7 +97,7 @@ public class OREControllerTest extends OREControllerTestsBase {
 	public void postCompoundObjectAndGet() throws Exception {
 		InputStream in = new ByteArrayInputStream(
 				CommonTestRecords.SIMPLE_ORE_EXAMPLE.getBytes());
-		OREResponse response = (OREResponse) controller.post(in);
+		OREResponse response = (OREResponse) controller.post(in, "application/rdf+xml");
 
 		assertNotNull(response.getLocationHeader());
 		assertNotNull(response.getReturnStatus());
@@ -137,7 +137,7 @@ public class OREControllerTest extends OREControllerTestsBase {
 		InputStream in = new ByteArrayInputStream(
 				CommonTestRecords.SIMPLE_ORE_EXAMPLE.getBytes());
 
-		controller.put("", in);
+		controller.put("", in, "application/rdf+xml");
 	}
 
 
@@ -150,7 +150,7 @@ public class OREControllerTest extends OREControllerTestsBase {
 		InputStream in = new ByteArrayInputStream(
 				CommonTestRecords.SIMPLE_ORE_EXAMPLE.getBytes());
 
-		controller.put("http://example.com/blergh", in);
+		controller.put("http://example.com/blergh", in, "application/rdf+xml");
 	}
 
 	@Test
@@ -159,7 +159,7 @@ public class OREControllerTest extends OREControllerTestsBase {
 
 		InputStream in = new ByteArrayInputStream(
 				CommonTestRecords.SIMPLE_ORE_EXAMPLE.getBytes());
-		controller.put(id, in);
+		controller.put(id, in, "application/rdf+xml");
 
 	}
 
@@ -221,7 +221,7 @@ public class OREControllerTest extends OREControllerTestsBase {
 	public void postWithNoAuth() throws Exception {
 		InputStream in = new ByteArrayInputStream(
 				CommonTestRecords.SIMPLE_ORE_EXAMPLE.getBytes());
-		authController.post(in);
+		authController.post(in, "application/rdf+xml");
 	}
 
 	@Test
@@ -231,21 +231,21 @@ public class OREControllerTest extends OREControllerTestsBase {
 
 		InputStream in = new ByteArrayInputStream(
 				CommonTestRecords.SIMPLE_ORE_EXAMPLE.getBytes());
-		authController.post(in);
+		authController.post(in, "application/rdf+xml");
 	}
 
 	@Test(expected = AccessDeniedException.class)
 	public void postWithNoAuth2() throws Exception {
 		InputStream in = new ByteArrayInputStream(
 				CommonTestRecords.SIMPLE_ORE_EXAMPLE.getBytes());
-		authController.post(in);
+		authController.post(in, "application/rdf+xml");
 	}
 
 	@Test(expected = LoreStoreException.class)
 	public void putToNonExistant() throws Exception {
 		InputStream in = new ByteArrayInputStream(
 				CommonTestRecords.SIMPLE_ORE_EXAMPLE.getBytes());
-		authController.put("http://nonexistant.example.com/ore/id", in);
+		authController.put("http://nonexistant.example.com/ore/id", in, "application/rdf+xml");
 	}
 
 	/**
@@ -259,11 +259,11 @@ public class OREControllerTest extends OREControllerTestsBase {
 
 		InputStream in = new ByteArrayInputStream(
 				CommonTestRecords.SIMPLE_ORE_EXAMPLE.getBytes());
-		controller.put(createdId, in);
+		controller.put(createdId, in, "application/rdf+xml");
 
 		in = new ByteArrayInputStream(
 				CommonTestRecords.SIMPLE_ORE_EXAMPLE.getBytes());
-		controller.put(createdId, in);
+		controller.put(createdId, in, "application/rdf+xml");
 	}
 
 	/**
@@ -281,7 +281,7 @@ public class OREControllerTest extends OREControllerTestsBase {
 		exception.expect(AccessDeniedException.class);
 		exception
 				.expectMessage("Authentication problem: request has no authentication object");
-		authController.put(createdId, in);
+		authController.put(createdId, in, "application/rdf+xml");
 	}
 
 	/**
@@ -295,13 +295,13 @@ public class OREControllerTest extends OREControllerTestsBase {
 				new String[] { "ROLE_USER", "ROLE_ORE" });
 		InputStream in = new ByteArrayInputStream(
 				CommonTestRecords.SIMPLE_ORE_EXAMPLE.getBytes());
-		OREResponse response = (OREResponse) authController.post(in);
+		OREResponse response = (OREResponse) authController.post(in, "application/rdf+xml");
 
 		String recordId = findUIDFromResponse(response);
 
 		in = new ByteArrayInputStream(
 				CommonTestRecords.SIMPLE_ORE_EXAMPLE.getBytes());
-		response = (OREResponse) authController.put(recordId, in);
+		response = (OREResponse) authController.put(recordId, in, "application/rdf+xml");
 	}
 
 	/**
@@ -315,7 +315,7 @@ public class OREControllerTest extends OREControllerTestsBase {
 				new String[] { "ROLE_USER", "ROLE_ORE" });
 		InputStream in = new ByteArrayInputStream(
 				CommonTestRecords.SIMPLE_ORE_EXAMPLE.getBytes());
-		OREResponse response = (OREResponse) authController.post(in);
+		OREResponse response = (OREResponse) authController.post(in, "application/rdf+xml");
 
 		String recordId = findUIDFromResponse(response);
 
@@ -326,7 +326,7 @@ public class OREControllerTest extends OREControllerTestsBase {
 
 		exception.expect(AccessDeniedException.class);
 		exception.expectMessage("You do not own this object");
-		response = (OREResponse) authController.put(recordId, in);
+		response = (OREResponse) authController.put(recordId, in, "application/rdf+xml");
 	}
 	
 
@@ -341,7 +341,7 @@ public class OREControllerTest extends OREControllerTestsBase {
 				new String[] { "ROLE_USER", "ROLE_ORE" });
 		InputStream in = new ByteArrayInputStream(
 				CommonTestRecords.SIMPLE_ORE_EXAMPLE.getBytes());
-		OREResponse response = (OREResponse) authController.post(in);
+		OREResponse response = (OREResponse) authController.post(in, "application/rdf+xml");
 
 		String recordId = findUIDFromResponse(response);
 
@@ -350,7 +350,7 @@ public class OREControllerTest extends OREControllerTestsBase {
 		in = new ByteArrayInputStream(
 				CommonTestRecords.SIMPLE_ORE_EXAMPLE.getBytes());
 
-		response = (OREResponse) authController.put(recordId, in);
+		response = (OREResponse) authController.put(recordId, in, "application/rdf+xml");
 	}
 
 	/**
@@ -364,7 +364,7 @@ public class OREControllerTest extends OREControllerTestsBase {
 				new String[] { "ROLE_USER", "ROLE_ORE" });
 		InputStream in = new ByteArrayInputStream(
 				CommonTestRecords.SIMPLE_ORE_EXAMPLE.getBytes());
-		OREResponse response = (OREResponse) authController.post(in);
+		OREResponse response = (OREResponse) authController.post(in, "application/rdf+xml");
 
 		String recordId = findUIDFromResponse(response);
 
@@ -388,13 +388,13 @@ public class OREControllerTest extends OREControllerTestsBase {
 				"ROLE_ORE" });
 		String simpleOreExample = CommonTestRecords.SIMPLE_ORE_EXAMPLE;
 		InputStream in = new ByteArrayInputStream(simpleOreExample.getBytes());
-		OREResponse response = (OREResponse) authController.post(in);
+		OREResponse response = (OREResponse) authController.post(in, "application/rdf+xml");
 
 		checkUserInModel(response, userUri);
 
 		String recordId = findUIDFromResponse(response);
 		in = new ByteArrayInputStream(simpleOreExample.getBytes());
-		response = (OREResponse) authController.put(recordId, in);
+		response = (OREResponse) authController.put(recordId, in, "application/rdf+xml");
 
 		checkUserInModel(response, userUri);
 	}
@@ -412,13 +412,13 @@ public class OREControllerTest extends OREControllerTestsBase {
 				"ROLE_ORE" });
 		String simpleOreExample = CommonTestRecords.SIMPLE_ORE_EXAMPLE_WITH_OWNER;
 		InputStream in = new ByteArrayInputStream(simpleOreExample.getBytes());
-		OREResponse response = (OREResponse) authController.post(in);
+		OREResponse response = (OREResponse) authController.post(in, "application/rdf+xml");
 
 		checkUserInModel(response, userUri);
 
 		String recordId = findUIDFromResponse(response);
 		in = new ByteArrayInputStream(simpleOreExample.getBytes());
-		response = (OREResponse) authController.put(recordId, in);
+		response = (OREResponse) authController.put(recordId, in, "application/rdf+xml");
 
 		checkUserInModel(response, userUri);
 	}
@@ -434,7 +434,7 @@ public class OREControllerTest extends OREControllerTestsBase {
 
 		InputStream in = new ByteArrayInputStream(
 				CommonTestRecords.SIMPLE_ORE_LOCKED.getBytes());
-		OREResponse response = (OREResponse) authController.post(in);
+		OREResponse response = (OREResponse) authController.post(in, "application/rdf+xml");
 
 		String recordId = findUIDFromResponse(response);
 		in = new ByteArrayInputStream(
@@ -442,7 +442,7 @@ public class OREControllerTest extends OREControllerTestsBase {
 		
 		exception.expect(AccessDeniedException.class);
 		exception.expectMessage("Object is locked, must be administrator to modify");
-		authController.put(recordId, in);
+		authController.put(recordId, in, "application/rdf+xml");
 	}
 	
 	//
@@ -467,7 +467,7 @@ public class OREControllerTest extends OREControllerTestsBase {
 
 	private String saveRecordToStore(String recordXML) throws Exception {
 		InputStream in = new ByteArrayInputStream(recordXML.getBytes());
-		OREResponse response = (OREResponse) controller.post(in);
+		OREResponse response = (OREResponse) controller.post(in, "application/rdf+xml");
 
 		String id = findUIDFromResponse(response);
 
