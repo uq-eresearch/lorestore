@@ -1,6 +1,6 @@
 {
  "@context": {
-    "oa" :     "http://www.w3.org/ns/openannotation/core/",
+    "oa": "http://www.w3.org/ns/oa#",
     "oac" :    "http://www.openannotation.org/ns/",
     "lit" :    "http://www.example.org/lit-annotation-ns#",
     "cnt" :    "http://www.w3.org/2011/content#",
@@ -11,12 +11,15 @@
     "rdf" :    "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
     "rdfs" :   "http://www.w3.org/2000/01/rdf-schema#",
     "skos" :   "http://www.w3.org/2004/02/skos/core#",
-    "body" :         {"@type":"@id", "@id" : "oa:hasBody"},
-    "target" :       {"@type":"@id", "@id" : "oa:hasTarget"},
-    "source" :       {"@type":"@id", "@id" : "oa:hasSource"},
-    "selector" :     {"@type":"@id", "@id" : "oa:hasSelector"},
-    "state" :        {"@type":"@id", "@id" : "oa:hasState"},
-    "scope" :        {"@type":"@id", "@id" : "oa:hasScope"},
+    "prov": "http://www.w3.org/ns/prov#",
+    "trig": "http://www.w3.org/2004/03/trix/rdfg-1/",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "hasBody" :      {"@type":"@id", "@id" : "oa:hasBody"},
+    "hasTarget" :    {"@type":"@id", "@id" : "oa:hasTarget"},
+    "hasSource" :    {"@type":"@id", "@id" : "oa:hasSource"},
+    "hasSelector" :  {"@type":"@id", "@id" : "oa:hasSelector"},
+    "hasState" :     {"@type":"@id", "@id" : "oa:hasState"},
+    "hasScope" :     {"@type":"@id", "@id" : "oa:hasScope"},
     "annotatedBy" :  {"@type":"@id", "@id" : "oa:annotatedBy"},
     "serializedBy" : {"@type":"@id", "@id" : "oa:serializedBy"},
     "motivatedBy" :  {"@type":"@id", "@id" : "oa:motivatedBy"},
@@ -43,6 +46,6 @@
     "label" :        "rdfs:label",
     "name" :         "foaf:name",
     "mbox" :         "foaf:mbox",
-    "style" :        "oa:styleClass"
+    "styleClass" :   "oa:styleClass"
   }
 }
