@@ -19,11 +19,11 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 @RunWith(JUnit4.class)
-public class RDF2GoOACUpdateHandlerTest  {
+public class RDF2GoOAUpdateHandlerTest  {
 
 	private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
 	private final ByteArrayOutputStream errContent = new ByteArrayOutputStream();
-	private RDF2GoOACUpdateHandler uh;
+	private RDF2GoOAUpdateHandler uh;
 	private LoreStoreControllerConfig noauthOCC;
 	
 	@Before
@@ -36,7 +36,7 @@ public class RDF2GoOACUpdateHandlerTest  {
 		noauthOCC.setBaseUri("http://example.com/");
 		noauthOCC.setUidGenerator(new UIDGenerator());
 		noauthOCC.setIdentityProvider(new MockOREIdentityProvider());
-		uh = new RDF2GoOACUpdateHandler(noauthOCC);
+		uh = new RDF2GoOAUpdateHandler(noauthOCC);
 	}
 
 	@After

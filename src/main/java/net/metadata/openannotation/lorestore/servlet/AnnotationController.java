@@ -8,8 +8,8 @@ import javax.servlet.http.HttpServletResponse;
 import net.metadata.openannotation.lorestore.exceptions.InvalidQueryParametersException;
 import net.metadata.openannotation.lorestore.exceptions.LoreStoreException;
 import net.metadata.openannotation.lorestore.exceptions.NotFoundException;
-import net.metadata.openannotation.lorestore.servlet.rdf2go.RDF2GoOACQueryHandler;
-import net.metadata.openannotation.lorestore.servlet.rdf2go.RDF2GoOACUpdateHandler;
+import net.metadata.openannotation.lorestore.servlet.rdf2go.RDF2GoOAQueryHandler;
+import net.metadata.openannotation.lorestore.servlet.rdf2go.RDF2GoOAUpdateHandler;
 
 import org.apache.log4j.Logger;
 import org.springframework.http.HttpStatus;
@@ -28,17 +28,17 @@ import org.springframework.web.servlet.ModelAndView;
 import au.edu.diasb.chico.mvc.RequestFailureException;
 
 @Controller
-public class OACController {
-    private final Logger LOG = Logger.getLogger(OACController.class);
+public class AnnotationController {
+    private final Logger LOG = Logger.getLogger(AnnotationController.class);
 
     private final LoreStoreControllerConfig occ;
     private LoreStoreQueryHandler qh;
     private LoreStoreUpdateHandler uh;
 
-    public OACController(LoreStoreControllerConfig occ) {
+    public AnnotationController(LoreStoreControllerConfig occ) {
         this.occ = occ;
-        this.qh = new RDF2GoOACQueryHandler(occ);
-        this.uh = new RDF2GoOACUpdateHandler(occ);
+        this.qh = new RDF2GoOAQueryHandler(occ);
+        this.uh = new RDF2GoOAUpdateHandler(occ);
     }
 
     @RequestMapping(value = "/", method = RequestMethod.POST)

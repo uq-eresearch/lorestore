@@ -6,7 +6,7 @@ import javax.xml.xpath.XPathFactory;
 import net.metadata.openannotation.lorestore.access.AllowEverythingAccessPolicy;
 import net.metadata.openannotation.lorestore.access.DefaultLoreStoreAccessPolicy;
 import net.metadata.openannotation.lorestore.servlet.LoreStoreControllerConfig;
-import net.metadata.openannotation.lorestore.servlet.OACController;
+import net.metadata.openannotation.lorestore.servlet.AnnotationController;
 import net.metadata.openannotation.lorestore.triplestore.MemoryTripleStoreConnectorFactory;
 import net.metadata.openannotation.lorestore.triplestore.TripleStoreConnectorFactory;
 import net.metadata.openannotation.lorestore.util.UIDGenerator;
@@ -17,12 +17,12 @@ import org.junit.Before;
 import org.ontoware.rdf2go.model.ModelSet;
 import org.ontoware.rdf2go.model.Syntax;
 
-public class OACControllerTestsBase {
+public class AnnotationControllerTestsBase {
 
 	private TripleStoreConnectorFactory cf;
 	private MockOREIdentityProvider ip;
-	protected static OACController controller;
-	protected static OACController authController;
+	protected static AnnotationController controller;
+	protected static AnnotationController authController;
 	static XPath xPath;
 	LoreStoreControllerConfig noauthOCC;
 	LoreStoreControllerConfig authReqdOCC;
@@ -34,7 +34,7 @@ public class OACControllerTestsBase {
 		authController = createAuthController();
 		xPath = XPathFactory.newInstance().newXPath();
 		
-		// Load oac schema into repository
+		// Load oa schema into repository
 		ClassLoader cl = this.getClass().getClassLoader();
 	    java.io.InputStream in = cl.getResourceAsStream("oac.trig");
 	    ModelSet connection = cf.retrieveConnection();
@@ -42,7 +42,7 @@ public class OACControllerTestsBase {
 	    cf.release(connection);
 	}
 
-	private OACController createController() throws InterruptedException {
+	private AnnotationController createController() throws InterruptedException {
 		noauthOCC = new LoreStoreControllerConfig();
 		noauthOCC.setContainerFactory(cf);
 		noauthOCC.setAccessPolicy(new AllowEverythingAccessPolicy());
@@ -50,10 +50,10 @@ public class OACControllerTestsBase {
 		noauthOCC.setUidGenerator(new UIDGenerator());
 		noauthOCC.setIdentityProvider(new MockOREIdentityProvider());
 		noauthOCC.setDefaultSchema("http://www.openannotation.org/ns/");
-		return new OACController(noauthOCC);
+		return new AnnotationController(noauthOCC);
 	}
 
-	private OACController createAuthController() throws Exception {
+	private AnnotationController createAuthController() throws Exception {
 		authReqdOCC = new LoreStoreControllerConfig();
 		authReqdOCC.setContainerFactory(cf);
 		ip = new MockOREIdentityProvider();
@@ -68,7 +68,7 @@ public class OACControllerTestsBase {
 		authReqdOCC.setIdentityProvider(ip);
 		authReqdOCC.setBaseUri("http://example.com/");
 		authReqdOCC.setUidGenerator(new UIDGenerator());
-		return new OACController(authReqdOCC);
+		return new AnnotationController(authReqdOCC);
 	}
 
 	protected void updateAuthenticationContext(String username, String uri,

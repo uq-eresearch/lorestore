@@ -15,11 +15,11 @@ import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.web.servlet.ModelAndView;
 
-public class OACAtomFeedViewTest {
+public class OAAtomFeedViewTest {
 	private MockHttpServletRequest request;
 	private MockHttpServletResponse response;
 	private ModelAndView mv;
-	private OACAtomFeedView view;
+	private OAAtomFeedView view;
 
 	@Before
 	public void setUp() throws Exception {
@@ -34,8 +34,8 @@ public class OACAtomFeedViewTest {
 		annotations.add(model1);
 		annotations.add(model2);
 		
-		view = new OACAtomFeedView();
-		mv = new ModelAndView("oacAtom");
+		view = new OAAtomFeedView();
+		mv = new ModelAndView("oaAtom");
 		mv.addObject("annotations",annotations);
 		request = new MockHttpServletRequest();
 		response = new MockHttpServletResponse();
@@ -43,7 +43,7 @@ public class OACAtomFeedViewTest {
 
 	@Test
 	public void constructorTest() {
-		new OACAtomFeedView();
+		new OAAtomFeedView();
 	}
 
 	

@@ -2,8 +2,7 @@ $(document)
         .ready(
                 function() {
                     var sampleQuery1 = "SELECT * WHERE {\n\t?c a <http://www.openarchives.org/ore/terms/ResourceMap>\n}";
-                    var sampleQuery2 = "SELECT * WHERE {\n\t?a a <http://www.openannotation.org/ns/Annotation>\n}";
-                    var sampleQuery3 = "SELECT * WHERE {\n\t?r a <http://www.openannotation.org/ns/Reply>\n}";
+                    var sampleQuery2 = "SELECT * WHERE {\n\t?a a <http://www.w3.org/ns/oa#Annotation>\n}";
                     var flintConfig = {
                         "interface" : {
                             "toolbar" : true,
@@ -101,11 +100,11 @@ $(document)
                                 "name" : "SPARQL-XML",
                                 "format" : "sparql",
                                 "type" : "application/sparql-results+xml"
-                            }, {
+                            }/*, {
                                 "name" : "JSON",
                                 "format" : "json",
                                 "type" : "application/sparql-results+json"
-                            } ],
+                            } */],
                             "constructFormats" : [ /*{
                                 "name" : "Plain text",
                                 "format" : "text",
@@ -123,17 +122,14 @@ $(document)
                         "endpoints" : [
                                 {"name": "LORESTORE",
                                     "uri": "sparql",
-                                    "modes": ["sparql10"],
+                                    "modes": ["sparql10", "sparql11query"],
                                        queries: [
                                            {"name": "Resource Maps", 
                                             "description": "List all ORE ResourceMaps", 
                                             "query": sampleQuery1},
                                             {"name": "Annotations", 
-                                                "description": "List all OAC Annotations", 
-                                                "query": sampleQuery2},
-                                            {"name": "Replies", 
-                                                    "description": "List all OAC Replies", 
-                                                    "query": sampleQuery3}
+                                                "description": "List all OA Annotations", 
+                                                "query": sampleQuery2}
                                 
                                        ]
                                    }

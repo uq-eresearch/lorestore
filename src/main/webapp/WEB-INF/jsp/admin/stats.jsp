@@ -34,7 +34,7 @@
 		     </tr>
 		     <tr>
 		     <td>
-		     	<p>Number of OAC Annotations: <c:out value="${numAnnotations}"></c:out></p>
+		     	<p>Number of OA Annotations: <c:out value="${numAnnotations}"></c:out></p>
 		     </td>
 		     </table>
           </div>

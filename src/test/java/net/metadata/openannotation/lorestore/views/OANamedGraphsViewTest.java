@@ -16,11 +16,11 @@ import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.web.servlet.ModelAndView;
 
-public class OACNamedGraphsViewTest {
+public class OANamedGraphsViewTest {
 	private MockHttpServletRequest request;
 	private MockHttpServletResponse response;
 	private ModelAndView mv;
-	private OACNamedGraphsView view;
+	private OANamedGraphsView view;
 
 	@Before
 	public void setUp() throws Exception {
@@ -37,8 +37,8 @@ public class OACNamedGraphsViewTest {
 		ms.addModel(model2);
 		model1.close();
 		model2.close();
-		view = new OACNamedGraphsView();
-		mv = new ModelAndView("oac");
+		view = new OANamedGraphsView();
+		mv = new ModelAndView("oa");
 		mv.addObject("annotations",ms);
 		request = new MockHttpServletRequest();
 		response = new MockHttpServletResponse();
@@ -46,7 +46,7 @@ public class OACNamedGraphsViewTest {
 
 	@Test
 	public void constructorTest() {
-		new OACNamedGraphsView();
+		new OANamedGraphsView();
 	}
 
 	@Test

@@ -5,6 +5,7 @@ import static net.metadata.openannotation.lorestore.common.LoreStoreConstants.DC
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.StringWriter;
 import java.util.Date;
 
 import javax.servlet.http.HttpServletResponse;
@@ -20,6 +21,7 @@ import net.metadata.openannotation.lorestore.servlet.OREResponse;
 import net.metadata.openannotation.lorestore.triplestore.TripleStoreConnectorFactory;
 import net.metadata.openannotation.lorestore.util.OATripleCallback;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 import org.ontoware.rdf2go.ModelFactory;
 import org.ontoware.rdf2go.RDF2Go;
@@ -75,9 +77,8 @@ public abstract class AbstractRDF2GoUpdateHandler implements LoreStoreUpdateHand
         URI newUri = mf.createModel().createURI(occ.getBaseUri() + uid);
         Model model = mf.createModel(newUri);
         try {
-            LOG.info("Opening model for " + newUri.toString());
             model.open();
-            if (contentType.equals(Syntax.RdfXml.getMimeType()) 
+            if (contentType.equals(Syntax.RdfXml.getMimeType())
                     || contentType.equals(Syntax.Trix.getMimeType()) 
                     || contentType.equals(Syntax.Trig.getMimeType())){
                 model.readFrom(inputRDF, Syntax.forMimeType(contentType), occ.getBaseUri());
@@ -94,7 +95,9 @@ public abstract class AbstractRDF2GoUpdateHandler implements LoreStoreUpdateHand
             }
         } catch (ModelRuntimeException e) {
             try{
-                LOG.error("Model read failed " + e.getMessage());
+                
+                LOG.info("Post: Model read failed " + e.getMessage() + " for posted content: " + IOUtils.toString(inputRDF, "UTF-8"));
+                
                 model.close();
             } catch (Exception e2){
                 // ignore
@@ -102,10 +105,14 @@ public abstract class AbstractRDF2GoUpdateHandler implements LoreStoreUpdateHand
             throw new RequestFailureException(
                     HttpServletResponse.SC_BAD_REQUEST, "Error reading RDF " + e.getMessage());
         } catch (JSONLDProcessingError e) {
-            LOG.error("Model read failed " + e.getMessage());
-                } catch (Exception e) {
-                    LOG.error("Post failed " + e.getMessage());
-                }
+            LOG.info("Post: Model read failed " + e.getMessage());
+            throw new RequestFailureException(
+                    HttpServletResponse.SC_BAD_REQUEST, "Error reading JSON " + e.getMessage());
+        } catch (Exception e) {
+            LOG.info("Post failed " + e.getMessage());
+            throw new RequestFailureException(
+                    HttpServletResponse.SC_BAD_REQUEST, "Post failed " + e.getMessage());
+        }
 
         NamedGraphImpl obj = makeNewObject(model);
         model.close();
@@ -212,12 +219,15 @@ public abstract class AbstractRDF2GoUpdateHandler implements LoreStoreUpdateHand
                                 throw new RequestFailureException(HttpServletResponse.SC_BAD_REQUEST, "Acceptable content types are RDF/XML or JSON-LD");
                             }
             } catch (ModelRuntimeException e) {
+                LOG.info("Put: Model read failed " + e.getMessage() + " for " + objURI.toString());
                 newModel.close();
                 throw new RequestFailureException(
                         HttpServletResponse.SC_BAD_REQUEST, "Error reading RDF");
             } catch (JSONLDProcessingError e) {
-                            LOG.debug("Model read failed " + e.getMessage());
-                        }
+                LOG.info("Put: Model read failed " + e.getMessage() + " for " + objURI.toString());
+                throw new RequestFailureException(
+                        HttpServletResponse.SC_BAD_REQUEST, "Error reading JSON " + " for " + objURI.toString());
+            }
             NamedGraphImpl obj = makeNewObject(newModel);
             newModel.close();
             

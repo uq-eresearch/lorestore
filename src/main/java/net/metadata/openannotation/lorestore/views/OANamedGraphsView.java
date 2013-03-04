@@ -23,10 +23,10 @@ import de.dfki.km.json.JSONUtils;
 import de.dfki.km.json.jsonld.JSONLD;
 import de.dfki.km.json.jsonld.JSONLDProcessor.Options;
 
-public class OACNamedGraphsView extends BaseView {
+public class OANamedGraphsView extends BaseView {
 
-         public OACNamedGraphsView() {
-                super(Logger.getLogger(OACNamedGraphsView.class));
+         public OANamedGraphsView() {
+                super(Logger.getLogger(OANamedGraphsView.class));
          }
          
          @Override
@@ -55,7 +55,7 @@ public class OACNamedGraphsView extends BaseView {
                     // however RDF/XML is the default
                     if (isAcceptable(MimeTypes.XML_RDF_MIMETYPES, request)) {    
                         stylesheetURI = (stylesheetParam == null || stylesheetParam.length() == 0) ?
-                                "/lorestore/stylesheets/OAC.xsl" : stylesheetParam;
+                                "/lorestore/stylesheets/OA.xsl" : stylesheetParam;
                         
                         if (isAcceptable(MimeTypes.XML_MIMETYPE, request)){
                             // we don't provide HTML as yet, use XML with stylesheet instead
@@ -96,7 +96,7 @@ public class OACNamedGraphsView extends BaseView {
                         annotations.commit();
                         annotations.close();
                     } catch (Exception e){
-                        logger.error("OACNamedGraphsView " + e.getMessage());
+                        logger.error("OANamedGraphsView " + e.getMessage());
                     };
                 }
             }
@@ -155,7 +155,7 @@ public class OACNamedGraphsView extends BaseView {
              Options opt = new Options();
              opt.optimize = true;
              ClassLoader cl = this.getClass().getClassLoader();
-             java.io.InputStream in = cl.getResourceAsStream("oacontext.json");
+             java.io.InputStream in = cl.getResourceAsStream("oa-context.json");
              Object jsonContext = JSONUtils.fromInputStream(in);
              jsonResult.append(JSONUtils.toString(JSONLD.compact(json, jsonContext, opt)));
         } catch (Exception e){

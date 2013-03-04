@@ -116,7 +116,7 @@ public interface LoreStoreQueryHandler {
 	
 	/**
 	 * Counts the total number of named graphs stored 
-	 * (e.g. OAC annotation or ORE resource map)
+	 * (e.g. OA annotation or ORE resource map)
 	 * 
 	 * @return the number of named graphs in the triplestore
 	 * @throws InterruptedException

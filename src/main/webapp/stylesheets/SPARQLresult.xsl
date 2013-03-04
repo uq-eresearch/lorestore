@@ -8,6 +8,7 @@
 	xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
 	xmlns:dc="http://purl.org/dc/elements/1.1/"
 	xmlns:oac="http://www.openannotation.org/ns/"
+	xmlns:oa="http://www.w3.org/ns/oa#"
 	xmlns:cnt="http://www.w3.org/2008/content#"
 	xmlns:foaf="http://xmlns.com/foaf/0.1/"
 	xmlns:dcterms="http://purl.org/dc/terms/"

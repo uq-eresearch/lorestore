@@ -17,14 +17,14 @@
           <div class="span10">
 
             <h2>Annotations</h2>
-        <form action="oac/">
+        <form action="oa/">
         <fieldset>
             <label for="annoInput">Annotates:&nbsp;</label>
             <input class="xlarge" id="annoInput" name="annotates" size="60" type="text">
             <input type="submit" class="btn btn-primary" value="Search">
         </fieldset>
       </form>
-        <form action="oac/">
+        <form action="oa/">
         <fieldset>
             <label for="annoInput">Keyword:&nbsp;</label>
             <input class="xlarge" id="annoInput" name="matchval" size="60" type="text">

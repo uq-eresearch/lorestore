@@ -1,4 +1,4 @@
-<meta name="description" content="OAC and ORE repository service">
+<meta name="description" content="OA and ORE repository service">
 <meta name="author" content="UQ ITEE eResearch">
 <!-- HTML5 shim, for IE6-8 support of HTML elements -->
 <!--[if lt IE 9]>

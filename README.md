@@ -6,7 +6,7 @@ The Open Annotation lorestore Web Application was developed at the UQ ITEE eRese
 About
 -----
 
-The webapp provides services for storing OAC annotations and ORE Resource Map bodies and targets.
+The webapp provides services for storing Open Annotation (OA) annotations and ORE Resource Map bodies and targets.
 We use the web app for our Open Annotation service at 
 [http://openannotation.metadata.net/lorestore/](http://openannotation.metadata.net/lorestore/)
 
@@ -65,7 +65,7 @@ Backup
 ------
 Use `mysqldump` to backup Emmet user data.
 
-Use lorestore's `oreadmin/export` page to export the RDF repository that stores OAC annotations and Resource Maps to file. 
+Use lorestore's `oreadmin/export` page to export the RDF repository that stores OA annotations and Resource Maps to file. 
 The file format supported for export and import is Trig; resource maps and annotations are stored as Named Graphs.
 
 History

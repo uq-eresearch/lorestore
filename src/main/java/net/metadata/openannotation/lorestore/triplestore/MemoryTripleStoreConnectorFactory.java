@@ -3,7 +3,7 @@ package net.metadata.openannotation.lorestore.triplestore;
 import java.io.File;
 
 import net.metadata.openannotation.lorestore.exceptions.LoreStoreDBConnectionException;
-import net.metadata.openannotation.lorestore.views.OACNamedGraphsView;
+import net.metadata.openannotation.lorestore.views.OANamedGraphsView;
 
 import org.apache.log4j.Logger;
 import org.ontoware.rdf2go.model.ModelSet;
@@ -21,7 +21,7 @@ public class MemoryTripleStoreConnectorFactory implements
 	private SailRepository repo;
 	private String dataDir;
 	private ForwardChainingRDFSInferencer memoryStore;
-	private Logger LOG = Logger.getLogger(OACNamedGraphsView.class);
+	private Logger LOG = Logger.getLogger(OANamedGraphsView.class);
 	public MemoryTripleStoreConnectorFactory() {
 		this.memoryStore = new ForwardChainingRDFSInferencer(new MemoryStore());
 	}

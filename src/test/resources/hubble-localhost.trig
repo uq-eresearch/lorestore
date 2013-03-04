@@ -4,16 +4,16 @@
 @prefix oac: <http://www.openannotation.org/ns/> .
 @prefix cnt: <http://www.w3.org/2011/content#> .
 
-<http://localhost:8080/lorestore/oac/HubbleBaseline> {
-	<http://localhost:8080/lorestore/oac/HubbleBaseline> a oac:Annotation ;
+<http://localhost:8080/lorestore/oa/HubbleBaseline> {
+	<http://localhost:8080/lorestore/oa/HubbleBaseline> a oac:Annotation ;
 		oac:hasTarget <http://commons.wikimedia.org/wiki/File:Hubble_ultra_deep_field.jpg> ;
 		oac:hasBody <http://www.youtube.com/watch?v=fgg2tpUVbXQ> .
 	<http://commons.wikimedia.org/wiki/File:Hubble_ultra_deep_field.jpg> a oac:Target.
 	<http://www.youtube.com/watch?v=fgg2tpUVbXQ> a oac:Body.
 }
 
-<http://localhost:8080/lorestore/oac/HubbleAdditionalProperties> {
-	<http://localhost:8080/lorestore/oac/HubbleAdditionalProperties> a oac:Annotation ;
+<http://localhost:8080/lorestore/oa/HubbleAdditionalProperties> {
+	<http://localhost:8080/lorestore/oa/HubbleAdditionalProperties> a oac:Annotation ;
 		dc:title "Annotation of Hubble Deep Field Image" ;
 		dcterms:creator <http://www.example.org/user/jbloggs> ;
 		dcterms:created "2010-02-01T12:34:56.000+5:00" ;
@@ -28,22 +28,22 @@
 		foaf:name "Joe Bloggs" .
 }
 
-<http://localhost:8080/lorestore/oac/HubbleTypesAnnotation> {
-	<http://localhost:8080/lorestore/oac/HubbleTypesAnnotation> a oac:Annotation ;
+<http://localhost:8080/lorestore/oa/HubbleTypesAnnotation> {
+	<http://localhost:8080/lorestore/oa/HubbleTypesAnnotation> a oac:Annotation ;
 		oac:hasTarget <http://commons.wikimedia.org/wiki/File:Hubble_ultra_deep_field.jpg> ;
 		oac:hasBody <http://twitter.com/---/status/12665463062> .
 	<http://commons.wikimedia.org/wiki/File:Hubble_ultra_deep_field.jpg> a oac:Target.
 	<http://twitter.com/---/status/12665463062> a oac:Body.
 }
 
-<http://localhost:8080/lorestore/oac/HubbleTypesReply> {
-	<http://localhost:8080/lorestore/oac/HubbleTypesReply> a oac:Reply ;
-		oac:hasTarget <http://localhost:8080/lorestore/oac/HubbleTypesAnnotation> ;
+<http://localhost:8080/lorestore/oa/HubbleTypesReply> {
+	<http://localhost:8080/lorestore/oa/HubbleTypesReply> a oac:Reply ;
+		oac:hasTarget <http://localhost:8080/lorestore/oa/HubbleTypesAnnotation> ;
 		oac:hasBody <http://twitter.com/---/status/12665505503> .
 }
 
-<http://localhost:8080/lorestore/oac/HubbleInlineBody> {
-	<http://localhost:8080/lorestore/oac/HubbleInlineBody> a oac:Annotation ;
+<http://localhost:8080/lorestore/oa/HubbleInlineBody> {
+	<http://localhost:8080/lorestore/oa/HubbleInlineBody> a oac:Annotation ;
 		oac:hasTarget <http://commons.wikimedia.org/wiki/File:Hubble_ultra_deep_field.jpg> ;
 		oac:hasBody <urn:uuid:074360F6-19F9-49A0-83BF-A07FEEF09D5D> .
 	<urn:uuid:074360F6-19F9-49A0-83BF-A07FEEF09D5D> a cnt:ContentAsText ;
@@ -51,8 +51,8 @@
 		cnt:chars "This image is very impressive!" .
 }
 
-<http://localhost:8080/lorestore/oac/HubbleMultipleTargets> {
-	<http://localhost:8080/lorestore/oac/HubbleMultipleTargets> a oac:Annotation ;
+<http://localhost:8080/lorestore/oa/HubbleMultipleTargets> {
+	<http://localhost:8080/lorestore/oa/HubbleMultipleTargets> a oac:Annotation ;
 		oac:hasTarget <http://commons.wikimedia.org/wiki/File:Hubble_ultra_deep_field.jpg> ;
 		oac:hasTarget <http://imgsrc.hubblesite.org/hu/db/images/hs-1996-01-a-full_tif.tif> ;
 		oac:hasBody <http://twitter.com/---/status/10994605527> .
@@ -61,8 +61,8 @@
 	<http://twitter.com/---/status/10994605527> a oac:Body.
 }
 
-<http://localhost:8080/lorestore/oac/HubbleMediaFragments> {
-	<http://localhost:8080/lorestore/oac/HubbleMediaFragments> a oac:Annotation ;
+<http://localhost:8080/lorestore/oa/HubbleMediaFragments> {
+	<http://localhost:8080/lorestore/oa/HubbleMediaFragments> a oac:Annotation ;
 		oac:hasTarget <http://commons.wikimedia.org/wiki/File:Hubble_ultra_deep_field.jpg#xywh=50,100,640,480> ;
 		oac:hasBody <http://twitter.com/---/status/6312261983> .
 	
@@ -71,8 +71,8 @@
 	<http://twitter.com/---/status/6312261983> a oac:Body .
 }
 
-<http://localhost:8080/lorestore/oac/HubbleConstraints> {
-	<http://localhost:8080/lorestore/oac/HubbleConstraints> a oac:Annotation ;
+<http://localhost:8080/lorestore/oa/HubbleConstraints> {
+	<http://localhost:8080/lorestore/oa/HubbleConstraints> a oac:Annotation ;
 		oac:hasTarget <urn:uuid:3DC92A55-6315-49D5-98BD-D9DFB7ADA59E> ;
 		oac:hasBody <http://twitter.com/---/status/6312261983> .
 	<urn:uuid:3DC92A55-6315-49D5-98BD-D9DFB7ADA59E> a oac:ConstrainedTarget ;
@@ -82,8 +82,8 @@
 		dc:format "image/svg+xml" .
 	<http://twitter.com/---/status/6312261983> a oac:Body .
 }
-<http://localhost:8080/lorestore/oac/HubbleInlineConstraint> {
-	<http://localhost:8080/lorestore/oac/HubbleInlineConstraint> a oac:Annotation ;
+<http://localhost:8080/lorestore/oa/HubbleInlineConstraint> {
+	<http://localhost:8080/lorestore/oa/HubbleInlineConstraint> a oac:Annotation ;
           oac:hasTarget <urn:uuid:98f77660-5c27-11e1-b86c-0800200c9a66> ;
           oac:hasBody <http://twitter.com/---/status/6312261983> .
 	<urn:uuid:98f77660-5c27-11e1-b86c-0800200c9a66> a oac:ConstrainedTarget ;
@@ -100,8 +100,8 @@
 	<http://twitter.com/---/status/6312261983> a oac:Body .
 }
 
-<http://localhost:8080/lorestore/oac/HubbleRDFConstraint> {
-	<http://localhost:8080/lorestore/oac/HubbleRDFConstraint> a oac:Annotation ;
+<http://localhost:8080/lorestore/oa/HubbleRDFConstraint> {
+	<http://localhost:8080/lorestore/oa/HubbleRDFConstraint> a oac:Annotation ;
           oac:hasTarget <urn:uuid:87c0e070-5c27-11e1-b86c-0800200c9a66> ;
           oac:hasBody <http://twitter.com/---/status/6312261983> .
 
@@ -116,8 +116,8 @@
           <http://www.example.org/image/h> 150 .
 	<http://twitter.com/---/status/6312261983> a oac:Body .
 }
-<http://localhost:8080/lorestore/oac/HubbleConstrainedBody> {
-	<http://localhost:8080/lorestore/oac/HubbleConstrainedBody> a oac:Annotation ;
+<http://localhost:8080/lorestore/oa/HubbleConstrainedBody> {
+	<http://localhost:8080/lorestore/oa/HubbleConstrainedBody> a oac:Annotation ;
 	      oac:hasBody <urn:uuid:a96f0ca0-5c28-11e1-b86c-0800200c9a66> ;
           oac:hasTarget <urn:uuid:c12f8630-5c28-11e1-b86c-0800200c9a66> .
 

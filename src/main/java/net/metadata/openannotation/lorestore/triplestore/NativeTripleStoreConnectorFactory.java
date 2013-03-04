@@ -27,9 +27,9 @@ public class NativeTripleStoreConnectorFactory implements
 
 	private SailRepository repo;
 	private String dataDirPath;
-	private String oacSchemaFile = null;
+	private String oaSchemaFile = null;
 	private String oreSchemaFile = null;
-	private String oacSchema = null;
+	private String oaSchema = null;
 	private String oreSchema = null;
 	private String sesameIndexes = "spoc,posc,cspo,ocsp";
 	
@@ -48,8 +48,8 @@ public class NativeTripleStoreConnectorFactory implements
 		if (connection.size() == 0){
 			LOG.info("load schema");
 			// Populate empty repository with schema
-			if (oacSchemaFile != null && oacSchema != null){
-				loadSchema(connection, oacSchemaFile, oacSchema);
+			if (oaSchemaFile != null && oaSchema != null){
+				loadSchema(connection, oaSchemaFile, oaSchema);
 			}
 			if (oreSchemaFile != null && oreSchema != null){
 				loadSchema(connection, oreSchemaFile, oreSchema);
@@ -121,19 +121,19 @@ public class NativeTripleStoreConnectorFactory implements
 		return dataDirPath;
 	}
 	
-	public void setOacSchemaFile(String oacSchemaFile){
-		this.oacSchemaFile = oacSchemaFile;
+	public void setOaSchemaFile(String schemaFile){
+		this.oaSchemaFile = schemaFile;
 	}
 	
-	public String getOacSchemaFile() {
-		return this.oacSchemaFile;
+	public String getOaSchemaFile() {
+		return this.oaSchemaFile;
 	}
-	public void setOacSchema(String oacSchema){
-		this.oacSchema = oacSchema;
+	public void setOaSchema(String schema){
+		this.oaSchema = schema;
 	}
 	
-	public String getOacSchema() {
-		return this.oacSchema;
+	public String getOaSchema() {
+		return this.oaSchema;
 	}
 	
 	public void setSesameIndexes(String sesameIndexes) {

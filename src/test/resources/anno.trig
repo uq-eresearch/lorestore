@@ -1,6 +1,6 @@
 
-<http://localhost:8080/lorestore/oac/00993BDB5D051BFF> {
-	<http://localhost:8080/lorestore/oac/00993BDB5D051BFF> a <http://www.openannotation.org/ns/Annotation> ;
+<http://localhost:8080/lorestore/oa/00993BDB5D051BFF> {
+	<http://localhost:8080/lorestore/oa/00993BDB5D051BFF> a <http://www.openannotation.org/ns/Annotation> ;
 		<http://purl.org/dc/elements/1.1/title> "Test" ;
 		<http://purl.org/dc/terms/modified> "2011-10-07T12:48:11.761+10:00" ;
 		<http://purl.org/dc/terms/created> "2011-10-07T12:48:11.761+10:00" ;

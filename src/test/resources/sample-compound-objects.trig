@@ -17,7 +17,6 @@
 @prefix ns16: <http://purl.utwente.nl/ns/escape-system.owl#> .
 @prefix ns17: <http://swrc.ontoware.org/ontology#> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
-@prefix oac: <http://www.openannotation.org/ns/> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix austlit: <http://austlit.edu.au/owl/austlit.owl#> .
 @prefix lorerel: <http://austlit.edu.au/owl/austlitore.owl#> .

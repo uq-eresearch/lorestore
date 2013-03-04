@@ -7,20 +7,19 @@ public interface LoreStoreConstants {
 	
 	String ORE_SYNTAX_URL = "http://www.openarchives.org/ore/terms/";
 	String OAC_SYNTAX_URL = "http://www.openannotation.org/ns/";
+	String OA_SYNTAX_URL = "http://www.w3.org/ns/oa#";
 	
 	String ORE_RESOURCEMAP_CLASS = ORE_SYNTAX_URL + "ResourceMap";
-	
 	String ORE_AGGREGATION_CLASS = ORE_SYNTAX_URL + "Aggregation";
 	
 	String OAC_ANNOTATION_CLASS = OAC_SYNTAX_URL + "Annotation";
-	String OAC_REPLY_CLASS = OAC_SYNTAX_URL + "Reply";
-	String OAC_DATA_ANNOTATION_CLASS = OAC_SYNTAX_URL + "DataAnnotation";
+	String OA_ANNOTATION_CLASS = OA_SYNTAX_URL + "Annotation";
+	
 	String OAC_TARGET_PROPERTY = OAC_SYNTAX_URL + "hasTarget";
+	String OA_TARGET_PROPERTY = OA_SYNTAX_URL + "hasTarget";
 	
 	String ORE_DESCRIBES_PROPERTY = ORE_SYNTAX_URL + "describes";
-	
-	
-	
+
     /**
      * The namespace URL for RDF syntax.
      */

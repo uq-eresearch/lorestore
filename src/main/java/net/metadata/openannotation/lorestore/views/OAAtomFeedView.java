@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.bind.DatatypeConverter;
 
-import net.metadata.openannotation.lorestore.model.rdf2go.OACAnnotationImpl;
+import net.metadata.openannotation.lorestore.model.rdf2go.OpenAnnotationImpl;
 
 import org.ontoware.rdf2go.model.Model;
 import org.ontoware.rdf2go.model.node.Node;
@@ -24,7 +24,7 @@ import com.sun.syndication.feed.atom.Feed;
 import com.sun.syndication.feed.atom.Link;
 import com.sun.syndication.feed.atom.Person;
 
-public class OACAtomFeedView extends AbstractAtomFeedView {
+public class OAAtomFeedView extends AbstractAtomFeedView {
 
 	@Override
 	protected void buildFeedMetadata(Map<String, Object> model, Feed feed,
@@ -46,7 +46,7 @@ public class OACAtomFeedView extends AbstractAtomFeedView {
 			Iterator<Model> itr = allAnnotations.iterator();
 		    while(itr.hasNext()){
 		     Model annoModel = itr.next();
-		     OACAnnotationImpl anno = new OACAnnotationImpl(annoModel);
+		     OpenAnnotationImpl anno = new OpenAnnotationImpl(annoModel);
 		     Entry entry = new Entry();
 		     
 		     entry.setId(anno.getURL());

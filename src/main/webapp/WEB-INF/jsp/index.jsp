@@ -20,7 +20,7 @@
           <div class="span5">
 
             <p>This service has been developed by UQ ITEE eResearch group for the <a href="http://openannotation.org/">Open Annotation Collaboration</a>, to support annotation in the context of electronic scholarly editions.</p>
-            <p>lorestore is a repository for OAC annotations and ORE resource maps, providing a REST API for creation, update, deletion and search of annotations or resource maps, as well as a SPARQL endpoint.</p>
+            <p>lorestore is a repository for OA annotations and ORE resource maps, providing a REST API for creation, update, deletion and search of annotations or resource maps, as well as a SPARQL endpoint.</p>
 
             <p>Register for a user account <a href="${secure}/selfRegister.html">here</a>.</p>
  
@@ -32,9 +32,9 @@
             <p><a href="${secure}/selfRegister.html">Register a new user account here</a></p>
             
             
-            <h2>Create content</h2>
+            <!--  h2>Create content</h2>
             <p>Use <a href="${secure}/lore.html">lore</a> to create and query resource maps and annotations</p>
-            
+            -->
             <h2>APIs</h2>
             <p><a href="${secure}/docs.html">Read the developer documentation</a> to get started integrating content from lorestore with your application</p>
 

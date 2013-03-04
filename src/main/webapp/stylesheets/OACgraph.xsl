@@ -5,6 +5,7 @@
     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
     xmlns:dc="http://purl.org/dc/elements/1.1/"
     xmlns:oac="http://www.openannotation.org/ns/"
+    xmlns:oa="http://www.w3.org/ns/oa#"
     xmlns:cnt="http://www.w3.org/2011/content#"
     xmlns:foaf="http://xmlns.com/foaf/0.1/"
     xmlns:dcterms="http://purl.org/dc/terms/"
@@ -16,7 +17,7 @@
     <xsl:template match="/">
         <html>
             <head>
-                <title>OAC Annotations/Replies</title>
+                <title>OA Annotations</title>
                 <link type="text/css" rel="stylesheet" href="../stylesheets/bootstrap.min.css"/>
                 <link rel="stylesheet" href="../prettify/prettify.css" type="text/css"/>
                 <style type="text/css">
@@ -151,6 +152,7 @@
                     <xsl:variable name="displayName">
                         <xsl:choose>
                             <xsl:when test="starts-with($valref,'http://www.openannotation.org/ns')">oac:<xsl:value-of select="substring-after($valref,'http://www.openannotation.org/ns/')"/></xsl:when>
+                            <xsl:when test="starts-with($valref,'http://www.w3.org/ns/oa#')">oa:<xsl:value-of select="substring-after($valref,'http://www.w3.org/ns/oa#')"/></xsl:when>
                             <xsl:when test="starts-with($valref,'http://www.w3.org/2011/content#')">cnt:<xsl:value-of select="substring-after($valref,'http://www.w3.org/2011/content#')"/></xsl:when>
                             <xsl:when test="starts-with($valref,'http://xmlns.com/foaf/0.1/')">foaf:<xsl:value-of select="substring-after($valref,'http://xmlns.com/foaf/0.1/')"/></xsl:when>
                             <xsl:when test="starts-with($valref,'urn') and local-name()='hasBody'">body</xsl:when>
@@ -189,6 +191,7 @@
             <xsl:variable name="labelName">
                 <xsl:choose>
                     <xsl:when test="namespace-uri()='http://www.openannotation.org/ns/'">oac:</xsl:when>
+                    <xsl:when test="namespace-uri()='http://www.w3.org/ns/oa#'">oa:</xsl:when>
                     <xsl:when test="namespace-uri()='http://www.w3.org/2011/content#'">cnt:</xsl:when>
                     <xsl:when test="namespace-uri()='http://xmlns.com/foaf/0.1/'">foaf:</xsl:when>
                     <xsl:when test="namespace-uri()='http://purl.org/dc/terms/'">dct:</xsl:when>

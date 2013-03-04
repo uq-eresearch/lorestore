@@ -33,7 +33,7 @@ import org.springframework.web.servlet.ModelAndView;
 import au.edu.diasb.chico.mvc.RequestFailureException;
 
 @RunWith(JUnit4.class)
-public class OACControllerTest extends OACControllerTestsBase {
+public class AnnotationControllerTest extends AnnotationControllerTestsBase {
 
 	private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
 	private final ByteArrayOutputStream errContent = new ByteArrayOutputStream();
@@ -97,12 +97,13 @@ public class OACControllerTest extends OACControllerTestsBase {
 
 	@Test
 	public void postGetDeleteGet() throws Exception {
+	
 		String createdId = saveRecordToStore(CommonTestRecords.OAC_INLINE_BODY);
-
+		
 		ModelAndView oacResponse2 = (ModelAndView) controller.get(createdId);
 		assertNotNull(oacResponse2);
 
-		assertEquals("oac", oacResponse2.getViewName());
+		assertEquals("oa", oacResponse2.getViewName());
 		Map<String, Object> model2 = oacResponse2.getModel();
 		ModelSet rdf2 = (ModelSet) model2.get("annotations");
 		assertNotNull(rdf2);
@@ -224,7 +225,7 @@ public class OACControllerTest extends OACControllerTestsBase {
 	public void putToNonExistant() throws Exception {
 		InputStream in = new ByteArrayInputStream(
 				CommonTestRecords.OAC_INLINE_BODY.getBytes());
-		authController.put("http://nonexistant.example.com/oac/id", in, "application/rdf+xml");
+		authController.put("http://nonexistant.example.com/oa/id", in, "application/rdf+xml");
 	}
 
 	/**
@@ -437,7 +438,7 @@ public class OACControllerTest extends OACControllerTestsBase {
 		
 	}
 	
-	private String findUIDFromOACResponse(ModelAndView response){
+	private String findUIDFromOAResponse(ModelAndView response){
 		ModelSet annotations = (ModelSet) response.getModel().get("annotations");
 		assertNotNull(annotations);
 		String theId = annotations.getModelURIs().next().toString();
@@ -445,7 +446,7 @@ public class OACControllerTest extends OACControllerTestsBase {
 		return createdId;
 		
 	}
-	private void checkUserInOACModel(ModelAndView response, String userUri) {
+	private void checkUserInOAModel(ModelAndView response, String userUri) {
 		ModelSet annotations = (ModelSet) response.getModel().get("annotations");
 		Model model = annotations.getModels().next();
 

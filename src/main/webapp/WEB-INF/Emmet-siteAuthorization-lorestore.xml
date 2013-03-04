@@ -22,7 +22,7 @@
 				
 				<!-- Site specific rules -->
 				<sec:intercept-url pattern="/ore/**" access="IS_AUTHENTICATED_ANONYMOUSLY,ROLE_ANY" />
-				<sec:intercept-url pattern="/oac/**" access="IS_AUTHENTICATED_ANONYMOUSLY,ROLE_ANY" />
+				<sec:intercept-url pattern="/oa/**" access="IS_AUTHENTICATED_ANONYMOUSLY,ROLE_ANY" />
                 
 				<!-- Generic -->
 				<sec:intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY,ROLE_ANY" />
@@ -45,7 +45,7 @@
 
                 <!-- LoreStore rule -->
 				<entry key="GET|/ore/*" value-ref="restfulEntryPoint"/>
-                <entry key="GET|/oac/*" value-ref="restfulEntryPoint"/>
+                <entry key="GET|/oa/*" value-ref="restfulEntryPoint"/>
                 
 				<entry key="GET,HEAD|/**" value-ref="loginUrlEntryPoint"/>
 				<entry key="*|/**" value-ref="forbiddenEntryPoint"/>

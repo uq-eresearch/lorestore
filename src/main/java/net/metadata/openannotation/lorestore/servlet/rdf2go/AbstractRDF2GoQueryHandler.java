@@ -44,7 +44,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 /**
  * The AbstractRDF2GoOREQueryHandler class provides common features for subclasses that
- * handle queries for ORE and OAC objects from the {@link OREController}.
+ * handle queries for ORE and OA objects from the {@link OREController}.
  */
 public abstract class AbstractRDF2GoQueryHandler implements LoreStoreQueryHandler {
 	protected final Logger LOG = Logger.getLogger(AbstractRDF2GoQueryHandler.class);

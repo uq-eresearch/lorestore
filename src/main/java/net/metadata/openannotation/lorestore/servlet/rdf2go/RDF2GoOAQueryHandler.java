@@ -3,14 +3,16 @@ package net.metadata.openannotation.lorestore.servlet.rdf2go;
 import static net.metadata.openannotation.lorestore.common.LoreStoreConstants.LORESTORE_PRIVATE;
 import static net.metadata.openannotation.lorestore.common.LoreStoreConstants.LORESTORE_USER;
 import static net.metadata.openannotation.lorestore.common.LoreStoreConstants.OAC_ANNOTATION_CLASS;
+import static net.metadata.openannotation.lorestore.common.LoreStoreConstants.OA_ANNOTATION_CLASS;
 import static net.metadata.openannotation.lorestore.common.LoreStoreConstants.OAC_TARGET_PROPERTY;
+import static net.metadata.openannotation.lorestore.common.LoreStoreConstants.OA_TARGET_PROPERTY;
 import static net.metadata.openannotation.lorestore.common.LoreStoreConstants.RDF_TYPE_PROPERTY;
 
 import java.util.ArrayList;
 
 import net.metadata.openannotation.lorestore.exceptions.InvalidQueryParametersException;
 import net.metadata.openannotation.lorestore.exceptions.NotFoundException;
-import net.metadata.openannotation.lorestore.model.rdf2go.OACAnnotationImpl;
+import net.metadata.openannotation.lorestore.model.rdf2go.OpenAnnotationImpl;
 import net.metadata.openannotation.lorestore.servlet.LoreStoreControllerConfig;
 import net.metadata.openannotation.lorestore.servlet.OREController;
 import net.metadata.openannotation.lorestore.triplestore.MemoryTripleStoreConnectorFactory;
@@ -29,12 +31,12 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.servlet.ModelAndView;
 
 /**
- * The RDF2GoOACQueryHandler class handles queries from the
+ * The RDF2GoOAQueryHandler class handles queries from the
  * {@link OREController}.
  */
-public class RDF2GoOACQueryHandler extends AbstractRDF2GoQueryHandler {
+public class RDF2GoOAQueryHandler extends AbstractRDF2GoQueryHandler {
 
-	public RDF2GoOACQueryHandler(LoreStoreControllerConfig occ) {
+	public RDF2GoOAQueryHandler(LoreStoreControllerConfig occ) {
 		super(occ);
 	}
 
@@ -50,7 +52,7 @@ public class RDF2GoOACQueryHandler extends AbstractRDF2GoQueryHandler {
 			InterruptedException {
 		ModelSet container = cf.retrieveConnection();
 		Model model = null;
-		ModelAndView mav = new ModelAndView("oac");
+		ModelAndView mav = new ModelAndView("oa");
 		MemoryTripleStoreConnectorFactory mf = new MemoryTripleStoreConnectorFactory();
 		ModelSet result = mf.retrieveConnection();
 		try {
@@ -80,7 +82,7 @@ public class RDF2GoOACQueryHandler extends AbstractRDF2GoQueryHandler {
 		return mav;
 	}
 	protected void checkUserCanRead(Model m) {
-		OACAnnotationImpl annotation = new OACAnnotationImpl(m);
+		OpenAnnotationImpl annotation = new OpenAnnotationImpl(m);
 		try {
 			ap.checkRead(annotation);
 		} finally {
@@ -93,7 +95,7 @@ public class RDF2GoOACQueryHandler extends AbstractRDF2GoQueryHandler {
 			MalformedQueryException, QueryEvaluationException,
 			TupleQueryResultHandlerException, InterruptedException {
 		String queryString = generateBrowseQuery(url);
-		ModelAndView mav = new ModelAndView("oacAtom");
+		ModelAndView mav = new ModelAndView("oaAtom");
 		mav.addObject("browseURL", url);
 
 		TupleQueryResult queryResult = runSparqlQueryIntoQR(queryString);
@@ -135,7 +137,7 @@ public class RDF2GoOACQueryHandler extends AbstractRDF2GoQueryHandler {
 		checkURLIsValid(urlParam);
 		String queryString = generateBrowseQuery(urlParam);
 
-		ModelAndView mav = new ModelAndView("oac");
+		ModelAndView mav = new ModelAndView("oa");
 		TupleQueryResult queryResult = runSparqlQueryIntoQR(queryString);
 		LOG.debug("Success doing annotates query ");
 		ModelSet container = cf.retrieveConnection();
@@ -240,9 +242,8 @@ public class RDF2GoOACQueryHandler extends AbstractRDF2GoQueryHandler {
 		// @formatter:off
 		String queryString = "select distinct ?g ?a ?m ?t ?v ?priv"
 				+ " where {"
-				+ "   ?g a <" + OAC_ANNOTATION_CLASS + "> ."
-				+ "   graph ?g {?g <" + OAC_TARGET_PROPERTY + "> ?x ."
-				//+ "{?g a <" + OAC_ANNOTATION_CLASS + ">} UNION {?g a <" + OAC_REPLY_CLASS + ">} UNION {?g a <" + OAC_DATA_ANNOTATION_CLASS + ">}."
+				+ "   {?g a <" + OAC_ANNOTATION_CLASS + "> } UNION {?g a <" + OA_ANNOTATION_CLASS + ">} ."
+				+ "   graph ?g {"
 				+ escapedURL + " " + predicate + " ?v ."
 				+        filter
 				+ "   } . "
@@ -266,7 +267,20 @@ public class RDF2GoOACQueryHandler extends AbstractRDF2GoQueryHandler {
 		try {
 			modelSet = cf.retrieveConnection();
 			defaultModel = modelSet.getDefaultModel();
-			numGraphs = defaultModel.countStatements(modelSet.createQuadPattern(Variable.ANY, Variable.ANY, modelSet.createURI(RDF_TYPE_PROPERTY), modelSet.createURI(OAC_ANNOTATION_CLASS)));
+			// temporarily support both OAC and OA annotations
+			numGraphs = defaultModel.countStatements(
+			        modelSet.createQuadPattern(
+			                Variable.ANY, 
+			                Variable.ANY, 
+			                modelSet.createURI(RDF_TYPE_PROPERTY), 
+			                modelSet.createURI(OAC_ANNOTATION_CLASS)
+			        )) + defaultModel.countStatements(
+	                                modelSet.createQuadPattern(
+	                                        Variable.ANY, 
+	                                        Variable.ANY, 
+	                                        modelSet.createURI(RDF_TYPE_PROPERTY), 
+	                                        modelSet.createURI(OA_ANNOTATION_CLASS)
+	                                ));
 		} catch (Exception e) {
 			LOG.debug(e.getMessage());
 		} finally {

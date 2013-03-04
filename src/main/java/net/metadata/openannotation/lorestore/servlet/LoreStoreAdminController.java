@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 import net.metadata.openannotation.lorestore.access.LoreStoreAccessPolicy;
 import net.metadata.openannotation.lorestore.exceptions.InvalidQueryParametersException;
 import net.metadata.openannotation.lorestore.model.UploadItem;
-import net.metadata.openannotation.lorestore.servlet.rdf2go.RDF2GoOACQueryHandler;
+import net.metadata.openannotation.lorestore.servlet.rdf2go.RDF2GoOAQueryHandler;
 import net.metadata.openannotation.lorestore.servlet.rdf2go.RDF2GoOREQueryHandler;
 import net.metadata.openannotation.lorestore.servlet.rdf2go.RDF2GoOREUpdateHandler;
 
@@ -45,7 +45,7 @@ public class LoreStoreAdminController {
 		this.occ = occ;
 		this.uh = new RDF2GoOREUpdateHandler(occ);
 		this.qh = new RDF2GoOREQueryHandler(occ);
-		this.oqh = new RDF2GoOACQueryHandler(occ);
+		this.oqh = new RDF2GoOAQueryHandler(occ);
 		this.ap = occ.getAccessPolicy();
 	}
 

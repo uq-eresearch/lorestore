@@ -27,7 +27,7 @@ public class RequestMappingTest {
 	private MockHttpServletRequest request;
 	private MockHttpServletResponse response;
 	private OREController oreController;
-	private OACController oacController;
+	private AnnotationController annoController;
 	private PlaceholderController pController;
 	private AnnotationMethodHandlerAdapter adapter;
 	
@@ -37,7 +37,7 @@ public class RequestMappingTest {
 	@Before
 	public void setUp() throws Exception {
 		oreController = EasyMock.createNiceMock(OREController.class);
-		oacController = EasyMock.createNiceMock(OACController.class);
+		annoController = EasyMock.createNiceMock(AnnotationController.class);
 		pController = EasyMock.createNiceMock(PlaceholderController.class);
 		
 		adapter = new AnnotationMethodHandlerAdapter();
@@ -61,15 +61,15 @@ public class RequestMappingTest {
 	}
 	
 	@Test
-	public void plainRetrieveOAC() throws Exception {
-		EasyMock.expect(oacController.get(exampleID)).andReturn(null);
-		EasyMock.replay(oacController);
+	public void plainRetrieveOA() throws Exception {
+		EasyMock.expect(annoController.get(exampleID)).andReturn(null);
+		EasyMock.replay(annoController);
 		
 		request.setRequestURI("/" + exampleID);
 		request.setMethod("GET");
 		
-		adapter.handle(request, response, oacController);
-		EasyMock.verify(oacController);
+		adapter.handle(request, response, annoController);
+		EasyMock.verify(annoController);
 	}
 	@Test
 	public void plainRetrievePlaceholder() throws Exception {
@@ -134,27 +134,27 @@ public class RequestMappingTest {
 	
 	@Test
 	public void annotatesQuery() throws Exception {
-		EasyMock.expect(oacController.refersToQuery(exampleURI)).andReturn(null);
-		EasyMock.replay(oacController);
+		EasyMock.expect(annoController.refersToQuery(exampleURI)).andReturn(null);
+		EasyMock.replay(annoController);
 		
 		request.setRequestURI("/");
 		request.setParameter("annotates", exampleURI);
 		request.setMethod("GET");
 		
-		adapter.handle(request, response, oacController);
-		EasyMock.verify(oacController);
+		adapter.handle(request, response, annoController);
+		EasyMock.verify(annoController);
 	}
 	
 	@Test
     public void searchQuery() throws Exception {
-	   EasyMock.expect(oacController.searchQuery("", "", "test", false)).andReturn(new ModelAndView("sparqlxml"));
-	   EasyMock.replay(oacController);
+	   EasyMock.expect(annoController.searchQuery("", "", "test", false)).andReturn(new ModelAndView("sparqlxml"));
+	   EasyMock.replay(annoController);
        request.setRequestURI("/");
        request.setParameter("matchval", "test");
 	   request.setMethod("GET");
-       ModelAndView mav = adapter.handle(request, response, oacController);
+       ModelAndView mav = adapter.handle(request, response, annoController);
        assertNotNull(mav);
-       EasyMock.verify(oacController);
+       EasyMock.verify(annoController);
     }
 	
 	@Test
@@ -171,15 +171,15 @@ public class RequestMappingTest {
 	}
 	@Test
 	public void atomRefersToQuery() throws Exception {
-		EasyMock.expect(oacController.atomRefersToQuery(exampleURI)).andReturn(null);
-		EasyMock.replay(oacController);
+		EasyMock.expect(annoController.atomRefersToQuery(exampleURI)).andReturn(null);
+		EasyMock.replay(annoController);
 		
 		request.setRequestURI("/feed");
 		request.setParameter("annotates", exampleURI);
 		request.setMethod("GET");
 		
-		adapter.handle(request, response, oacController);
-		EasyMock.verify(oacController);
+		adapter.handle(request, response, annoController);
+		EasyMock.verify(annoController);
 	}
 	
 }
