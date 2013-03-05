@@ -64,7 +64,7 @@ public class SesameOREQueryHandler implements LoreStoreQueryHandler {
 
 	@Override
 	public ModelAndView searchQuery(String urlParam,
-			String matchpred, String matchval) throws RepositoryException,
+			String matchpred, String matchval, Boolean includeAbstract, Boolean asTriples) throws RepositoryException,
 			MalformedQueryException, QueryEvaluationException,
 			TupleQueryResultHandlerException, InterruptedException {
 		return null;
@@ -96,13 +96,6 @@ public class SesameOREQueryHandler implements LoreStoreQueryHandler {
 		return null;
 	}
 
-	@Override
-	public ModelAndView searchQueryIncludingAbstract(String urlParam,
-			String matchpred, String matchval) throws RepositoryException,
-			MalformedQueryException, QueryEvaluationException,
-			TupleQueryResultHandlerException, InterruptedException {
-		return null;
-	}
 
 	@Override
 	public ModelAndView refersToQuery(String urlParam)
