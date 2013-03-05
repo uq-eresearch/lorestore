@@ -71,7 +71,7 @@
                                        <xsl:variable name="creator" select="dcterms:creator/@rdf:resource | dcterms:creator/@rdf:nodeID"/>
                                        <xsl:value-of select="//rdf:Description[@rdf:about=$creator or @rdf:nodeID=$creator]/foaf:name" />
                                        <xsl:choose>
-                                          <xsl:when test="dcterms:creator/@rdf:nodeID"> (no associated user account)</xsl:when>
+                                          <xsl:when test="dcterms:creator/@rdf:nodeID"> (no associated user identity)</xsl:when>
                                           <xsl:otherwise> (<xsl:value-of select="$creator"/>)</xsl:otherwise>
                                        </xsl:choose>
                                        <xsl:variable name="mbox" select="//rdf:Description[@rdf:about=$creator or @rdf:nodeID=$creator]/foaf:mbox"/>
@@ -82,14 +82,23 @@
                                    <xsl:when test="dc:creator/.">
                                        <xsl:value-of select="dc:creator" />
                                    </xsl:when>
+                                   <xsl:when test="oa:annotatedBy/.">
+                                       <xsl:variable name="creator" select="oa:annotatedBy/@rdf:resource | oa:annotatedBy/@rdf:nodeID"/>
+                                       <xsl:value-of select="//rdf:Description[@rdf:about=$creator or @rdf:nodeID=$creator]/foaf:name" />
+                                       <xsl:choose>
+                                          <xsl:when test="oa:annotatedBy/@rdf:nodeID"> (no associated user identity)</xsl:when>
+                                          <xsl:otherwise> (<xsl:value-of select="$creator"/>)</xsl:otherwise>
+                                       </xsl:choose>
+                                   </xsl:when>
                                    <xsl:otherwise>
-                                       Anonymous
+                                       Unknown
                                    </xsl:otherwise>
                                </xsl:choose> 
                         </xsl:variable>
-                        <a target="_blank" href="{$annoUri}"><xsl:value-of select="$annotype" /></a>
+                        <a target="_blank" title="{$annoUri}" href="{$annoUri}"><xsl:value-of select="$annotype" /></a>
                         <xsl:text> created </xsl:text>
                             <xsl:value-of select="substring-before(dcterms:created, 'T')" />
+                            <xsl:value-of select="substring-before(oa:annotatedAt, 'T')" />
                             <xsl:if test="dcterms:modified">
                                 <xsl:text>,  Last modified </xsl:text>
                                 <xsl:value-of select="substring-before(dcterms:modified, 'T')" />
@@ -105,8 +114,21 @@
                         
                         <!--  display other annotation properties from the RDF -->
                         <xsl:for-each select="//rdf:Description[@rdf:about = $annoUri]/*">
-                        <xsl:if test="local-name() != 'creator' and local-name() != 'created' and local-name() != 'modified' and local-name() != 'type' and local-name() != 'hasBody' and local-name() != 'hasTarget' and local-name() != 'title'">
-                          <p><strong><xsl:value-of select="local-name()"/>:&#160;</strong><xsl:value-of select="@rdf:resource | ."/></p>
+                        <xsl:if test="local-name() != 'annotatedBy' and local-name() != 'annotatedAt' and local-name() != 'creator' and local-name() != 'created' and local-name() != 'modified' and local-name() != 'type' and local-name() != 'hasBody' and local-name() != 'hasTarget' and local-name() != 'title'">
+                          <xsl:variable name="ref" select="@rdf:resource"/>
+                          <p><strong><xsl:value-of select="local-name()"/>:&#160;</strong> 
+                            <xsl:choose>
+                                <xsl:when test="$ref">
+                                    <xsl:value-of select="@rdf:resource"/>
+                                    <xsl:if test="//rdf:Description[@rdf:about=$ref or @rdf:nodeID=$ref]/foaf:name">
+                                    <xsl:text> (</xsl:text><xsl:value-of select="//rdf:Description[@rdf:about=$ref or @rdf:nodeID=$ref]/foaf:name"/><xsl:text>)</xsl:text>
+                                    </xsl:if>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:value-of select="."/>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                          </p>
                         </xsl:if>
                         </xsl:for-each>
                         <p><a class="btn btn-mini" target="_blank" href="../oa/?annotates={@rdf:about}">Find replies</a>&#160;&#160;<a class="btn btn-mini" target="_blank" href="#" onclick="downloadTrig('{@rdf:about}')">Get TriG</a>
