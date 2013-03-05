@@ -81,9 +81,10 @@ public class AnnotationController {
             @RequestParam(value = "annotates", defaultValue = "") String urlParam,
             @RequestParam(value = "matchpred", defaultValue = "") String matchpred,
             @RequestParam("matchval") String matchval,
-            @RequestParam(value = "includeAbstract", defaultValue = "false") Boolean includeAbstract) throws Exception {
+            @RequestParam(value = "includeAbstract", defaultValue = "false") Boolean includeAbstract,
+            @RequestParam(value = "asTriples", defaultValue = "true") Boolean asTriples) throws Exception {
         
-            return qh.searchQuery(urlParam, matchpred, matchval);
+            return qh.searchQuery(urlParam, matchpred, matchval, includeAbstract, asTriples);
         
     }
 

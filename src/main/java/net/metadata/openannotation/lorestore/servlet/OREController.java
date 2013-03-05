@@ -80,13 +80,12 @@ public class OREController {
             @RequestParam(value = "refersTo", defaultValue = "") String urlParam,
             @RequestParam(value = "matchpred", defaultValue = "") String matchpred,
             @RequestParam("matchval") String matchval,
-            @RequestParam(value = "includeAbstract", defaultValue = "false") Boolean includeAbstract) throws Exception {
+            @RequestParam(value = "includeAbstract", defaultValue = "false") Boolean includeAbstract,
+            @RequestParam(value = "asTriples", defaultValue = "true") Boolean asTriples) throws Exception {
         LOG.info("searchQuery " + urlParam + " " + matchval + " " + matchpred + " " + includeAbstract);
-        if (includeAbstract) {
-            return oreqh.searchQueryIncludingAbstract(urlParam, matchpred, matchval);
-        } else {
-            return oreqh.searchQuery(urlParam, matchpred, matchval);
-        }
+        
+        return oreqh.searchQuery(urlParam, matchpred, matchval, includeAbstract, asTriples);
+        
     }
 
     @RequestMapping(value = "/", params = { "matchpred" }, method = RequestMethod.GET)
@@ -94,12 +93,11 @@ public class OREController {
             @RequestParam(value = "refersTo", defaultValue = "") String urlParam,
             @RequestParam("matchpred") String matchpred,
             @RequestParam(value = "matchval", defaultValue = "") String matchval,
-            @RequestParam(value = "includeAbstract", defaultValue = "false") Boolean includeAbstract) throws Exception {
-        if (includeAbstract) {
-            return oreqh.searchQueryIncludingAbstract(urlParam, matchpred, matchval);
-        } else {
-            return oreqh.searchQuery(urlParam, matchpred, matchval);
-        }
+            @RequestParam(value = "includeAbstract", defaultValue = "false") Boolean includeAbstract,
+            @RequestParam(value = "asTriples", defaultValue = "true") Boolean asTriples) throws Exception {
+       
+        return oreqh.searchQuery(urlParam, matchpred, matchval, includeAbstract, asTriples);
+        
     }
     
     @RequestMapping(value = "/", params = "exploreFrom", method = RequestMethod.GET)

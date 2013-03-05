@@ -212,7 +212,7 @@ public class OREControllerTest extends OREControllerTestsBase {
 
 	@Test
 	public void keywordSearch() throws Exception {
-		String body = (String) controller.searchQuery("", "", "test", false).getModel().get("sparqlxml");
+		String body = (String) controller.searchQuery("", "", "test", false, true).getModel().get("sparqlxml");
 
 		assertNotNull(body);
 	}

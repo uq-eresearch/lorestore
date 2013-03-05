@@ -127,68 +127,6 @@ public class RDF2GoOAQueryHandler extends AbstractRDF2GoQueryHandler {
         return mav;
     }
 
-
-
-    
-    @Override
-    public ModelAndView refersToQuery(String urlParam) throws RepositoryException,
-            MalformedQueryException, QueryEvaluationException,
-            TupleQueryResultHandlerException, InterruptedException, InvalidQueryParametersException {
-        checkURLIsValid(urlParam);
-        String queryString = generateBrowseQuery(urlParam);
-
-        ModelAndView mav = new ModelAndView("oa");
-        TupleQueryResult queryResult = runSparqlQueryIntoQR(queryString);
-        LOG.debug("Success doing annotates query ");
-        ModelSet container = cf.retrieveConnection();
-        // construct a ModelSet rather than a list for ease of serialization
-        MemoryTripleStoreConnectorFactory mf = new MemoryTripleStoreConnectorFactory();
-        ModelSet result = mf.retrieveConnection();
-        if (result == null){
-            LOG.debug("Problem with model set");
-        } else {
-            LOG.debug("created model set " + result.size());
-        }
-        Model model = null;
-        
-        try{
-            while (queryResult.hasNext()) {
-                BindingSet bs = queryResult.next();
-                String uri =  bs.getValue("g").stringValue();
-                if (uri != null){
-                    model = container.getModel(container.createURI(uri));
-                    if (model == null || model.isEmpty()) {
-                        if (model != null) {
-                            model.close();
-                        }
-                    } else {
-                        result.addModel(model);
-                        model.close();
-                    }
-                }
-                    
-                
-            }
-            
-            mav.addObject("annotations", result);
-            LOG.debug ("found " + result.size() + " annotations");
-            
-        } catch (Exception ex) {
-            // The model is normally closed after the response view is generated,
-            // but since an exception is thrown it must be closed here.
-            if (model != null){
-                model.close();
-            }
-            
-            // throw.ex;
-            
-        } finally {
-            cf.release(container);
-        }
-        return mav;
-    }
-    
-
     protected String generateBrowseQuery(String escapedURL) {
 
         // Needs to match both www and non-www version of URL
@@ -300,5 +238,57 @@ public class RDF2GoOAQueryHandler extends AbstractRDF2GoQueryHandler {
         }
         return numGraphs;
     }
-    
+
+    @Override
+    protected ModelAndView runSparqlQueryIntoGraphsMAV(String queryString) throws RepositoryException, MalformedQueryException, QueryEvaluationException, TupleQueryResultHandlerException, InterruptedException {
+        ModelAndView mav = new ModelAndView("oa");
+        TupleQueryResult queryResult = runSparqlQueryIntoQR(queryString);
+        ModelSet container = cf.retrieveConnection();
+        // construct a ModelSet rather than a list for ease of serialization
+        MemoryTripleStoreConnectorFactory mf = new MemoryTripleStoreConnectorFactory();
+        ModelSet result = mf.retrieveConnection();
+        if (result == null){
+            LOG.debug("Problem with model set");
+        } else {
+            LOG.debug("created model set " + result.size());
+        }
+        Model model = null;
+        
+        try{
+            while (queryResult.hasNext()) {
+                BindingSet bs = queryResult.next();
+                String uri =  bs.getValue("g").stringValue();
+                if (uri != null){
+                    model = container.getModel(container.createURI(uri));
+                    if (model == null || model.isEmpty()) {
+                        if (model != null) {
+                            model.close();
+                        }
+                    } else {
+                        result.addModel(model);
+                        model.close();
+                    }
+                }
+                    
+                
+            }
+            
+            mav.addObject("annotations", result);
+            LOG.debug ("found " + result.size() + " annotations");
+            
+        } catch (Exception ex) {
+            // The model is normally closed after the response view is generated,
+            // but since an exception is thrown it must be closed here.
+            if (model != null){
+                model.close();
+            }
+            
+            // throw.ex;
+            
+        } finally {
+            cf.release(container);
+        }
+        return mav;
+    }
+
 }

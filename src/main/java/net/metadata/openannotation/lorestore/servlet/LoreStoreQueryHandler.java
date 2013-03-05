@@ -53,7 +53,7 @@ public interface LoreStoreQueryHandler {
 	 * @return a http response containing results in sparqlXML format
 	 */
 	public ModelAndView searchQuery(String urlParam, String matchpred,
-			String matchval)
+			String matchval, Boolean includeAbstract, Boolean asTriples)
 			throws RepositoryException, MalformedQueryException,
 			QueryEvaluationException, TupleQueryResultHandlerException,
 			InterruptedException, RDFHandlerException;
@@ -68,19 +68,6 @@ public interface LoreStoreQueryHandler {
 			throws RepositoryException, MalformedQueryException,
 			QueryEvaluationException, TupleQueryResultHandlerException,
 			InterruptedException, InvalidQueryParametersException, RDFHandlerException;
-	/**
-	 * Handles a search query, includes the abstract field if present
-	 * 
-	 * @param urlParam
-	 * @param matchpred
-	 * @param matchval
-	 * @return a http response containing results in sparqlXML format
-	 */
-	public ModelAndView searchQueryIncludingAbstract(String urlParam, String matchpred,
-			String matchval)
-			throws RepositoryException, MalformedQueryException,
-			QueryEvaluationException, TupleQueryResultHandlerException,
-			InterruptedException, RDFHandlerException;
 	
 	/**
 	 * LORE explore results for a url

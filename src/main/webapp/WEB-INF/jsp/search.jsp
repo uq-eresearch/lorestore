@@ -28,6 +28,7 @@
         <fieldset>
             <label for="annoInput">Keyword:&nbsp;</label>
             <input class="xlarge" id="annoInput" name="matchval" size="60" type="text">
+            <input type="hidden" name="asTriples" value="false">
             <input type="submit" class="btn btn-primary" value="Search">
         </fieldset>
       </form>

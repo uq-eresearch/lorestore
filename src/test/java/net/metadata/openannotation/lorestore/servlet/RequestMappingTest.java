@@ -147,7 +147,7 @@ public class RequestMappingTest {
 	
 	@Test
     public void searchQuery() throws Exception {
-	   EasyMock.expect(annoController.searchQuery("", "", "test", false)).andReturn(new ModelAndView("sparqlxml"));
+	   EasyMock.expect(annoController.searchQuery("", "", "test", false, true)).andReturn(new ModelAndView("sparqlxml"));
 	   EasyMock.replay(annoController);
        request.setRequestURI("/");
        request.setParameter("matchval", "test");

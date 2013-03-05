@@ -103,18 +103,21 @@ public abstract class AbstractRDF2GoQueryHandler implements LoreStoreQueryHandle
 			throws RepositoryException, MalformedQueryException,
 			QueryEvaluationException, TupleQueryResultHandlerException,
 			InterruptedException, InvalidQueryParametersException, RDFHandlerException {
-		// Implemented in subclasses
-		return null;
+	        String queryString = generateBrowseQuery(urlParam);
+	        return runSparqlQueryIntoGraphsMAV(queryString);
 	}
 	
 	@Override
 	public ModelAndView searchQuery(String urlParam,
-			String matchpred, String matchval) throws RepositoryException,
+			String matchpred, String matchval, Boolean includeAbstract, Boolean asTriples) throws RepositoryException,
 			MalformedQueryException, QueryEvaluationException,
 			TupleQueryResultHandlerException, InterruptedException, RDFHandlerException {
-		String queryString = generateSearchQuery(urlParam, matchpred, matchval,
-				false);
+		String queryString = generateSearchQuery(urlParam, matchpred, matchval, includeAbstract);
+		if (asTriples){
 		return runSparqlQueryIntoMAV(queryString);
+		} else {
+		    return runSparqlQueryIntoGraphsMAV(queryString);
+		}
 	}
 
 	
@@ -156,17 +159,6 @@ public abstract class AbstractRDF2GoQueryHandler implements LoreStoreQueryHandle
 	
 
 	@Override
-	public ModelAndView searchQueryIncludingAbstract(String urlParam,
-			String matchpred, String matchval) throws RepositoryException,
-			MalformedQueryException, QueryEvaluationException,
-			TupleQueryResultHandlerException, InterruptedException, RDFHandlerException {
-		String queryString = generateSearchQuery(urlParam, matchpred, matchval,
-				true);
-		return runSparqlQueryIntoMAV(queryString);
-	}
-
-
-	@Override
 	public ResponseEntity<String> exploreQuery(String url)
 			throws RepositoryException, MalformedQueryException,
 			QueryEvaluationException, TupleQueryResultHandlerException,
@@ -175,6 +167,22 @@ public abstract class AbstractRDF2GoQueryHandler implements LoreStoreQueryHandle
 		return null;
 	}
 
+	/**
+	 * Takes a sparql query and a generates a ModelAndView that displays the matching graphs (e.g. annotations, resource maps)
+	 * @param queryString
+	 * @return
+	 * @throws RepositoryException
+	 * @throws MalformedQueryException
+	 * @throws QueryEvaluationException
+	 * @throws TupleQueryResultHandlerException
+	 * @throws InterruptedException
+	 */
+	protected ModelAndView runSparqlQueryIntoGraphsMAV(String queryString) throws RepositoryException, MalformedQueryException, QueryEvaluationException, TupleQueryResultHandlerException, InterruptedException {
+	    // implemented in subclasses
+	    return null;
+	}
+	       
+	
 	/**
 	 * Takes a sparql query and returns a string of the sparql xml results from
 	 * running that query on the configured triplestore.

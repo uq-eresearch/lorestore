@@ -166,7 +166,7 @@ public class AnnotationControllerTest extends AnnotationControllerTestsBase {
 	 * Refers to (annotates) query only accepts valid URLs
 	 * @throws Exception
 	 */
-	@Test(expected = InvalidQueryParametersException.class)
+	@Test(expected = org.openrdf.query.MalformedQueryException.class)
 	public void queryRefersToInvalidURL() throws Exception {
 		controller.refersToQuery("zxcv");
 	}
@@ -198,7 +198,7 @@ public class AnnotationControllerTest extends AnnotationControllerTestsBase {
 
 	@Test
 	public void keywordSearch() throws Exception {
-		String body = (String) controller.searchQuery("", "", "test", false).getModel().get("sparqlxml");
+		String body = (String) controller.searchQuery("", "", "test", false, true).getModel().get("sparqlxml");
 
 		assertNotNull(body);
 	}

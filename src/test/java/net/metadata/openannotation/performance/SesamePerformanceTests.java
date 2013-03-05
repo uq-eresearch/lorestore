@@ -56,7 +56,7 @@ public class SesamePerformanceTests {
 		System.out.println("keyword: " + searchString);
 		for (int i = 0; i < numTests; i++) {
 			long startTime = System.currentTimeMillis();
-			ModelAndView searchQuery = qh.searchQuery(null, null, searchString);
+			ModelAndView searchQuery = qh.searchQuery(null, null, searchString, false, true);
 			if (printQueryResults)
 				System.out.println(searchQuery.getModel().get("sparqlxml"));
 			long stopTime = System.currentTimeMillis();
@@ -69,7 +69,7 @@ public class SesamePerformanceTests {
 		System.out.println("advanced: " + searchString);
 		for (int i = 0; i < numTests; i++) {
 			long startTime = System.currentTimeMillis();
-			qh.searchQuery(null, "http://purl.org/dc/elements/1.1/creator", searchString);
+			qh.searchQuery(null, "http://purl.org/dc/elements/1.1/creator", searchString, false, true);
 			long stopTime = System.currentTimeMillis();
 			long elapsedTime = stopTime - startTime;
 			System.out.println(elapsedTime);
