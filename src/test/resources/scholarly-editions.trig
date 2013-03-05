@@ -6,8 +6,8 @@
 @prefix lit: <http://www.example.org/lit-annotation-ns#> .
 @prefix aos: <http://purl.org/ao/selectors/> .
 @prefix ore: <http://www.openarchives.org/ore/terms/> .
-<http://openannotation.metadata.net/lorestore/oac/SEExplanatoryNote> {
-	<http://openannotation.metadata.net/lorestore/oac/SEExplanatoryNote> a oac:Annotation ;
+<http://openannotation.metadata.net/lorestore/oa/SEExplanatoryNote> {
+	<http://openannotation.metadata.net/lorestore/oa/SEExplanatoryNote> a oac:Annotation ;
 		a lit:ExplanatoryNote ;
         oac:hasBody <http://austlit.edu.au/auselit/annotea/body/1C41B1C9E18CEB63> ;
         oac:hasTarget <http://austlit.edu.au/?ex=FullTextView&docId=bulstor.xml;chunk.id=d29e2470;toc.depth=1;toc.id=d29e223> ;
@@ -18,18 +18,18 @@
         foaf:name "Roger Osborne" ;
         foaf:mbox "rosborne@example.edu" .
 }
-<http://openannotation.metadata.net/lorestore/oac/SEReply> {
-	<http://openannotation.metadata.net/lorestore/oac/SEReply> a oac:Reply ;
+<http://openannotation.metadata.net/lorestore/oa/SEReply> {
+	<http://openannotation.metadata.net/lorestore/oa/SEReply> a oac:Reply ;
 	        oac:hasBody <http://austlit.edu.au/auselit/annotea/body/2426C1B5462F96DD> ;
-	        oac:hasTarget <http://openannotation.metadata.net/lorestore/oac/SEExplanatoryNote> ;
+	        oac:hasTarget <http://openannotation.metadata.net/lorestore/oa/SEExplanatoryNote> ;
 	        dcterms:creator <http://www.example.org/user/2> ;
 	        dcterms:created "2010-09-16T13:43:27Z" .
 	<http://www.example.org/user/2> a foaf:Agent ;
 	        foaf:name "Anna Gerber" ;
 	        foaf:mbox "agerber@example.edu" .
 }
-<http://openannotation.metadata.net/lorestore/oac/SENoteXPointer> {
-	<http://openannotation.metadata.net/lorestore/oac/SENoteXPointer> a oac:Annotation ;
+<http://openannotation.metadata.net/lorestore/oa/SENoteXPointer> {
+	<http://openannotation.metadata.net/lorestore/oa/SENoteXPointer> a oac:Annotation ;
 			a lit:ExplanatoryNote ;
 	        oac:hasBody <http://austlit.edu.au/auselit/annotea/body/1C41B1C9E18CEB63> ;
 	        oac:hasTarget <http://austlit.edu.au/?ex=FullTextView&docId=bulstor.xml;chunk.id=d29e2470;toc.depth=1;toc.id=d29e223#xpointer(string-range(id("div-content")/table[2]/tbody[1]/tr[1]/td[1]/div[1]/p[35]/i[1], "", 1, 22))> ;
@@ -41,8 +41,8 @@
 	        foaf:name "Roger Osborne" ;
 	        foaf:mbox "rosborne@example.edu" .
 }
-<http://openannotation.metadata.net/lorestore/oac/SEConstrainedTarget> {
-	<http://openannotation.metadata.net/lorestore/oac/SEConstrainedTarget> a oac:Annotation ;
+<http://openannotation.metadata.net/lorestore/oa/SEConstrainedTarget> {
+	<http://openannotation.metadata.net/lorestore/oa/SEConstrainedTarget> a oac:Annotation ;
 			a lit:ExplanatoryNote ;
 	        oac:hasBody <http://austlit.edu.au/auselit/annotea/body/1C41B1C9E18CEB63> ;
 	        oac:hasTarget <urn:uuid:be459980-c305-11e0-9ca8-0002a5d5c51b> ;
@@ -60,8 +60,8 @@
 	        foaf:name "Roger Osborne" ;
 	        foaf:mbox "rosborne@example.edu" .
 }
-<http://openannotation.metadata.net/lorestore/oac/SEBodyProperties> {
-	<http://openannotation.metadata.net/lorestore/oac/SEBodyProperties> a oac:Annotation ;
+<http://openannotation.metadata.net/lorestore/oa/SEBodyProperties> {
+	<http://openannotation.metadata.net/lorestore/oa/SEBodyProperties> a oac:Annotation ;
 			a lit:TextualNote ;
 	        oac:hasTarget <http://web.srv.adfa.edu.au/JITM/JL/JL%20PE/JL%20Preferred%20Perspective.html#xpointer(string-range(id("JL-PE.TE-22"), "", 495, 11))> ;
 	        oac:hasBody <http://web.srv.adfa.edu.au/JITM/JL/JL%20PE/JL%20PE/Ancillary/Textual%20Notes(PE).html#Annotations(PE).Note13> ;
@@ -78,8 +78,8 @@
 	<http://www.example.org/user/4> foaf:name "Damien Ayers";
 	        foaf:mbox "dayers@example.edu" .
 }
-<http://openannotation.metadata.net/lorestore/oac/SEMultipleTargets> {
-	<http://openannotation.metadata.net/lorestore/oac/SEMultipleTargets> a oac:Annotation ;
+<http://openannotation.metadata.net/lorestore/oa/SEMultipleTargets> {
+	<http://openannotation.metadata.net/lorestore/oa/SEMultipleTargets> a oac:Annotation ;
 			a lit:TextualNote ;
 	        oac:hasTarget <http://austlit.edu.au/---/OMYF/WBB_01_WR_OMYF.txt#char=2639,2651> ;
 	        oac:hasTarget <http://acms.sl.nsw.gov.au/_DAMx/image/19/121/a1211001h.jpg#xywh=559,784,235,52> ;
@@ -87,8 +87,8 @@
 	<http://acms.sl.nsw.gov.au/_DAMx/image/19/121/a1211001h.jpg#xywh=559,784,235,52> dcterms:isPartOf <http://acms.sl.nsw.gov.au/_DAMx/image/19/121/a1211001h.jpg> .
 	<http://austlit.edu.au/---/OMYF/WBB_01_WR_OMYF.txt#char=2639,2651> dcterms:isPartOf <http://austlit.edu.au/---/OMYF/WBB_01_WR_OMYF.txt> .
 }
-<http://openannotation.metadata.net/lorestore/oac/SEDataAnnotation> {
-	<http://openannotation.metadata.net/lorestore/oac/SEDataAnnotation> a oac:DataAnnotation ;
+<http://openannotation.metadata.net/lorestore/oa/SEDataAnnotation> {
+	<http://openannotation.metadata.net/lorestore/oa/SEDataAnnotation> a oac:DataAnnotation ;
 	        oac:hasTarget <http://austlit.edu.au/common/loredemo/H1867A87.html#xpointer(string-range(/html[1]/body[1]/pre[1], "", 82, 8))> ;
 	        oac:hasTarget <http://austlit.edu.au/common/loredemo/H1867A87.html#xpointer(string-range(/html[1]/body[1]/pre[1], "", 82, 8))> ;
 	        oac:hasBody <http://openannotation.metadata.net/lorestore/ore/SEDataAnnotationBody> .

@@ -19,13 +19,13 @@
         <div class="row">
           <div class="span5">
 
-            <p>This service has been developed by UQ ITEE eResearch group for the <a href="http://openannotation.org/">Open Annotation Collaboration</a>, to support annotation in the context of electronic scholarly editions.</p>
+            <p>This service has been developed by UQ ITEE eResearch group as part of the <a href="http://openannotation.org/">Open Annotation Collaboration</a>, to support annotation in the context of electronic scholarly editions.</p>
             <p>lorestore is a repository for OA annotations and ORE resource maps, providing a REST API for creation, update, deletion and search of annotations or resource maps, as well as a SPARQL endpoint.</p>
 
             <p>Register for a user account <a href="${secure}/selfRegister.html">here</a>.</p>
  
-    		<p>For further information, see <a href="http://openannotation.metadata.net">Open Annotation at UQ</a>, or for technical assistance with LORE or the annotation service, contact Anna Gerber (<a href="mailto:agerber&#64;itee.uq.edu.au">agerber&#64;itee.uq.edu.au</a>)</p>
-			<p><em>Please be aware that this service is currently operating as a sandbox: content and/or accounts may be deleted at any time.</em></p>
+    		<p>For further information, or for technical assistance, contact Anna Gerber (<a href="mailto:agerber&#64;itee.uq.edu.au">agerber&#64;itee.uq.edu.au</a>)</p>
+
           </div>
           <div class="span5 sidebarmenu">
             <h2>Sign up</h2>

@@ -82,14 +82,23 @@
                     </div>
                     <div class="container">
                     <div class="content">
-                    <xsl:if test="count(/rdf:RDF/rdf:Description[contains(rdf:type/@rdf:resource,'openannotation.org/ns/')]) = 0">
+                    <xsl:if test="count(/rdf:RDF/rdf:Description[contains(rdf:type/@rdf:resource,'openannotation.org/ns/')]) = 0 and count(/rdf:RDF/rdf:Description[contains(rdf:type/@rdf:resource,'w3.org/ns/oa')]) = 0">
                         <p style="margin-top:2em">No matching annotations</p>
                     </xsl:if>
                     
-                    <xsl:for-each select="/rdf:RDF/rdf:Description[contains(rdf:type/@rdf:resource,'openannotation.org/ns/Annotation') or contains(rdf:type/@rdf:resource,'openannotation.org/ns/Reply') or contains(rdf:type/@rdf:resource,'openannotation.org/ns/DataAnnotation')]">
+                    <xsl:for-each select="/rdf:RDF/rdf:Description[contains(rdf:type/@rdf:resource,'w3.org/ns/oa#Annotation') or contains(rdf:type/@rdf:resource,'openannotation.org/ns/Annotation') or contains(rdf:type/@rdf:resource,'openannotation.org/ns/Reply') or contains(rdf:type/@rdf:resource,'openannotation.org/ns/DataAnnotation')]">
                        <xsl:variable name="annoUri" select="@rdf:about"/>
                        <xsl:variable name="shortId" select="generate-id()"/>
-                        <xsl:variable name="annotype" select="substring-after(rdf:type/@rdf:resource, '/ns/')"/>
+                       <xsl:variable name="annotype">
+                            <xsl:choose>
+                                <xsl:when test="contains(rdf:type/@rdf:resource,'openannotation.org/ns/Annotation')">
+                                    <xsl:value-of select="substring-after(rdf:type/@rdf:resource, '/ns/')"/>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:value-of select="substring-after(rdf:type/@rdf:resource, '#')"/>
+                                </xsl:otherwise>
+                             </xsl:choose>
+                        </xsl:variable>
                         <div class="annotation">
                         <div class="page-header">
                         <h1>
@@ -142,7 +151,7 @@
         <xsl:variable name="apos">'  </xsl:variable>
         <xsl:variable name="quot">"&#13;&#10;&#09;</xsl:variable>
         
-        <xsl:for-each select="$context/*[not(name()='rdf:type' and (@rdf:resource='http://www.openannotation.org/ns/Body' or @rdf:resource='http://www.openannotation.org/ns/Target'))]">
+        <xsl:for-each select="$context/*[not(name()='rdf:type' and (@rdf:resource='http://www.openannotation.org/ns/Body' or @rdf:resource='http://www.openannotation.org/ns/Target' or @rdf:resource='http://www.w3.org/ns/oa#Body' or @rdf:resource='http://www.w3.org/ns/oa#Target'))]">
             <xsl:variable name="valref" select="@rdf:resource | @rdf:nodeID"/>
             <xsl:variable name="valId" select="generate-id()"/>
             <xsl:variable name="propName" select="name()"/>
