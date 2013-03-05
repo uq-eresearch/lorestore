@@ -114,7 +114,7 @@ public abstract class AbstractRDF2GoQueryHandler implements LoreStoreQueryHandle
 			TupleQueryResultHandlerException, InterruptedException, RDFHandlerException {
 		String queryString = generateSearchQuery(urlParam, matchpred, matchval, includeAbstract);
 		if (asTriples){
-		return runSparqlQueryIntoMAV(queryString);
+		    return runSparqlQueryIntoMAV(queryString);
 		} else {
 		    return runSparqlQueryIntoGraphsMAV(queryString);
 		}
@@ -166,7 +166,7 @@ public abstract class AbstractRDF2GoQueryHandler implements LoreStoreQueryHandle
 		// Implemented in subclasses
 		return null;
 	}
-
+	
 	/**
 	 * Takes a sparql query and a generates a ModelAndView that displays the matching graphs (e.g. annotations, resource maps)
 	 * @param queryString
@@ -221,7 +221,8 @@ public abstract class AbstractRDF2GoQueryHandler implements LoreStoreQueryHandle
 			    RDFXMLWriter resultsWriter = new RDFXMLWriter(stream);
 			    ((GraphQuery)query).evaluate(resultsWriter);
 			} else if (query instanceof BooleanQuery) {
-			    return "" + ((BooleanQuery) query).evaluate();
+			    return "<?xml version=\"1.0\"?><sparql xmlns=\"http://www.w3.org/2005/sparql-results#\">"
+			      + "<boolean>" + ((BooleanQuery) query).evaluate() + "</boolean></sparql>";
 			}
 		} finally {
 			if (con != null){
