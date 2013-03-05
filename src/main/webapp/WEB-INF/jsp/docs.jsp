@@ -26,9 +26,9 @@
 			
 			<h3 id="create">Create</h3>
     		<p>Issue a POST request to <code>${secure}/ore/</code> to create a resource map.</p> 
-			<p>Issue a POST request to <code>${secure}/oac/</code> to create an annotation.</p> 
+			<p>Issue a POST request to <code>${secure}/oa/</code> to create an annotation.</p> 
 			<p><span class="label label-info">Preconditions</span> Must be authenticated</p>
-			<p>Send the RDF/XML for the Resource Map or Annotation as the content of the request.</p>
+			<p>Send the RDF for the Resource Map or Annotation as the content of the request (in RDF/XML, JSON-LD, TriG or TriX format).</p>
 			<p>As the URI for the object will be unknown until after the create request succeeds, use any dummy value for the Resource Map or Annotation identifier and it will be replaced by lorestore, e.g:</p>
             <pre class="pre prettyprint">
 &lt;rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" 
@@ -44,20 +44,20 @@
             <pre class="pre prettyprint">
 &lt;rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" 
     xmlns:dc="http://purl.org/dc/elements/1.1/" 
-    xmlns:oac="http://www.openannotation.org/ns/"&gt;
-    &lt;oac:Annotation rdf:about="${secure}/oac/dummy"&gt;
-        &lt;oac:hasBody rdf:resource="urn:uuid:4F390D25-41DF-475D-8140-6153CA6E330D"/&gt;
-        &lt;oac:hasTarget rdf:resource="http://example.org/target"/&gt;
+    xmlns:oa="http://www.w3.org/ns/oa#"&gt;
+    &lt;oa:Annotation rdf:about="${secure}/oa/dummy"&gt;
+        &lt;oa:hasBody rdf:resource="urn:uuid:4F390D25-41DF-475D-8140-6153CA6E330D"/&gt;
+        &lt;oa:hasTarget rdf:resource="http://example.org/target"/&gt;
         &lt;dc:title&gt;My Annotation&lt;/dc:title&gt;
         &lt;!-- ... etc ... --&gt;
-    &lt;/oac:Annotation&gt;
+    &lt;/oa:Annotation&gt;
 &lt;/rdf:RDF&gt;
             </pre>
             <p>Returns HTTP status code 201 and the RDF/XML of the new object on success</p>
             <p>Example:</p>
             <pre class="pre prettyprint">
 var xhr = new XMLHttpRequest();
-xhr.open("POST","${secure}/oac/");
+xhr.open("POST","${secure}/oa/");
 xhr.onreadystatechange= function(){
     if (xhr.readyState == 4) {
         if (xhr.status == 201) { 
@@ -105,7 +105,7 @@ xhr.send(null);
 			<p>Example:</p>
 			<pre class="pre prettyprint">
 var xhr = new XMLHttpRequest();
-xhr.open("DELETE", "${secure}/oac/123456789");  
+xhr.open("DELETE", "${secure}/oa/123456789");  
 xhr.onreadystatechange= function(){
     if (xhr.readyState == 4) {
         if (xhr.status == 204) { 
@@ -282,9 +282,9 @@ Ext.Ajax.request({
 			
 			<h3 id="oac">Annotations</h3>
 			<h4>annotates</h4>
-			<p>Fetch annotations that annotate a given web resource (also fetches replies if the queried resource is itself an annotation). Results are returned in TriX, TriG, RDF/XML or JSON format, depending on the Accept header. 
+			<p>Fetch annotations that annotate a given web resource (also fetches replies if the queried resource is itself an annotation). Results are returned in TriX, TriG, RDF/XML or JSON-LD format, depending on the Accept header. 
                 Use TriX or TriG format if scoping of arbitrary RDF data stored with annotations is important, as these formats have Named Graph support. For RDF/XML the results are flattened into a single graph.</p>
-			<p><code>GET ${secure}/oac/?annotates=http%3A%2F%2Fwww.example.org</code></p>
+			<p><code>GET ${secure}/oa/?annotates=http%3A%2F%2Fwww.example.org</code></p>
 			
 			</section>
 			<section id="sparql">
