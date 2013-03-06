@@ -23,5 +23,8 @@ public class RDF2GoOAUpdateHandler extends AbstractRDF2GoUpdateHandler {
 	protected NamedGraphImpl makeNewObject (Model model) {
 		return new OpenAnnotationImpl(model);
 	}
+	protected String getDefaultViewName() {
+	        return "oa";
+	}
 
 }

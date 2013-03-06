@@ -1,7 +1,9 @@
 package net.metadata.openannotation.lorestore.views;
 
 import static net.metadata.openannotation.lorestore.common.LoreStoreConstants.LORESTORE_USE_STYLESHEET;
-
+import static net.metadata.openannotation.lorestore.servlet.LorestoreResponse.OVERRIDE_CTYPE;
+import static net.metadata.openannotation.lorestore.servlet.LorestoreResponse.MODEL_KEY;
+import static net.metadata.openannotation.lorestore.servlet.LorestoreResponse.MODELSET_KEY;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
@@ -11,9 +13,11 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import net.metadata.openannotation.lorestore.triplestore.MemoryTripleStoreConnectorFactory;
 import net.metadata.openannotation.lorestore.util.OAJSONLDSerializer;
 
 import org.apache.log4j.Logger;
+import org.ontoware.rdf2go.model.Model;
 import org.ontoware.rdf2go.model.ModelSet;
 import org.ontoware.rdf2go.model.Syntax;
 
@@ -34,12 +38,19 @@ public class OANamedGraphsView extends BaseView {
                 HttpServletRequest request, HttpServletResponse response) 
         throws IOException {
              logger.info("Annotations render");
-             ModelSet annotations = (ModelSet) map.get("annotations");
-             
-             
-            if (annotations == null || annotations.size() == 0){
-                logger.debug("Problem getting all annotations");
-            }
+             ModelSet annotations = (ModelSet) map.get(MODELSET_KEY);
+             Model annotation = (Model)map.get(MODEL_KEY);
+             if (annotations == null && annotation == null){
+                 logger.error("No content has been set");
+                 response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, 
+                         "No content has been set");
+             } else if (annotations == null){
+                 MemoryTripleStoreConnectorFactory mf = new MemoryTripleStoreConnectorFactory();
+                 annotations = mf.retrieveConnection();
+                 annotations.addModel(annotation);
+             }
+             String overrideContentType = (String) map.get(OVERRIDE_CTYPE);
+
             logger.debug("render merged output annotations: ");
             String stylesheetParam = request.getParameter(LORESTORE_USE_STYLESHEET);
             
@@ -49,43 +60,47 @@ public class OANamedGraphsView extends BaseView {
             // FIXME the mapping of 'accept' types to formats that we understand and hence
             // to the content types that we use needs to be soft, and a lot smarter.
             // Think about using ContentNegotiatingViewResolver
+            String acceptableContentType = overrideContentType;
+            if (overrideContentType == null || overrideContentType.equals("")){
+                // set acceptable content type by looking at request
+                if (isAcceptable(MimeTypes.XML_RDF_MIMETYPES, request)){
+                    if (isAcceptable(MimeTypes.XML_MIMETYPE, request)){
+                        acceptableContentType = MimeTypes.XML_MIMETYPE;
+                    } else {
+                        acceptableContentType = Syntax.RdfXml.getMimeType();
+                    }
+                } else if (isAcceptable(Syntax.Trix.getMimeType(),request)){
+                    acceptableContentType = Syntax.Trix.getMimeType();
+                } else if (isAcceptable(Syntax.Trig.getMimeType(), request)){
+                    acceptableContentType = Syntax.Trig.getMimeType();
+                } else if (isAcceptable("application/json", request)) {
+                    acceptableContentType = "application/json";
+                } 
+            }
             try {
+                if (acceptableContentType == null) {
+                    response.sendError(HttpServletResponse.SC_NOT_ACCEPTABLE,
+                            "Request response only available in RDF+XML, JSON-LD, TriG or TriX formats");
+                }
                 if (annotations != null) {
                     // TriX or Trig are preferred format as they have named graph support,
                     // however RDF/XML is the default
-                    if (isAcceptable(MimeTypes.XML_RDF_MIMETYPES, request)) {    
+                    if (acceptableContentType.equals(Syntax.RdfXml.getMimeType()) || acceptableContentType.equals(MimeTypes.XML_MIMETYPE)) {    
                         stylesheetURI = (stylesheetParam == null || stylesheetParam.length() == 0) ?
                                 "/lorestore/stylesheets/OA.xsl" : stylesheetParam;
-                        
-                        if (isAcceptable(MimeTypes.XML_MIMETYPE, request)){
-                            // we don't provide HTML as yet, use XML with stylesheet instead
-                            response.setContentType(MimeTypes.XML_MIMETYPE);
-                        } else {
-                            response.setContentType(MimeTypes.XML_RDF);
-                        }
                         response.setCharacterEncoding("UTF-8");
                         os = outputRDF(response, annotations, stylesheetURI, Syntax.RdfXml);
-                    } else if (isAcceptable("application/trix",request)) {
+                    } else if (acceptableContentType.equals(Syntax.Trix.getMimeType())) {
                         // TODO: add default stylesheet for TriX
-                         response.setContentType(MimeTypes.XML_MIMETYPE);
                         response.setCharacterEncoding("UTF-8");
                         os = outputRDF(response, annotations, stylesheetURI, Syntax.Trix);
-                    } else if (isAcceptable("application/x-trig", request)){
-                        
-                        response.setContentType("application/x-trig");
+                    } else if (acceptableContentType.equals(Syntax.Trig.getMimeType())){
                         os = outputRDF(response, annotations, null, Syntax.Trig);
-                    } else if (isAcceptable("application/json",request)){
-                        response.setContentType("application/json");
+                    } else if (acceptableContentType.equals("application/json")){
                         os = outputJSON(response, annotations);
-                    } else {
-                        response.sendError(HttpServletResponse.SC_NOT_ACCEPTABLE,
-                                "Request response only available in Trix, RDF+XML, Trig and JSON formats");
                     }
-                } else {
-                    logger.error("No content has been set");
-                    response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, 
-                            "No content has been set");
-                }
+                    response.setContentType(acceptableContentType);
+                } 
             } finally {
                 if (os != null) {
                     os.flush();
@@ -105,8 +120,9 @@ public class OANamedGraphsView extends BaseView {
      private OutputStream outputRDF(HttpServletResponse response,  
                 ModelSet annotations, String stylesheetURL, Syntax syntax) 
         throws IOException {
-
-            if (stylesheetURL == null) {
+         
+            // it only makes sense to add stylesheet to xml types
+            if (stylesheetURL == null || !syntax.getMimeType().contains("xml")) {
                 OutputStream os = response.getOutputStream();
                 annotations.writeTo(os,syntax);
                 return os;

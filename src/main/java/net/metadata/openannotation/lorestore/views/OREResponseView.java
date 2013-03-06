@@ -2,13 +2,14 @@ package net.metadata.openannotation.lorestore.views;
 
 import static net.metadata.openannotation.lorestore.common.LoreStoreConstants.LORESTORE_USE_STYLESHEET;
 import static net.metadata.openannotation.lorestore.common.LoreStoreProperties.DEFAULT_RDF_STYLESHEET_PROP;
-import static net.metadata.openannotation.lorestore.servlet.OREResponse.LOCATION_HEADER;
-import static net.metadata.openannotation.lorestore.servlet.OREResponse.ORE_PROPS_KEY;
-import static net.metadata.openannotation.lorestore.servlet.OREResponse.RESPONSE_RDF_KEY;
-import static net.metadata.openannotation.lorestore.servlet.OREResponse.RETURN_STATUS;
-
+import static net.metadata.openannotation.lorestore.servlet.LorestoreResponse.LOCATION_HEADER;
+import static net.metadata.openannotation.lorestore.servlet.LorestoreResponse.ORE_PROPS_KEY;
+import static net.metadata.openannotation.lorestore.servlet.LorestoreResponse.MODEL_KEY;
+import static net.metadata.openannotation.lorestore.servlet.LorestoreResponse.RETURN_STATUS;
+import static net.metadata.openannotation.lorestore.servlet.LorestoreResponse.OVERRIDE_CTYPE;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.PrintStream;
 import java.io.StringWriter;
 import java.util.Map;
 import java.util.Properties;
@@ -16,9 +17,16 @@ import java.util.Properties;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import net.metadata.openannotation.lorestore.util.OAJSONLDSerializer;
+
 import org.apache.log4j.Logger;
 import org.ontoware.rdf2go.model.Model;
+import org.ontoware.rdf2go.model.ModelSet;
 import org.ontoware.rdf2go.model.Syntax;
+
+import de.dfki.km.json.JSONUtils;
+import de.dfki.km.json.jsonld.JSONLD;
+import de.dfki.km.json.jsonld.JSONLDProcessor.Options;
 
 import au.edu.diasb.chico.mvc.BaseView;
 import au.edu.diasb.chico.mvc.MimeTypes;
@@ -32,8 +40,10 @@ public class OREResponseView extends BaseView {
     protected void renderMergedOutputModel(Map<String, Object> map, 
             HttpServletRequest request, HttpServletResponse response) 
     throws IOException {
-    	Model responseRDF = (Model) map.get(RESPONSE_RDF_KEY);
+    	Model model = (Model) map.get(MODEL_KEY);
         Properties props = (Properties) map.get(ORE_PROPS_KEY);
+        String overrideContentType = (String) map.get(OVERRIDE_CTYPE);
+        
         String stylesheetParam = request.getParameter(LORESTORE_USE_STYLESHEET);
         // FIXME: remove hardcoded stylesheet
         String stylesheetURI = (stylesheetParam == null) ? "/lorestore/stylesheets/CompoundObjectDetail.xsl" :
@@ -43,22 +53,43 @@ public class OREResponseView extends BaseView {
         setResponseHeaders(map, response);
         
         OutputStream os = null;
-        // FIXME the mapping of 'accept' types to formats that we understand and hence
-        // to the content types that we use needs to be soft, and a lot smarter.
-        try {
-            if (responseRDF != null) {
-            	if (isAcceptable(MimeTypes.XML_RDF_MIMETYPES, request)) { 
-                    
-                    if (isAcceptable(MimeTypes.XML_MIMETYPE, request)){
-                    	response.setContentType(MimeTypes.XML_MIMETYPE);
-                    } else {
-                    	response.setContentType(MimeTypes.XML_RDF);
-                    }
-                    os = outputRDF(response, responseRDF, stylesheetURI);
+        
+        String acceptableContentType = overrideContentType;
+        if (overrideContentType == null || overrideContentType.equals("")){
+            // set acceptable content type by looking at request
+            if (isAcceptable(MimeTypes.XML_RDF_MIMETYPES, request)){
+                if (isAcceptable(MimeTypes.XML_MIMETYPE, request)){
+                    acceptableContentType = MimeTypes.XML_MIMETYPE;
                 } else {
-                    response.sendError(HttpServletResponse.SC_NOT_ACCEPTABLE,
-                            "Request response is only available as RDF/XML");
+                    acceptableContentType = Syntax.RdfXml.getMimeType();
                 }
+            } else if (isAcceptable(Syntax.Trix.getMimeType(),request)){
+                acceptableContentType = Syntax.Trix.getMimeType();
+            } else if (isAcceptable(Syntax.Trig.getMimeType(), request)){
+                acceptableContentType = Syntax.Trig.getMimeType();
+            } else if (isAcceptable("application/json", request)) {
+                acceptableContentType = "application/json";
+            }
+        }
+        try {
+            if (acceptableContentType == null) {
+                response.sendError(HttpServletResponse.SC_NOT_ACCEPTABLE,
+                        "Request response only available in RDF+XML, JSON-LD, TriG or TriX formats");
+            }
+            if (model != null) {
+                if (acceptableContentType.equals(Syntax.RdfXml.getMimeType()) || acceptableContentType.equals(MimeTypes.XML_MIMETYPE)){
+                    response.setCharacterEncoding("UTF-8");
+                    os = outputRDF(response, model, stylesheetURI, Syntax.RdfXml);
+                } else if (acceptableContentType.equals(Syntax.Trix.getMimeType())) {
+                    // TODO: add default stylesheet for TriX
+                    response.setCharacterEncoding("UTF-8");
+                    os = outputRDF(response, model, stylesheetURI, Syntax.Trix);
+                } else if (acceptableContentType.equals(Syntax.Trig.getMimeType())){
+                    os = outputRDF(response, model, null, Syntax.Trig);
+                } else if (acceptableContentType.equals("application/json")){
+                    os = outputJSON(response, model); 
+                } 
+                response.setContentType(acceptableContentType);
             } else if (props != null) {
                 if (isAcceptable(MimeTypes.XML_MIMETYPE, request)) {
                     os = outputProps(response, props);
@@ -75,8 +106,8 @@ public class OREResponseView extends BaseView {
             if (os != null) {
                 os.close();
             }
-            if (responseRDF != null) {
-            	responseRDF.close();
+            if (model != null) {
+            	model.close();
             }
         }
     }
@@ -103,20 +134,23 @@ public class OREResponseView extends BaseView {
     }
 
     private OutputStream outputRDF(HttpServletResponse response,  
-    		Model responseRDF, String stylesheetURL) 
+    		Model model, String stylesheetURL, Syntax contentType) 
     throws IOException {
         response.setCharacterEncoding("UTF-8");
-        if (stylesheetURL == null) {
+        if (stylesheetURL == null || !contentType.equals(Syntax.RdfXml.getMimeType())) {
             OutputStream os = response.getOutputStream();
-            responseRDF.writeTo(os, Syntax.RdfXml);
+            // serialize  (without stylesheet PI)
+            model.writeTo(os, contentType);
             return os;
-        } else {
+        } else { 
+            // inject stylesheeet PI for RDF/XML only
+            
             // I considered tweaking the RDF serializers to add the stylesheet processing
             // instruction.  Sesame would support this, but it would be difficult with Jena.
             // Instead, we serialize to a StringBuffer and do some simple surgery to insert
             // the required stuff.
             StringWriter sw = new StringWriter();
-            responseRDF.writeTo(sw, Syntax.RdfXml);
+            model.writeTo(sw, Syntax.RdfXml);
             StringBuffer sb = sw.getBuffer();
             // The insertion point will be immediately after the '?>' of the xml declaration
             // (if present) or at the start of the document.
@@ -144,4 +178,16 @@ public class OREResponseView extends BaseView {
         }
     }
 
+    private OutputStream outputJSON(HttpServletResponse response, Model model) 
+            throws IOException {
+        OutputStream os = response.getOutputStream(); 
+        
+        // TODO implement JSON-LD serialization for resource maps
+        
+        PrintStream printStream = new PrintStream(os);
+        
+        printStream.print("{\"@id\":\"" + model.getContextURI() + "\"}");
+        printStream.close();
+        return os;
+    }
 }

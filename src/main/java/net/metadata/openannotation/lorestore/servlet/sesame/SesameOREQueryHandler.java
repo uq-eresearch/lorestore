@@ -4,7 +4,7 @@ import java.io.Writer;
 
 import net.metadata.openannotation.lorestore.exceptions.NotFoundException;
 import net.metadata.openannotation.lorestore.servlet.LoreStoreQueryHandler;
-import net.metadata.openannotation.lorestore.servlet.OREResponse;
+import net.metadata.openannotation.lorestore.servlet.LorestoreResponse;
 
 import org.openrdf.model.Statement;
 import org.openrdf.model.URI;
@@ -24,7 +24,7 @@ import org.springframework.web.servlet.ModelAndView;
 public class SesameOREQueryHandler implements LoreStoreQueryHandler {
 
 	@Override
-	public OREResponse getNamedGraphObject(String oreId) throws NotFoundException,
+	public LorestoreResponse getNamedGraphObject(String oreId) throws NotFoundException,
 			InterruptedException {
 
 		Repository myRepository = new SailRepository(new MemoryStore());

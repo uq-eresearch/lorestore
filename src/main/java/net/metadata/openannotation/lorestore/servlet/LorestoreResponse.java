@@ -1,6 +1,7 @@
 package net.metadata.openannotation.lorestore.servlet;
 
 import org.ontoware.rdf2go.model.Model;
+import org.ontoware.rdf2go.model.ModelSet;
 import org.springframework.web.servlet.ModelAndView;
 
 /**
@@ -10,17 +11,25 @@ import org.springframework.web.servlet.ModelAndView;
  * 
  * @author uqdayers
  */
-public class OREResponse extends ModelAndView {
+public class LorestoreResponse extends ModelAndView {
 
-	public static final String RESPONSE_RDF_KEY = "responseRDF";
+	public static final String MODEL_KEY = "rdfmodel";
+	public static final String MODELSET_KEY = "rdfmodelset";
 	public static final String ORE_PROPS_KEY = "oreProperties";
 	public static final String LOCATION_HEADER = "locationHeader";
 	public static final String RETURN_STATUS = "returnStatus";
+	public static final String OVERRIDE_CTYPE = "overrideContentType";
 	
-	public OREResponse(Model model) {
-		// The name of the view we will use
-		super("ore");
-		this.addObject(RESPONSE_RDF_KEY, model);
+	public LorestoreResponse(String view) {
+		super(view);
+	}
+	
+	public void setRDFModel(Model model){
+	    this.addObject(MODEL_KEY,model);
+	}
+	
+	public void setRDFModelSet(ModelSet modelset){
+	    this.addObject(MODELSET_KEY,modelset);
 	}
 	
 	public void setReturnStatus(int status) {
@@ -37,5 +46,11 @@ public class OREResponse extends ModelAndView {
 	
 	public String getLocationHeader() {
 		return (String)this.getModelMap().get(LOCATION_HEADER);
+	}
+	public void setOverrideContentType(String ctype) {
+	    this.addObject(OVERRIDE_CTYPE, ctype);
+	}
+	public String getOverrideContentType() {
+	    return (String)this.getModelMap().get(OVERRIDE_CTYPE);
 	}
 }

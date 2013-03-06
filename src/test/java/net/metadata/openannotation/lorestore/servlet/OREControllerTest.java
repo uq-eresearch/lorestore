@@ -19,7 +19,7 @@ import net.metadata.openannotation.lorestore.common.LoreStoreConstants;
 import net.metadata.openannotation.lorestore.exceptions.InvalidQueryParametersException;
 import net.metadata.openannotation.lorestore.exceptions.LoreStoreException;
 import net.metadata.openannotation.lorestore.exceptions.NotFoundException;
-import net.metadata.openannotation.lorestore.servlet.OREResponse;
+import net.metadata.openannotation.lorestore.servlet.LorestoreResponse;
 
 import org.junit.After;
 import org.junit.Before;
@@ -97,7 +97,7 @@ public class OREControllerTest extends OREControllerTestsBase {
 	public void postCompoundObjectAndGet() throws Exception {
 		InputStream in = new ByteArrayInputStream(
 				CommonTestRecords.SIMPLE_ORE_EXAMPLE.getBytes());
-		OREResponse response = (OREResponse) controller.post(in, "application/rdf+xml");
+		LorestoreResponse response = (LorestoreResponse) controller.post(in, "application/rdf+xml");
 
 		assertNotNull(response.getLocationHeader());
 		assertNotNull(response.getReturnStatus());
@@ -110,12 +110,12 @@ public class OREControllerTest extends OREControllerTestsBase {
 	public void postGetDeleteGet() throws Exception {
 		String createdId = saveRecordToStore(CommonTestRecords.SIMPLE_ORE_EXAMPLE);
 
-		OREResponse oreResponse2 = (OREResponse) controller.get(createdId);
+		LorestoreResponse oreResponse2 = (LorestoreResponse) controller.get(createdId);
 		assertNotNull(oreResponse2);
 
 		assertEquals("ore", oreResponse2.getViewName());
 		Map<String, Object> model2 = oreResponse2.getModel();
-		Model rdf2 = (Model) model2.get(OREResponse.RESPONSE_RDF_KEY);
+		Model rdf2 = (Model) model2.get(LorestoreResponse.MODEL_KEY);
 		assertNotNull(rdf2);
 
 		controller.delete(createdId);
@@ -295,13 +295,13 @@ public class OREControllerTest extends OREControllerTestsBase {
 				new String[] { "ROLE_USER", "ROLE_ORE" });
 		InputStream in = new ByteArrayInputStream(
 				CommonTestRecords.SIMPLE_ORE_EXAMPLE.getBytes());
-		OREResponse response = (OREResponse) authController.post(in, "application/rdf+xml");
+		LorestoreResponse response = (LorestoreResponse) authController.post(in, "application/rdf+xml");
 
 		String recordId = findUIDFromResponse(response);
 
 		in = new ByteArrayInputStream(
 				CommonTestRecords.SIMPLE_ORE_EXAMPLE.getBytes());
-		response = (OREResponse) authController.put(recordId, in, "application/rdf+xml");
+		response = (LorestoreResponse) authController.put(recordId, in, "application/rdf+xml");
 	}
 
 	/**
@@ -315,7 +315,7 @@ public class OREControllerTest extends OREControllerTestsBase {
 				new String[] { "ROLE_USER", "ROLE_ORE" });
 		InputStream in = new ByteArrayInputStream(
 				CommonTestRecords.SIMPLE_ORE_EXAMPLE.getBytes());
-		OREResponse response = (OREResponse) authController.post(in, "application/rdf+xml");
+		LorestoreResponse response = (LorestoreResponse) authController.post(in, "application/rdf+xml");
 
 		String recordId = findUIDFromResponse(response);
 
@@ -326,7 +326,7 @@ public class OREControllerTest extends OREControllerTestsBase {
 
 		exception.expect(AccessDeniedException.class);
 		exception.expectMessage("You do not own this object");
-		response = (OREResponse) authController.put(recordId, in, "application/rdf+xml");
+		response = (LorestoreResponse) authController.put(recordId, in, "application/rdf+xml");
 	}
 	
 
@@ -341,7 +341,7 @@ public class OREControllerTest extends OREControllerTestsBase {
 				new String[] { "ROLE_USER", "ROLE_ORE" });
 		InputStream in = new ByteArrayInputStream(
 				CommonTestRecords.SIMPLE_ORE_EXAMPLE.getBytes());
-		OREResponse response = (OREResponse) authController.post(in, "application/rdf+xml");
+		LorestoreResponse response = (LorestoreResponse) authController.post(in, "application/rdf+xml");
 
 		String recordId = findUIDFromResponse(response);
 
@@ -350,7 +350,7 @@ public class OREControllerTest extends OREControllerTestsBase {
 		in = new ByteArrayInputStream(
 				CommonTestRecords.SIMPLE_ORE_EXAMPLE.getBytes());
 
-		response = (OREResponse) authController.put(recordId, in, "application/rdf+xml");
+		response = (LorestoreResponse) authController.put(recordId, in, "application/rdf+xml");
 	}
 
 	/**
@@ -364,7 +364,7 @@ public class OREControllerTest extends OREControllerTestsBase {
 				new String[] { "ROLE_USER", "ROLE_ORE" });
 		InputStream in = new ByteArrayInputStream(
 				CommonTestRecords.SIMPLE_ORE_EXAMPLE.getBytes());
-		OREResponse response = (OREResponse) authController.post(in, "application/rdf+xml");
+		LorestoreResponse response = (LorestoreResponse) authController.post(in, "application/rdf+xml");
 
 		String recordId = findUIDFromResponse(response);
 
@@ -388,13 +388,13 @@ public class OREControllerTest extends OREControllerTestsBase {
 				"ROLE_ORE" });
 		String simpleOreExample = CommonTestRecords.SIMPLE_ORE_EXAMPLE;
 		InputStream in = new ByteArrayInputStream(simpleOreExample.getBytes());
-		OREResponse response = (OREResponse) authController.post(in, "application/rdf+xml");
+		LorestoreResponse response = (LorestoreResponse) authController.post(in, "application/rdf+xml");
 
 		checkUserInModel(response, userUri);
 
 		String recordId = findUIDFromResponse(response);
 		in = new ByteArrayInputStream(simpleOreExample.getBytes());
-		response = (OREResponse) authController.put(recordId, in, "application/rdf+xml");
+		response = (LorestoreResponse) authController.put(recordId, in, "application/rdf+xml");
 
 		checkUserInModel(response, userUri);
 	}
@@ -412,13 +412,13 @@ public class OREControllerTest extends OREControllerTestsBase {
 				"ROLE_ORE" });
 		String simpleOreExample = CommonTestRecords.SIMPLE_ORE_EXAMPLE_WITH_OWNER;
 		InputStream in = new ByteArrayInputStream(simpleOreExample.getBytes());
-		OREResponse response = (OREResponse) authController.post(in, "application/rdf+xml");
+		LorestoreResponse response = (LorestoreResponse) authController.post(in, "application/rdf+xml");
 
 		checkUserInModel(response, userUri);
 
 		String recordId = findUIDFromResponse(response);
 		in = new ByteArrayInputStream(simpleOreExample.getBytes());
-		response = (OREResponse) authController.put(recordId, in, "application/rdf+xml");
+		response = (LorestoreResponse) authController.put(recordId, in, "application/rdf+xml");
 
 		checkUserInModel(response, userUri);
 	}
@@ -434,7 +434,7 @@ public class OREControllerTest extends OREControllerTestsBase {
 
 		InputStream in = new ByteArrayInputStream(
 				CommonTestRecords.SIMPLE_ORE_LOCKED.getBytes());
-		OREResponse response = (OREResponse) authController.post(in, "application/rdf+xml");
+		LorestoreResponse response = (LorestoreResponse) authController.post(in, "application/rdf+xml");
 
 		String recordId = findUIDFromResponse(response);
 		in = new ByteArrayInputStream(
@@ -454,9 +454,9 @@ public class OREControllerTest extends OREControllerTestsBase {
 				.parse(new InputSource(new StringReader(xml)));
 	}
 
-	private void checkUserInModel(OREResponse oreResponse, String userUri) {
+	private void checkUserInModel(LorestoreResponse oreResponse, String userUri) {
 		Model model = (Model) oreResponse.getModel().get(
-				OREResponse.RESPONSE_RDF_KEY);
+				LorestoreResponse.MODEL_KEY);
 
 		URI userPred = model.createURI(LoreStoreConstants.LORESTORE_USER);
 		assertEquals(1, model.countStatements(new TriplePatternImpl(
@@ -467,14 +467,14 @@ public class OREControllerTest extends OREControllerTestsBase {
 
 	private String saveRecordToStore(String recordXML) throws Exception {
 		InputStream in = new ByteArrayInputStream(recordXML.getBytes());
-		OREResponse response = (OREResponse) controller.post(in, "application/rdf+xml");
+		LorestoreResponse response = (LorestoreResponse) controller.post(in, "application/rdf+xml");
 
 		String id = findUIDFromResponse(response);
 
 		return id;
 	}
 
-	private String findUIDFromResponse(OREResponse response) {
+	private String findUIDFromResponse(LorestoreResponse response) {
 		// assertTrue(redirect.startsWith("redirect:"));
 		String redirect = response.getLocationHeader();
 		String createdId = redirect.substring(redirect.lastIndexOf("/") + 1);

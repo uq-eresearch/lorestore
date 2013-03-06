@@ -11,7 +11,7 @@ import net.metadata.openannotation.lorestore.exceptions.NotFoundException;
 import net.metadata.openannotation.lorestore.servlet.LoreStoreControllerConfig;
 import net.metadata.openannotation.lorestore.servlet.LoreStoreQueryHandler;
 import net.metadata.openannotation.lorestore.servlet.OREController;
-import net.metadata.openannotation.lorestore.servlet.OREResponse;
+import net.metadata.openannotation.lorestore.servlet.LorestoreResponse;
 import net.metadata.openannotation.lorestore.triplestore.TripleStoreConnectorFactory;
 
 import org.apache.log4j.Logger;
@@ -92,7 +92,14 @@ public abstract class AbstractRDF2GoQueryHandler implements LoreStoreQueryHandle
 		} finally {
 			cf.release(container);
 		}
-		return new OREResponse(model);
+		LorestoreResponse resp = new LorestoreResponse(getDefaultViewName());
+		resp.setRDFModel(model);
+		return resp;
+	}
+	
+	protected String getDefaultViewName() {
+	        // override in subclasses
+	        return "";
 	}
 	
 	protected void checkUserCanRead(Model m) {	

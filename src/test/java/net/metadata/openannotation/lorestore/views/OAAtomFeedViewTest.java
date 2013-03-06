@@ -36,7 +36,7 @@ public class OAAtomFeedViewTest {
 		
 		view = new OAAtomFeedView();
 		mv = new ModelAndView("oaAtom");
-		mv.addObject("annotations",annotations);
+		mv.addObject("annotationlist",annotations);
 		request = new MockHttpServletRequest();
 		response = new MockHttpServletResponse();
 	}

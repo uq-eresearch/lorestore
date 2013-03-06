@@ -5,7 +5,7 @@ import static org.junit.Assert.assertEquals;
 import java.io.ByteArrayInputStream;
 
 import net.metadata.openannotation.lorestore.servlet.CommonTestRecords;
-import net.metadata.openannotation.lorestore.servlet.OREResponse;
+import net.metadata.openannotation.lorestore.servlet.LorestoreResponse;
 import net.metadata.openannotation.misc.TestUtilities;
 
 import org.junit.Before;
@@ -31,7 +31,8 @@ public class OREResponseViewTest {
 		Model model = TestUtilities.create(new ByteArrayInputStream(
 				CommonTestRecords.ORE_TEXT.getBytes()),
 				"http://example.com/rem/");
-		OREResponse mv = new OREResponse(model);
+		LorestoreResponse mv = new LorestoreResponse("ore");
+		mv.setRDFModel(model);
 		MockHttpServletRequest request = new MockHttpServletRequest();
 		MockHttpServletResponse response = new MockHttpServletResponse();
 		

@@ -20,7 +20,7 @@ public interface LoreStoreUpdateHandler {
 	 * @throws LoreStoreException
 	 * @throws InterruptedException
 	 */
-	public OREResponse post(InputStream inputRDF, String contentType)
+	public LorestoreResponse post(InputStream inputRDF, String contentType)
 			throws RequestFailureException, IOException, LoreStoreException,
 			InterruptedException;
 
@@ -36,7 +36,7 @@ public interface LoreStoreUpdateHandler {
 	 * @param inputRDF
 	 * @return
 	 */
-	public OREResponse put(String objId, InputStream inputRDF, String contentType)
+	public LorestoreResponse put(String objId, InputStream inputRDF, String contentType)
 			throws RequestFailureException, IOException, LoreStoreException,
 			InterruptedException;
 

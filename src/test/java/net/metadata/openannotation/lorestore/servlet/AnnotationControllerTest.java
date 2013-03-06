@@ -14,7 +14,7 @@ import net.metadata.openannotation.lorestore.common.LoreStoreConstants;
 import net.metadata.openannotation.lorestore.exceptions.InvalidQueryParametersException;
 import net.metadata.openannotation.lorestore.exceptions.LoreStoreException;
 import net.metadata.openannotation.lorestore.exceptions.NotFoundException;
-import net.metadata.openannotation.lorestore.servlet.OREResponse;
+import net.metadata.openannotation.lorestore.servlet.LorestoreResponse;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -105,7 +105,7 @@ public class AnnotationControllerTest extends AnnotationControllerTestsBase {
 
 		assertEquals("oa", oacResponse2.getViewName());
 		Map<String, Object> model2 = oacResponse2.getModel();
-		ModelSet rdf2 = (ModelSet) model2.get("annotations");
+		ModelSet rdf2 = (ModelSet) model2.get(LorestoreResponse.MODELSET_KEY);
 		assertNotNull(rdf2);
 
 		controller.delete(createdId);
@@ -173,7 +173,7 @@ public class AnnotationControllerTest extends AnnotationControllerTestsBase {
 
 	@Test
 	public void queryRefersToNonExistentURL() throws Exception {
-		ModelSet annotations = (ModelSet) controller.refersToQuery("http://itee.uq.edu.au/~agerber/").getModel().get("annotations");
+		ModelSet annotations = (ModelSet) controller.refersToQuery("http://itee.uq.edu.au/~agerber/").getModel().get(LorestoreResponse.MODELSET_KEY);
 		assertNotNull(annotations);
 
 		
@@ -185,11 +185,11 @@ public class AnnotationControllerTest extends AnnotationControllerTestsBase {
 		// save an object
 		
 		InputStream in = new ByteArrayInputStream(CommonTestRecords.OAC_INLINE_BODY.getBytes());
-		OREResponse response = (OREResponse) controller.post(in, "application/rdf+xml");
+		LorestoreResponse response = (LorestoreResponse) controller.post(in, "application/rdf+xml");
 		String createdId = response.getLocationHeader();
 		
 		// query for it
-		ModelSet annotations = (ModelSet) controller.refersToQuery("http://itee.uq.edu.au/~agerber/").getModel().get("annotations");
+		ModelSet annotations = (ModelSet) controller.refersToQuery("http://itee.uq.edu.au/~agerber/").getModel().get(LorestoreResponse.MODELSET_KEY);
 
 		// check the results include the object
 		assertTrue(annotations.containsModel(annotations.createURI(createdId)));
@@ -275,13 +275,13 @@ public class AnnotationControllerTest extends AnnotationControllerTestsBase {
 				new String[] { "ROLE_USER", "ROLE_ORE" });
 		InputStream in = new ByteArrayInputStream(
 				CommonTestRecords.OAC_INLINE_BODY.getBytes());
-		OREResponse response =  (OREResponse) authController.post(in, "application/rdf+xml");
+		LorestoreResponse response =  (LorestoreResponse) authController.post(in, "application/rdf+xml");
 
 		String recordId = findUIDFromOREResponse(response);
 
 		in = new ByteArrayInputStream(
 				CommonTestRecords.OAC_INLINE_BODY.getBytes());
-		response = (OREResponse) authController.put(recordId, in, "application/rdf+xml");
+		response = (LorestoreResponse) authController.put(recordId, in, "application/rdf+xml");
 	}
 
 	/**
@@ -295,7 +295,7 @@ public class AnnotationControllerTest extends AnnotationControllerTestsBase {
 				new String[] { "ROLE_USER", "ROLE_ORE" });
 		InputStream in = new ByteArrayInputStream(
 				CommonTestRecords.OAC_INLINE_BODY.getBytes());
-		OREResponse response =  (OREResponse) authController.post(in, "application/rdf+xml");
+		LorestoreResponse response =  (LorestoreResponse) authController.post(in, "application/rdf+xml");
 
 		String recordId = findUIDFromOREResponse(response);
 
@@ -306,7 +306,7 @@ public class AnnotationControllerTest extends AnnotationControllerTestsBase {
 
 		exception.expect(AccessDeniedException.class);
 		exception.expectMessage("You do not own this object");
-		response = (OREResponse) authController.put(recordId, in, "application/rdf+xml");
+		response = (LorestoreResponse) authController.put(recordId, in, "application/rdf+xml");
 	}
 	
 
@@ -321,7 +321,7 @@ public class AnnotationControllerTest extends AnnotationControllerTestsBase {
 				new String[] { "ROLE_USER", "ROLE_ORE" });
 		InputStream in = new ByteArrayInputStream(
 				CommonTestRecords.OAC_INLINE_BODY.getBytes());
-		OREResponse response = (OREResponse) authController.post(in, "application/rdf+xml");
+		LorestoreResponse response = (LorestoreResponse) authController.post(in, "application/rdf+xml");
 
 		String recordId = findUIDFromOREResponse(response);
 
@@ -330,7 +330,7 @@ public class AnnotationControllerTest extends AnnotationControllerTestsBase {
 		in = new ByteArrayInputStream(
 				CommonTestRecords.OAC_INLINE_BODY.getBytes());
 
-		response = (OREResponse) authController.put(recordId, in, "application/rdf+xml");
+		response = (LorestoreResponse) authController.put(recordId, in, "application/rdf+xml");
 	}
 
 	/**
@@ -344,7 +344,7 @@ public class AnnotationControllerTest extends AnnotationControllerTestsBase {
 				new String[] { "ROLE_USER", "ROLE_ORE" });
 		InputStream in = new ByteArrayInputStream(
 				CommonTestRecords.OAC_INLINE_BODY.getBytes());
-		OREResponse response = (OREResponse) authController.post(in, "application/rdf+xml");
+		LorestoreResponse response = (LorestoreResponse) authController.post(in, "application/rdf+xml");
 
 		String recordId = findUIDFromOREResponse(response);
 
@@ -368,13 +368,13 @@ public class AnnotationControllerTest extends AnnotationControllerTestsBase {
 				"ROLE_ORE" });
 		String simpleExample = CommonTestRecords.OAC_INLINE_BODY;
 		InputStream in = new ByteArrayInputStream(simpleExample.getBytes());
-		OREResponse response =  (OREResponse) authController.post(in, "application/rdf+xml");
+		LorestoreResponse response =  (LorestoreResponse) authController.post(in, "application/rdf+xml");
 
 		checkUserInModel(response, userUri);
 
 		String recordId = findUIDFromOREResponse(response);
 		in = new ByteArrayInputStream(simpleExample.getBytes());
-		response =  (OREResponse) authController.put(recordId, in, "application/rdf+xml");
+		response =  (LorestoreResponse) authController.put(recordId, in, "application/rdf+xml");
 
 		checkUserInModel(response, userUri);
 	}
@@ -392,13 +392,13 @@ public class AnnotationControllerTest extends AnnotationControllerTestsBase {
 				"ROLE_ORE" });
 		String simpleExample = CommonTestRecords.OAC_WITH_OWNER;
 		InputStream in = new ByteArrayInputStream(simpleExample.getBytes());
-		OREResponse response = (OREResponse) authController.post(in, "application/rdf+xml");
+		LorestoreResponse response = (LorestoreResponse) authController.post(in, "application/rdf+xml");
 
 		checkUserInModel(response, userUri);
 
 		String recordId = findUIDFromOREResponse(response);
 		in = new ByteArrayInputStream(simpleExample.getBytes());
-		response =  (OREResponse) authController.put(recordId, in, "application/rdf+xml");
+		response =  (LorestoreResponse) authController.put(recordId, in, "application/rdf+xml");
 
 		checkUserInModel(response, userUri);
 	}
@@ -408,9 +408,9 @@ public class AnnotationControllerTest extends AnnotationControllerTestsBase {
 	//
 	// Private Methods
 	//
-	private void checkUserInModel(OREResponse oreResponse, String userUri) {
+	private void checkUserInModel(LorestoreResponse oreResponse, String userUri) {
 		Model model = (Model) oreResponse.getModel().get(
-				OREResponse.RESPONSE_RDF_KEY);
+				LorestoreResponse.MODEL_KEY);
 
 		URI userPred = model.createURI(LoreStoreConstants.LORESTORE_USER);
 		assertEquals(1, model.countStatements(new TriplePatternImpl(
@@ -422,14 +422,14 @@ public class AnnotationControllerTest extends AnnotationControllerTestsBase {
 	
 	private String saveRecordToStore(String recordXML) throws Exception {
 		InputStream in = new ByteArrayInputStream(recordXML.getBytes());
-		OREResponse response = (OREResponse) controller.post(in, "application/rdf+xml");
+		LorestoreResponse response = (LorestoreResponse) controller.post(in, "application/rdf+xml");
 
 		String id = findUIDFromOREResponse(response);
 
 		return id;
 	}
 	
-	private String findUIDFromOREResponse(OREResponse response) {
+	private String findUIDFromOREResponse(LorestoreResponse response) {
 		
 		// assertTrue(redirect.startsWith("redirect:"));
 		String redirect = response.getLocationHeader();
@@ -439,7 +439,7 @@ public class AnnotationControllerTest extends AnnotationControllerTestsBase {
 	}
 	
 	private String findUIDFromOAResponse(ModelAndView response){
-		ModelSet annotations = (ModelSet) response.getModel().get("annotations");
+		ModelSet annotations = (ModelSet) response.getModel().get(LorestoreResponse.MODELSET_KEY);
 		assertNotNull(annotations);
 		String theId = annotations.getModelURIs().next().toString();
 		String createdId = theId.substring(theId.lastIndexOf("/") + 1);
@@ -447,7 +447,7 @@ public class AnnotationControllerTest extends AnnotationControllerTestsBase {
 		
 	}
 	private void checkUserInOAModel(ModelAndView response, String userUri) {
-		ModelSet annotations = (ModelSet) response.getModel().get("annotations");
+		ModelSet annotations = (ModelSet) response.getModel().get(LorestoreResponse.MODELSET_KEY);
 		Model model = annotations.getModels().next();
 
 		URI userPred = model.createURI(LoreStoreConstants.LORESTORE_USER);

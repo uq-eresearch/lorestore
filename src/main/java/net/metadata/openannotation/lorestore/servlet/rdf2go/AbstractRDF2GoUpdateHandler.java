@@ -17,7 +17,7 @@ import net.metadata.openannotation.lorestore.model.NamedGraph;
 import net.metadata.openannotation.lorestore.model.rdf2go.NamedGraphImpl;
 import net.metadata.openannotation.lorestore.servlet.LoreStoreControllerConfig;
 import net.metadata.openannotation.lorestore.servlet.LoreStoreUpdateHandler;
-import net.metadata.openannotation.lorestore.servlet.OREResponse;
+import net.metadata.openannotation.lorestore.servlet.LorestoreResponse;
 import net.metadata.openannotation.lorestore.triplestore.TripleStoreConnectorFactory;
 import net.metadata.openannotation.lorestore.util.OATripleCallback;
 
@@ -66,7 +66,7 @@ public abstract class AbstractRDF2GoUpdateHandler implements LoreStoreUpdateHand
      * @see net.metadata.openannotation.lorestore.servlet.rdf2go.OREUpdateHandler#post(java.io.InputStream)
      */
     @Override
-    public OREResponse post(InputStream inputRDF, String contentType) throws RequestFailureException,
+    public LorestoreResponse post(InputStream inputRDF, String contentType) throws RequestFailureException,
             IOException, LoreStoreException, InterruptedException {
         
         // TODO: probably should check after we've loaded the model,
@@ -149,13 +149,15 @@ public abstract class AbstractRDF2GoUpdateHandler implements LoreStoreUpdateHand
         } finally {
             cf.release(ms);
         }
-        // TODO return response in same contentType as posted
-        OREResponse response = new OREResponse(obj.getModel());
+        LorestoreResponse response = new LorestoreResponse(getDefaultViewName());
+        response.setRDFModel(obj.getModel());
         response.setLocationHeader(occ.getBaseUri() + uid);
+        response.setOverrideContentType(contentType);
         response.setReturnStatus(201);
         return response;
     }
-
+    
+    
     /* (non-Javadoc)
      * @see net.metadata.openannotation.lorestore.servlet.rdf2go.OREUpdateHandler#delete(java.lang.String)
      */
@@ -184,7 +186,7 @@ public abstract class AbstractRDF2GoUpdateHandler implements LoreStoreUpdateHand
 
 
     @Override
-    public OREResponse put(String objId, InputStream inputRDF, String contentType)
+    public LorestoreResponse put(String objId, InputStream inputRDF, String contentType)
             throws RequestFailureException, IOException, LoreStoreException,
             InterruptedException {
         ModelFactory mf = RDF2Go.getModelFactory();
@@ -260,9 +262,15 @@ public abstract class AbstractRDF2GoUpdateHandler implements LoreStoreUpdateHand
         } finally {
             cf.release(container);
         }
-        return new OREResponse(newModel);
+        LorestoreResponse resp = new LorestoreResponse(getDefaultViewName());
+        resp.setRDFModel(newModel);
+        resp.setOverrideContentType(contentType);
+        return resp;
     }
-
+    protected String getDefaultViewName() {
+        // override in subclasses
+        return "";
+    }
     private String checkUserCanUpdate(Model oldModel) throws LoreStoreException {
         if (oldModel == null || oldModel.isEmpty()) {
             if (oldModel != null)

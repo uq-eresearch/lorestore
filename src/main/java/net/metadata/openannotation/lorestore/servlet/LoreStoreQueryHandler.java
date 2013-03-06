@@ -22,7 +22,7 @@ public interface LoreStoreQueryHandler {
 	 * 
 	 * @param oreId
 	 *            The ID of the requested object.
-	 * @return an OREResponse containing the single object
+	 * @return a ModelAndView containing the single object
 	 * @throws NotFoundException
 	 *             if the object doesn't exist here
 	 */

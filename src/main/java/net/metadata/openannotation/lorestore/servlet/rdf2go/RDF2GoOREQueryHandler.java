@@ -32,7 +32,9 @@ public class RDF2GoOREQueryHandler extends AbstractRDF2GoQueryHandler {
 	public RDF2GoOREQueryHandler(LoreStoreControllerConfig occ) {
 		super(occ);
 	}
-
+        protected String getDefaultViewName() {
+            return "ore";
+        }
 	protected void checkUserCanRead(Model m) {
 		CompoundObjectImpl compoundObject = new CompoundObjectImpl(m);
 		try {
@@ -215,5 +217,4 @@ public class RDF2GoOREQueryHandler extends AbstractRDF2GoQueryHandler {
 		}
 		return numGraphs;
 	}
-	
 }

@@ -14,6 +14,7 @@ import net.metadata.openannotation.lorestore.exceptions.InvalidQueryParametersEx
 import net.metadata.openannotation.lorestore.exceptions.NotFoundException;
 import net.metadata.openannotation.lorestore.model.rdf2go.OpenAnnotationImpl;
 import net.metadata.openannotation.lorestore.servlet.LoreStoreControllerConfig;
+import net.metadata.openannotation.lorestore.servlet.LorestoreResponse;
 import net.metadata.openannotation.lorestore.servlet.OREController;
 import net.metadata.openannotation.lorestore.triplestore.MemoryTripleStoreConnectorFactory;
 
@@ -71,7 +72,7 @@ public class RDF2GoOAQueryHandler extends AbstractRDF2GoQueryHandler {
             
             LOG.debug ("Annotations about to add model to model set " + result.size());
             result.addModel(model);
-            mav.addObject("annotations", result); 
+            mav.addObject(LorestoreResponse.MODELSET_KEY, result); 
         } catch (AccessDeniedException ex) {
             throw ex;
         } finally {
@@ -80,6 +81,9 @@ public class RDF2GoOAQueryHandler extends AbstractRDF2GoQueryHandler {
         }
         
         return mav;
+    }
+    protected String getDefaultViewName() {
+        return "oa";
     }
     protected void checkUserCanRead(Model m) {
         OpenAnnotationImpl annotation = new OpenAnnotationImpl(m);
@@ -118,7 +122,7 @@ public class RDF2GoOAQueryHandler extends AbstractRDF2GoQueryHandler {
                     } 
                     allAnnotations.add(model);
                 }
-                mav.addObject("annotations", allAnnotations);
+                mav.addObject("annotationlist", allAnnotations);
                 LOG.debug("atom query found " + allAnnotations.size());
         } catch (Exception e){
             LOG.debug("Problem with atom view " + e.getMessage());
@@ -273,7 +277,7 @@ public class RDF2GoOAQueryHandler extends AbstractRDF2GoQueryHandler {
                 
             }
             
-            mav.addObject("annotations", result);
+            mav.addObject(LorestoreResponse.MODELSET_KEY, result);
             LOG.debug ("found " + result.size() + " annotations");
             
         } catch (Exception ex) {

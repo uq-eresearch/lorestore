@@ -41,7 +41,7 @@ public class OAAtomFeedView extends AbstractAtomFeedView {
 		
 		
 		@SuppressWarnings("unchecked")
-		List<Model> allAnnotations = (List<Model>) model.get("annotations");
+		List<Model> allAnnotations = (List<Model>) model.get("annotationlist");
 		if (allAnnotations != null){
 			Iterator<Model> itr = allAnnotations.iterator();
 		    while(itr.hasNext()){

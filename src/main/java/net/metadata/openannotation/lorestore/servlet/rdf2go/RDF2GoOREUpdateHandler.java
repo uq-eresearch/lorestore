@@ -23,4 +23,7 @@ public class RDF2GoOREUpdateHandler extends AbstractRDF2GoUpdateHandler {
 	protected NamedGraphImpl makeNewObject (Model model){
 		return new CompoundObjectImpl(model);
 	}
+	protected String getDefaultViewName() {
+	        return "ore";
+	}
 }

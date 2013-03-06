@@ -5,6 +5,7 @@ import static org.junit.Assert.assertEquals;
 import java.io.ByteArrayInputStream;
 
 import net.metadata.openannotation.lorestore.servlet.CommonTestRecords;
+import net.metadata.openannotation.lorestore.servlet.LorestoreResponse;
 import net.metadata.openannotation.lorestore.triplestore.MemoryTripleStoreConnectorFactory;
 import net.metadata.openannotation.misc.TestUtilities;
 
@@ -39,7 +40,7 @@ public class OANamedGraphsViewTest {
 		model2.close();
 		view = new OANamedGraphsView();
 		mv = new ModelAndView("oa");
-		mv.addObject("annotations",ms);
+		mv.addObject(LorestoreResponse.MODELSET_KEY,ms);
 		request = new MockHttpServletRequest();
 		response = new MockHttpServletResponse();
 	}
@@ -54,7 +55,7 @@ public class OANamedGraphsViewTest {
 		request.addHeader("Accept", "application/trix");
 		view.render(mv.getModel(), request, response);
 		//System.out.print(response.getContentAsString());
-		assertEquals("application/xml", response.getContentType());
+		assertEquals("application/trix", response.getContentType());
 		
 	}
 	@Test
