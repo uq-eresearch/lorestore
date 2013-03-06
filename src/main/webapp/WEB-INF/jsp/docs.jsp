@@ -9,27 +9,28 @@
     <script type="text/javascript" src="${secure}/prettify/prettify.js"></script>
   </head>
   <body onload="prettyPrint()">  
-	<%@ include file="menu.jsp" %>
+    <%@ include file="menu.jsp" %>
     <div class="container">
       <div class="content">
-		<div class="page-header main-page-header">
+        <div class="page-header main-page-header">
           <h1>Developer Documentation</h1>
         </div>
-		<div class="row">
+        <div class="row">
         <div class="span8">
             <section id="crud">
-				
+                
                 <h2>CRUD API</h2>
-				<hr>
-				
-			<p>Resource Maps and Annotations share a REST-based API for Create, Read, Update and Delete (CRUD).</p>
-			
-			<h3 id="create">Create</h3>
-    		<p>Issue a POST request to <code>${secure}/ore/</code> to create a resource map.</p> 
-			<p>Issue a POST request to <code>${secure}/oa/</code> to create an annotation.</p> 
-			<p><span class="label label-info">Preconditions</span> Must be authenticated</p>
-			<p>Send the RDF for the Resource Map or Annotation as the content of the request (in RDF/XML, JSON-LD, TriG or TriX format).</p>
-			<p>As the URI for the object will be unknown until after the create request succeeds, use any dummy value for the Resource Map or Annotation identifier and it will be replaced by lorestore, e.g:</p>
+                <hr>
+                
+            <p>Resource Maps and Annotations share a REST-based API for Create, Read, Update and Delete (CRUD).</p>
+            
+            <h3 id="create">Create</h3>
+            <p>Issue a POST request to <code>${secure}/ore/</code> to create a resource map.</p> 
+            <p>Issue a POST request to <code>${secure}/oa/</code> to create an annotation.</p> 
+            <p><span class="label label-info">Preconditions</span> Must be authenticated</p>
+            <p>Send the RDF for the Resource Map or Annotation as the content of the request (in RDF/XML, JSON-LD, TriG or TriX format).</p>
+            <p>Set the <code>Content-Type</code> header to match the format of the content being sent.</p>
+            <p>As the URI for the object will be unknown until after the create request succeeds, use any dummy value for the Resource Map or Annotation identifier and it will be replaced by lorestore, e.g:</p>
             <pre class="pre prettyprint">
 &lt;rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" 
     xmlns:ore="http://www.openarchives.org/ore/terms/"&gt;
@@ -53,7 +54,7 @@
     &lt;/oa:Annotation&gt;
 &lt;/rdf:RDF&gt;
             </pre>
-            <p>Returns HTTP status code 201 and the RDF/XML of the new object on success</p>
+            <p>Returns HTTP status code 201 and the RDF (in the same format as posted) of the new object on success</p>
             <p>Example:</p>
             <pre class="pre prettyprint">
 var xhr = new XMLHttpRequest();
@@ -68,14 +69,14 @@ xhr.onreadystatechange= function(){
 xhr.setRequestHeader("Content-Type", "application/rdf+xml");
 xhr.send(annoRDF);
             </pre>
-			
-			
-			<h3 id="read">Read</h3>
-			<p>Issue a GET request to the URI that identifies the Annotation or Resource Map.<br/>
-				The result is returned in RDF/XML format.</p>
-			<p><span class="label label-info">Preconditions</span> Object must be public (only option for non-authenticated users) or visible to your account</p>
-			<p>Example:</p>
-			<pre class="pre prettyprint">
+            
+            
+            <h3 id="read">Read</h3>
+            <p>Issue a GET request to the URI that identifies the Annotation or Resource Map.<br/>
+                The result is returned in RDF/XML format by default. Set the <code>Accept</code> header for other formats (JSON-LD, TriX, TriG)</p>
+            <p><span class="label label-info">Preconditions</span> Object must be public (only option for non-authenticated users) or visible to your account</p>
+            <p>Example:</p>
+            <pre class="pre prettyprint">
 var xhr = new XMLHttpRequest();
 xhr.open("GET", "${secure}/ore/123456789", true);  
 xhr.onreadystatechange= function(){
@@ -85,25 +86,25 @@ xhr.onreadystatechange= function(){
 };
 xhr.setRequestHeader('Accept','application/rdf+xml')
 xhr.send(null);
-			</pre>
-			
-			<h3 id="update">Update</h3>
-			
-			<p>Issue a PUT request to the URI that identifies the Annotation or Resource Map. 
-				Send the updated RDF for the object as the content of the request.
-			</p>
-			<p><span class="label label-info">Preconditions</span> Must be authenticated using the account that owns the object or as an administrator</p>
-			
-			<p>Any owner or modified date properties provided in the update will be ignored as these are managed by lorestore.</p>
+            </pre>
+            
+            <h3 id="update">Update</h3>
+            
+            <p>Issue a PUT request to the URI that identifies the Annotation or Resource Map. 
+                Send the updated RDF for the object as the content of the request.
+            </p>
+            <p><span class="label label-info">Preconditions</span> Must be authenticated using the account that owns the object or as an administrator</p>
+            
+            <p>Any owner or modified date properties provided in the update will be ignored as these are managed by lorestore.</p>
             <p>Update requests will fail if the object has been marked as locked, except for users with administrator privileges.</p>
             <p>Returns HTTP status code 200 on success.</p>
-			
-			<h3 id="delete">Delete</h3>
-			<p>Issue a DELETE request to the resource map or annotation URI</p>
-			<p><span class="label label-info">Preconditions</span> Must be authenticated using the account that owns the object or as an administrator</p>
-			<p>Returns HTTP status code 204 on success.</p>
-			<p>Example:</p>
-			<pre class="pre prettyprint">
+            
+            <h3 id="delete">Delete</h3>
+            <p>Issue a DELETE request to the resource map or annotation URI</p>
+            <p><span class="label label-info">Preconditions</span> Must be authenticated using the account that owns the object or as an administrator</p>
+            <p>Returns HTTP status code 204 on success.</p>
+            <p>Example:</p>
+            <pre class="pre prettyprint">
 var xhr = new XMLHttpRequest();
 xhr.open("DELETE", "${secure}/oa/123456789");  
 xhr.onreadystatechange= function(){
@@ -114,9 +115,9 @@ xhr.onreadystatechange= function(){
     }
 };
 xhr.send(null);
-			</pre>
+            </pre>
             
-			<h3 id="auth">Sign in</h3>
+            <h3 id="auth">Sign in</h3>
             <p>Some API operations require authentication.</p>
             <p>lorestore uses Emmet to manage authentication, which supports a number of standard authentication schemes.
                 Refer to the <a href="http://metadata.net/sites/emmet-0.6-SNAPSHOT/">Emmet documentation</a> for further details of the schemes supported.
@@ -143,24 +144,24 @@ Ext.Ajax.request({
             </pre>
             <p>To fetch the authentication status and details for the current request, use <code>emmet.svc</code> with the <code>fetchAuthentication</code> action. Refer to the <a href="http://metadata.net/sites/emmet-0.6-SNAPSHOT/webapis.html#Action_-_fetchAuthentication">Emmet API documentation</a> for further details.</p>
             
-			</section>
+            </section>
 <section id="queries">
-			<h2>Query API</h2>
-			<hr>
-			<p>Results for several common queries for resource maps and annotations are available via GET. lorestore also provides a <a href="#sparql">SPARQL endpoint</a> for custom queries.</p>
-			<h3 id="ore">Resource Maps</h3>
-			<p>Issue a GET request to <code>${secure}/ore</code> providing <code>refersTo</code>, <code>matchval</code> and <code>matchpred</code> parameters.
-				Parameter values should be URL encoded. The parameters can be used in combination. Results are returned in SPARQL XML format. You do not need to sign in to query public resource maps. 
-				However, if you have signed in, private resource maps that you have permission to view will be included in the results.</p> 
-			
-			
-			<h4>refersTo</h4>
-			<p>Find Resource Maps that make reference to a given URI (e.g. it identifies the resource map or is aggregated within)</p>
-			
-			<p>Example: find resource maps that refer to http://example.org/ :</p>
-			<p><code>GET ${secure}/ore/?refersTo=http%3A%2F%2Fexample.org%2F</code></p>
-			
-			<p>Example of refersTo query result:</p>
+            <h2>Query API</h2>
+            <hr>
+            <p>Results for several common queries for resource maps and annotations are available via GET. lorestore also provides a <a href="#sparql">SPARQL endpoint</a> for custom queries.</p>
+            <h3 id="ore">Resource Maps</h3>
+            <p>Issue a GET request to <code>${secure}/ore</code> providing <code>refersTo</code>, <code>matchval</code> and <code>matchpred</code> parameters.
+                Parameter values should be URL encoded. The parameters can be used in combination. Results are returned in SPARQL XML format. You do not need to sign in to query public resource maps. 
+                However, if you have signed in, private resource maps that you have permission to view will be included in the results.</p> 
+            
+            
+            <h4>refersTo</h4>
+            <p>Find Resource Maps that make reference to a given URI (e.g. it identifies the resource map or is aggregated within)</p>
+            
+            <p>Example: find resource maps that refer to http://example.org/ :</p>
+            <p><code>GET ${secure}/ore/?refersTo=http%3A%2F%2Fexample.org%2F</code></p>
+            
+            <p>Example of refersTo query result:</p>
             <pre class="pre prettyprint">
 &lt;?xml version='1.0' encoding='UTF-8'?&gt;
 &lt;sparql xmlns='http://www.w3.org/2005/sparql-results#'&gt;
@@ -191,15 +192,15 @@ Ext.Ajax.request({
     &lt;/results&gt;
 &lt;/sparql&gt;
             </pre>
-			
-			<h4>matchval</h4>
-			<p>Find resource maps with predicate values containing the search term. When used without any other parameters, functions like a keyword search.</p>
-			<p>Example: match resource maps where any value contains 'Lawson'</p>
-			<p>
+            
+            <h4>matchval</h4>
+            <p>Find resource maps with predicate values containing the search term. When used without any other parameters, functions like a keyword search.</p>
+            <p>Example: match resource maps where any value contains 'Lawson'</p>
+            <p>
             <code>GET ${secure}/ore/?matchval=Lawson</code>
             </p>
-			<p>Example of matchval query result:</p>
-			<pre class="pre prettyprint">
+            <p>Example of matchval query result:</p>
+            <pre class="pre prettyprint">
 &lt;?xml version='1.0' encoding='UTF-8'?&gt;
 &lt;sparql xmlns='http://www.w3.org/2005/sparql-results#'&gt;
     &lt;head&gt;
@@ -233,23 +234,23 @@ Ext.Ajax.request({
         ...
     &lt;/results&gt;
 &lt;/sparql&gt;
-			</pre>
-			<h4>matchpred</h4>
-			<p>Returns resource maps containing <code>matchpred</code> (anywhere within the named graph, e.g. as a property of the map or aggregation or of one of the aggregated resources). When used with <code>matchval</code>, where the value of the specified predicate contains <code>matchval</code>.</p>
+            </pre>
+            <h4>matchpred</h4>
+            <p>Returns resource maps containing <code>matchpred</code> (anywhere within the named graph, e.g. as a property of the map or aggregation or of one of the aggregated resources). When used with <code>matchval</code>, where the value of the specified predicate contains <code>matchval</code>.</p>
             <p>Example: find resource maps with any subject</p>
             <p><code>GET ${secure}/ore/?&matchpred=http%3A%2F%2Fpurl.org%2Fdc%2Felements%2F1.1%2Fsubject</code></p>
-			<p>Example combining matchpred and matchval: Find all resource maps by a particular creator</p>
-			<p>
+            <p>Example combining matchpred and matchval: Find all resource maps by a particular creator</p>
+            <p>
             <code>GET ${secure}/ore/?matchval=Jane+Doe&matchpred=http%3A%2F%2Fpurl.org%2Fdc%2Felements%2F1.1%2Fcreator</code>
             </p>
             
-			<h4>exploreFrom</h4>
-			<p>Get related resources and resource maps (used by LORE explore view) for a given URI. 
-				For convenience, if the exploreFrom URI is a resource map, results are returned for both the resource map and its aggregation.</p>
-			<p>Example:</p>
-			<p><code>GET ${secure}/ore/?exploreFrom=${secure}/ore/123456789</code></p>
-			<p>Example exploreFrom result:</p>
-			<pre class="pre prettyprint">
+            <h4>exploreFrom</h4>
+            <p>Get related resources and resource maps (used by LORE explore view) for a given URI. 
+                For convenience, if the exploreFrom URI is a resource map, results are returned for both the resource map and its aggregation.</p>
+            <p>Example:</p>
+            <p><code>GET ${secure}/ore/?exploreFrom=${secure}/ore/123456789</code></p>
+            <p>Example exploreFrom result:</p>
+            <pre class="pre prettyprint">
 &lt;?xml version='1.0' encoding='UTF-8'?&gt;
 &lt;sparql xmlns='http://www.w3.org/2005/sparql-results#'&gt;
     &lt;head&gt;
@@ -278,37 +279,37 @@ Ext.Ajax.request({
     &lt;/results&gt;
 &lt;/sparql&gt;
 
-			</pre>
-			
-			<h3 id="oac">Annotations</h3>
-			<h4>annotates</h4>
-			<p>Fetch annotations that annotate a given web resource (also fetches replies if the queried resource is itself an annotation). Results are returned in TriX, TriG, RDF/XML or JSON-LD format, depending on the Accept header. 
-                Use TriX or TriG format if scoping of arbitrary RDF data stored with annotations is important, as these formats have Named Graph support. For RDF/XML the results are flattened into a single graph.</p>
-			<p><code>GET ${secure}/oa/?annotates=http%3A%2F%2Fwww.example.org</code></p>
-			
-			</section>
-			<section id="sparql">
-			<h2>SPARQL endpoint</h2>
-			<hr>
-			<p>The SPARQL endpoint allows authenticated users with administrator privileges to issue custom queries over the underlying RDF triplestore.</p> 
-			<p>Issue a GET request to <code>${secure}/oreadmin/sparql</code>, providing the escaped SPARQL query as the value of the <code>sparql</code> parameter. All matching results (regardless of privacy flags) are returned in SPARQL XML format.</p>
-			<p>Example query returns the identifier for all annotations:</p>
-			<p><code>${secure}/oreadmin/sparql?sparql=SELECT+*+WHERE+%7B%3Fa+a+%3Chttp%3A%2F%2Fwww.openannotation.org%2Fns%2FAnnotation%3E%7D</code></p>
-			<p>Administrators can also use the <a href="${secure}/oreadmin/sparqlPage.html">SPARQL Query UI</a> to develop queries.</p>
+            </pre>
             
-			</section>
-			<section id="user">
-				<h2>User Management API</h2>
+            <h3 id="oac">Annotations</h3>
+            <h4>annotates</h4>
+            <p>Fetch annotations that annotate a given web resource (also fetches replies if the queried resource is itself an annotation). Results are returned in TriX, TriG, RDF/XML or JSON-LD format, depending on the Accept header. 
+                Use TriX or TriG format if scoping of arbitrary RDF data stored with annotations is important, as these formats have Named Graph support. For RDF/XML the results are flattened into a single graph.</p>
+            <p><code>GET ${secure}/oa/?annotates=http%3A%2F%2Fwww.example.org</code></p>
+            
+            </section>
+            <section id="sparql">
+            <h2>SPARQL endpoint</h2>
+            <hr>
+            <p>The SPARQL endpoint allows authenticated users with administrator privileges to issue custom queries over the underlying RDF triplestore.</p> 
+            <p>Issue a GET request to <code>${secure}/oreadmin/sparql</code>, providing the escaped SPARQL query as the value of the <code>sparql</code> parameter. All matching results (regardless of privacy flags) are returned in SPARQL XML format.</p>
+            <p>Example query returns the identifier for all annotations:</p>
+            <p><code>${secure}/oreadmin/sparql?sparql=SELECT+*+WHERE+%7B%3Fa+a+%3Chttp%3A%2F%2Fwww.openannotation.org%2Fns%2FAnnotation%3E%7D</code></p>
+            <p>Administrators can also use the <a href="${secure}/oreadmin/sparqlPage.html">SPARQL Query UI</a> to develop queries.</p>
+            
+            </section>
+            <section id="user">
+                <h2>User Management API</h2>
                 <hr>
-				<p>Refer to the <a href="http://metadata.net/sites/emmet-0.6-SNAPSHOT/webapis.html">Emmet web API documentation</a> for details of the user management API.</p>
+                <p>Refer to the <a href="http://metadata.net/sites/emmet-0.6-SNAPSHOT/webapis.html">Emmet web API documentation</a> for details of the user management API.</p>
           
-			</section>
+            </section>
             <section id="content">
                 <h2>Content formats</h2>
                 <hr>
                 <p>Resource Maps must conform to the <a href="http://www.openarchives.org/ore/1.0/toc.html">OAI-ORE</a> specification.</p>
                 <p>Annotations must conform to the <a href="http://www.openannotation.org/spec/beta/">OAC data model</a></p>
-                <p>Annotations and Resource Maps are stored as Named Graphs. Arbitrary RDF data can be included in the RDF/XML submitted to lorestore via a create or update request, and it will be stored in the same graph.
+                <p>Annotations and Resource Maps are stored as Named Graphs. Arbitrary RDF data can be included in the RDF submitted to lorestore via a create or update request, and it will be stored in the same graph.
                 <h3>Properties</h3>
                 <p>The following properties are used by lorestore:</p>
                 <dl>
@@ -323,29 +324,29 @@ Ext.Ajax.request({
             </section>
           </div>
           <div class="span2 sidebarmenu">
-			<h2>Index</h2>
-			<ul>
-				<li><a href="#crud">CRUD API</a>
-					<ul>
-						
-						<li><a href="#create">Create</a></li>
-						<li><a href="#read">Read</a></li>
-						<li><a href="#update">Update</a></li>
-						<li><a href="#delete">Delete</a></li>
-						<li><a href="#auth">Sign In</a></li>
-					</ul>
-				</li>
-				<li><a href="#queries">Query API</a>
-					<ul>
-						<li><a href="#ore">Resource Maps</a></li>
-						<li><a href="#oac">Annotations</a></li>
-					</ul>
-				</li>
-				<li><a href="#sparql">SPARQL endpoint</a></li>
-				<li><a href="#user">User Management</a></li>
+            <h2>Index</h2>
+            <ul>
+                <li><a href="#crud">CRUD API</a>
+                    <ul>
+                        
+                        <li><a href="#create">Create</a></li>
+                        <li><a href="#read">Read</a></li>
+                        <li><a href="#update">Update</a></li>
+                        <li><a href="#delete">Delete</a></li>
+                        <li><a href="#auth">Sign In</a></li>
+                    </ul>
+                </li>
+                <li><a href="#queries">Query API</a>
+                    <ul>
+                        <li><a href="#ore">Resource Maps</a></li>
+                        <li><a href="#oac">Annotations</a></li>
+                    </ul>
+                </li>
+                <li><a href="#sparql">SPARQL endpoint</a></li>
+                <li><a href="#user">User Management</a></li>
                 <li><a href="#content">Content formats</a></li>
-			</ul>
-		  </div>
+            </ul>
+          </div>
       </div>
       </div>
       <%@ include file="footer.jsp" %>
