@@ -156,8 +156,8 @@ public class RDF2GoOAQueryHandler extends AbstractRDF2GoQueryHandler {
                 + " UNION {?anno <http://www.openannotation.org/ns/hasTarget> ?t . ?t <http://www.openannotation.org/ns/constrains> <" + escapedURL + ">} "
                 + " UNION {?anno <http://www.openannotation.org/ns/hasTarget> ?t . ?t <http://www.openannotation.org/ns/constrains> <" + altURL + ">} "
                 // constrained target OA
-                + " UNION {?anno <http://www.w3.org/ns/oa#hasTarget> ?t . ?t <http://www.w3.org/ns/oa#constrains> <" + escapedURL + ">} "
-                + " UNION {?anno <http://www.w3.org/ns/oa#hasTarget> ?t . ?t <http://www.w3.org/ns/oa#constrains> <" + altURL + ">} "
+                + " UNION {?anno <http://www.w3.org/ns/oa#hasTarget> ?t . ?t <http://www.w3.org/ns/oa#hasSource> <" + escapedURL + ">} "
+                + " UNION {?anno <http://www.w3.org/ns/oa#hasTarget> ?t . ?t <http://www.w3.org/ns/oa#hasSource> <" + altURL + ">} "
                 + "}."
                 + " OPTIONAL {?g <http://purl.org/dc/elements/1.1/creator> ?a}."
                 + " OPTIONAL {?g <http://purl.org/dc/terms/modified> ?m}."

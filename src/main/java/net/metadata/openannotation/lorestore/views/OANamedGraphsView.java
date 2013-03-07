@@ -37,7 +37,6 @@ public class OANamedGraphsView extends BaseView {
         protected void renderMergedOutputModel(Map<String, Object> map, 
                 HttpServletRequest request, HttpServletResponse response) 
         throws IOException {
-             logger.info("Annotations render");
              ModelSet annotations = (ModelSet) map.get(MODELSET_KEY);
              Model annotation = (Model)map.get(MODEL_KEY);
              if (annotations == null && annotation == null){
@@ -83,8 +82,8 @@ public class OANamedGraphsView extends BaseView {
                             "Request response only available in RDF+XML, JSON-LD, TriG or TriX formats");
                 }
                 if (annotations != null) {
-                    // TriX or Trig are preferred format as they have named graph support,
-                    // however RDF/XML is the default
+                    logger.info("setting content type to  " + acceptableContentType);
+                    response.setContentType(acceptableContentType);
                     if (acceptableContentType.equals(Syntax.RdfXml.getMimeType()) || acceptableContentType.equals(MimeTypes.XML_MIMETYPE)) {    
                         stylesheetURI = (stylesheetParam == null || stylesheetParam.length() == 0) ?
                                 "/lorestore/stylesheets/OA.xsl" : stylesheetParam;
@@ -99,7 +98,7 @@ public class OANamedGraphsView extends BaseView {
                     } else if (acceptableContentType.equals("application/json")){
                         os = outputJSON(response, annotations);
                     }
-                    response.setContentType(acceptableContentType);
+                    
                 } 
             } finally {
                 if (os != null) {
