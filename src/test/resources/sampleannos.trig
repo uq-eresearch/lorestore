@@ -1,0 +1,130 @@
+@prefix dc: <http://purl.org/dc/elements/1.1/> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix dcterms : <http://purl.org/dc/terms/> .
+@prefix oa: <http://www.w3.org/ns/oa#> .
+@prefix cnt: <http://www.w3.org/2011/content#> .
+@prefix ex: <http://www.example.org/> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix dctypes: <http://purl.org/dc/dcmitype/> .
+
+<http://localhost:8080/lorestore/oa/sopabasic> {
+    <http://localhost:8080/lorestore/oa/sopabasic> a oa:Annotation ;
+    oa:hasBody <http://www.youtube.com/watch?v=uPh81LIe7B8> ;
+    oa:hasTarget <http://en.wikipedia.org/> .
+}
+<http://localhost:8080/lorestore/oa/webpageinwebpage> {
+    <http://localhost:8080/lorestore/oa/webpageinwebpage> a oa:Annotation ;
+       oa:hasTarget <http://www.foaffy.org/gallery2/main.php?g2_itemId=11496> ;
+       oa:hasBody <http://en.wikipedia.org/wiki/Harry_Perry_%28musician%29> ;
+       oa:annotatedBy <http://www.example.org/user/2> ;
+       oa:annotatedAt "2012-02-12T15:02:14Z" .
+     
+    <http://www.foaffy.org/gallery2/main.php?g2_itemId=11496>
+       dc:format "text/html" .
+     
+    <http://en.wikipedia.org/wiki/Harry_Perry_%28musician%29>
+       dc:format "text/html" .
+     
+    <http://www.example.org/user/2> a foaf:Person ;
+       foaf:mbox "john.doe@example.org" ;
+       foaf:name "John Doe" .
+
+}
+
+<http://localhost:8080/lorestore/oa/sopamultiple> {
+  <http://localhost:8080/lorestore/oa/sopamultiple> a oa:Annotation ;
+    oa:hasBody <http://www.youtube.com/watch?v=uPh81LIe7B8> ;
+    oa:hasTarget <http://en.wikipedia.org/> ;
+    oa:hasTarget <http://en.wikipedia.org/wiki/Free_love> .
+}
+
+<http://localhost:8080/lorestore/oa/bookmarkinline>{
+    <http://localhost:8080/lorestore/oa/bookmarkinline> a oa:Annotation ;
+       oa:hasTarget <http://www.w3.org/community/openannotation/> ;
+       oa:hasBody <urn:uuid:b45922b0-8529-11e2-9e96-0800200c9a66> ;
+       oa:motivatedBy oa:bookmarking ;
+       oa:annotatedBy <http://www.example.org/user/2> ;
+       oa:annotatedAt "2012-02-12T15:02:14Z" ;
+       oa:serializedBy ex:software1 ;
+       oa:serializedAt "2012-02-12T15:02:14Z" .
+     
+    <http://www.w3.org/community/openannotation/>
+       dc:format "text/html" .
+     
+    <urn:uuid:b45922b0-8529-11e2-9e96-0800200c9a66> a cnt:ContentAsText ;
+       cnt:chars "Official Page of the Open Annotation Community Group" ;
+       dc:format "text/plain" ;
+       cnt:characterEncoding "utf-8" .
+     
+    ex:Software1 a foaf:Agent, prov:SoftwareAgent ;
+       foaf:name "ExAnnotator" .
+}
+
+
+<http://localhost:8080/lorestore/oa/webpagetext>{
+    <http://localhost:8080/lorestore/oa/webpagetext> a oa:Annotation ;
+       oa:hasTarget <http://www.w3.org/community/openannotation/> ;
+       oa:hasBody <urn:uuid:6ee44330-852a-11e2-9e96-0800200c9a66> ;
+       oa:annotatedBy <http://www.example.org/user/2> ;
+       oa:annotatedAt "2012-02-12T15:02:14Z" ;
+       oa:serializedBy ex:Software1 ;
+       oa:serializedAt "2012-02-12T15:02:14Z" .
+     
+    <http://www.w3.org/community/openannotation/>
+       dc:format "text/html" .
+     
+    <urn:uuid:6ee44330-852a-11e2-9e96-0800200c9a66> a cnt:ContentAsText ;
+      cnt:chars "This is the result of the merging process of Annotation Ontology (AO) and Open Annotation Collaboration (OAC)" ;
+      cnt:characterEncoding "utf-8" .
+     
+    ex:Software1 
+       foaf:name "ExAnnotator" .
+}
+
+<http://localhost:8080/lorestore/oa/prov>{
+    <http://localhost:8080/lorestore/oa/prov> a oa:Annotation ;
+        oa:hasBody <http://www.youtube.com/watch?v=uPh81LIe7B8> ;
+        oa:hasTarget <http://en.wikipedia.org/> ;
+        oa:annotatedBy <http://www.example.org/user/2> ;
+        oa:annotatedAt "2012-01-18 12:00:00Z" ;
+        oa:serializedBy ex:PyAnno ;
+        oa:serializedAt "2012-05-10 14:24:30Z" .
+}
+
+<http://localhost:8080/lorestore/oa/freetag>{
+    <http://localhost:8080/lorestore/oa/freetag> a oa:Annotation ;
+       oa:hasTarget <http://alturl.com/wxidq> ;
+       oa:hasBody <urn:uuid:fd3c6da0-852b-11e2-9e96-0800200c9a66> ;
+       oa:motivatedBy oa:tagging ;
+       oa:annotatedBy <http://www.example.org/user/2> ;
+       oa:annotatedAt "2012-02-12T15:02:14Z" ;
+       oa:serializedBy ex:Software1 ;
+       oa:serializedAt "2012-02-12T15:02:14Z" .
+     
+    <http://alturl.com/wxidq> a dctypes:Image ;
+       dc:format "image/jpeg" .
+     
+    <urn:uuid:fd3c6da0-852b-11e2-9e96-0800200c9a66> a cnt:ContentAsText, oa:Tag ;
+       cnt:chars "Amyloid Beta Protein" ;
+       dc:format "text/plain" ;
+       cnt:characterEncoding "utf-8" .
+}
+<http://localhost:8080/lorestore/oa/equiv> {
+   <urn:uuid:2cefd097-e399-4808-aa90-a64d3151a150> a oa:Annotation ;
+        oa:hasBody <http://www.youtube.com/watch?v=uPh81LIe7B8> ;
+        oa:hasTarget <http://en.wikipedia.org/> ;
+        oa:serializedAt "2012-03-21 16:30:00Z" .
+
+  <http://localhost:8080/lorestore/oa/equiv> a oa:Annotation; 
+        oa:serializedAt "2012-04-07 12:00:00Z" ;
+        oa:equivalent <urn:uuid:2cefd097-e399-4808-aa90-a64d3151a150> .
+}
+
+<http://localhost:8080/lorestore/oa/bodyresource>{
+  <http://localhost:8080/lorestore/oa/bodyresource> a oa:Annotation ;
+    oa:hasBody <http://www.youtube.com/watch?v=uPh81LIe7B8> ;
+    oa:hasTarget <http://en.wikipedia.org/> .
+
+  <http://www.youtube.com/watch?v=uPh81LIe7B8> a dctypes:MovingImage ;
+    dc:format "application/flv" .
+}
