@@ -197,8 +197,8 @@
         <div style="padding-bottom:1em">
             <span class="label">
                 <xsl:choose>
-                    <xsl:when test="//rdf:Description[@rdf:about = $resourceUri]/rdf:type[@rdf:resource='http://www.w3.org/ns/oa#ConstrainedTarget'or @rdf:resource='http://www.w3.org/ns/pa#ConstrainedBody' or @rdf:resource='http://www.openannotation.org/ns/ConstrainedTarget'or @rdf:resource='http://www.openannotation.org/ns/ConstrainedBody']">
-                    <xsl:text>Constrained </xsl:text>
+                    <xsl:when test="//rdf:Description[@rdf:about = $resourceUri]/oa:hasSource | //rdf:Description[@rdf:about=$resourceUri]/oac:constrains">
+                    <xsl:text>Specific </xsl:text>
                     </xsl:when>
                     <xsl:when test="$bodyOrTarget='Body' and starts-with(//rdf:Description[@rdf:about=$resourceUri]/rdf:type/@rdf:resource,'http://www.w3.org/2011/content#')">
                     <xsl:text>Inline </xsl:text>
@@ -221,7 +221,7 @@
                     <!-- Embed Inline Body-->
                     <xsl:apply-templates select="//rdf:Description[@rdf:about=$resourceUri and (cnt:rest or cnt:chars)]"/>
                     <!-- Display Constrained Body or Target -->
-                    <xsl:apply-templates select="//rdf:Description[@rdf:about=$resourceUri and (rdf:type/@rdf:resource='http://www.w3.org/ns/oa#ConstrainedTarget' or rdf:type/@rdf:resource='http://www.w3.org/ns/oa#ConstrainedBody' or rdf:type/@rdf:resource='http://www.openannotation.org/ns/ConstrainedTarget' or rdf:type/@rdf:resource='http://www.openannotation.org/ns/ConstrainedBody')]"/>
+                    <xsl:apply-templates select="//rdf:Description[@rdf:about=$resourceUri and (oa:hasSource or oac:constrains)]"/>
                 </xsl:otherwise>
             </xsl:choose>
             <!--  dcterms:isPartOf for body or target -->
@@ -239,19 +239,19 @@
     </xsl:template>
     
     <!--  constrained body or target -->
-    <xsl:template match="rdf:Description[rdf:type/@rdf:resource='http://www.w3.org/ns/oa#ConstrainedTarget' or rdf:type/@rdf:resource='http://www.w3.org/ns/oa#ConstrainedBody' or rdf:type/@rdf:resource='http://www.openannotation.org/ns/ConstrainedTarget' or rdf:type/@rdf:resource='http://www.openannotation.org/ns/ConstrainedBody']">
+    <xsl:template match="rdf:Description[oa:hasSource or oac:constrains]">
         <p style="margin-left:2em">
-            <strong>constrains:&#160;</strong>
+            <strong>hasSource:&#160;</strong>
             <xsl:if test="oac:constrains">
             <a href="{oac:constrains/@rdf:resource}"><xsl:value-of select="oac:constrains/@rdf:resource"/></a>
             </xsl:if>
-            <xsl:if test="oa:constrains">
-                <a href="{oa:constrains/@rdf:resource}"><xsl:value-of select="oa:constrains/@rdf:resource"/></a>
+            <xsl:if test="oa:hasSource">
+                <a href="{oa:hasSource/@rdf:resource}"><xsl:value-of select="oa:hasSource/@rdf:resource"/></a>
             </xsl:if>
         </p>
-        <xsl:variable name="constraint" select="oac:constrainedBy/@rdf:resource | oa:constrainedBy/@rdf:resource"/>
+        <xsl:variable name="constraint" select="oac:constrainedBy/@rdf:resource | oa:hasSelector/@rdf:resource"/>
         <p style="margin-left:2em">
-            <strong>constrainedBy:&#160;</strong>
+            <strong>hasSelector:&#160;</strong>
             
             <xsl:if test="starts-with($constraint,'http://')">&#160;<a href="{$constraint}"><xsl:value-of select="$constraint"/></a></xsl:if>
             (<xsl:apply-templates select="//rdf:Description[@rdf:about=$constraint]/rdf:type" mode="constraint"/>)
@@ -268,7 +268,7 @@
             <xsl:when test="starts-with(.,'http://www.w3.org/2011/content#')">
             Inline
             </xsl:when>
-            <xsl:otherwise><xsl:value-of select="."/></xsl:otherwise>
+            <xsl:otherwise><xsl:text> </xsl:text><xsl:value-of select="."/><xsl:text> </xsl:text></xsl:otherwise>
         </xsl:choose>
         </xsl:for-each>
     </xsl:template>
