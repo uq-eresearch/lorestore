@@ -10,7 +10,7 @@ import net.metadata.openannotation.lorestore.exceptions.LoreStoreException;
 import net.metadata.openannotation.lorestore.exceptions.NotFoundException;
 import net.metadata.openannotation.lorestore.servlet.rdf2go.RDF2GoOAQueryHandler;
 import net.metadata.openannotation.lorestore.servlet.rdf2go.RDF2GoOAUpdateHandler;
-
+import net.metadata.openannotation.lorestore.servlet.rdf2go.OAValidationHandler;
 import org.apache.log4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,11 +34,12 @@ public class AnnotationController {
     private final LoreStoreControllerConfig occ;
     private LoreStoreQueryHandler qh;
     private LoreStoreUpdateHandler uh;
-
+    private LoreStoreValidationHandler vh;
     public AnnotationController(LoreStoreControllerConfig occ) {
         this.occ = occ;
         this.qh = new RDF2GoOAQueryHandler(occ);
         this.uh = new RDF2GoOAUpdateHandler(occ);
+        this.vh = new OAValidationHandler(occ);
     }
 
     @RequestMapping(value = "/", method = RequestMethod.POST)
@@ -122,7 +123,13 @@ public class AnnotationController {
         response.sendError(HttpStatus.FORBIDDEN.value(), ex.getMessage());
     }
     
-    
+    @RequestMapping(value="/validate", method = RequestMethod.POST)
+    public ModelAndView validate(InputStream inputRDF, @RequestHeader("Content-Type") String contentType)
+                    throws RequestFailureException, IOException, LoreStoreException,
+                    InterruptedException {
+
+            return vh.validate(inputRDF, contentType);
+    }
     
     public LoreStoreControllerConfig getControllerConfig() {
         return occ;

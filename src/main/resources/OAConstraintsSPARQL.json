@@ -1,0 +1,366 @@
+[{
+    "section": "2 Open Annotation Core",
+    "constraints": [
+      {
+        "ref": "2.1 Body and Target Resources",
+        "description": "The Body and Target SHOULD be identified by HTTP URIs unless they are embedded within the Annotation.",
+        "severity": "warn",
+        "query": ""
+      },
+      {
+        "ref": "2.1 Body and Target Resources",
+        "description": "The oa:Annotation class MUST be associated with each Annotation.",
+        "severity": "error",
+        "query": "PREFIX oa: <http://www.w3.org/ns/oa#> SELECT ?annotation WHERE {?annotation oa:hasTarget ?t . FILTER(NOT EXISTS { ?annotation a oa:Annotation })}"
+      },
+      {
+        "ref": "2.1 Body and Target Resources",
+        "description": "Additional subclassing is ONLY RECOMMENDED in order to provide additional, community-specific constraints on the model.",
+        "severity": "warn",
+        "query": ""
+      },
+      {
+        "ref": "2.1 Body and Target Resources",
+        "description": "There SHOULD be 1 or more oa:hasBody relationships associated with an Annotation but there MAY be 0.",
+        "severity": "warn",
+        "query": "PREFIX oa: <http://www.w3.org/ns/oa#> SELECT ?annotation WHERE { ?annotation oa:hasTarget ?t . FILTER(NOT EXISTS { ?annotation a oa:hasBody })}"
+      },
+      {
+          "ref": "2.1 Body and Target Resources",
+          "description": "There MUST be 1 or more oa:hasTarget relationships associated with an Annotation.",
+          "severity": "error",
+          "query": "PREFIX oa: <http://www.w3.org/ns/oa#> SELECT ?annotation WHERE { ?annotation a oa:Annotation . FILTER(NOT EXISTS { ?annotation oa:hasTarget ?t }) }"
+      },
+      {
+          "ref": "2.1.1 Typing of Body and Target",
+          "description": "There SHOULD be 1 or more content-based classes associated with the Body and Target resources of an Annotation.",
+          "severity": "warn",
+          "query": ""
+      },
+      {
+          "ref": "2.1.1 Typing of Body and Target",
+          "description": "The Dublin Core Types vocabulary is RECOMMENDED.",
+          "severity": "warn",
+          "query": ""
+      },
+      {
+          "ref": "2.1.1 Typing of Body and Target",
+          "description": "The advice of the DCMI to encode images of text as dctypes:Text is NOT RECOMMENDED.",
+          "severity": "warn",
+          "query": ""
+      },
+      {
+          "ref": "2.1.2 Embedded Textual Bodies",
+          "description": "If it is important that the body have an identity, then it is RECOMMENDED that the cnt:ContentAsText resource be identified with a UUID URI, but other URIs MAY be used. If this is not considered to be important, for example for short personal notes, then an RDF blank node SHOULD be used instead.",
+          "severity": "warn",
+          "query": ""
+      },
+      {
+          "ref": "2.1.2 Embedded Textual Bodies",
+          "description": "The cnt:ContentAsText class SHOULD be assigned to the embedded body resource, however it can be inferred from the presence of the mandatory cnt:chars property.",
+          "severity": "warn",
+          "query": ""
+      },
+      {
+          "ref": "2.1.2 Embedded Textual Bodies",
+          "description": "There MAY be 0 or more dc:language properties for an embedded body. Each language SHOULD be expressed as a language tag, as defined by RFC 3066.",
+          "severity": "warn",
+          "query": ""
+      },
+      {
+          "ref": "2.1.3 Tags and Semantic Tags",
+          "description": "The type oa:Tag MUST be associated with the tagging resource.",
+          "severity": "error",
+          "query": ""
+      },
+      {
+          "ref": "2.1.3 Tags and Semantic Tags",
+          "description": "Annotations that tag resources, either with text or semantic tags, SHOULD also have the oa:tagging motivation.",
+          "severity": "warn",
+          "query": ""
+      },
+      
+      {
+          "ref": "2.2 Annotation Provenance",
+          "description": "There SHOULD be exactly 1 oa:annotatedBy relationship per Annotation but MAY be 0 or more than 1.",
+          "severity": "warn",
+          "query": ""
+      },
+      {
+          "ref": "2.2 Annotation Provenance",
+          "description": "There SHOULD be exactly 1 oa:annotatedAt property per Annotation.",
+          "severity": "warn",
+          "query": ""
+      },
+      {
+          "ref": "2.2 Annotation Provenance",
+          "description": "There MUST NOT be more than 1 oa:annotatedAt property per Annotation.",
+          "severity": "error",
+          "query": ""
+      },
+      {
+          "ref": "2.2 Annotation Provenance",
+          "description": "The datetime for oa:annotatedAt and oa:serializedAt MUST be expressed in the xsd:dateTime (ISO 8601) format.",
+          "severity": "error",
+          "query": ""
+      },
+      {
+          "ref": "2.2 Annotation Provenance",
+          "description": "The datetime for oa:annotatedAt and oa:serializedAt SHOULD have a timezone specified.",
+          "severity": "warn",
+          "query": ""
+      },
+      {
+          "ref": "2.2 Annotation Provenance",
+          "description": "There MAY be exactly 1 oa:serializedAt property per Annotation, and MUST NOT be more than 1.",
+          "severity": "error",
+          "query": ""
+      },
+      {
+          "ref": "2.2.1 Agents",
+          "description": "It is RECOMMENDED to use foaf:Person as the class of the object of oa:annotatedBy or prov:SoftwareAgent as the class of the object of oa:serializedBy.",
+          "severity": "warn",
+          "query": ""
+      },
+      {
+          "ref": "2.2.1 Agents",
+          "description": "Each agent SHOULD have exactly 1 name property.",
+          "severity": "warn",
+          "query": ""
+      },
+      {
+          "ref": "2.3 Motivations",
+          "description": "Each Annotation SHOULD have at least one oa:motivatedBy relationship to an instance of oa:Motivation.",
+          "severity": "warn",
+          "query": ""
+      }
+    ]
+},
+{
+    "section": "3. Specifiers and Specific Resources",
+    "constraints": [
+      {
+          "ref": "3.1 Specifiers and Specific Resources",
+          "description": "The oa:SpecificResource class SHOULD be associated with a Specific Resource.",
+          "severity": "warn",
+          "query": ""
+      },
+      {
+          "ref": "3.1 Specifiers and Specific Resources",
+          "description": "There MUST be exactly 1 oa:hasSource relationship associated with a Specific Resource.",
+          "severity": "error",
+          "query": ""
+      },
+      {
+          "ref": "3.1 Specifiers and Specific Resources",
+          "description": "Specific Resource SHOULD be identified by a globally unique URI, such as a UUID URN. If it is not considered important to allow other Annotations or systems to refer to the Specific Resource, then a blank node MAY be used instead.",
+          "severity": "warn",
+          "query": ""
+      },
+      {
+          "ref": "3.2 Selectors",
+          "description": "There MUST be exactly 0 or 1 oa:hasSelector relationship associated with a Specific Resource.",
+          "severity": "error",
+          "query": ""
+      },
+      {
+          "ref": "3.2.1 Fragment Selector",
+          "description": "It is RECOMMENDED to use oa:FragmentSelector rather than annotating the fragment URI directly.",
+          "severity": "warn",
+          "query": ""
+      },
+      {
+          "ref": "3.2.1 Fragment Selector",
+          "description": "The oa:FragmentSelector MUST have exactly 1 rdf:value property.",
+          "severity": "error",
+          "query": ""
+      },
+      {
+          "ref": "3.2.1 Fragment Selector",
+          "description": "The Fragment Selector SHOULD have a dcterms:conformsTo relationship.",
+          "severity": "warn",
+          "query": ""
+      },
+      {
+          "ref": "3.2.2.1 Text Position Selector",
+          "description": "Each TextPositionSelector MUST have exactly 1 oa:start property.",
+          "severity": "error",
+          "query": ""
+      },
+      {
+          "ref": "3.2.2.1 Text Position Selector",
+          "description": "Each TextPositionSelector MUST have exactly 1 oa:end property.",
+          "severity": "error",
+          "query": ""
+      },
+      {
+          "ref": "3.2.2.1 Text Position Selector",
+          "description": "Tt is RECOMMENDED that a State be used in addition to a TextPositionSelector.",
+          "severity": "warn",
+          "query": ""
+      },
+      {
+          "ref": "3.2.2.2 Text Quote Selector",
+          "description": "Each TextQuoteSelector MUST have exactly 1 oa:exact property.",
+          "severity": "error",
+          "query": ""
+      },
+      {
+          "ref": "3.2.2.2 Text Quote Selector",
+          "description": "Each TextQuoteSelector SHOULD have exactly 1 oa:prefix property.",
+          "severity": "warn",
+          "query": ""
+      },
+      {
+          "ref": "3.2.2.2 Text Quote Selector",
+          "description": "Each TextQuoteSelector MUST NOT have more than 1 oa:prefix property.",
+          "severity": "error",
+          "query": ""
+      },
+      {
+          "ref": "3.2.2.2 Text Quote Selector",
+          "description": "Each TextQuoteSelector SHOULD have exactly 1 oa:suffix property.",
+          "severity": "warn",
+          "query": ""
+      },
+      {
+          "ref": "3.2.2.2 Text Quote Selector",
+          "description": "Each TextQuoteSelector MUST NOT have more than 1 oa:suffix property.",
+          "severity": "error",
+          "query": ""
+      },
+      {
+          "ref": "3.2.2.3 Data Position Selector",
+          "description": "Each DataPositionSelector MUST have exactly 1 oa:start property.",
+          "severity": "error",
+          "query": ""
+      },
+      {
+          "ref": "3.2.2.3 Data Position Selector",
+          "description": "Each TextPositionSelector MUST have exactly 1 oa:end property.",
+          "severity": "error",
+          "query": ""
+      },
+      {
+          "ref": "3.3 States",
+          "description": "There MAY be 0 or 1 oa:hasState relationship for each SpecificResource.",
+          "severity": "error",
+
+          "query": ""
+      },
+      {
+          "ref": "3.3.1 Time State",
+          "description": "The timestamp for oa:when MUST be expressed in the xsd:dateTime (ISO 8601) format.",
+          "severity": "error",
+          "query": ""
+      },
+      {
+          "ref": "3.3.1 Time State",
+          "description": "The timestamp for oa:when SHOULD have a timezone specified.",
+          "severity": "warn",
+          "query": ""
+      },
+      {
+          "ref": "3.3.1 Time State",
+          "description": "There MAY be 0 or more oa:when or oa:cachedSource properties per TimeState, but there MUST be at least one of oa:when and oa:cachedSource.",
+          "severity": "error",
+          "query": ""
+      },
+      {
+          "ref": "3.3.2 Request Header State",
+          "description": "There MUST be exactly 1 rdf:value property per HTTPRequestState.",
+          "severity": "error",
+          "query": ""
+      },
+      {
+          "ref": "3.4 Styles",
+          "description": "There MAY be 0 or 1 styledBy relationships for each Annotation.",
+          "severity": "error",
+          "query": ""
+      },
+      {
+          "ref": "3.4.1 CSS Style",
+          "description": "There MAY be 0 or more styleClass properties on a Specific Resource.",
+          "severity": "warn",
+          "query": ""
+      }
+      
+    ]
+},
+{
+    "section": "4 Multiplicity Constructs",
+    "constraints": [
+      {
+          "ref": "4 Multiplicity",
+          "description": "Multiplicity Constructs SHOULD have a globally unique URI to identify them, such as a UUID URN. They MAY instead be modeled using RDF blank nodes if it is not considered important that they be referenced directly by other Annotations or systems.",
+          "severity": "warn",
+          "query": ""
+      },
+      {
+          "ref": "4 Multiplicity",
+          "description": "There MUST be 1 or more item relationships for each multiplicity construct.",
+          "severity": "error",
+          "query": "PREFIX oa: <http://www.w3.org/ns/oa#> SELECT ?multiplicity WHERE { {?multiplicity a oa:Composite } UNION {?multiplicity a oa:Choice} UNION {?multiplicity a oa:List}. FILTER (NOT EXISTS { ?multiplicity oa:item ?item })}"
+      },
+      {
+          "ref": "4.1 Choice",
+          "description": "There SHOULD be exactly 1 default relationship for each Choice.",
+          "severity": "warn",
+          "query": "PREFIX oa: <http://www.w3.org/ns/oa#> SELECT ?choice (count(distinct ?default) as ?num) WHERE { ?choice a oa:Choice . ?choice oa:default ?default } group by ?choice having(count(distinct ?default) != 1)"
+      },
+      {
+          "ref": "4.2 Composite",
+          "description": "Each Composite MUST have two or more constituent resources.",
+          "severity": "error",
+          "query": "PREFIX oa: <http://www.w3.org/ns/oa#> SELECT ?composite (count(distinct ?item) as ?num) WHERE { ?composite a oa:Composite . ?composite oa:item ?item } group by ?composite having(count(distinct ?item) < 2)"
+      }
+    ]
+},
+{
+    "section": "5 Publishing",
+    "constraints": [
+      {
+          "ref": "5.2 Embedding Resources",
+          "description": "There MUST be exactly 1 cnt:chars property for a ContentAsText resource.",
+          "severity": "error",
+          "query": "PREFIX oa: <http://www.w3.org/ns/oa#> PREFIX cnt: <http://www.w3.org/2011/content#> SELECT ?resource (count(distinct ?chars) as ?numberOfProperties) WHERE { ?resource a cnt:ContentAsText . ?resource cnt:chars ?chars } group by ?resource having(count(distinct ?chars) != 1)"
+      },
+      {
+          "ref": "5.2 Embedding Resources",
+          "description": "There MUST be exactly 1 cnt:bytes property for a ContentAsBase64 resource.",
+          "severity": "error",
+          "query": "PREFIX oa: <http://www.w3.org/ns/oa#> PREFIX cnt: <http://www.w3.org/2011/content#> select ?res (count(distinct ?bytes) as ?num) WHERE { ?res a cnt:ContentAsBase64 . ?res cnt:bytes ?bytes } group by ?res having(count(distinct ?bytes) != 1)"
+      },
+      {
+          "ref": "5.2 Embedding Resources",
+          "description": "There SHOULD be exactly 1 cnt:characterEncoding for a ContentAsText or ContentAsBase64 resource.",
+          "severity": "warn",
+          "query": "PREFIX oa: <http://www.w3.org/ns/oa#> PREFIX cnt: <http://www.w3.org/2011/content#> select ?res (count(distinct ?encoding) as ?num) WHERE { {?res a cnt:ContentAsText .} UNION {?res a cnt:ContentAsBase64} UNION {?res a cnt:ContentAsXML} . ?res cnt:characterEncoding ?encoding } group by ?res having(count(distinct ?encoding) != 1)"
+      },
+      {
+          "ref": "5.2 Embedding Resources",
+          "description": "There SHOULD be exactly 1 dc:format property associated with each embedded resource.",
+          "severity": "warn",
+          "query": "PREFIX oa: <http://www.w3.org/ns/oa#> PREFIX cnt: <http://www.w3.org/2011/content#> PREFIX dc: <http://purl.org/dc/elements/1.1/> select ?res (count(distinct ?format) as ?num) WHERE { {?res a cnt:ContentAsText .} UNION {?res a cnt:ContentAsBase64} UNION {?res a cnt:ContentAsXML} . ?res dc:format ?format } group by ?res having(count(distinct ?format) != 1)"
+      }
+    ]
+},
+{
+    "section": "B Extending Motivations",
+    "constraints": [
+      {
+          "ref": "Appendix B",
+          "description": "New Motivations MUST be instances of oa:Motivation, which is a subClass of skos:Concept.",
+          "severity": "error",
+          "query": "PREFIX oa: <http://www.w3.org/ns/oa#> SELECT * WHERE { ?annotation oa:motivatedBy ?motivation . FILTER(NOT EXISTS {?motivation a oa:Motivation}) }"
+      },
+      {
+          "ref": "Appendix B",
+          "description": "The skos:broader relationship SHOULD be asserted between the new Motivation and at least one existing Motivation, if there are any that are broader in scope. The skos:related or skos:closeMatch relationship SHOULD also be asserted to other similar concepts created by other communities.",
+          "severity": "warn",
+          "query": ""
+      }
+    ]
+}
+]
+ 
