@@ -36,7 +36,7 @@ public class ValidationReportView extends BaseView {
                     // for each of the section.constraints
                     for (Map<String,String> constraint: ((List<Map<String,String>>)section.get("constraints"))){
                         out.print("<p>");
-                        if ("ok".equals(constraint.get("status"))){
+                        if ("pass".equals(constraint.get("status"))){
                             out.print("PASS ");
                         } else if ("warn".equals(constraint.get("status"))){
                             out.print("WARN ");

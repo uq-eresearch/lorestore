@@ -92,7 +92,7 @@
                      var section = d[i];
                      jQuery('#result').append(Mustache.render(sectionTemplate,section));
                  }
-                 jQuery('#result').append("<p>Legend: <span class='ok'><i class='icon-ok'></i> Passed</span> <span class='skip'><i class='icon-skip'></i> Skipped</span> <span class='error'><icon class='icon-error'></i> Error</span> <span class='warn'><icon class='icon-warn'></i> Warning</span></p>");
+                 jQuery('#result').append("<p>Legend: <span class='pass'><i class='icon-pass'></i> Passed</span> <span class='error'><icon class='icon-error'></i> Error</span> <span class='warn'><icon class='icon-warn'></i> Warning</span> <span class='skip'><i class='icon-skip'></i> Skipped</span></p>");
              },
              error: function(e){
                  console.log("error",e);

@@ -96,10 +96,11 @@
   #data {
       border:1px solid #eee;
   }
-  .ok {color:#468847;}
+  .pass {color:#468847;}
   .error {color:#b94a48;}
   .warn {color:#c09853;}
   .skip {color:#999999;}
-  .icon-error:before{content:"\f00d"}
+  .icon-pass:before{content:"\f058"}
+  .icon-error:before{content:"\f057"}
   .icon-warn:before{content:"\f071"}
   .icon-skip:before{content:"\f056"}

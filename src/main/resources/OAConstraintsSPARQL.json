@@ -23,7 +23,7 @@
         "ref": "2.1. Body and Target Resources",
         "description": "There SHOULD be 1 or more oa:hasBody relationships associated with an Annotation but there MAY be 0.",
         "severity": "warn",
-        "query": "PREFIX oa: <http://www.w3.org/ns/oa#> SELECT ?annotation WHERE { ?annotation oa:hasTarget ?t . FILTER(NOT EXISTS { ?annotation a oa:hasBody })}"
+        "query": "PREFIX oa: <http://www.w3.org/ns/oa#> SELECT ?annotation WHERE { ?annotation oa:hasTarget ?t . FILTER(NOT EXISTS { ?annotation oa:hasBody ?body})}"
       },
       {
           "ref": "2.1. Body and Target Resources",
@@ -306,13 +306,13 @@
           "ref": "4.1. Choice",
           "description": "There SHOULD be exactly 1 default relationship for each Choice.",
           "severity": "warn",
-          "query": "PREFIX oa: <http://www.w3.org/ns/oa#> SELECT ?choice (count(distinct ?default) as ?num) WHERE { ?choice a oa:Choice . ?choice oa:default ?default } group by ?choice having(count(distinct ?default) != 1)"
+          "query": "PREFIX oa: <http://www.w3.org/ns/oa#> SELECT ?choice WHERE { ?choice a oa:Choice . ?choice oa:default ?default } group by ?choice  having(count(distinct ?default) != 1)"
       },
       {
           "ref": "4.2. Composite",
           "description": "Each Composite MUST have two or more constituent resources.",
           "severity": "error",
-          "query": "PREFIX oa: <http://www.w3.org/ns/oa#> SELECT ?composite (count(distinct ?item) as ?num) WHERE { ?composite a oa:Composite . ?composite oa:item ?item } group by ?composite having(count(distinct ?item) < 2)"
+          "query": "PREFIX oa: <http://www.w3.org/ns/oa#> SELECT ?composite WHERE { ?composite a oa:Composite . ?composite oa:item ?item } group by ?composite having(count(distinct ?item) < 2)"
       }
     ]
 },
@@ -323,25 +323,25 @@
           "ref": "5.2. Embedding Resources",
           "description": "There MUST be exactly 1 cnt:chars property for a ContentAsText resource.",
           "severity": "error",
-          "query": "PREFIX oa: <http://www.w3.org/ns/oa#> PREFIX cnt: <http://www.w3.org/2011/content#> SELECT ?resource (count(distinct ?chars) as ?numberOfProperties) WHERE { ?resource a cnt:ContentAsText . ?resource cnt:chars ?chars } group by ?resource having(count(distinct ?chars) != 1)"
+          "query": "PREFIX oa: <http://www.w3.org/ns/oa#> PREFIX cnt: <http://www.w3.org/2011/content#> SELECT ?resource  WHERE { ?resource a cnt:ContentAsText . ?resource cnt:chars ?chars } group by ?resource having(count(distinct ?chars) != 1)"
       },
       {
           "ref": "5.2. Embedding Resources",
           "description": "There MUST be exactly 1 cnt:bytes property for a ContentAsBase64 resource.",
           "severity": "error",
-          "query": "PREFIX oa: <http://www.w3.org/ns/oa#> PREFIX cnt: <http://www.w3.org/2011/content#> select ?res (count(distinct ?bytes) as ?num) WHERE { ?res a cnt:ContentAsBase64 . ?res cnt:bytes ?bytes } group by ?res having(count(distinct ?bytes) != 1)"
+          "query": "PREFIX oa: <http://www.w3.org/ns/oa#> PREFIX cnt: <http://www.w3.org/2011/content#> select ?res WHERE { ?res a cnt:ContentAsBase64 . ?res cnt:bytes ?bytes } group by ?res having(count(distinct ?bytes) != 1)"
       },
       {
           "ref": "5.2. Embedding Resources",
           "description": "There SHOULD be exactly 1 cnt:characterEncoding for a ContentAsText or ContentAsBase64 resource.",
           "severity": "warn",
-          "query": "PREFIX oa: <http://www.w3.org/ns/oa#> PREFIX cnt: <http://www.w3.org/2011/content#> select ?res (count(distinct ?encoding) as ?num) WHERE { {?res a cnt:ContentAsText .} UNION {?res a cnt:ContentAsBase64} UNION {?res a cnt:ContentAsXML} . ?res cnt:characterEncoding ?encoding } group by ?res having(count(distinct ?encoding) != 1)"
+          "query": "PREFIX oa: <http://www.w3.org/ns/oa#> PREFIX cnt: <http://www.w3.org/2011/content#> select ?res WHERE { {?res a cnt:ContentAsText .} UNION {?res a cnt:ContentAsBase64} UNION {?res a cnt:ContentAsXML} . ?res cnt:characterEncoding ?encoding } group by ?res having(count(distinct ?encoding) != 1)"
       },
       {
           "ref": "5.2. Embedding Resources",
           "description": "There SHOULD be exactly 1 dc:format property associated with each embedded resource.",
           "severity": "warn",
-          "query": "PREFIX oa: <http://www.w3.org/ns/oa#> PREFIX cnt: <http://www.w3.org/2011/content#> PREFIX dc: <http://purl.org/dc/elements/1.1/> select ?res (count(distinct ?format) as ?num) WHERE { {?res a cnt:ContentAsText .} UNION {?res a cnt:ContentAsBase64} UNION {?res a cnt:ContentAsXML} . ?res dc:format ?format } group by ?res having(count(distinct ?format) != 1)"
+          "query": "PREFIX oa: <http://www.w3.org/ns/oa#> PREFIX cnt: <http://www.w3.org/2011/content#> PREFIX dc: <http://purl.org/dc/elements/1.1/> select ?res WHERE { {?res a cnt:ContentAsText .} UNION {?res a cnt:ContentAsBase64} UNION {?res a cnt:ContentAsXML} . ?res dc:format ?format } group by ?res having(count(distinct ?format) != 1)"
       }
     ]
 },

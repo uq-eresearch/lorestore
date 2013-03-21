@@ -2,7 +2,9 @@ package net.metadata.openannotation.lorestore.servlet.rdf2go;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.StringReader;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -23,7 +25,13 @@ import org.ontoware.rdf2go.Reasoning;
 import org.ontoware.rdf2go.exception.ModelRuntimeException;
 import org.ontoware.rdf2go.model.Model;
 import org.ontoware.rdf2go.model.ModelSet;
+import org.ontoware.rdf2go.model.QueryResultTable;
+import org.ontoware.rdf2go.model.QueryRow;
 import org.ontoware.rdf2go.model.Syntax;
+import org.ontoware.rdf2go.model.node.Node;
+import org.openrdf.query.Query;
+import org.openrdf.query.QueryLanguage;
+import org.openrdf.query.TupleQueryResult;
 import org.openrdf.rdf2go.RepositoryModelFactory;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -64,9 +72,11 @@ public class OAValidationHandler implements LoreStoreValidationHandler {
             if (contentType.equals(Syntax.RdfXml.getMimeType())
                     || contentType.equals(Syntax.Trix.getMimeType()) 
                     || contentType.equals(Syntax.Trig.getMimeType())){
+                //StringReader reader = new StringReader(inputRDF);
                 model.readFrom(inputRDF, Syntax.forMimeType(contentType), occ.getBaseUri());
             
             } else if (contentType.equals("application/json")){
+                //Object jsonObject = JSONUtils.fromString(inputRDF);
                 Object jsonObject = JSONUtils.fromInputStream(inputRDF);
                 // TODO if no @context, inject default context
                 // TODO if no @id, inject dummy identifier (will be replaced)
@@ -97,13 +107,44 @@ public class OAValidationHandler implements LoreStoreValidationHandler {
         // clone the validation rules into an object that we will pass to the ModelAndView
         ArrayList<Map<String,Object>> result = new ArrayList<Map<String,Object>>(validationRules);
         for (Map<String,Object> section : result){
-            LOG.info("Running constraints for " + section.get("section"));
             // for each section.constraints
-            for (Map<String,String> constraint: ((List<Map<String,String>>)section.get("constraints"))){
-                String query = constraint.get("query");
-                // run the query and store the result back into the constraint object
-                // if query returns results, put severity as status, otherwise status is "ok"
-                constraint.put("status", constraint.get("severity"));
+            for (Map<String,Object> rule: ((List<Map<String,Object>>)section.get("constraints"))){
+                String queryString = (String) rule.get("query");
+                if(queryString == null || "".equals(queryString)){
+                    rule.put("status", "skip");
+                } else {
+                    // run the query and store the result back into the constraint object
+                    QueryResultTable resultTable = model.sparqlSelect(queryString);
+                    List<String> vars = resultTable.getVariables();
+                    int count = 0;
+                    List<Map<String,String>> matches = new ArrayList<Map<String,String>>();
+                    String rowString = "";
+                    for(QueryRow row : resultTable) {
+                        boolean nullValues = true;
+                        for(String var: vars){
+                            //HashMap<String,String> res = new HashMap<String,String>();
+                            //res.put(var, row.getValue(var).toString());
+                            //matches.add(res);
+                            Node val = row.getValue(var);
+                            if (val != null){
+                                nullValues = false;
+                                rowString += var +" " + row.getValue(var) + ", ";
+                            }
+                        }
+                        if (!nullValues){
+                            count++;
+                        }
+                    }
+                    if (count == 0){
+                        rule.put("status", "pass");
+                    } else {
+                        // if there are results, the validation failed, so set the status from the severity
+                        // TODO add results to the result so that they can be displayed
+                        rule.put("result", rowString);
+                        rule.put("status", rule.get("severity"));
+                    }
+                }
+                
             }
             
         }
