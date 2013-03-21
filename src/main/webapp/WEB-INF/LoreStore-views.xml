@@ -7,6 +7,7 @@
     
     <bean id="ore" class="net.metadata.openannotation.lorestore.views.OREResponseView"/>
     <bean id="oa" class="net.metadata.openannotation.lorestore.views.OANamedGraphsView"/>
+    <bean id="validation" class="net.metadata.openannotation.lorestore.views.ValidationReportView"/>
     <bean id="sparqlxml" class="net.metadata.openannotation.lorestore.views.SPARQLXMLView"/>
     <bean id="oreAtom" class="net.metadata.openannotation.lorestore.views.OREAtomFeedView" />
     <bean id="oaAtom" class="net.metadata.openannotation.lorestore.views.OAAtomFeedView" />
