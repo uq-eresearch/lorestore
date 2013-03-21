@@ -76,18 +76,30 @@
   [class^="icon-"],[class*=" icon-"]{background-image:url("../images/glyphicons-halflings.png");}
   .icon-white{background-image:url("../images/glyphicons-halflings-white.png");}
   
-.Imageicon {background-image: url(../images/icons/image.png);}
-.StillImageicon {background-image: url(../images/icons/image.png);}
-.MovingImageicon{background-image: url(../images/icons/film.png);}
-.Filmicon {background-image: url(../images/icons/film.png);}
-.pdficon {background-image: url(../images/icons/file_acrobat.gif);}
-.Soundicon {background-image: url(../images/icons/page_sound.gif);}
-.Dataseticon {background-image: url(../images/icons/database_table.png);}
-.Collectionicon {background-image: url(../images/icons/page_white_stack.png);}
-.Texticon{background-image: url(../images/icons/page_white_text.png);}
-.PhysicalObjecticon {background-image: url(../images/icons/chair.png);}
-.Softwareicon {background-image: url(../images/icons/application.png);}
-.Serviceicon {background-image: url(../images/icons/server-network.png);}
-.InteractiveResourceicon {background-image: url(../images/icons/map_cursor.png);}
-.Eventicon {background-image: url(../images/icons/alarm-clock-select.png);}
-.prop {font-weight:bold;color:#51666b;}
+  .Imageicon {background-image: url(../images/icons/image.png);}
+  .StillImageicon {background-image: url(../images/icons/image.png);}
+  .MovingImageicon{background-image: url(../images/icons/film.png);}
+  .Filmicon {background-image: url(../images/icons/film.png);}
+  .pdficon {background-image: url(../images/icons/file_acrobat.gif);}
+  .Soundicon {background-image: url(../images/icons/page_sound.gif);}
+  .Dataseticon {background-image: url(../images/icons/database_table.png);}
+  .Collectionicon {background-image: url(../images/icons/page_white_stack.png);}
+  .Texticon{background-image: url(../images/icons/page_white_text.png);}
+  .PhysicalObjecticon {background-image: url(../images/icons/chair.png);}
+  .Softwareicon {background-image: url(../images/icons/application.png);}
+  .Serviceicon {background-image: url(../images/icons/server-network.png);}
+  .InteractiveResourceicon {background-image: url(../images/icons/map_cursor.png);}
+  .Eventicon {background-image: url(../images/icons/alarm-clock-select.png);}
+  .prop {font-weight:bold;color:#51666b;}
+
+/* Validation report */
+  #data {
+      border:1px solid #eee;
+  }
+  .ok {color:#468847;}
+  .error {color:#b94a48;}
+  .warn {color:#c09853;}
+  .skip {color:#999999;}
+  .icon-error:before{content:"\f00d"}
+  .icon-warn:before{content:"\f071"}
+  .icon-skip:before{content:"\f056"}
