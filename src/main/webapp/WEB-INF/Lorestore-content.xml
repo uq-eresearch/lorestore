@@ -16,6 +16,7 @@
                <value>/flintsparql/.+</value>
                <value>/prettify/.+</value>
                <value>/graphdracula/.+</value>
+               <value>/font/.+</value>
             </list>
         </property>
     </bean>
