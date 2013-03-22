@@ -75,8 +75,9 @@
          }
      });
      jQuery('#validate').click(function(ev){
-         var data = jQuery('#data').val();
+         var data = cmEditor.getValue();
          var contentType = jQuery('input:radio[name=contentType]:checked').val();
+         jQuery('#result').empty();
          jQuery.ajax({
              type: 'POST',
              url: '/lorestore/oa/validate/',
