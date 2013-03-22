@@ -58,10 +58,15 @@
          lineNumbers: true,
          tabMode: "indent"
      });
-     var sectionTemplate = "<h2>Validating against Section {{section}}</h2>" +
+     var summaryTemplate = "<h3>Summary</h3>" + 
+        "";
+     //<i class='icon-circle-arrow-right'></i>
+     var sectionTemplate = "<h2><i class='{{status}} icon-{{status}}'></i> Section {{section}}</h2>" +
+       "<p>Section Summary: <span class='pass'>Passed: {{pass}}</span> <span class='error'>Errors: {{error}}</span> <span class='warn'>Warnings: {{warn}}</span> <span class='skip'>Skipped: {{skip}}</span></p>" +
+       "<hr class='mute'>" +
        "{{#constraints}}" +
        "<div><h3 class='{{status}}' title='{{status}}'><i class='icon-{{status}}'></i> " + 
-       "{{ref}}</h3><p>{{description}}</p></div>" +
+       "{{ref}}</h3><p><a style='color:#333333' target='_blank' href='{{url}}'>{{description}}</a></p></div>" +
        "{{/constraints}}" +
        "<hr class='mute'>";
      jQuery("input:radio[name=contentType]").change(function(){
@@ -88,6 +93,9 @@
              data: data.toString(),
              success: function(d){
                  console.log("got data", d);
+                 jQuery('#result').append("<h2>Validation Results</h2>");
+                 
+                 // TODO display summary of all results
                  var result = "";
                  for(var i =0; i< d.length; i++){
                      var section = d[i];

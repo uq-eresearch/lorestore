@@ -104,54 +104,92 @@ public class OAValidationHandler implements LoreStoreValidationHandler {
             InputStream in = this.getClass().getClassLoader().getResourceAsStream("OAConstraintsSPARQL.json");
             this.validationRules = (List<Map<String,Object>>) JSONUtils.fromInputStream(in);
         }
+        int totalPass = 0, totalError = 0, totalWarn = 0, totalSkip = 0;
         // clone the validation rules into an object that we will pass to the ModelAndView
         ArrayList<Map<String,Object>> result = new ArrayList<Map<String,Object>>(validationRules);
         for (Map<String,Object> section : result){
             // for each section.constraints
+            int sectionPass = 0, sectionError = 0, sectionWarn = 0, sectionSkip =0;
             for (Map<String,Object> rule: ((List<Map<String,Object>>)section.get("constraints"))){
                 String queryString = (String) rule.get("query");
                 if(queryString == null || "".equals(queryString)){
                     rule.put("status", "skip");
+                    totalSkip++;
+                    sectionSkip++;
                 } else {
-                    // run the query and store the result back into the constraint object
-                    QueryResultTable resultTable = model.sparqlSelect(queryString);
-                    List<String> vars = resultTable.getVariables();
                     int count = 0;
-                    List<Map<String,String>> matches = new ArrayList<Map<String,String>>();
-                    String rowString = "";
-                    for(QueryRow row : resultTable) {
-                        boolean nullValues = true;
-                        for(String var: vars){
-                            //HashMap<String,String> res = new HashMap<String,String>();
-                            //res.put(var, row.getValue(var).toString());
-                            //matches.add(res);
-                            Node val = row.getValue(var);
-                            if (val != null){
-                                nullValues = false;
-                                rowString += var +" " + row.getValue(var) + ", ";
+                    try{
+                        // run the query and store the result back into the constraint object
+                        QueryResultTable resultTable = model.sparqlSelect(queryString);
+                        List<String> vars = resultTable.getVariables();
+                        List<Map<String,String>> matches = new ArrayList<Map<String,String>>();
+                        
+                        for(QueryRow row : resultTable) {
+                            boolean nullValues = true;
+                            for(String var: vars){
+                                Node val = row.getValue(var);
+                                //LOG.info(var + " " + row.toString());
+                                if (val != null && !val.toString().equals("0")){
+                                    nullValues = false;
+                                    HashMap<String,String> res = new HashMap<String,String>();
+                                    res.put(var, row.getValue(var).toString());
+                                    matches.add(res);
+                                } 
+                            }
+                            if (!nullValues){
+                                count++;
                             }
                         }
-                        if (!nullValues){
-                            count++;
+                        if (count == 0){
+                            rule.put("status", "pass");
+                            totalPass++;
+                            sectionPass++;
+                        } else {
+                            // if there are results, the validation failed, so set the status from the severity
+                            // add results to the result so that they can be displayed
+                            rule.put("result", matches);
+                            String severity = (String) rule.get("severity");
+                            rule.put("status", severity);
+                            if ("error".equals("severity")){
+                                totalError++;
+                                sectionError++;
+                            } else {
+                                totalWarn++;
+                                sectionWarn++;
+                            }
                         }
-                    }
-                    if (count == 0){
-                        rule.put("status", "pass");
-                    } else {
-                        // if there are results, the validation failed, so set the status from the severity
-                        // TODO add results to the result so that they can be displayed
-                        rule.put("result", rowString);
-                        rule.put("status", rule.get("severity"));
+                    } catch (Exception e){
+                        // if there were any errors running the query, set status to skip
+                        LOG.info("error validating " + rule.get("description") + " " + e.getMessage());
+                        rule.put("status", "skip");
+                        totalSkip++;
+                        sectionSkip++;
                     }
                 }
-                
+                // section summaries for validation report
+                section.put("pass", sectionPass);
+                section.put("error", sectionError);
+                section.put("warn", sectionWarn);
+                section.put("skip", sectionSkip);
+                if (sectionError > 0){
+                    section.put("status","error");
+                } else if (sectionWarn > 0){
+                    section.put("status", "warn");
+                } else if (sectionPass == 0){
+                    section.put("status", "skip");
+                } else {
+                    section.put("status", "pass");
+                }
             }
-            
         }
         
         // run each query and generate report data to store in ModelAndView:
         // pass/fail, title, link, description
         mav.addObject("result", result);
+        mav.addObject("totalError",totalError);
+        mav.addObject("totalWarn", totalWarn);
+        mav.addObject("totalPass",totalPass);
+        mav.addObject("totalSkip",totalSkip);
         // destroy temp rdf model
         model.close();
         return mav;
