@@ -91,7 +91,7 @@ public class OAValidationHandler implements LoreStoreValidationHandler {
                 LOG.debug("Model read failed " + e.getMessage());
                 model.close();
             } catch (Exception e2){
-                // ignore
+                // ignore errors closing model
             }
             throw new RequestFailureException(HttpServletResponse.SC_BAD_REQUEST, "Error reading RDF " + e.getMessage());
         } catch (JSONLDProcessingError e) {
@@ -104,64 +104,90 @@ public class OAValidationHandler implements LoreStoreValidationHandler {
             InputStream in = this.getClass().getClassLoader().getResourceAsStream("OAConstraintsSPARQL.json");
             this.validationRules = (List<Map<String,Object>>) JSONUtils.fromInputStream(in);
         }
-        int totalPass = 0, totalError = 0, totalWarn = 0, totalSkip = 0;
+        int totalPass = 0, totalError = 0, totalWarn = 0, totalSkip = 0, totalTotal = 0;
         // clone the validation rules into an object that we will pass to the ModelAndView
         ArrayList<Map<String,Object>> result = new ArrayList<Map<String,Object>>(validationRules);
         for (Map<String,Object> section : result){
-            // for each section.constraints
-            int sectionPass = 0, sectionError = 0, sectionWarn = 0, sectionSkip =0;
+            // for each section
+            int sectionPass = 0, sectionError = 0, sectionWarn = 0, sectionSkip = 0;
             for (Map<String,Object> rule: ((List<Map<String,Object>>)section.get("constraints"))){
+                totalTotal++;
+                // process each rule
                 String queryString = (String) rule.get("query");
+                String preconditionQueryString = (String) rule.get("precondition");
                 if(queryString == null || "".equals(queryString)){
-                    rule.put("status", "skip");
                     totalSkip++;
                     sectionSkip++;
+                    rule.put("status", "skip");
+                    rule.put("result", "Validation rule not implemented");
                 } else {
+                    
                     int count = 0;
+                    int precondcount = 0;
                     try{
-                        // run the query and store the result back into the constraint object
-                        QueryResultTable resultTable = model.sparqlSelect(queryString);
-                        List<String> vars = resultTable.getVariables();
-                        List<Map<String,String>> matches = new ArrayList<Map<String,String>>();
-                        
-                        for(QueryRow row : resultTable) {
-                            boolean nullValues = true;
-                            for(String var: vars){
-                                Node val = row.getValue(var);
-                                //LOG.info(var + " " + row.toString());
-                                if (val != null && !val.toString().equals("0")){
-                                    nullValues = false;
-                                    HashMap<String,String> res = new HashMap<String,String>();
-                                    res.put(var, row.getValue(var).toString());
-                                    matches.add(res);
-                                } 
+                        boolean preconditionOK = true;
+                        // TODO check if there is a precondition query and run that first to determine whether rule applies
+                        if (preconditionQueryString != null && ! "".equals(preconditionQueryString)){
+                            QueryResultTable precondResultTable = model.sparqlSelect(preconditionQueryString);
+                            for(QueryRow row1 : precondResultTable) {
+                                precondcount++;
                             }
-                            if (!nullValues){
-                                count++;
-                            }
+                            if (precondcount == 0){
+                                // if precondition did not produce any matches, set status to skip
+                                rule.put("status", "skip");
+                                rule.put("result", "Rule does not apply to supplied data: " + rule.get("preconditionMessage"));
+                                
+                                totalSkip++;
+                                sectionSkip++;
+                                preconditionOK = false;
+                            } 
                         }
-                        if (count == 0){
-                            rule.put("status", "pass");
-                            totalPass++;
-                            sectionPass++;
-                        } else {
-                            // if there are results, the validation failed, so set the status from the severity
-                            // add results to the result so that they can be displayed
-                            rule.put("result", matches);
-                            String severity = (String) rule.get("severity");
-                            rule.put("status", severity);
-                            if ("error".equals("severity")){
-                                totalError++;
-                                sectionError++;
+                        if (preconditionOK){
+                            // run the query and store the result back into the constraint object
+                            QueryResultTable resultTable = model.sparqlSelect(queryString);
+                            List<String> vars = resultTable.getVariables();
+                            List<Map<String,String>> matches = new ArrayList<Map<String,String>>();
+                            for(QueryRow row : resultTable) {
+                                boolean nullValues = true;
+                                for(String var: vars){
+                                    Node val = row.getValue(var);
+                                    //LOG.info(var + " " + row.toString());
+                                    if (val != null && !val.toString().equals("0")){
+                                        nullValues = false;
+                                        HashMap<String,String> res = new HashMap<String,String>();
+                                        res.put(var, row.getValue(var).toString());
+                                        matches.add(res);
+                                    } 
+                                }
+                                if (!nullValues){
+                                    count++;
+                                }
+                            }
+                            if (count == 0){
+                                rule.put("status", "pass");
+                                rule.put("result","");
+                                totalPass++;
+                                sectionPass++;
                             } else {
-                                totalWarn++;
-                                sectionWarn++;
+                                // if there are results, the validation failed, so set the status from the severity
+                                // add results to the result so that they can be displayed
+                                rule.put("result", matches);
+                                String severity = (String) rule.get("severity");
+                                rule.put("status", severity);
+                                if ("error".equals(severity)){
+                                    totalError++;
+                                    sectionError++;
+                                } else {
+                                    totalWarn++;
+                                    sectionWarn++;
+                                }
                             }
                         }
                     } catch (Exception e){
-                        // if there were any errors running the query, set status to skip
+                        // if there were any errors running queries, set status to skip
                         LOG.info("error validating " + rule.get("description") + " " + e.getMessage());
                         rule.put("status", "skip");
+                        rule.put("result","Error evaluating validation rule: " + e.getMessage());
                         totalSkip++;
                         sectionSkip++;
                     }
@@ -183,13 +209,15 @@ public class OAValidationHandler implements LoreStoreValidationHandler {
             }
         }
         
-        // run each query and generate report data to store in ModelAndView:
-        // pass/fail, title, link, description
-        mav.addObject("result", result);
-        mav.addObject("totalError",totalError);
-        mav.addObject("totalWarn", totalWarn);
-        mav.addObject("totalPass",totalPass);
-        mav.addObject("totalSkip",totalSkip);
+        // store results of validation in ModelAndView:
+        HashMap<String,Object> finalResult = new HashMap<String, Object>();
+        finalResult.put("result",result);
+        finalResult.put("error",totalError);
+        finalResult.put("warn", totalWarn);
+        finalResult.put("pass",totalPass);
+        finalResult.put("skip",totalSkip);
+        finalResult.put("total", totalTotal);
+        mav.addObject("result", finalResult);
         // destroy temp rdf model
         model.close();
         return mav;

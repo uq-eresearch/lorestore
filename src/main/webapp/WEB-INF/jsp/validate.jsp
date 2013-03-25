@@ -58,15 +58,39 @@
          lineNumbers: true,
          tabMode: "indent"
      });
+     
+     function renderResult(){
+          var result = this? this.result : "";
+           // if the result is an array, process results
+           // otherwise display result to String
+           if (typeof result !== 'string' && result){
+               var resultString = "";
+               for (var i = 0; i < result.length; i++) {
+                   var row = result[i];
+                   for (var p in row){
+                       if (row.hasOwnProperty(p)){
+                           resultString +=  p + ": " + row[p] + "\n";
+                       }
+                   }
+               }
+               return "<pre>" + resultString + "</pre>";
+           } else { 
+               
+               return result? "<em>" + result + "</em>" : "";
+           }
+     }
      var summaryTemplate = "<h3>Summary</h3>" + 
-        "";
-     //<i class='icon-circle-arrow-right'></i>
+     "<p>Validated against {{total}} rules: <span class='pass'>Passed: {{pass}}</span> <span class='error'>Errors: {{error}}</span> <span class='warn'>Warnings: {{warn}}</span> <span class='skip'>Skipped: {{skip}}</span></p>" +
+     "<hr class='mute'>";
      var sectionTemplate = "<h2><i class='{{status}} icon-{{status}}'></i> Section {{section}}</h2>" +
-       "<p>Section Summary: <span class='pass'>Passed: {{pass}}</span> <span class='error'>Errors: {{error}}</span> <span class='warn'>Warnings: {{warn}}</span> <span class='skip'>Skipped: {{skip}}</span></p>" +
+     "<p>Section Summary: <span class='pass'>Passed: {{pass}}</span> <span class='error'>Errors: {{error}}</span> <span class='warn'>Warnings: {{warn}}</span> <span class='skip'>Skipped: {{skip}}</span></p>" +
        "<hr class='mute'>" +
        "{{#constraints}}" +
        "<div><h3 class='{{status}}' title='{{status}}'><i class='icon-{{status}}'></i> " + 
-       "{{ref}}</h3><p><a style='color:#333333' target='_blank' href='{{url}}'>{{description}}</a></p></div>" +
+       "{{ref}}</h3><p><a style='color:#333333' target='_blank' href='{{url}}'>{{description}}</a>" + 
+       "<br/>{{{renderResult}}}" + 
+       "</p>" + 
+       "</div>" +
        "{{/constraints}}" +
        "<hr class='mute'>";
      jQuery("input:radio[name=contentType]").change(function(){
@@ -94,11 +118,12 @@
              success: function(d){
                  console.log("got data", d);
                  jQuery('#result').append("<h2>Validation Results</h2>");
-                 
-                 // TODO display summary of all results
+                 jQuery('#result').append(Mustache.render(summaryTemplate,d));
                  var result = "";
-                 for(var i =0; i< d.length; i++){
-                     var section = d[i];
+                 var detailedResults = d.result;
+                 for(var i =0; i < detailedResults.length; i++){
+                     var section = detailedResults[i];
+                     section.renderResult = renderResult;
                      jQuery('#result').append(Mustache.render(sectionTemplate,section));
                  }
                  jQuery('#result').append("<p>Legend: <span class='pass'><i class='icon-pass'></i> Passed</span> <span class='error'><icon class='icon-error'></i> Error</span> <span class='warn'><icon class='icon-warn'></i> Warning</span> <span class='skip'><i class='icon-skip'></i> Skipped</span></p>");
