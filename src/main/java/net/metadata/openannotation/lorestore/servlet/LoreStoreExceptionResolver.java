@@ -36,9 +36,9 @@ public class LoreStoreExceptionResolver extends
         } else if (ex instanceof NotFoundException) {
             statusCode = HttpStatus.NOT_FOUND.value();
         }
-        
-        response.setStatus(statusCode);
+
         ModelAndView mav = new ModelAndView("exception");
+        mav.addObject("statusCode",statusCode);
         mav.addObject("message", ex.getLocalizedMessage());
         mav.addObject("className", ClassUtils.getShortName(ex.getClass()));
         mav.addObject("stackTrace",ex.getStackTrace());

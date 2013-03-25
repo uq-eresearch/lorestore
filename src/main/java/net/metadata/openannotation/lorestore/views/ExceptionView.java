@@ -23,6 +23,8 @@ public class ExceptionView extends BaseView {
         throws IOException {
             String className = (String) map.get("className");
             String message = (String) map.get("message");
+            Integer statusCode = (Integer) map.get("statusCode");
+            response.setStatus(statusCode);
             response.setContentType(MimeTypes.HTML_MIMETYPE);
             PrintWriter out = response.getWriter();
             out.print("<html><body>" + message + "<br/>(" + className + ")</body></html>");
