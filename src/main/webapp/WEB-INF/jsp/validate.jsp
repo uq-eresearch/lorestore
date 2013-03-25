@@ -104,7 +104,7 @@
                  jQuery('#result').append("<p>Legend: <span class='pass'><i class='icon-pass'></i> Passed</span> <span class='error'><icon class='icon-error'></i> Error</span> <span class='warn'><icon class='icon-warn'></i> Warning</span> <span class='skip'><i class='icon-skip'></i> Skipped</span></p>");
              },
              error: function(e){
-                 console.log("error",e);
+                 jQuery('#result').append("<div class='error'>" + e.responseText + "</div>");
              }
          })
          return false;

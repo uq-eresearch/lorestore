@@ -106,23 +106,7 @@ public class AnnotationController {
         uh.delete(oreId);
         return new ResponseEntity<String>("", HttpStatus.NO_CONTENT);
     }
-    
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    @ExceptionHandler({ RequestFailureException.class, NotFoundException.class })
-    public void return404(Exception ex, HttpServletResponse response)
-            throws IOException {
-        LOG.debug("Handling Exception, returning 404" + ex);
-        response.sendError(HttpStatus.NOT_FOUND.value(), ex.getMessage());
-    }
 
-    
-    @ResponseStatus(HttpStatus.FORBIDDEN)
-    @ExceptionHandler({ AccessDeniedException.class })
-    public void return403(AccessDeniedException ex, HttpServletResponse response) throws IOException {
-        LOG.debug("Handling Exception, returning 403: " + ex);
-        response.sendError(HttpStatus.FORBIDDEN.value(), ex.getMessage());
-    }
-    
     @RequestMapping(value="/validate", method = RequestMethod.POST)
     public ModelAndView validate(InputStream inputRDF, @RequestHeader("Content-Type") String contentType)
                     throws RequestFailureException, IOException, LoreStoreException,
