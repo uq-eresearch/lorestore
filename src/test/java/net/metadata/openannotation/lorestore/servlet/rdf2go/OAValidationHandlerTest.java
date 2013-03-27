@@ -114,10 +114,16 @@ public class OAValidationHandlerTest {
         checkTestResult("2.1.1. (1) Typing of Body and Target", CommonTestRecords.OA_BASIC, "warn", "No content types");
         checkTestResult("2.1.1. (1) Typing of Body and Target", CommonTestRecords.OA_CONTENT_TYPES_WARNING, "warn", "Content types but not for all");
         checkTestResult("2.1.1. (1) Typing of Body and Target", CommonTestRecords.OA_BASIC_FULLY_VALID, "pass", "Content types for all");
+        // TODO specific resource pass (should be associated with hasSource resource)
+        // TODO specific resource fail
     }
     @Test
-    public void dctypes() {
+    public void dctypes() throws Exception {
         // The Dublin Core Types vocabulary is RECOMMENDED.
+        checkTestResult("2.1.1. (2) Typing of Body and Target", CommonTestRecords.OA_BASIC, "warn", "No types");
+        checkTestResult("2.1.1. (2) Typing of Body and Target", CommonTestRecords.OA_CONTENT_TYPES_NOT_DC, "warn", "Uses Types but not DCMI");
+        // dctypes
+        checkTestResult("2.1.1. (2) Typing of Body and Target", CommonTestRecords.OA_BASIC_FULLY_VALID, "pass", "Uses DCMI Types");
     }
     @Test
     public void imagesAsText(){

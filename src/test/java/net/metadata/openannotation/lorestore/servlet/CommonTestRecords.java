@@ -324,7 +324,11 @@ public abstract class CommonTestRecords {
         
     /* Sample annos for validation tests : all in TriG format */
 
-    public static final String OA_BASIC = "@prefix oa: <http://www.w3.org/ns/oa#> .<http://localhost:8080/lorestore/oa/sopabasic> {<http://localhost:8080/lorestore/oa/sopabasic> a oa:Annotation ; oa:hasBody <http://www.youtube.com/watch?v=uPh81LIe7B8> ; oa:hasTarget <http://en.wikipedia.org/> .}";
+    public static final String OA_BASIC = "@prefix oa: <http://www.w3.org/ns/oa#> ."
+            + "<http://localhost:8080/lorestore/oa/sopabasic> {"
+            + "<http://localhost:8080/lorestore/oa/sopabasic> a oa:Annotation ; "
+            + "oa:hasBody <http://www.youtube.com/watch?v=uPh81LIe7B8> ; " 
+            + "oa:hasTarget <http://en.wikipedia.org/> .}";
     
     public static final String OA_BASIC_FULLY_VALID = "@prefix oa: <http://www.w3.org/ns/oa#> . " 
             + "@prefix foaf: <http://xmlns.com/foaf/0.1/> . "
@@ -563,6 +567,22 @@ public abstract class CommonTestRecords {
             + "<http://example.org/user1> a foaf:Person ; "
             + "foaf:name \"Joe Bloggs\" . "
             + "<http://en.wikipedia.org/> a dctypes:Text . "
+            + "}";
+    public static final String OA_CONTENT_TYPES_NOT_DC = "@prefix oa: <http://www.w3.org/ns/oa#> . " 
+            + "@prefix foaf: <http://xmlns.com/foaf/0.1/> . "
+            + "@prefix dctypes: <http://purl.org/dc/dcmitype/> . "
+            + "@prefix ex: <http://example.org/> ."
+            + "<http://localhost:8080/lorestore/oa/sopabasic> { "
+            + "<http://localhost:8080/lorestore/oa/sopabasic> a oa:Annotation ; "
+            + "oa:annotatedBy <http://example.org/user1> ; "
+            + "oa:annotatedAt \"2012-02-12T15:02:14Z\" ; "
+            + "oa:motivatedBy oa:commenting ; "
+            + "oa:hasBody <http://www.youtube.com/watch?v=uPh81LIe7B8> ; "
+            + "oa:hasTarget <http://en.wikipedia.org/> ."
+            + "<http://example.org/user1> a foaf:Person ; "
+            + "foaf:name \"Joe Bloggs\" . "
+            + "<http://www.youtube.com/watch?v=uPh81LIe7B8> a dctypes:MovingImage ."
+            + "<http://en.wikipedia.org/> a ex:Foo . "
             + "}";
     public static final String OA_MOTIVATION_NO_INSTANCE  = "@prefix oa: <http://www.w3.org/ns/oa#> . " 
             + "@prefix foaf: <http://xmlns.com/foaf/0.1/> . "
