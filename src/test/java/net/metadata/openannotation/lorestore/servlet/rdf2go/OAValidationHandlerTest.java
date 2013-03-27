@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import net.metadata.openannotation.lorestore.access.AllowEverythingAccessPolicy;
-import net.metadata.openannotation.lorestore.servlet.CommonTestRecords;
+import net.metadata.openannotation.lorestore.servlet.OATestRecords;
 import net.metadata.openannotation.lorestore.servlet.LoreStoreControllerConfig;
 import net.metadata.openannotation.lorestore.triplestore.MemoryTripleStoreConnectorFactory;
 import net.metadata.openannotation.lorestore.util.UIDGenerator;
@@ -56,12 +56,12 @@ public class OAValidationHandlerTest {
     @Test
     public void basicWithWarnings() throws Exception {
         // minimal annotation based on SOPA example
-        checkTestCounts(CommonTestRecords.OA_BASIC, 9, 5 ,0, 41);
+        checkTestCounts(OATestRecords.OA_BASIC, 9, 5 ,0, 41);
     }
     @Test
     public void basicFullyValid() throws Exception {
         // minimal annotation but with basic provenance etc so that all recommended and should rules are satisfied (i.e. no warnings)
-        checkTestCounts(CommonTestRecords.OA_BASIC_FULLY_VALID, 18, 0, 0, 37);
+        checkTestCounts(OATestRecords.OA_BASIC_FULLY_VALID, 18, 0, 0, 37);
     }
     @Test
     public void multipleAnnotations() throws Exception{
@@ -76,54 +76,53 @@ public class OAValidationHandlerTest {
     @Test
     public void bodyTargetIdentifiers() throws Exception {
         // The Body and Target SHOULD be identified by HTTP URIs unless they are embedded within the Annotation.
-        checkTestResult("2.1.0. (1) Body and Target Resources", CommonTestRecords.OA_BLANKNODE_TARGET, "warn", "Blank Node Target");
-        checkTestResult("2.1.0. (1) Body and Target Resources", CommonTestRecords.OA_UUID_BODY, "warn", "UUID Body");
-        checkTestResult("2.1.0. (1) Body and Target Resources", CommonTestRecords.OA_EMBEDDED_BODY, "pass", "Embedded UUID Body");
-        checkTestResult("2.1.0. (1) Body and Target Resources", CommonTestRecords.OA_BASIC_FULLY_VALID, "pass", "HTTP Identifiers");
+        checkTestResult("2.1.0. (1) Body and Target Resources", OATestRecords.OA_BLANKNODE_TARGET, "warn", "Blank Node Target");
+        checkTestResult("2.1.0. (1) Body and Target Resources", OATestRecords.OA_UUID_BODY, "warn", "UUID Body");
+        checkTestResult("2.1.0. (1) Body and Target Resources", OATestRecords.OA_EMBEDDED_BODY, "pass", "Embedded UUID Body");
+        checkTestResult("2.1.0. (1) Body and Target Resources", OATestRecords.OA_BASIC_FULLY_VALID, "pass", "HTTP Identifiers");
     }
    
     @Test
     public void annoClass() throws Exception{
         // The oa:Annotation class MUST be associated with each Annotation.
-        checkTestResult("2.1.0. (2) Body and Target Resources", CommonTestRecords.OA_NO_TYPE, "error", "No oa:Annotation class");
-        checkTestResult("2.1.0. (2) Body and Target Resources", CommonTestRecords.OA_BASIC_FULLY_VALID, "pass", "oa:Annotation class asserted");
+        checkTestResult("2.1.0. (2) Body and Target Resources", OATestRecords.OA_NO_TYPE, "error", "No oa:Annotation class");
+        checkTestResult("2.1.0. (2) Body and Target Resources", OATestRecords.OA_BASIC_FULLY_VALID, "pass", "oa:Annotation class asserted");
     }
     
     @Test
     public void annoSubclassing() throws Exception{
         // Additional subclassing is ONLY RECOMMENDED in order to provide additional, community-specific constraints on the model.
-        checkTestResult("2.1.0. (3) Body and Target Resources", CommonTestRecords.OA_CUSTOM_SUBCLASS, "warn", "Custom subclass");
-        checkTestResult("2.1.0. (3) Body and Target Resources", CommonTestRecords.OA_CUSTOM_CLASS, "pass", "Custom annotation type (not oa:Annotation subclass)");
-        checkTestResult("2.1.0. (3) Body and Target Resources", CommonTestRecords.OA_BASIC_FULLY_VALID, "pass", "No subclassing");
+        checkTestResult("2.1.0. (3) Body and Target Resources", OATestRecords.OA_CUSTOM_SUBCLASS, "warn", "Custom subclass");
+        checkTestResult("2.1.0. (3) Body and Target Resources", OATestRecords.OA_CUSTOM_CLASS, "pass", "Custom annotation type (not oa:Annotation subclass)");
+        checkTestResult("2.1.0. (3) Body and Target Resources", OATestRecords.OA_BASIC_FULLY_VALID, "pass", "No subclassing");
     }
     @Test
     public void hasBodyWarn() throws Exception{
         // There SHOULD be 1 or more oa:hasBody relationships associated with an Annotation but there MAY be 0.
-        checkTestResult("2.1.0. (4) Body and Target Resources", CommonTestRecords.OA_NO_BODY, "warn", "No body");
-        checkTestResult("2.1.0. (4) Body and Target Resources", CommonTestRecords.OA_BASIC_FULLY_VALID, "pass", "Body exists");
+        checkTestResult("2.1.0. (4) Body and Target Resources", OATestRecords.OA_NO_BODY, "warn", "No body");
+        checkTestResult("2.1.0. (4) Body and Target Resources", OATestRecords.OA_BASIC_FULLY_VALID, "pass", "Body exists");
     }
     @Test
     public void hasTarget() throws Exception{
         // There MUST be 1 or more oa:hasTarget relationships associated with an Annotation.
-        checkTestResult("2.1.0. (5) Body and Target Resources", CommonTestRecords.OA_NO_TARGET, "error", "No target");
-        checkTestResult("2.1.0. (5) Body and Target Resources", CommonTestRecords.OA_BASIC_FULLY_VALID, "pass", "Target exists");
+        checkTestResult("2.1.0. (5) Body and Target Resources", OATestRecords.OA_NO_TARGET, "error", "No target");
+        checkTestResult("2.1.0. (5) Body and Target Resources", OATestRecords.OA_BASIC_FULLY_VALID, "pass", "Target exists");
     }
     @Test
     public void contentClasses() throws Exception{
         // There SHOULD be 1 or more content-based classes associated with the Body and Target resources of an Annotation.
-        checkTestResult("2.1.1. (1) Typing of Body and Target", CommonTestRecords.OA_BASIC, "warn", "No content types");
-        checkTestResult("2.1.1. (1) Typing of Body and Target", CommonTestRecords.OA_CONTENT_TYPES_WARNING, "warn", "Content types but not for all");
-        checkTestResult("2.1.1. (1) Typing of Body and Target", CommonTestRecords.OA_BASIC_FULLY_VALID, "pass", "Content types for all");
+        checkTestResult("2.1.1. (1) Typing of Body and Target", OATestRecords.OA_BASIC, "warn", "No content types");
+        checkTestResult("2.1.1. (1) Typing of Body and Target", OATestRecords.OA_CONTENT_TYPES_WARNING, "warn", "Content types but not for all");
+        checkTestResult("2.1.1. (1) Typing of Body and Target", OATestRecords.OA_BASIC_FULLY_VALID, "pass", "Content types for all");
         // TODO specific resource pass (should be associated with hasSource resource)
         // TODO specific resource fail
     }
     @Test
     public void dctypes() throws Exception {
         // The Dublin Core Types vocabulary is RECOMMENDED.
-        checkTestResult("2.1.1. (2) Typing of Body and Target", CommonTestRecords.OA_BASIC, "warn", "No types");
-        checkTestResult("2.1.1. (2) Typing of Body and Target", CommonTestRecords.OA_CONTENT_TYPES_NOT_DC, "warn", "Uses Types but not DCMI");
-        // dctypes
-        checkTestResult("2.1.1. (2) Typing of Body and Target", CommonTestRecords.OA_BASIC_FULLY_VALID, "pass", "Uses DCMI Types");
+        checkTestResult("2.1.1. (2) Typing of Body and Target", OATestRecords.OA_BASIC, "warn", "No types");
+        checkTestResult("2.1.1. (2) Typing of Body and Target", OATestRecords.OA_CONTENT_TYPES_NOT_DC, "warn", "Uses Types but not DCMI");
+        checkTestResult("2.1.1. (2) Typing of Body and Target", OATestRecords.OA_BASIC_FULLY_VALID, "pass", "Uses DCMI Types");
     }
     @Test
     public void imagesAsText(){
@@ -132,8 +131,9 @@ public class OAValidationHandlerTest {
     @Test
     public void embeddedContentAsTextClass() throws Exception {
         // The cnt:ContentAsText class SHOULD be assigned to the embedded body resource
-        checkTestResult("2.1.2. (1) Embedded Textual Bodies", CommonTestRecords.OA_EMBEDDED_BODY_NO_CONTENTASTEXT, "warn", "No ContentAsText type");
-        checkTestResult("2.1.2. (1) Embedded Textual Bodies", CommonTestRecords.OA_EMBEDDED_BODY, "pass", "ContentAsText type exists");
+        checkTestResult("2.1.2. (1) Embedded Textual Bodies", OATestRecords.OA_EMBEDDED_BODY_NO_CONTENTASTEXT, "warn", "No ContentAsText type");
+        checkTestResult("2.1.2. (1) Embedded Textual Bodies", OATestRecords.OA_EMBEDDED_BODY, "pass", "ContentAsText type exists");
+        checkTestResult("2.1.2. (1) Embedded Textual Bodies", OATestRecords.OA_BASIC, "skip", "No embedded content");
     }
     @Test
     public void language3066(){
@@ -200,20 +200,32 @@ public class OAValidationHandlerTest {
         //Specific Resource SHOULD be identified by a globally unique URI
     }
     @Test
-    public void hasSelectorNotMoreThanOne(){
+    public void hasSelectorNotMoreThanOne() throws Exception {
         //There MUST be exactly 0 or 1 oa:hasSelector relationship associated with a Specific Resource.
+        checkTestResult("3.2.0. (1) Selectors", OATestRecords.OA_SPECIFIC_RESOURCE_NO_SELECTOR, "pass", "no hasSelector");
+        checkTestResult("3.2.0. (1) Selectors", OATestRecords.OA_FRAGMENT_SELECTOR, "pass", "hasSelector exists");
+        checkTestResult("3.2.0. (1) Selectors", OATestRecords.OA_FRAGMENT_SELECTOR_INVALID, "error", "too many hasSelectors");
     }
     @Test
-    public void fragmentSelector(){
+    public void fragmentSelector() throws Exception {
         //It is RECOMMENDED to use oa:FragmentSelector rather than annotating the fragment URI directly.
+        checkTestResult("3.2.1. (1) Fragment Selector", OATestRecords.OA_FRAGMENT_TARGET, "warn", "Target with Fragment URI");
+        checkTestResult("3.2.1. (1) Fragment Selector", OATestRecords.OA_FRAGMENT_SELECTOR, "pass", "Fragment Selector");
+        checkTestResult("3.2.1. (1) Fragment Selector", OATestRecords.OA_BASIC, "skip", "No fragments");
     }
     @Test
-    public void fragmentSelectorValue(){
+    public void fragmentSelectorValue() throws Exception{
         //The oa:FragmentSelector MUST have exactly 1 rdf:value property
+        checkTestResult("3.2.1. (2) Fragment Selector", OATestRecords.OA_FRAGMENT_SELECTOR_INVALID, "error", "No rdf:value");
+        checkTestResult("3.2.1. (2) Fragment Selector", OATestRecords.OA_FRAGMENT_SELECTOR, "pass", "rdf:value exists");
+        checkTestResult("3.2.1. (2) Fragment Selector", OATestRecords.OA_BASIC, "skip", "No fragment selector");
     }
     @Test
-    public void fragmentSelectorConformsTo(){
+    public void fragmentSelectorConformsTo() throws Exception {
         //The Fragment Selector SHOULD have a dcterms:conformsTo relationship.
+        checkTestResult("3.2.1. (3) Fragment Selector", OATestRecords.OA_FRAGMENT_SELECTOR_INVALID, "warn", "No dcterms:conformsTo");
+        checkTestResult("3.2.1. (3) Fragment Selector", OATestRecords.OA_FRAGMENT_SELECTOR, "pass", "dcterms:conformsTo exists");
+        checkTestResult("3.2.1. (3) Fragment Selector", OATestRecords.OA_BASIC, "skip", "No fragment selector");
     }
     @Test
     public void textPosSelStart(){
@@ -306,28 +318,32 @@ public class OAValidationHandlerTest {
     @Test
     public void embeddedResourceEncoding() throws Exception {
         //There SHOULD be exactly 1 cnt:characterEncoding for a ContentAsText or ContentAsBase64 resource
-        checkTestResult("5.2. (3) Embedding Resources", CommonTestRecords.OA_EMBEDDED_BODY_NO_ENCODING, "warn", "No encoding");
-        checkTestResult("5.2. (3) Embedding Resources", CommonTestRecords.OA_EMBEDDED_BODY_MULTIPLE_ENCODING, "warn", "Too many encodings");
-        checkTestResult("5.2. (3) Embedding Resources", CommonTestRecords.OA_EMBEDDED_BODY, "pass", "Encoding exists");
+        checkTestResult("5.2. (3) Embedding Resources", OATestRecords.OA_EMBEDDED_BODY_NO_ENCODING, "warn", "No encoding");
+        checkTestResult("5.2. (3) Embedding Resources", OATestRecords.OA_EMBEDDED_BODY_MULTIPLE_ENCODING, "warn", "Too many encodings");
+        checkTestResult("5.2. (3) Embedding Resources", OATestRecords.OA_EMBEDDED_BODY, "pass", "Encoding exists");
+        checkTestResult("5.2. (3) Embedding Resources", OATestRecords.OA_BASIC, "skip", "No embedded resources");
     }
     @Test
     public void embeddedResourceFormat() throws Exception {
         //There SHOULD be exactly 1 dc:format property associated with each embedded resource
-        checkTestResult("5.2. (4) Embedding Resources", CommonTestRecords.OA_EMBEDDED_BODY_NO_FORMAT, "warn", "No dc:format");
-        checkTestResult("5.2. (4) Embedding Resources", CommonTestRecords.OA_EMBEDDED_BODY, "pass", "dc:format exists");
+        checkTestResult("5.2. (4) Embedding Resources", OATestRecords.OA_EMBEDDED_BODY_NO_FORMAT, "warn", "No dc:format");
+        checkTestResult("5.2. (4) Embedding Resources", OATestRecords.OA_EMBEDDED_BODY, "pass", "dc:format exists");
+        checkTestResult("5.2. (4) Embedding Resources", OATestRecords.OA_BASIC, "skip", "No embedded resources");
     }
     @Test
     public void motivationsSubclass() throws Exception{
         //New Motivations MUST be instances of oa:Motivation, which is a subClass of skos:Concept.
-        checkTestResult("B. (1) Extending Motivations", CommonTestRecords.OA_MOTIVATION_NO_INSTANCE, "error", "Motivation is not instance of oa:Motivation");
-        checkTestResult("B. (1) Extending Motivations", CommonTestRecords.OA_MOTIVATION_NO_BROADER, "pass", "Motivation is instance");
+        checkTestResult("B. (1) Extending Motivations", OATestRecords.OA_MOTIVATION_NO_INSTANCE, "error", "Motivation is not instance of oa:Motivation");
+        checkTestResult("B. (1) Extending Motivations", OATestRecords.OA_MOTIVATION_NO_BROADER, "pass", "Motivation is instance");
+        checkTestResult("B. (1) Extending Motivations", OATestRecords.OA_BASIC_FULLY_VALID, "skip", "No new Motivations");
     }
     
     @Test
     public void motivationsBroader() throws Exception {
         //The skos:broader relationship SHOULD be asserted between the new Motivation and at least one existing Motivation
-        checkTestResult("B. (2) Extending Motivations", CommonTestRecords.OA_MOTIVATION_NO_INSTANCE, "warn", "No broader");
-        checkTestResult("B. (2) Extending Motivations", CommonTestRecords.OA_MOTIVATION_VALID, "pass", "Broader exists");
+        checkTestResult("B. (2) Extending Motivations", OATestRecords.OA_MOTIVATION_NO_INSTANCE, "warn", "No broader");
+        checkTestResult("B. (2) Extending Motivations", OATestRecords.OA_MOTIVATION_VALID, "pass", "Broader exists");
+        checkTestResult("B. (2) Extending Motivations", OATestRecords.OA_BASIC_FULLY_VALID, "skip", "No new Motivations");
     }
     
     private void checkTestCounts(String annotation, int passExpect, int warnExpect, int errorExpect, int skipExpect) throws Exception{
