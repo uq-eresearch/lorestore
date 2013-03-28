@@ -63,9 +63,15 @@ public class OAValidationHandlerTest {
         // minimal annotation but with basic provenance etc so that all recommended and should rules are satisfied (i.e. no warnings)
         checkTestCounts(OATestRecords.OA_BASIC_FULLY_VALID, 18, 0, 0, 37);
     }
+    @Test 
+    public void allValid() throws Exception {
+        // annotation where all rules preconditions are satisfied and all rules pass
+        checkTestCounts(OATestRecords.OA_ALL_RULES_PASS, 55, 0, 0, 0);
+    }
     @Test
     public void multipleAnnotations() throws Exception{
         // check validation still works when multiple annotations are supplied
+        checkTestCounts(OATestRecords.OA_BASIC_MULTIPLE, 9, 5, 0, 41);
     }
     
     // Test individual rules return the correct status
@@ -188,16 +194,24 @@ public class OAValidationHandlerTest {
         checkTestResult("2.2.0. (5) Annotation Provenance", OATestRecords.OA_BASIC_INVALID_DATETIME, "warn", "Invalid annotatedAt time zone");
     }
     @Test
-    public void serializedAtNotMoreThanOne(){
+    public void serializedAtNotMoreThanOne() throws Exception {
         //There MUST NOT be more than 1 oa:serializedAt property per Annotation
+        checkTestResult("2.2.0. (6) Annotation Provenance", OATestRecords.OA_BASIC_FULLY_VALID, "pass", "Not more than one serializedAt");
+        checkTestResult("2.2.0. (6) Annotation Provenance", OATestRecords.OA_MULTIPLE_SERIALIZEDAT, "error", "Too many serializedAt props");
     }
     @Test
-    public void foafPerson(){
+    public void foafPerson() throws Exception {
         //It is RECOMMENDED to use foaf:Person as the class of the object of oa:annotatedBy
+        checkTestResult("2.2.1. (1) Agents", OATestRecords.OA_BASIC_FULLY_VALID, "pass", "Agent has type Person");
+        checkTestResult("2.2.1. (1) Agents", OATestRecords.OA_NO_PERSON, "warn", "Agent not of type Person");
+        checkTestResult("2.2.1. (1) Agents", OATestRecords.OA_BASIC, "skip", "No annotatedBy prop");
     }
     @Test
-    public void provSoftwareAgent(){
+    public void provSoftwareAgent() throws Exception {
         //It is RECOMMENDED to use prov:SoftwareAgent as the class of the object of oa:serializedBy
+        checkTestResult("2.2.1. (2) Agents", OATestRecords.OA_SERIALIZEDBY, "pass", "Agent has type prov:SoftwareAgent");
+        checkTestResult("2.2.1. (2) Agents", OATestRecords.OA_NO_SOFTWAREAGENT, "warn", "Agent not of type SoftwareAgent");
+        checkTestResult("2.2.1. (2) Agents", OATestRecords.OA_BASIC, "skip", "No serializedBy prop");
     }
     @Test
     public void agentName() throws Exception {
@@ -263,16 +277,27 @@ public class OAValidationHandlerTest {
         checkTestResult("3.2.1. (3) Fragment Selector", OATestRecords.OA_BASIC, "skip", "No fragment selector");
     }
     @Test
-    public void textPosSelStart(){
+    public void textPosSelStart() throws Exception {
         //Each TextPositionSelector MUST have exactly 1 oa:start property
+        checkTestResult("3.2.2.1. (1) Text Position Selector", OATestRecords.OA_BASIC, "skip", "No text position selector");
+        checkTestResult("3.2.2.1. (1) Text Position Selector", OATestRecords.OA_ALL_RULES_PASS, "pass", "One oa:start prop");
+        checkTestResult("3.2.2.1. (1) Text Position Selector", OATestRecords.OA_TEXTPOSSEL_NO_START_OR_END, "error", "No oa:start prop");
+        checkTestResult("3.2.2.1. (1) Text Position Selector", OATestRecords.OA_TEXTPOSSEL_MULTIPLE_START_OR_END, "error", "Too many oa:start props");
     }
     @Test
-    public void textPosSelEnd(){
+    public void textPosSelEnd() throws Exception {
         //Each TextPositionSelector MUST have exactly 1 oa:end property
+        checkTestResult("3.2.2.1. (2) Text Position Selector", OATestRecords.OA_BASIC, "skip", "No text position selector");
+        checkTestResult("3.2.2.1. (2) Text Position Selector", OATestRecords.OA_ALL_RULES_PASS, "pass", "One oa:end prop");
+        checkTestResult("3.2.2.1. (2) Text Position Selector", OATestRecords.OA_TEXTPOSSEL_NO_START_OR_END, "error", "No oa:end prop");
+        checkTestResult("3.2.2.1. (2) Text Position Selector", OATestRecords.OA_TEXTPOSSEL_MULTIPLE_START_OR_END, "error", "Too many oa:end props");
     }
     @Test
-    public void textPosSelPlusState(){
+    public void textPosSelPlusState() throws Exception{
         //It is RECOMMENDED that a State be used in addition to a TextPositionSelector.
+        checkTestResult("3.2.2.1. (3) Text Position Selector", OATestRecords.OA_TEXTPOSSEL_NO_START_OR_END, "warn", "No TimeState");
+        checkTestResult("3.2.2.1. (3) Text Position Selector", OATestRecords.OA_TEXTPOSSEL_TIMESTATE, "pass", "Has TimeState");
+        checkTestResult("3.2.2.1. (3) Text Position Selector", OATestRecords.OA_BASIC, "skip", "No text position selector");
     }
     @Test
     public void textQuoteSelHasExact(){
@@ -307,20 +332,34 @@ public class OAValidationHandlerTest {
         //There MAY be 0 or 1 oa:hasState relationship for each SpecificResource
     }
     @Test
-    public void when8601(){
+    public void when8601() throws Exception {
         //The timestamp for oa:when MUST be expressed in the xsd:dateTime (ISO 8601) format
+        checkTestResult("3.3.1. (1) Time State", OATestRecords.OA_ALL_RULES_PASS, "pass", "DateTime valid for oa:when");
+        checkTestResult("3.3.1. (1) Time State", OATestRecords.OA_TIMESTATE_INVALID_WHEN, "error", "Invalid DateTime for oa:when");
+        checkTestResult("3.3.1. (1) Time State", OATestRecords.OA_BASIC, "skip", "No TimeState");
     }
     @Test
-    public void whenTimeZone(){
+    public void whenTimeZone() throws Exception {
         //The timestamp for oa:when SHOULD have a timezone specified
+        checkTestResult("3.3.1. (2) Time State", OATestRecords.OA_ALL_RULES_PASS, "pass", "Timezone valid for oa:when");
+        checkTestResult("3.3.1. (2) Time State", OATestRecords.OA_TIMESTATE_INVALID_WHEN, "warn", "Invalid timezone for oa:when");
+        checkTestResult("3.3.1. (2) Time State", OATestRecords.OA_BASIC, "skip", "No TimeState");
     }
     @Test
-    public void whenOrCachedSource(){
+    public void whenOrCachedSource() throws Exception {
         //There MUST be at least one of oa:when or oa:cachedSource.
+        checkTestResult("3.3.1. (3) Time State", OATestRecords.OA_ALL_RULES_PASS, "pass", "Has oa:when");
+        checkTestResult("3.3.1. (3) Time State", OATestRecords.OA_TEXTPOSSEL_TIMESTATE, "pass", "Has oa:cachedSource");
+        checkTestResult("3.3.1. (3) Time State", OATestRecords.OA_TIMESTATE_NO_WHEN, "error", "No oa:when or oa:cachedSource");
+        checkTestResult("3.3.1. (3) Time State", OATestRecords.OA_BASIC, "skip", "No TimeState");
     }
     @Test
-    public void httpRequestStateValue(){
+    public void httpRequestStateValue() throws Exception{
         //There MUST be exactly 1 rdf:value property per HTTPRequestState.
+        checkTestResult("3.3.2. (1) Request Header State", OATestRecords.OA_BASIC, "skip", "No HTTPRequestState");
+        checkTestResult("3.3.2. (1) Request Header State", OATestRecords.OA_ALL_RULES_PASS, "pass", "One rdf:value");
+        checkTestResult("3.3.2. (1) Request Header State", OATestRecords.OA_HTTPREQUESTSTATE_NO_VAL, "error", "No rdf:value");
+        checkTestResult("3.3.2. (1) Request Header State", OATestRecords.OA_HTTPREQUESTSTATE_MULTIPLE_VAL, "error", "Too many rdf:value props");
     }
     @Test
     public void styledByNotMoreThanOne() throws Exception{
@@ -399,10 +438,10 @@ public class OAValidationHandlerTest {
         int warn = (Integer) result.get("warn");
         int error = (Integer) result.get("error");
         int skip = (Integer) result.get("skip");
-        assertEquals("Number of passes",pass,passExpect);
-        assertEquals("Number of warns",warn,warnExpect);
-        assertEquals("Number of errors",error,errorExpect);
-        assertEquals("Number of skips",skip,skipExpect);
+        assertEquals("Number of passes",passExpect,pass);
+        assertEquals("Number of warns",warnExpect,warn);
+        assertEquals("Number of errors",errorExpect,error);
+        assertEquals("Number of skips",skipExpect,skip);
     }
     
     /* Run a validation test and check that the status was as expected */

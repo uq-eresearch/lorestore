@@ -8,7 +8,7 @@
         "severity": "warn",
         "preconditionMessage": "No body or target present",
         "precondition": "PREFIX oa: <http://www.w3.org/ns/oa#> SELECT ?anno WHERE {  {?anno oa:hasBody ?res } UNION {?anno oa:hasTarget ?res}}",
-        "query": "PREFIX oa: <http://www.w3.org/ns/oa#> PREFIX cnt: <http://www.w3.org/2011/content#> SELECT ?anno WHERE { {{?anno oa:hasBody ?res } UNION {?anno oa:hasTarget ?res} . FILTER (NOT EXISTS{?res oa:hasSource ?source})} UNION {{?anno oa:hasBody ?b . ?b oa:hasSource ?res} UNION {?anno oa:hasTarget ?b . ?b oa:hasSource ?res}} . MINUS {  {{?anno oa:hasBody ?res } UNION {?anno oa:hasTarget ?res} . FILTER (NOT EXISTS{?res oa:hasSource ?source})} UNION {{?anno oa:hasBody ?b . ?b oa:hasSource ?res} UNION {?anno oa:hasTarget ?b . ?b oa:hasSource ?res}} . FILTER regex(str(?res),\"^http\") } . MINUS { {{?anno oa:hasBody ?res } UNION {?anno oa:hasTarget ?res} . FILTER (NOT EXISTS{?res oa:hasSource ?source})} UNION {{?anno oa:hasBody ?b . ?b oa:hasSource ?res} UNION {?anno oa:hasTarget ?b . ?b oa:hasSource ?res}} . FILTER (EXISTS{{?res a cnt:ContentAsText} UNION {?res a cnt:ContentAsBase64}}) }}"
+        "query": "PREFIX oa: <http://www.w3.org/ns/oa#> PREFIX cnt: <http://www.w3.org/2011/content#> SELECT ?res WHERE { {{?anno oa:hasBody ?res } UNION {?anno oa:hasTarget ?res} . FILTER (NOT EXISTS{?res oa:hasSource ?source})} UNION {?sr a oa:SpecificResource . ?sr oa:hasSource ?res} . MINUS {  {{?anno oa:hasBody ?res } UNION {?anno oa:hasTarget ?res} .  FILTER (NOT EXISTS{?res oa:hasSource ?source})}  UNION {?sr a oa:SpecificResource . ?sr oa:hasSource ?res} .  FILTER regex(str(?res),\"^http\") }  . MINUS { {{?anno oa:hasBody ?res } UNION {?anno oa:hasTarget ?res} .  FILTER (NOT EXISTS{?res oa:hasSource ?source})} UNION {?sr a oa:SpecificResource . ?sr oa:hasSource ?res} .  FILTER (EXISTS{{?res a cnt:ContentAsText} UNION {?res a cnt:ContentAsBase64}}) }} "
       },
       {
         "ref": "2.1.0. (2) Body and Target Resources",
@@ -248,7 +248,7 @@
           "description": "It is RECOMMENDED to use oa:FragmentSelector rather than annotating the fragment URI directly.",
           "severity": "warn",
           "preconditionMessage": "No fragments identified",
-          "precondition": "PREFIX oa: <http://www.w3.org/ns/oa#> SELECT ?annotation WHERE { {?annotation oa:hasTarget ?target . FILTER regex(str(?target), \"#\") } UNION {?annotation oa:hasTarget ?target . ?target oa:hasSelector ?sel . ?sel a oa:FragmentSelector}}",
+          "precondition": "PREFIX oa: <http://www.w3.org/ns/oa#> SELECT ?res WHERE { {?annotation oa:hasTarget ?res . FILTER regex(str(?res), \"#\") } UNION {?res a oa:FragmentSelector}}",
           "query": "PREFIX oa: <http://www.w3.org/ns/oa#> SELECT ?annotation WHERE {  ?annotation oa:hasTarget ?target . FILTER regex(str(?target), \"#\") } "
       },
       {
@@ -294,7 +294,7 @@
           "severity": "warn",
           "preconditionMessage": "No TextPositionSelectors identified",
           "precondition": "PREFIX oa: <http://www.w3.org/ns/oa#> SELECT ?sel WHERE { ?sel a oa:TextPositionSelector }",
-          "query": "PREFIX oa: <http://www.w3.org/ns/oa#> PREFIX prov: <http://www.w3.org/ns/prov#> SELECT ?sel WHERE {  ?res oa:hasSelector ?sel . ?sel a oa:TextPositionSelector . FILTER (NOT EXISTS{?res oa:hasState ?state})}"
+          "query": "PREFIX oa: <http://www.w3.org/ns/oa#> PREFIX prov: <http://www.w3.org/ns/prov#> SELECT ?sel WHERE {  ?sel a oa:TextPositionSelector . ?res (oa:hasSelector | oa:item)+ ?sel . ?res a oa:SpecificResource . FILTER (NOT EXISTS{?res oa:hasState ?state})}"
       },
       {
           "ref": "3.2.2.2. (1) Text Quote Selector",
@@ -384,7 +384,7 @@
           "severity": "warn",
           "preconditionMessage": "oa:when property not present",
           "precondition": "PREFIX oa: <http://www.w3.org/ns/oa#> SELECT ?timestate WHERE { ?timestate oa:when ?when}",
-          "query": "PREFIX oa: <http://www.w3.org/ns/oa#> SELECT * WHERE { ?timestate oa:when ?when . MINUS { ?timestate oa:when ?when . FILTER regex(str(?when), \"[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]T[0-9][0-9]:[0-9][0-9]:[0-9][0-9](\\+[0-9][0-9]:[0-9][0-9]|-[0-9][0-9]:[0-9][0-9]|Z)\")}}"
+          "query": "PREFIX oa: <http://www.w3.org/ns/oa#> SELECT * WHERE { ?timestate oa:when ?when . MINUS { ?timestate oa:when ?when . FILTER regex(str(?when), \"[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]T[0-9][0-9]:[0-9][0-9]:[0-9][0-9](\\\\+[0-9][0-9]:[0-9][0-9]|-[0-9][0-9]:[0-9][0-9]|Z)\")}}"
       },
       {
           "ref": "3.3.1. (3) Time State",
@@ -393,7 +393,7 @@
           "severity": "error",
           "preconditionMessage": "No TimeStates identified",
           "precondition": "PREFIX oa: <http://www.w3.org/ns/oa#> SELECT ?timestate WHERE { ?timestate a oa:TimeState}",
-          "query": "PREFIX oa: <http://www.w3.org/ns/oa#> SELECT ?timestate WHERE { ?timestate a oa:TimeState . {?timestate oa:when ?val} UNION {?timestate oa:cachedSource ?val}} group by ?timestate having(count(?val) < 1)"
+          "query": "PREFIX oa: <http://www.w3.org/ns/oa#> SELECT ?timestate WHERE { ?timestate a oa:TimeState . OPTIONAL{{?timestate oa:when ?val} UNION {?timestate oa:cachedSource ?val}}} group by ?timestate having(count(?val) < 1)"
       },
       {
           "ref": "3.3.2. (1) Request Header State",
