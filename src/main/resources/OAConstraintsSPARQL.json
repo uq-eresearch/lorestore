@@ -97,8 +97,8 @@
           "description": "The type oa:Tag (or subclass e.g. oa:SemanticTag) MUST be associated with the tagging resource.",
           "severity": "error",
           "preconditionMessage": "No tags identified",
-          "precondition": "PREFIX oa: <http://www.w3.org/ns/oa#> SELECT ?annotation  WHERE { {?anno oa:motivatedBy oa:tagging} UNION { ?anno oa:hasBody ?tag . {?tag a oa:Tag } UNION {?tag a oa:SemanticTag } }}",
-          "query": "PREFIX oa: <http://www.w3.org/ns/oa#> SELECT ?annotation  WHERE { ?anno oa:motivatedBy oa:tagging . FILTER (NOT EXISTS{?anno oa:hasBody ?tag . {?tag a oa:Tag } UNION {?tag a oa:SemanticTag } })}"
+          "precondition": "PREFIX oa: <http://www.w3.org/ns/oa#> SELECT ?anno  WHERE { {?anno oa:motivatedBy oa:tagging} UNION { ?anno oa:hasBody ?tag . {?tag a oa:Tag } UNION {?tag a oa:SemanticTag } }}",
+          "query": "PREFIX oa: <http://www.w3.org/ns/oa#> SELECT ?anno  WHERE { ?anno oa:motivatedBy oa:tagging . FILTER (NOT EXISTS{?anno oa:hasBody ?tag . {?tag a oa:Tag } UNION {?tag a oa:SemanticTag } })}"
       },
       {
           "ref": "2.1.3. (2) Tags and Semantic Tags",
@@ -106,8 +106,8 @@
           "description": "Annotations that tag resources, either with text or semantic tags, SHOULD also have the oa:tagging motivation.",
           "severity": "warn",
           "preconditionMessage": "No tags identified",
-          "precondition": "PREFIX oa: <http://www.w3.org/ns/oa#> SELECT ?annotation  WHERE { {?anno oa:motivatedBy oa:tagging} UNION { ?anno oa:hasBody ?tag . {?tag a oa:Tag } UNION {?tag a oa:SemanticTag } }}",
-          "query": "PREFIX oa: <http://www.w3.org/ns/oa#> SELECT ?annotation  WHERE { ?anno oa:hasBody ?tag . {?tag a oa:Tag } UNION {?tag a oa:SemanticTag } . FILTER (NOT EXISTS{?anno oa:motivatedBy oa:tagging })}"
+          "precondition": "PREFIX oa: <http://www.w3.org/ns/oa#> SELECT ?anno  WHERE { {?anno oa:motivatedBy oa:tagging} UNION { ?anno oa:hasBody ?tag . {?tag a oa:Tag } UNION {?tag a oa:SemanticTag } }}",
+          "query": "PREFIX oa: <http://www.w3.org/ns/oa#> SELECT ?anno  WHERE { {?anno oa:motivatedBy oa:tagging} UNION {?anno oa:hasBody ?tag . {?tag a oa:Tag } UNION {?tag a oa:SemanticTag }} . FILTER (NOT EXISTS{?anno oa:motivatedBy oa:tagging })}"
       },
       
       {
@@ -222,7 +222,7 @@
           "severity": "error",
           "preconditionMessage": "No SpecificResources identified",
           "precondition": "PREFIX oa: <http://www.w3.org/ns/oa#> SELECT ?res WHERE { {?res oa:hasSource ?source } UNION {?res a oa:SpecificResource}}",
-          "query": "PREFIX oa: <http://www.w3.org/ns/oa#> SELECT ?res WHERE { {?res oa:hasSource ?source } UNION {?res a oa:SpecificResource} . ?res oa:hasSource ?source} group by ?res having(count(distinct ?source) != 1)"
+          "query": "PREFIX oa: <http://www.w3.org/ns/oa#> SELECT ?res WHERE { {?res oa:hasSource ?source } UNION {?res a oa:SpecificResource} . OPTIONAL{?res oa:hasSource ?source}} group by ?res having(count(distinct ?source) != 1)"
       },
       {
           "ref": "3.1.0. (3) Specifiers and Specific Resources",
