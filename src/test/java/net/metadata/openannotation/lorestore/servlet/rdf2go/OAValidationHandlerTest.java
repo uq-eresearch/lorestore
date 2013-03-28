@@ -67,10 +67,6 @@ public class OAValidationHandlerTest {
     public void multipleAnnotations() throws Exception{
         // check validation still works when multiple annotations are supplied
     }
-    @Test
-    public void failureReporting() throws Exception {
-     // Test that results are being supplied when rule results in error/warning
-    }
     
     // Test individual rules return the correct status
     @Test
@@ -125,8 +121,10 @@ public class OAValidationHandlerTest {
         checkTestResult("2.1.1. (2) Typing of Body and Target", OATestRecords.OA_BASIC_FULLY_VALID, "pass", "Uses DCMI Types");
     }
     @Test
-    public void imagesAsText(){
+    public void imageAsText() throws Exception {
         //The advice of the DCMI to encode images of text as dctypes:Text is NOT RECOMMENDED.
+        checkTestResult("2.1.1. (3) Typing of Body and Target", OATestRecords.OA_IMAGE_AS_TEXT, "warn", "Image with dctypes Text");
+        checkTestResult("2.1.1. (3) Typing of Body and Target", OATestRecords.OA_IMAGE_AS_IMAGE, "pass", "Image with dctypes Image");
     }
     @Test
     public void embeddedContentAsTextClass() throws Exception {
@@ -136,36 +134,58 @@ public class OAValidationHandlerTest {
         checkTestResult("2.1.2. (1) Embedded Textual Bodies", OATestRecords.OA_BASIC, "skip", "No embedded content");
     }
     @Test
-    public void language3066(){
+    public void language3066() throws Exception {
         //Each language SHOULD be expressed as a language tag, as defined by RFC 3066
+        checkTestResult("2.1.2. (2) Embedded Textual Bodies", OATestRecords.OA_EMBEDDED_BODY_NONRFC3066_LANGUAGE, "warn", "Prop dc:langugae does not conform to RFC3066");
+        checkTestResult("2.1.2. (2) Embedded Textual Bodies", OATestRecords.OA_EMBEDDED_BODY, "pass", "Valid dc language");
+        checkTestResult("2.1.2. (2) Embedded Textual Bodies", OATestRecords.OA_BASIC, "skip", "No dc:language");
     }
     @Test
-    public void tagClass(){
+    public void tagClass() throws Exception {
         //The type oa:Tag (or subclass e.g. oa:SemanticTag) MUST be associated with the tagging resource
+        checkTestResult("2.1.3. (1) Tags and Semantic Tags", OATestRecords.OA_TAGGING_MOTIVATION_NOT_TAG, "error", "SemanticTag class not present");
+        checkTestResult("2.1.3. (1) Tags and Semantic Tags", OATestRecords.OA_SEMANTICTAG, "pass", "SemanticTag class present");
+        checkTestResult("2.1.3. (1) Tags and Semantic Tags", OATestRecords.OA_BASIC, "skip", "No tags");
     }
     @Test
-    public void taggingMotivation(){
+    public void taggingMotivation() throws Exception {
         //Annotations that tag resources, either with text or semantic tags, SHOULD also have the oa:tagging motivation.
+        checkTestResult("2.1.3. (2) Tags and Semantic Tags", OATestRecords.OA_SEMANTICTAG_WRONG_MOTIVATION, "warn", "No tagging Motivation");
+        checkTestResult("2.1.3. (2) Tags and Semantic Tags", OATestRecords.OA_SEMANTICTAG, "pass", "Tagging Motivation present");
+        checkTestResult("2.1.3. (2) Tags and Semantic Tags", OATestRecords.OA_BASIC, "skip", "No tags");
     }
     @Test
-    public void annotatedBy(){
+    public void annotatedBy() throws Exception {
         //There SHOULD be exactly 1 oa:annotatedBy relationship per Annotation but MAY be 0 or more than 1
+        checkTestResult("2.2.0. (1) Annotation Provenance", OATestRecords.OA_BASIC, "warn", "No oa:annotatedBy");
+        checkTestResult("2.2.0. (1) Annotation Provenance", OATestRecords.OA_BASIC_FULLY_VALID, "pass", "Prop oa:annotatedBy present");
     }
     @Test
-    public void annotatedAtExists(){
+    public void annotatedAtExists() throws Exception {
         //There SHOULD be exactly 1 oa:annotatedAt property per Annotation.
+        checkTestResult("2.2.0. (2) Annotation Provenance", OATestRecords.OA_BASIC, "warn", "No annotatedAt");
+        checkTestResult("2.2.0. (2) Annotation Provenance", OATestRecords.OA_BASIC_FULLY_VALID, "pass", "One annotatedAt prop");
     }
     @Test
-    public void annotatedAtNotMoreThanOne(){
+    public void annotatedAtNotMoreThanOne() throws Exception {
         // There MUST NOT be more than 1 oa:annotatedAt property per Annotation.
+        checkTestResult("2.2.0. (3) Annotation Provenance", OATestRecords.OA_MULTIPLE_ANNOTATEDAT, "error", "Too many annotatedAt props");
+        checkTestResult("2.2.0. (3) Annotation Provenance", OATestRecords.OA_BASIC_FULLY_VALID, "pass", "One annotatedAt");
+        checkTestResult("2.2.0. (3) Annotation Provenance", OATestRecords.OA_BASIC, "pass", "No annotatedAt");
     }
     @Test
-    public void provDateTime8601(){
+    public void provDateTime8601() throws Exception {
         // The datetime for oa:annotatedAt and oa:serializedAt MUST be expressed in the xsd:dateTime (ISO 8601) format.
+        checkTestResult("2.2.0. (4) Annotation Provenance", OATestRecords.OA_BASIC, "skip", "No annotatedAt or serializedAt properties");
+        checkTestResult("2.2.0. (4) Annotation Provenance", OATestRecords.OA_BASIC_FULLY_VALID, "pass", "Valid annotatedAt dateTime");
+        checkTestResult("2.2.0. (4) Annotation Provenance", OATestRecords.OA_BASIC_INVALID_DATETIME, "error", "Invalid annotatedAt dateTime");
     }
     @Test
-    public void provDateTimeTimeZone(){
+    public void provDateTimeTimeZone() throws Exception{
         // The datetime for oa:annotatedAt and oa:serializedAt SHOULD have a timezone specified
+        checkTestResult("2.2.0. (5) Annotation Provenance", OATestRecords.OA_BASIC, "skip", "No annotatedAt or serializedAt properties");
+        checkTestResult("2.2.0. (5) Annotation Provenance", OATestRecords.OA_BASIC_FULLY_VALID, "pass", "Valid annotatedAt time zone");
+        checkTestResult("2.2.0. (5) Annotation Provenance", OATestRecords.OA_BASIC_INVALID_DATETIME, "warn", "Invalid annotatedAt time zone");
     }
     @Test
     public void serializedAtNotMoreThanOne(){
@@ -180,31 +200,46 @@ public class OAValidationHandlerTest {
         //It is RECOMMENDED to use prov:SoftwareAgent as the class of the object of oa:serializedBy
     }
     @Test
-    public void agentName(){
+    public void agentName() throws Exception {
         // Each agent SHOULD have exactly 1 name property.
+        checkTestResult("2.2.1. (3) Agents", OATestRecords.OA_BASIC_FULLY_VALID, "pass", "Agent name exists");
+        checkTestResult("2.2.1. (3) Agents", OATestRecords.OA_NO_AGENT_NAME, "warn", "No Agent name");
+        checkTestResult("2.2.1. (3) Agents", OATestRecords.OA_MULTIPLE_AGENT_NAME, "warn", "Too many Agent name props");
     }
     @Test
-    public void motivatedBy(){
+    public void motivatedBy() throws Exception {
         //Each Annotation SHOULD have at least one oa:motivatedBy relationship.
+        checkTestResult("2.3. (1) Motivations", OATestRecords.OA_BASIC, "warn", "No motivatedBy");
+        checkTestResult("2.3. (1) Motivations", OATestRecords.OA_BASIC_FULLY_VALID, "pass", "Prop oa:motivatedBy exists");
     }
     @Test
-    public void specificResourceClass(){
+    public void specificResourceClass() throws Exception {
         //The oa:SpecificResource class SHOULD be associated with a Specific Resource
+        checkTestResult("3.1.0. (1) Specifiers and Specific Resources", OATestRecords.OA_FRAGMENT_SELECTOR, "pass", "Specific Resource has class");
+        checkTestResult("3.1.0. (1) Specifiers and Specific Resources", OATestRecords.OA_SR_NO_CLASS, "warn", "Specific Resource has no class");
+        checkTestResult("3.1.0. (1) Specifiers and Specific Resources", OATestRecords.OA_BASIC, "skip", "No Specific Resources");
     }
     @Test
-    public void hasSource(){
+    public void hasSource() throws Exception {
         //There MUST be exactly 1 oa:hasSource relationship associated with a Specific Resource.
+        checkTestResult("3.1.0. (2) Specifiers and Specific Resources", OATestRecords.OA_FRAGMENT_SELECTOR, "pass", "Specific Resource has one haSelector");
+        checkTestResult("3.1.0. (2) Specifiers and Specific Resources", OATestRecords.OA_SPECIFIC_RESOURCE_NO_SOURCE_OR_SELECTOR, "error", "No hasSource");
+        checkTestResult("3.1.0. (2) Specifiers and Specific Resources", OATestRecords.OA_INVALID_SR, "error", "Too many hasSource props");
+        checkTestResult("3.1.0. (2) Specifiers and Specific Resources", OATestRecords.OA_BASIC, "skip", "No Specific Resources");
     }
     @Test
-    public void specificResourceIdentifier(){
+    public void specificResourceIdentifier() throws Exception {
         //Specific Resource SHOULD be identified by a globally unique URI
+        checkTestResult("3.1.0. (3) Specifiers and Specific Resources", OATestRecords.OA_FRAGMENT_SELECTOR, "pass", "Specific Resource has UUID URN");
+        checkTestResult("3.1.0. (3) Specifiers and Specific Resources", OATestRecords.OA_INVALID_SR, "warn", "Specific Resource does not have URN");
+        checkTestResult("3.1.0. (3) Specifiers and Specific Resources", OATestRecords.OA_BASIC, "skip", "No Specific Resources");
     }
     @Test
     public void hasSelectorNotMoreThanOne() throws Exception {
         //There MUST be exactly 0 or 1 oa:hasSelector relationship associated with a Specific Resource.
-        checkTestResult("3.2.0. (1) Selectors", OATestRecords.OA_SPECIFIC_RESOURCE_NO_SELECTOR, "pass", "no hasSelector");
-        checkTestResult("3.2.0. (1) Selectors", OATestRecords.OA_FRAGMENT_SELECTOR, "pass", "hasSelector exists");
-        checkTestResult("3.2.0. (1) Selectors", OATestRecords.OA_FRAGMENT_SELECTOR_INVALID, "error", "too many hasSelectors");
+        checkTestResult("3.2.0. (1) Selectors", OATestRecords.OA_SPECIFIC_RESOURCE_NO_SOURCE_OR_SELECTOR, "pass", "No hasSelector");
+        checkTestResult("3.2.0. (1) Selectors", OATestRecords.OA_FRAGMENT_SELECTOR, "pass", "Prop oa:hasSelector exists");
+        checkTestResult("3.2.0. (1) Selectors", OATestRecords.OA_FRAGMENT_SELECTOR_INVALID, "error", "Too many hasSelector props");
     }
     @Test
     public void fragmentSelector() throws Exception {
@@ -217,14 +252,14 @@ public class OAValidationHandlerTest {
     public void fragmentSelectorValue() throws Exception{
         //The oa:FragmentSelector MUST have exactly 1 rdf:value property
         checkTestResult("3.2.1. (2) Fragment Selector", OATestRecords.OA_FRAGMENT_SELECTOR_INVALID, "error", "No rdf:value");
-        checkTestResult("3.2.1. (2) Fragment Selector", OATestRecords.OA_FRAGMENT_SELECTOR, "pass", "rdf:value exists");
+        checkTestResult("3.2.1. (2) Fragment Selector", OATestRecords.OA_FRAGMENT_SELECTOR, "pass", "Prop rdf:value exists");
         checkTestResult("3.2.1. (2) Fragment Selector", OATestRecords.OA_BASIC, "skip", "No fragment selector");
     }
     @Test
     public void fragmentSelectorConformsTo() throws Exception {
         //The Fragment Selector SHOULD have a dcterms:conformsTo relationship.
         checkTestResult("3.2.1. (3) Fragment Selector", OATestRecords.OA_FRAGMENT_SELECTOR_INVALID, "warn", "No dcterms:conformsTo");
-        checkTestResult("3.2.1. (3) Fragment Selector", OATestRecords.OA_FRAGMENT_SELECTOR, "pass", "dcterms:conformsTo exists");
+        checkTestResult("3.2.1. (3) Fragment Selector", OATestRecords.OA_FRAGMENT_SELECTOR, "pass", "Prop dcterms:conformsTo exists");
         checkTestResult("3.2.1. (3) Fragment Selector", OATestRecords.OA_BASIC, "skip", "No fragment selector");
     }
     @Test
@@ -288,8 +323,10 @@ public class OAValidationHandlerTest {
         //There MUST be exactly 1 rdf:value property per HTTPRequestState.
     }
     @Test
-    public void styledByNotMoreThanOne(){
+    public void styledByNotMoreThanOne() throws Exception{
         //There MAY be 0 or 1 styledBy relationships for each Annotation.
+        checkTestResult("3.4. (1) Styles", OATestRecords.OA_BASIC_STYLED_BY, "pass", "One oa:styledBy");
+        checkTestResult("3.4. (1) Styles", OATestRecords.OA_BASIC_MULTIPLE_STYLED_BY, "error", "Too many oa:styledBy props");
     }
     @Test
     public void multiplicityIdentifier(){
@@ -308,18 +345,26 @@ public class OAValidationHandlerTest {
         //Each Composite MUST have two or more constituent resources
     }
     @Test
-    public void embeddedResourceChars(){
+    public void embeddedResourceChars() throws Exception{
         //There MUST be exactly 1 cnt:chars property for a ContentAsText resource.
+        checkTestResult("5.2. (1) Embedding Resources", OATestRecords.OA_EMBEDDED_BODY_NO_ENCODING_OR_CHARS, "error", "No cnt:chars");
+        checkTestResult("5.2. (1) Embedding Resources", OATestRecords.OA_EMBEDDED_BODY, "pass", "One cnt:chars");
+        checkTestResult("5.2. (1) Embedding Resources", OATestRecords.OA_EMBEDDED_BODY_MULTIPLE_CHARS, "error", "Too many cnt:chars props");
+        checkTestResult("5.2. (1) Embedding Resources", OATestRecords.OA_BASIC, "skip", "No embedded resources");
     }
     @Test
-    public void embeddedResourceBytes(){
+    public void embeddedResourceBytes() throws Exception {
         //There MUST be exactly 1 cnt:bytes property for a ContentAsBase64 resource
+        checkTestResult("5.2. (2) Embedding Resources", OATestRecords.OA_EMBEDDED_BODY_BASE64_NO_BYTES, "error", "Prop cnt:bytes not found");
+        checkTestResult("5.2. (2) Embedding Resources", OATestRecords.OA_EMBEDDED_BODY_BASE64, "pass", "One cnt:bytes prop");
+        checkTestResult("5.2. (2) Embedding Resources", OATestRecords.OA_EMBEDDED_BODY_BASE64_MULTIPLE_BYTES, "error", "Too many cnt:bytes props");
+        checkTestResult("5.2. (2) Embedding Resources", OATestRecords.OA_BASIC, "skip", "No embedded resources");
     }
     @Test
     public void embeddedResourceEncoding() throws Exception {
         //There SHOULD be exactly 1 cnt:characterEncoding for a ContentAsText or ContentAsBase64 resource
-        checkTestResult("5.2. (3) Embedding Resources", OATestRecords.OA_EMBEDDED_BODY_NO_ENCODING, "warn", "No encoding");
-        checkTestResult("5.2. (3) Embedding Resources", OATestRecords.OA_EMBEDDED_BODY_MULTIPLE_ENCODING, "warn", "Too many encodings");
+        checkTestResult("5.2. (3) Embedding Resources", OATestRecords.OA_EMBEDDED_BODY_NO_ENCODING_OR_CHARS, "warn", "No encoding");
+        checkTestResult("5.2. (3) Embedding Resources", OATestRecords.OA_EMBEDDED_BODY_MULTIPLE_ENCODING, "warn", "Too many characterEncoding props");
         checkTestResult("5.2. (3) Embedding Resources", OATestRecords.OA_EMBEDDED_BODY, "pass", "Encoding exists");
         checkTestResult("5.2. (3) Embedding Resources", OATestRecords.OA_BASIC, "skip", "No embedded resources");
     }
@@ -327,7 +372,7 @@ public class OAValidationHandlerTest {
     public void embeddedResourceFormat() throws Exception {
         //There SHOULD be exactly 1 dc:format property associated with each embedded resource
         checkTestResult("5.2. (4) Embedding Resources", OATestRecords.OA_EMBEDDED_BODY_NO_FORMAT, "warn", "No dc:format");
-        checkTestResult("5.2. (4) Embedding Resources", OATestRecords.OA_EMBEDDED_BODY, "pass", "dc:format exists");
+        checkTestResult("5.2. (4) Embedding Resources", OATestRecords.OA_EMBEDDED_BODY, "pass", "Prop dc:format exists");
         checkTestResult("5.2. (4) Embedding Resources", OATestRecords.OA_BASIC, "skip", "No embedded resources");
     }
     @Test
@@ -354,10 +399,10 @@ public class OAValidationHandlerTest {
         int warn = (Integer) result.get("warn");
         int error = (Integer) result.get("error");
         int skip = (Integer) result.get("skip");
-        assertEquals("Number of pass",pass,passExpect);
-        assertEquals("Number of warn",warn,warnExpect);
-        assertEquals("Number of error",error,errorExpect);
-        assertEquals("Number of skip",skip,skipExpect);
+        assertEquals("Number of passes",pass,passExpect);
+        assertEquals("Number of warns",warn,warnExpect);
+        assertEquals("Number of errors",error,errorExpect);
+        assertEquals("Number of skips",skip,skipExpect);
     }
     
     /* Run a validation test and check that the status was as expected */
