@@ -62,7 +62,7 @@
           "severity": "warn",
           "preconditionMessage": "No body or target present",
           "precondition": "PREFIX oa: <http://www.w3.org/ns/oa#> SELECT ?resource  WHERE { {?annotation oa:hasTarget ?resource} UNION {?annotation oa:hasBody ?resource} }",
-          "query": "PREFIX oa: <http://www.w3.org/ns/oa#> SELECT ?resource ?type WHERE { {?annotation oa:hasTarget ?resource . FILTER(NOT EXISTS{?resource oa:hasSource ?i})} UNION {?annotation oa:hasBody ?resource . FILTER(NOT EXISTS{?resource oa:hasSource ?i})} UNION {?annotation oa:hasTarget ?i . ?i oa:hasSource ?resource} UNION {?annotation oa:hasBody ?i . ?i oa:hasSource ?resource} .  FILTER NOT EXISTS{?resource a ?type . FILTER regex(str(?type),\"^http://purl.org/dc/dcmitype/\")}}"
+          "query": "PREFIX oa: <http://www.w3.org/ns/oa#> SELECT ?resource ?type WHERE { {?annotation oa:hasTarget ?resource . FILTER(NOT EXISTS{?resource oa:hasSource ?i})} UNION {?annotation oa:hasBody ?resource . FILTER(NOT EXISTS{?resource oa:hasSource ?i})} UNION {?annotation oa:hasTarget ?i . ?i oa:hasSource ?resource} UNION {?annotation oa:hasBody ?i . ?i oa:hasSource ?resource} .  FILTER NOT EXISTS{{?resource a ?type . FILTER regex(str(?type),\"^http://purl.org/dc/dcmitype/\")}UNION{?resource a ?type . FILTER regex(str(?type), \"http://www.w3.org/ns/oa#\")}}}"
       },
       {
           "ref": "2.1.1. (3) Typing of Body and Target",
