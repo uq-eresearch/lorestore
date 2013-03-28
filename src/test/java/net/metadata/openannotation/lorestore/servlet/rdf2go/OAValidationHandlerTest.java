@@ -281,55 +281,82 @@ public class OAValidationHandlerTest {
         //Each TextPositionSelector MUST have exactly 1 oa:start property
         checkTestResult("3.2.2.1. (1) Text Position Selector", OATestRecords.OA_BASIC, "skip", "No text position selector");
         checkTestResult("3.2.2.1. (1) Text Position Selector", OATestRecords.OA_ALL_RULES_PASS, "pass", "One oa:start prop");
-        checkTestResult("3.2.2.1. (1) Text Position Selector", OATestRecords.OA_TEXTPOSSEL_NO_START_OR_END, "error", "No oa:start prop");
-        checkTestResult("3.2.2.1. (1) Text Position Selector", OATestRecords.OA_TEXTPOSSEL_MULTIPLE_START_OR_END, "error", "Too many oa:start props");
+        checkTestResult("3.2.2.1. (1) Text Position Selector", OATestRecords.OA_SEL_NO_START_OR_END, "error", "No oa:start prop");
+        checkTestResult("3.2.2.1. (1) Text Position Selector", OATestRecords.OA_SEL_MULTIPLE_START_OR_END, "error", "Too many oa:start props");
     }
     @Test
     public void textPosSelEnd() throws Exception {
         //Each TextPositionSelector MUST have exactly 1 oa:end property
         checkTestResult("3.2.2.1. (2) Text Position Selector", OATestRecords.OA_BASIC, "skip", "No text position selector");
         checkTestResult("3.2.2.1. (2) Text Position Selector", OATestRecords.OA_ALL_RULES_PASS, "pass", "One oa:end prop");
-        checkTestResult("3.2.2.1. (2) Text Position Selector", OATestRecords.OA_TEXTPOSSEL_NO_START_OR_END, "error", "No oa:end prop");
-        checkTestResult("3.2.2.1. (2) Text Position Selector", OATestRecords.OA_TEXTPOSSEL_MULTIPLE_START_OR_END, "error", "Too many oa:end props");
+        checkTestResult("3.2.2.1. (2) Text Position Selector", OATestRecords.OA_SEL_NO_START_OR_END, "error", "No oa:end prop");
+        checkTestResult("3.2.2.1. (2) Text Position Selector", OATestRecords.OA_SEL_MULTIPLE_START_OR_END, "error", "Too many oa:end props");
     }
     @Test
     public void textPosSelPlusState() throws Exception{
         //It is RECOMMENDED that a State be used in addition to a TextPositionSelector.
-        checkTestResult("3.2.2.1. (3) Text Position Selector", OATestRecords.OA_TEXTPOSSEL_NO_START_OR_END, "warn", "No TimeState");
+        checkTestResult("3.2.2.1. (3) Text Position Selector", OATestRecords.OA_SEL_NO_START_OR_END, "warn", "No TimeState");
         checkTestResult("3.2.2.1. (3) Text Position Selector", OATestRecords.OA_TEXTPOSSEL_TIMESTATE, "pass", "Has TimeState");
         checkTestResult("3.2.2.1. (3) Text Position Selector", OATestRecords.OA_BASIC, "skip", "No text position selector");
     }
     @Test
-    public void textQuoteSelHasExact(){
+    public void textQuoteSelHasExact() throws Exception {
         //Each TextQuoteSelector MUST have exactly 1 oa:exact property.
+        checkTestResult("3.2.2.2. (1) Text Quote Selector", OATestRecords.OA_ALL_RULES_PASS, "pass", "One exact property");
+        checkTestResult("3.2.2.2. (1) Text Quote Selector", OATestRecords.OA_SEL_MULTIPLE_PROPS, "error", "More than one exact");
+        checkTestResult("3.2.2.2. (1) Text Quote Selector", OATestRecords.OA_SEL_NO_PROPS, "error", "No exact");
+        checkTestResult("3.2.2.2. (1) Text Quote Selector", OATestRecords.OA_BASIC, "skip", "No text quote selectors");
     }
     @Test
-    public void textQuoteSelPrefix(){
+    public void textQuoteSelPrefix() throws Exception {
         //Each TextQuoteSelector SHOULD have exactly 1 oa:prefix property
+        checkTestResult("3.2.2.2. (2) Text Quote Selector", OATestRecords.OA_ALL_RULES_PASS, "pass", "One prefix property");
+        checkTestResult("3.2.2.2. (2) Text Quote Selector", OATestRecords.OA_SEL_NO_PROPS, "warn", "No prefix");
+        checkTestResult("3.2.2.2. (2) Text Quote Selector", OATestRecords.OA_BASIC, "skip", "No text quote selectors");
     }
     @Test
-    public void textQuoteSelPrefixNotMoreThanOne(){
+    public void textQuoteSelPrefixNotMoreThanOne() throws Exception {
         //Each TextQuoteSelector MUST NOT have more than 1 oa:prefix property.
+        checkTestResult("3.2.2.2. (3) Text Quote Selector", OATestRecords.OA_ALL_RULES_PASS, "pass", "One prefix property");
+        checkTestResult("3.2.2.2. (3) Text Quote Selector", OATestRecords.OA_SEL_MULTIPLE_PROPS, "error", "More than one");
+        checkTestResult("3.2.2.2. (3) Text Quote Selector", OATestRecords.OA_BASIC, "skip", "No text quote selectors");
     }
     @Test
-    public void textQuoteSelSuffix(){
+    public void textQuoteSelSuffix() throws Exception {
         //Each TextQuoteSelector SHOULD have exactly 1 oa:suffix property.
+        checkTestResult("3.2.2.2. (4) Text Quote Selector", OATestRecords.OA_ALL_RULES_PASS, "pass", "One suffix property");
+        checkTestResult("3.2.2.2. (4) Text Quote Selector", OATestRecords.OA_SEL_NO_PROPS, "warn", "No prefix");
+        checkTestResult("3.2.2.2. (4) Text Quote Selector", OATestRecords.OA_BASIC, "skip", "No text quote selectors");
     }
     @Test
-    public void textQuoteSelSuffixNotMoreThanOne(){
+    public void textQuoteSelSuffixNotMoreThanOne() throws Exception {
         //Each TextQuoteSelector MUST NOT have more than 1 oa:suffix property.
+        checkTestResult("3.2.2.2. (5) Text Quote Selector", OATestRecords.OA_ALL_RULES_PASS, "pass", "One suffix property");
+        checkTestResult("3.2.2.2. (5) Text Quote Selector", OATestRecords.OA_SEL_MULTIPLE_PROPS, "error", "More than one");
+        checkTestResult("3.2.2.2. (5) Text Quote Selector", OATestRecords.OA_BASIC, "skip", "No text quote selectors");
     }
     @Test
-    public void dataPosSelStart(){
+    public void dataPosSelStart() throws Exception {
         //Each DataPositionSelector MUST have exactly 1 oa:start property.
+        checkTestResult("3.2.2.3. (1) Data Position Selector", OATestRecords.OA_ALL_RULES_PASS, "pass", "One start property");
+        checkTestResult("3.2.2.3. (1) Data Position Selector", OATestRecords.OA_SEL_MULTIPLE_START_OR_END, "error", "More than one start");
+        checkTestResult("3.2.2.3. (1) Data Position Selector", OATestRecords.OA_SEL_NO_START_OR_END, "error", "No start");
+        checkTestResult("3.2.2.3. (1) Data Position Selector", OATestRecords.OA_BASIC, "skip", "No data position selectors");
     }
     @Test
-    public void dataPosSelEnd(){
+    public void dataPosSelEnd() throws Exception {
         //Each DataPositionSelector MUST have exactly 1 oa:end property.
+        checkTestResult("3.2.2.3. (2) Data Position Selector", OATestRecords.OA_ALL_RULES_PASS, "pass", "One end property");
+        checkTestResult("3.2.2.3. (2) Data Position Selector", OATestRecords.OA_SEL_MULTIPLE_START_OR_END, "error", "More than one end");
+        checkTestResult("3.2.2.3. (2) Data Position Selector", OATestRecords.OA_SEL_NO_START_OR_END, "error", "No end");
+        checkTestResult("3.2.2.3. (2) Data Position Selector", OATestRecords.OA_BASIC, "skip", "No data position selectors");
     }
     @Test
-    public void stateNotMoreThanOne(){
+    public void stateNotMoreThanOne() throws Exception {
         //There MAY be 0 or 1 oa:hasState relationship for each SpecificResource
+        checkTestResult("3.3.0. (1) States", OATestRecords.OA_ALL_RULES_PASS, "pass", "One state");
+        checkTestResult("3.3.0. (1) States", OATestRecords.OA_MULTIPLE_STATES, "error", "More than one state");
+        checkTestResult("3.3.0. (1) States", OATestRecords.OA_BASIC, "skip", "No SpecificResource");
     }
     @Test
     public void when8601() throws Exception {
@@ -368,20 +395,33 @@ public class OAValidationHandlerTest {
         checkTestResult("3.4. (1) Styles", OATestRecords.OA_BASIC_MULTIPLE_STYLED_BY, "error", "Too many oa:styledBy props");
     }
     @Test
-    public void multiplicityIdentifier(){
+    public void multiplicityIdentifier() throws Exception {
         //Multiplicity Constructs SHOULD have a globally unique URI
+        checkTestResult("4.0. (1) Multiplicity", OATestRecords.OA_MULTIPLICITY_BLANKNODE, "warn", "Blank Node");
+        checkTestResult("4.0. (1) Multiplicity", OATestRecords.OA_ALL_RULES_PASS, "pass", "UUID");
+        checkTestResult("4.0. (1) Multiplicity", OATestRecords.OA_BASIC, "skip", "No multiplicity constructs");
     }
     @Test
-    public void multiplicityItem(){
+    public void multiplicityItem() throws Exception {
         //There MUST be 1 or more item relationships for each multiplicity construct
+        checkTestResult("4.0. (2) Multiplicity", OATestRecords.OA_COMPOSITE_NO_ITEMS, "error", "No items");
+        checkTestResult("4.0. (2) Multiplicity", OATestRecords.OA_ALL_RULES_PASS, "pass", "multiple items");
+        checkTestResult("4.0. (2) Multiplicity", OATestRecords.OA_BASIC, "skip", "No multiplicity constructs");
     }
     @Test
-    public void choiceDefault(){
+    public void choiceDefault() throws Exception {
         //There SHOULD be exactly 1 default relationship for each Choice
+        checkTestResult("4.1. (1) Choice", OATestRecords.OA_CHOICE_NO_DEFAULT, "warn", "No default");
+        checkTestResult("4.1. (1) Choice", OATestRecords.OA_ALL_RULES_PASS, "pass", "One default");
+        checkTestResult("4.1. (1) Choice", OATestRecords.OA_CHOICE_MULTIPLE_DEFAULT, "warn", "Too many default props");
+        checkTestResult("4.1. (1) Choice", OATestRecords.OA_BASIC, "skip", "No Choice constructs");
     }
     @Test
-    public void compositeItems(){
+    public void compositeItems() throws Exception {
         //Each Composite MUST have two or more constituent resources
+        checkTestResult("4.2. (1) Composite", OATestRecords.OA_ALL_RULES_PASS, "pass", "Two items");
+        checkTestResult("4.2. (1) Composite", OATestRecords.OA_COMPOSITE_ONE_ITEM, "error", "One item");
+        checkTestResult("4.2. (1) Composite", OATestRecords.OA_BASIC, "skip", "No composite constructs");
     }
     @Test
     public void embeddedResourceChars() throws Exception{

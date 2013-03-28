@@ -424,8 +424,8 @@
           "description": "Multiplicity Constructs SHOULD have a globally unique URI to identify them, such as a UUID URN. They MAY instead be modeled using RDF blank nodes if it is not considered important that they be referenced directly by other Annotations or systems.",
           "severity": "warn",
           "preconditionMessage": "No multiplicity constructs identified",
-          "precondition":"PREFIX oa: <http://www.w3.org/ns/oa#> SELECT ?c WHERE { {?multiplicity a oa:Composite } UNION {?multiplicity a oa:Choice} UNION {?multiplicity a oa:List} }",
-          "query": "PREFIX oa: <http://www.w3.org/ns/oa#> SELECT ?c WHERE { {?multiplicity a oa:Composite } UNION {?multiplicity a oa:Choice} UNION {?multiplicity a oa:List}  MINUS {{?multiplicity a oa:Composite } UNION {?multiplicity a oa:Choice} UNION {?multiplicity a oa:List} . FILTER regex(str(?multiplicity),\"^urn:uuid\", \"i\")}}"
+          "precondition":"PREFIX oa: <http://www.w3.org/ns/oa#> SELECT ?multiplicity WHERE { {?multiplicity a oa:Composite } UNION {?multiplicity a oa:Choice} UNION {?multiplicity a oa:List} }",
+          "query": "PREFIX oa: <http://www.w3.org/ns/oa#> SELECT ?multiplicity WHERE { {?multiplicity a oa:Composite } UNION {?multiplicity a oa:Choice} UNION {?multiplicity a oa:List}  MINUS {{{?multiplicity a oa:Composite } UNION {?multiplicity a oa:Choice} UNION {?multiplicity a oa:List}} . FILTER regex(str(?multiplicity),\"^urn:uuid\", \"i\")}}"
       },
       {
           "ref": "4.0. (2) Multiplicity",
@@ -433,7 +433,7 @@
           "description": "There MUST be 1 or more item relationships for each multiplicity construct.",
           "severity": "error",
           "preconditionMessage": "No multiplicity constructs identified",
-          "precondition":"PREFIX oa: <http://www.w3.org/ns/oa#> SELECT ?c WHERE { {?multiplicity a oa:Composite } UNION {?multiplicity a oa:Choice} UNION {?multiplicity a oa:List} }",
+          "precondition":"PREFIX oa: <http://www.w3.org/ns/oa#> SELECT ?multiplicity WHERE { {?multiplicity a oa:Composite } UNION {?multiplicity a oa:Choice} UNION {?multiplicity a oa:List} }",
           "query": "PREFIX oa: <http://www.w3.org/ns/oa#> SELECT ?multiplicity WHERE { {?multiplicity a oa:Composite } UNION {?multiplicity a oa:Choice} UNION {?multiplicity a oa:List}. FILTER (NOT EXISTS { ?multiplicity oa:item ?item })}"
       },
       {
