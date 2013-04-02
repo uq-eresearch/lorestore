@@ -39,6 +39,9 @@
           <label class="radio">
             <input type="radio" name="contentType" value="application/x-trig" checked> TriG
           </label>
+          <label class="radio">
+            <input type="radio" name="contentType" value="application/x-turtle" checked> Turtle
+          </label>
           <div class="form-actions">
           <button id="validate" class="btn">Validate</button>
           </div>

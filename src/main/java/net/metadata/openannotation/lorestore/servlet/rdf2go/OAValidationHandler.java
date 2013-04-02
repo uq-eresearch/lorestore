@@ -69,8 +69,12 @@ public class OAValidationHandler implements LoreStoreValidationHandler {
         Model model = mf.createModel(Reasoning.owl);
         try {
             model.open();
+            LOG.info(Syntax.Turtle.getMimeType() + " " + Syntax.Ntriples.getMimeType() + " " + Syntax.Nquads.getMimeType());
             if (contentType.equals(Syntax.RdfXml.getMimeType())
                     || contentType.equals(Syntax.Trix.getMimeType()) 
+                    || contentType.equals(Syntax.Turtle.getMimeType())
+                    || contentType.equals(Syntax.Ntriples.getMimeType())
+                    || contentType.equals(Syntax.Nquads.getMimeType())
                     || contentType.equals(Syntax.Trig.getMimeType())){
                 //StringReader reader = new StringReader(inputRDF);
                 model.readFrom(inputRDF, Syntax.forMimeType(contentType), occ.getBaseUri());
@@ -84,7 +88,7 @@ public class OAValidationHandler implements LoreStoreValidationHandler {
                 callback.setModel(model);
                 JSONLD.toRDF(jsonObject, callback);
             } else {
-                throw new RequestFailureException(HttpServletResponse.SC_BAD_REQUEST, "Acceptable content types are RDF/XML or JSON-LD");
+                throw new RequestFailureException(HttpServletResponse.SC_BAD_REQUEST, "Acceptable content types are RDF/XML, TriX, Turtle, Ntriples, Nquads, TriG or JSON-LD");
             }
         } catch (ModelRuntimeException e) {
             try{
