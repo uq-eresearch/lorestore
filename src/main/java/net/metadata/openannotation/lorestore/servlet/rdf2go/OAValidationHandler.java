@@ -132,11 +132,8 @@ public class OAValidationHandler implements LoreStoreValidationHandler {
                         boolean preconditionOK = true;
                         // TODO check if there is a precondition query and run that first to determine whether rule applies
                         if (preconditionQueryString != null && ! "".equals(preconditionQueryString)){
-                            QueryResultTable precondResultTable = model.sparqlSelect(preconditionQueryString);
-                            for(QueryRow row1 : precondResultTable) {
-                                precondcount++;
-                            }
-                            if (precondcount == 0){
+                            boolean preconditionSatisfied = model.sparqlAsk(preconditionQueryString);
+                            if (!preconditionSatisfied) {
                                 // if precondition did not produce any matches, set status to skip
                                 rule.put("status", "skip");
                                 rule.put("result", "Rule does not apply to supplied data: " + rule.get("preconditionMessage"));

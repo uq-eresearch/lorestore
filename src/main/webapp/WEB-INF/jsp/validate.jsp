@@ -37,10 +37,10 @@
             <input type="radio" name="contentType" value="application/trix"> TriX
           </label>
           <label class="radio">
-            <input type="radio" name="contentType" value="application/x-trig" checked> TriG
+            <input type="radio" name="contentType" value="application/x-turtle"> Turtle
           </label>
           <label class="radio">
-            <input type="radio" name="contentType" value="application/x-turtle" checked> Turtle
+            <input type="radio" name="contentType" value="application/x-trig" checked> TriG
           </label>
           <div class="form-actions">
           <button id="validate" class="btn">Validate</button>
