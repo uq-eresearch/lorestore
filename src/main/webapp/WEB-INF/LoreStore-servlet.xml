@@ -8,7 +8,6 @@
     <import resource="Lorestore-content.xml"/>
 	<import resource="Lorestore-common.xml"/>
     <import resource="Emmet-common.xml"/>
-    <import resource="Drupal.xml"/>
     
 	<import resource="siteTailoring.xml" />
 	
@@ -92,9 +91,6 @@
 		<property name="writeAuthorities" value="ROLE_ORE" />
 		<property name="adminAuthorities" value="ROLE_ADMIN" />
 		<property name="identityProvider" ref="identityProvider"/>
-		<property name="drupalDBConnection" ref="drupalDBConnection"/>
-		<property name="userDetailsService" ref="userDetailsService"/>
-		<property name="security" value="${emmet.security}"/>
 		<!--
 			<property name="checkOwner" value="true" />
 			<property name="privateFieldName" value="http://austlit.edu.au/ontologies/2009/03/lit-annotation-ns#private" />

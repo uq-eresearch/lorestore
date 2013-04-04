@@ -123,8 +123,24 @@
         <property name="notLoggedInUrl"
                   value="http://${emmet.hostname}/${emmet.container}/notLoggedIn.html"/>
     </bean>
-	
-	<import resource="Drupal.xml"/>
+    
+    
+	<bean id="drupalProviderConfigs" 
+          class="org.springframework.beans.factory.config.ListFactoryBean">
+        <property name="sourceList">
+            <list>
+                <bean class="au.edu.diasb.springsecurity.ExternalProviderConfiguration">
+                    <property name="domain" value="drupal"/>
+                    <property name="defaultAuthorities" value="ROLE_USER, ROLE_ORE" />
+                    <property name="providerRegex" value=".+" />
+                    <property name="preferredUserNameAttributes" 
+                        value="name,lastName,firstName,email2,email"/>
+                    <property name="iconUri"
+                        value="#{emmetProps.getProperty('emmet.images')}/drupal.png"/>
+                </bean>
+            </list>
+        </property>
+    </bean>
 	
     <bean id="externalProviderConfigs" 
           class="au.edu.diasb.chico.config.ListFactoryBean">
