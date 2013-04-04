@@ -29,7 +29,7 @@
         <sec:session-management session-fixation-protection="migrateSession"/>
         <sec:custom-filter before="FILTER_SECURITY_INTERCEPTOR"
             ref="filterSecurityInterceptor" />
-        <sec:custom-filter ref="drupalFilter" before="FORM_LOGIN_FILTER" />
+        <sec:custom-filter ref="drupalFilter" before="REMEMBER_ME_FILTER" />
         <sec:custom-filter before="LOGOUT_FILTER" ref="hybridLogoutFilter"/>
         <sec:custom-filter position="BASIC_AUTH_FILTER" ref="basicAuthenticationFilter" />
     </sec:http>
@@ -61,7 +61,6 @@
                 <sec:salt-source ref="saltSource"/>
             </sec:password-encoder>
         </sec:authentication-provider>
-        <!-- <sec:authentication-provider ref="drupalExternalProvider"/> -->
     </sec:authentication-manager>
     
     <bean id="drupalProvider"

@@ -10,9 +10,9 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import net.metadata.openannotation.lorestore.security.drupal.DrupalAuthenticationDetails;
 
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -34,6 +34,7 @@ public class DrupalAuthenticationFilter extends AbstractAuthenticationProcessing
 
 	private Map<String,String> realmMapping = Collections.emptyMap();
     private Set<String> returnToUrlParameters = Collections.emptySet();
+    private String drupalCookiePrefix = "SESS";
     
     public DrupalAuthenticationFilter() {
         super("/j_spring_drupal_security_check");
@@ -54,6 +55,13 @@ public class DrupalAuthenticationFilter extends AbstractAuthenticationProcessing
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
             throws AuthenticationException, IOException {
         String sid = request.getParameter("sid");
+       
+        Cookie[] cookies = request.getCookies();
+        for (Cookie cookie : cookies) {
+        	if (cookie.getName().startsWith(drupalCookiePrefix)) {
+        		sid = cookie.getValue();
+        	}
+        }
         
         if (!StringUtils.hasText(sid)) {
             response.sendRedirect("http://localhost/lorestoreLogin/");
