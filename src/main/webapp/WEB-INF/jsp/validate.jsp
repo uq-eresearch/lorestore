@@ -37,6 +37,9 @@
             <input type="radio" name="contentType" value="application/trix"> TriX
           </label>
           <label class="radio">
+            <input type="radio" name="contentType" value="application/x-turtle"> Turtle
+          </label>
+          <label class="radio">
             <input type="radio" name="contentType" value="application/x-trig" checked> TriG
           </label>
           <div class="form-actions">

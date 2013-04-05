@@ -69,8 +69,12 @@ public class OAValidationHandler implements LoreStoreValidationHandler {
         Model model = mf.createModel(Reasoning.owl);
         try {
             model.open();
+            LOG.info(Syntax.Turtle.getMimeType() + " " + Syntax.Ntriples.getMimeType() + " " + Syntax.Nquads.getMimeType());
             if (contentType.equals(Syntax.RdfXml.getMimeType())
                     || contentType.equals(Syntax.Trix.getMimeType()) 
+                    || contentType.equals(Syntax.Turtle.getMimeType())
+                    || contentType.equals(Syntax.Ntriples.getMimeType())
+                    || contentType.equals(Syntax.Nquads.getMimeType())
                     || contentType.equals(Syntax.Trig.getMimeType())){
                 //StringReader reader = new StringReader(inputRDF);
                 model.readFrom(inputRDF, Syntax.forMimeType(contentType), occ.getBaseUri());
@@ -84,7 +88,7 @@ public class OAValidationHandler implements LoreStoreValidationHandler {
                 callback.setModel(model);
                 JSONLD.toRDF(jsonObject, callback);
             } else {
-                throw new RequestFailureException(HttpServletResponse.SC_BAD_REQUEST, "Acceptable content types are RDF/XML or JSON-LD");
+                throw new RequestFailureException(HttpServletResponse.SC_BAD_REQUEST, "Acceptable content types are RDF/XML, TriX, Turtle, Ntriples, Nquads, TriG or JSON-LD");
             }
         } catch (ModelRuntimeException e) {
             try{
@@ -128,11 +132,8 @@ public class OAValidationHandler implements LoreStoreValidationHandler {
                         boolean preconditionOK = true;
                         // TODO check if there is a precondition query and run that first to determine whether rule applies
                         if (preconditionQueryString != null && ! "".equals(preconditionQueryString)){
-                            QueryResultTable precondResultTable = model.sparqlSelect(preconditionQueryString);
-                            for(QueryRow row1 : precondResultTable) {
-                                precondcount++;
-                            }
-                            if (precondcount == 0){
+                            boolean preconditionSatisfied = model.sparqlAsk(preconditionQueryString);
+                            if (!preconditionSatisfied) {
                                 // if precondition did not produce any matches, set status to skip
                                 rule.put("status", "skip");
                                 rule.put("result", "Rule does not apply to supplied data: " + rule.get("preconditionMessage"));
