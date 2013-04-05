@@ -78,12 +78,12 @@ public abstract class AbstractRDF2GoUpdateHandler implements LoreStoreUpdateHand
         Model model = mf.createModel(newUri);
         try {
             model.open();
-            if (contentType.equals(Syntax.RdfXml.getMimeType())
+            if (contentType.contains(Syntax.RdfXml.getMimeType())
                     || contentType.equals(Syntax.Trix.getMimeType()) 
                     || contentType.equals(Syntax.Trig.getMimeType())){
                 model.readFrom(inputRDF, Syntax.forMimeType(contentType), occ.getBaseUri());
             
-            } else if (contentType.equals("application/json")){
+            } else if (contentType.contains("application/json")){
                 Object jsonObject = JSONUtils.fromInputStream(inputRDF);
                 // TODO if no @context, inject default context
                 // TODO if no @id, inject dummy identifier (will be replaced)
