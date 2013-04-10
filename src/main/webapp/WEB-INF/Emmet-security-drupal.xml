@@ -34,10 +34,7 @@
         <sec:custom-filter position="BASIC_AUTH_FILTER" ref="basicAuthenticationFilter" />
     </sec:http>
     
-    <bean id="drupalFilter" class="net.metadata.openannotation.lorestore.security.drupal.DrupalAuthenticationFilter">
-        <property name="authenticationManager" ref="authenticationManager"/>
-        <property name="userDetailsService" ref="userDetailsService"/>
-        <property name="drupalDBConnection" ref="drupalDBConnection"/>
+    <bean id="drupalFilter" class="net.metadata.openannotation.lorestore.security.drupal.DrupalSessionAuthenticationFilter">
     </bean>
         
     <!-- Add a filter to accept HTTP BASIC authentication, but do not include an entry point
@@ -54,8 +51,6 @@
     </bean>
     
     <sec:authentication-manager alias="authenticationManager">
-        <sec:authentication-provider ref="drupalProvider"/>
-        <sec:authentication-provider ref="drupalExternalProvider"/>
         <sec:authentication-provider user-service-ref="userDetailsService">
             <sec:password-encoder base64="true" ref="passwordEncoder">
                 <sec:salt-source ref="saltSource"/>
@@ -63,10 +58,6 @@
         </sec:authentication-provider>
     </sec:authentication-manager>
     
-    <bean id="drupalProvider"
-		class="net.metadata.openannotation.lorestore.security.drupal.DrupalAuthenticationProvider">
-        <property name="userDetailsService" ref="userDetailsService"/>
-	</bean>
 	
 	<bean id="drupalExternalProvider"
 		class="net.metadata.openannotation.lorestore.security.drupal.DrupalExternalAuthenticationProvider">

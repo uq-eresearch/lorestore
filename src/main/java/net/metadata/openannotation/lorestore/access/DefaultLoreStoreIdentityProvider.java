@@ -1,5 +1,7 @@
 package net.metadata.openannotation.lorestore.access;
 
+import net.metadata.openannotation.lorestore.security.drupal.DrupalUser;
+
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.security.core.Authentication;
 import org.springframework.util.Assert;
@@ -29,6 +31,8 @@ public class DefaultLoreStoreIdentityProvider implements LoreStoreIdentityProvid
                 uri = ((EmmetUserWrapper) p).unwrap().getPrimaryUri();
             } else if (p instanceof EmmetUser) {
                 uri = ((EmmetUser) p).getPrimaryUri();
+            } else if (p instanceof DrupalUser) {
+            	uri = ((DrupalUser) p).getPrimaryUri();
             } else if (p instanceof String) {
             	return (String)p;
             }

@@ -3,6 +3,8 @@ package net.metadata.openannotation.lorestore.security.drupal;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.FilterChain;
@@ -17,10 +19,10 @@ import org.apache.xmlrpc.client.XmlRpcClient;
 import org.apache.xmlrpc.client.XmlRpcClientConfigImpl;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.ApplicationEventPublisherAware;
-import org.springframework.security.authentication.AuthenticationDetailsSource;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.GrantedAuthorityImpl;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.web.filter.GenericFilterBean;
 
 public class DrupalSessionAuthenticationFilter extends GenericFilterBean
@@ -32,7 +34,6 @@ public class DrupalSessionAuthenticationFilter extends GenericFilterBean
 	// re http://api.drupal.org/api/drupal/includes!bootstrap.inc/function/drupal_settings_initialize/7
 	private String drupalCookiePrefix = "SESS";
 	private String xmlrpcEndpoint = "http://127.0.0.1/xmlrpc.php";
-    private AuthenticationDetailsSource authenticationDetailsSource = new WebAuthenticationDetailsSource();
 
 	@Override
 	public void doFilter(ServletRequest req, ServletResponse res,
@@ -43,6 +44,7 @@ public class DrupalSessionAuthenticationFilter extends GenericFilterBean
         	Authentication drupalAuth = checkDrupalAuth(request);
         	
         	if (drupalAuth != null) {
+    			SecurityContextHolder.getContext().setAuthentication(drupalAuth);
 	        	if (logger.isDebugEnabled()) {
 	        		logger.debug("SecurityContextHolder populated with drupal-auth token: '"
 	        				+ SecurityContextHolder.getContext().getAuthentication() + "'");
@@ -50,6 +52,12 @@ public class DrupalSessionAuthenticationFilter extends GenericFilterBean
         	}
             chain.doFilter(request, res);
         } else {
+        	Authentication drupalAuth = checkDrupalAuth(request);
+        	
+        	if (drupalAuth == null) {
+        		SecurityContextHolder.getContext().setAuthentication(null);
+        	}
+        	
             if (logger.isDebugEnabled()) {
                 logger.debug("SecurityContextHolder not populated with drupal auth token, as it already contained: '"
                     + SecurityContextHolder.getContext().getAuthentication() + "'");
@@ -63,7 +71,24 @@ public class DrupalSessionAuthenticationFilter extends GenericFilterBean
 
 	private Authentication checkDrupalAuth(HttpServletRequest request) {
 		Cookie cookie = getDrupalSessionCookie(request);
-		if (validateSession(cookie.getValue())) {
+		if (cookie != null) {
+			DrupalUser principal = validateSession(cookie.getValue());
+			
+			if (principal == null) {
+				return null;
+			}
+			
+			List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
+			authorities.add(new GrantedAuthorityImpl("ROLE_ORE"));
+			authorities.add(new GrantedAuthorityImpl("ROLE_USER"));
+			
+			if (principal.isAdministrator()) {
+				authorities.add(new GrantedAuthorityImpl("ROLE_ADMIN"));
+			}
+			
+			Authentication auth = new DrupalAuthenticationToken(principal, authorities);
+			auth.setAuthenticated(true);
+			return auth;
 			
 		}
 		return null;
@@ -81,12 +106,12 @@ public class DrupalSessionAuthenticationFilter extends GenericFilterBean
 	}
 	
 	@SuppressWarnings("unchecked")
-	private boolean validateSession(String sid) {
+	private DrupalUser validateSession(String sid) {
 		XmlRpcClientConfigImpl config = new XmlRpcClientConfigImpl();
 	    try {
 			config.setServerURL(new URL(xmlrpcEndpoint));
 		} catch (MalformedURLException e) {
-			return false;
+			return null;
 		}
 	    XmlRpcClient client = new XmlRpcClient();
 	    client.setConfig(config);
@@ -94,18 +119,25 @@ public class DrupalSessionAuthenticationFilter extends GenericFilterBean
 	    try {
 			Map<String, Object> map = (Map<String, Object>)client.execute(METHOD_LOGIN_CHECK, params);
 			Boolean valid = (Boolean) map.get("valid");
+			Boolean admin = (Boolean) map.get("admin");
 			
 			if (valid) {
 				Map<String, Object> user = (Map<String, Object>) map.get("user");
-				return true;
+				
+				DrupalUser principal = new DrupalUser();
+				principal.setName((String)user.get("name"));
+				principal.setUsername((String)user.get("name"));
+				principal.setUid((String)user.get("uid"));
+				principal.setAdministrator(admin);
+				return principal;
 			}
 			
 			
 		} catch (XmlRpcException e) {
-			return false;
+			return null;
 		}
 	      
-		return false;
+		return null;
 	}
 
 	@Override
