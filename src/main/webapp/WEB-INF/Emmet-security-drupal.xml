@@ -58,12 +58,7 @@
         </sec:authentication-provider>
     </sec:authentication-manager>
     
-	
-	<bean id="drupalExternalProvider"
-		class="net.metadata.openannotation.lorestore.security.drupal.DrupalExternalAuthenticationProvider">
-		<property name="providerConfigurations" ref="drupalProviderConfigs"/>
-	</bean>
-    
+ 
     <bean id="loginUrlEntryPoint"
           class="au.edu.diasb.springsecurity.LoginUrlAuthenticationEntryPoint">
         <!-- <property name="forceHttps" value="true"/> -->
@@ -97,10 +92,6 @@
         class="au.edu.diasb.springsecurity.HybridLogoutSuccessHandler">
         <property name="handlers">
             <list>
-                <bean class="net.metadata.openannotation.lorestore.security.drupal.DrupalLogoutSuccessHandler">
-                    <property name="logoutSuccessUrl" 
-                        value="http://${emmet.hostname}/${emmet.container}/cannotLogout.html"/>
-                </bean>
                 <bean class="au.edu.diasb.springsecurity.UserPasswordLogoutSuccessHandler">
                     <property name="logoutSuccessUrl" 
                         value="http://${emmet.hostname}/${emmet.container}/loggedOut.html"/>

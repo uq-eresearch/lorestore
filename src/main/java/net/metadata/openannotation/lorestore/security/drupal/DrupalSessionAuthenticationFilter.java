@@ -19,6 +19,7 @@ import org.apache.xmlrpc.client.XmlRpcClient;
 import org.apache.xmlrpc.client.XmlRpcClientConfigImpl;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.ApplicationEventPublisherAware;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.GrantedAuthorityImpl;
@@ -40,7 +41,8 @@ public class DrupalSessionAuthenticationFilter extends GenericFilterBean
 			FilterChain chain) throws IOException, ServletException {
         HttpServletRequest request = (HttpServletRequest) req;
 
-        if (SecurityContextHolder.getContext().getAuthentication() == null) {
+        if (SecurityContextHolder.getContext().getAuthentication() == null ||
+        		SecurityContextHolder.getContext().getAuthentication() instanceof AnonymousAuthenticationToken) {
         	Authentication drupalAuth = checkDrupalAuth(request);
         	
         	if (drupalAuth != null) {
@@ -96,6 +98,9 @@ public class DrupalSessionAuthenticationFilter extends GenericFilterBean
 
 	private Cookie getDrupalSessionCookie(HttpServletRequest request) {
         Cookie[] cookies = request.getCookies();
+        if (cookies == null) {
+        	return null;
+        }
         for (Cookie cookie : cookies) {
         	if (cookie.getName().startsWith(drupalCookiePrefix)) {
         		return cookie;
