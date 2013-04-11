@@ -1,0 +1,30 @@
+Drupal Authentication
+=====================
+
+LoreStore includes code for integrating with user accounts and sessions
+from a drupal installation running the AustESE repository code.
+
+This works by calling an XMLRPC function on Drupal. 'check_login'
+is called, which accepts a session id parameter, and returns user details
+about that session. If it's a valid session, the user is authenticated
+for using Lorestore.
+
+This function only responds to calls from localhost.
+
+This authentication method will only work when cookies are shared
+between drupal and lorestore.
+
+Requirements
+------------
+Drupal installation with a recent AustESE repository version.
+
+Configuration
+-------------
+Edit local-lorestore-substitution.properties adding:
+
+emmet.security=drupal
+lorestore.drupalhostname=localhost
+lorestore.drupalxmlrpc=http://127.0.0.1/xmlrpc.php
+
+
+
