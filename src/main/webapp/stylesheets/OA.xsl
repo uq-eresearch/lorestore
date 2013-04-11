@@ -254,14 +254,16 @@
             <strong>hasSelector:&#160;</strong>
             
             <xsl:if test="starts-with($constraint,'http://')">&#160;<a href="{$constraint}"><xsl:value-of select="$constraint"/></a></xsl:if>
-            (<xsl:apply-templates select="//rdf:Description[@rdf:about=$constraint]/rdf:type" mode="constraint"/>)
+            
         </p>
         <!--  constraint details -->
+        <ul>
         <xsl:apply-templates select="//rdf:Description[@rdf:about=$constraint]" mode="constraint"/>
+        </ul>
     </xsl:template>
     
     <!-- Display constraint type :  use a mode rather than template matching because constraint could be any type -->
-    <xsl:template match="rdf:Description/rdf:type" mode="constraint">
+    <xsl:template match="rdf:type" mode="constraint">
         <xsl:variable name="constraintType" select="@rdf:resource"/>
         <xsl:for-each select="$constraintType">
         <xsl:choose>
@@ -274,14 +276,20 @@
     </xsl:template>
     
     <!--  Display constraint details -->
-    <xsl:template match="rdf:Description" mode="constraint">
+    <xsl:template match="rdf:Description" mode="constraint">  
+        <li style="margin-left:4em;list-style:none">(<xsl:apply-templates select="rdf:type" mode="constraint"/>)<br/>
         <!--  display properties -->
-        <xsl:for-each select="*[local-name()!='type' and namespace-uri(.)!='http://www.w3.org/2011/content#']">
-            <p style="margin-left:4em"><strong><xsl:value-of select="local-name()"/>:&#160;</strong><xsl:value-of select="@rdf:resource | ."/></p>      
+        <xsl:for-each select="*[local-name()!='type' and namespace-uri(.)!='http://www.w3.org/2011/content#']"> 
+            <p style="margin-left:4em"><strong><xsl:value-of select="local-name()"/>:&#160;</strong><xsl:value-of select="@rdf:resource | ."/></p>
+            <xsl:if test="local-name()='item' or local-name() = 'default'">
+                <xsl:variable name="ref" select="@rdf:resource"/>
+                <ul><xsl:apply-templates select="//rdf:Description[@rdf:about=$ref]" mode="constraint"/></ul>
+            </xsl:if>      
         </xsl:for-each>
         <xsl:if test="cnt:rest | cnt:chars">
             <div style="margin-left:4em"><xsl:apply-templates select="."/></div>
         </xsl:if>
+        </li>
     </xsl:template>
     
     <!--  inline content -->
