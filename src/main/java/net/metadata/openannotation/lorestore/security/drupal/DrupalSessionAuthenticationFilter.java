@@ -14,6 +14,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.xmlrpc.XmlRpcException;
 import org.apache.xmlrpc.client.XmlRpcClient;
 import org.apache.xmlrpc.client.XmlRpcClientConfigImpl;
@@ -24,6 +25,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.GrantedAuthorityImpl;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.util.Assert;
 import org.springframework.web.filter.GenericFilterBean;
 
 public class DrupalSessionAuthenticationFilter extends GenericFilterBean
@@ -34,8 +36,17 @@ public class DrupalSessionAuthenticationFilter extends GenericFilterBean
 	// Drupal Session Cookies are named according to host name
 	// re http://api.drupal.org/api/drupal/includes!bootstrap.inc/function/drupal_settings_initialize/7
 	private String drupalCookiePrefix = "SESS";
+	private String drupalCookieName;
+	private String drupalHostname;
 	private String xmlrpcEndpoint = "http://127.0.0.1/xmlrpc.php";
-
+	
+	@Override
+	public void initFilterBean() {
+        Assert.notNull(drupalHostname, "drupalHostname must be specified");
+        Assert.notNull(xmlrpcEndpoint, "xmlrpcEndpoint must be specified");
+		this.drupalCookieName = drupalCookiePrefix + DigestUtils.sha256Hex(this.drupalHostname).substring(0, 32);
+	}
+	
 	@Override
 	public void doFilter(ServletRequest req, ServletResponse res,
 			FilterChain chain) throws IOException, ServletException {
@@ -102,7 +113,7 @@ public class DrupalSessionAuthenticationFilter extends GenericFilterBean
         	return null;
         }
         for (Cookie cookie : cookies) {
-        	if (cookie.getName().startsWith(drupalCookiePrefix)) {
+        	if (cookie.getName().equals(drupalCookieName)) {
         		return cookie;
         	}
         }
@@ -149,6 +160,21 @@ public class DrupalSessionAuthenticationFilter extends GenericFilterBean
 	public void setApplicationEventPublisher(ApplicationEventPublisher arg0) {
 		// TODO Auto-generated method stub
 
+	}
+	public String getDrupalCookieName() {
+		return drupalCookieName;
+	}
+	public String getDrupalHostname() {
+		return drupalHostname;
+	}
+	public void setDrupalHostname(String drupalHostname) {
+		this.drupalHostname = drupalHostname;
+	}
+	public String getXmlrpcEndpoint() {
+		return xmlrpcEndpoint;
+	}
+	public void setXmlrpcEndpoint(String xmlrpcEndpoint) {
+		this.xmlrpcEndpoint = xmlrpcEndpoint;
 	}
 
 }

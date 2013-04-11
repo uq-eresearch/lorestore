@@ -35,6 +35,8 @@
     </sec:http>
     
     <bean id="drupalFilter" class="net.metadata.openannotation.lorestore.security.drupal.DrupalSessionAuthenticationFilter">
+        <property name="drupalHostname" value="${lorestore.drupalhostname}" />
+        <property name="xmlrpcEndpoint" value="${lorestore.drupalxmlrpc}" />
     </bean>
         
     <!-- Add a filter to accept HTTP BASIC authentication, but do not include an entry point
