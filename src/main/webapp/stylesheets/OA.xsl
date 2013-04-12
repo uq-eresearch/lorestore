@@ -270,24 +270,35 @@
             <xsl:when test="starts-with(.,'http://www.w3.org/2011/content#')">
             Inline
             </xsl:when>
-            <xsl:otherwise><xsl:text> </xsl:text><xsl:value-of select="."/><xsl:text> </xsl:text></xsl:otherwise>
+            <xsl:otherwise>
+                <xsl:text> </xsl:text>
+	            <xsl:choose>
+		            <xsl:when test="starts-with(.,'http://www.w3.org/ns/oa#')">
+		              <xsl:value-of select="substring-after(.,'http://www.w3.org/ns/oa#')"/>
+		            </xsl:when>
+		            <xsl:otherwise>
+		              <xsl:value-of select="."/>
+		            </xsl:otherwise>
+	            </xsl:choose>
+	            <xsl:text> </xsl:text>
+            </xsl:otherwise>
         </xsl:choose>
         </xsl:for-each>
     </xsl:template>
     
     <!--  Display constraint details -->
     <xsl:template match="rdf:Description" mode="constraint">  
-        <li style="margin-left:4em;list-style:none">(<xsl:apply-templates select="rdf:type" mode="constraint"/>)<br/>
+        <li style="margin-left:2em;list-style:none"><strong><xsl:apply-templates select="rdf:type" mode="constraint"/>:</strong><br/>
         <!--  display properties -->
         <xsl:for-each select="*[local-name()!='type' and namespace-uri(.)!='http://www.w3.org/2011/content#']"> 
-            <p style="margin-left:4em"><strong><xsl:value-of select="local-name()"/>:&#160;</strong><xsl:value-of select="@rdf:resource | ."/></p>
+            <p style="margin-left:2em"><strong><xsl:value-of select="local-name()"/>:&#160;</strong><xsl:value-of select="@rdf:resource | ."/></p>
             <xsl:if test="local-name()='item' or local-name() = 'default'">
                 <xsl:variable name="ref" select="@rdf:resource"/>
                 <ul><xsl:apply-templates select="//rdf:Description[@rdf:about=$ref]" mode="constraint"/></ul>
             </xsl:if>      
         </xsl:for-each>
         <xsl:if test="cnt:rest | cnt:chars">
-            <div style="margin-left:4em"><xsl:apply-templates select="."/></div>
+            <div style="margin-left:2em"><xsl:apply-templates select="."/></div>
         </xsl:if>
         </li>
     </xsl:template>
