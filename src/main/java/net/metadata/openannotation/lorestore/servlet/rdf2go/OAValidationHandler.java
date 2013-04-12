@@ -69,12 +69,12 @@ public class OAValidationHandler implements LoreStoreValidationHandler {
         Model model = mf.createModel(Reasoning.owl);
         try {
             model.open();
-            LOG.info(Syntax.Turtle.getMimeType() + " " + Syntax.Ntriples.getMimeType() + " " + Syntax.Nquads.getMimeType());
+            //LOG.info(Syntax.Turtle.getMimeType() + " " + Syntax.Ntriples.getMimeType() + " " + Syntax.Nquads.getMimeType());
             if (contentType.equals(Syntax.RdfXml.getMimeType())
                     || contentType.equals(Syntax.Trix.getMimeType()) 
                     || contentType.equals(Syntax.Turtle.getMimeType())
                     || contentType.equals(Syntax.Ntriples.getMimeType())
-                    || contentType.equals(Syntax.Nquads.getMimeType())
+                    //|| contentType.equals(Syntax.Nquads.getMimeType())
                     || contentType.equals(Syntax.Trig.getMimeType())){
                 //StringReader reader = new StringReader(inputRDF);
                 model.readFrom(inputRDF, Syntax.forMimeType(contentType), occ.getBaseUri());
