@@ -145,6 +145,7 @@ public class DrupalSessionAuthenticationFilter extends GenericFilterBean
 				principal.setUsername((String)user.get("name"));
 				principal.setUid((String)user.get("uid"));
 				principal.setAdministrator(admin);
+				principal.setDrupalHostname(drupalHostname);
 				return principal;
 			}
 			

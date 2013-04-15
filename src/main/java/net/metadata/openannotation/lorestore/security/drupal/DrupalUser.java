@@ -6,10 +6,11 @@ public class DrupalUser {
 	private String email;
 	private String username;
 	private String uid;
+	private String drupalHostname;
 	private boolean administrator;
 	
 	public String getPrimaryUri() {
-		return "http://localhost/user/1";
+		return "http://" + drupalHostname + "/user/" + uid;
 	}
 	
 	public String getName() {
@@ -45,6 +46,14 @@ public class DrupalUser {
 
 	public void setAdministrator(boolean administrator) {
 		this.administrator = administrator;
+	}
+
+	public String getDrupalHostname() {
+		return drupalHostname;
+	}
+
+	public void setDrupalHostname(String drupalHostname) {
+		this.drupalHostname = drupalHostname;
 	}
 	
 }
