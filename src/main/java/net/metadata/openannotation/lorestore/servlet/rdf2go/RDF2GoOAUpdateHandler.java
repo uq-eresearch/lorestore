@@ -1,5 +1,14 @@
 package net.metadata.openannotation.lorestore.servlet.rdf2go;
 
+import static net.metadata.openannotation.lorestore.common.LoreStoreConstants.DCTERMS_CREATED;
+import static net.metadata.openannotation.lorestore.common.LoreStoreConstants.DCTERMS_MODIFIED;
+import static net.metadata.openannotation.lorestore.common.LoreStoreConstants.OA_ANNOTATED_AT_PROPERTY;
+
+import java.util.Date;
+
+import net.metadata.openannotation.lorestore.access.LoreStoreIdentityProvider;
+import net.metadata.openannotation.lorestore.exceptions.LoreStoreException;
+import net.metadata.openannotation.lorestore.model.OpenAnnotation;
 import net.metadata.openannotation.lorestore.model.rdf2go.NamedGraphImpl;
 import net.metadata.openannotation.lorestore.model.rdf2go.OpenAnnotationImpl;
 import net.metadata.openannotation.lorestore.servlet.LoreStoreControllerConfig;
@@ -26,5 +35,31 @@ public class RDF2GoOAUpdateHandler extends AbstractRDF2GoUpdateHandler {
 	protected String getDefaultViewName() {
 	        return "oa";
 	}
-
+	
+	/**
+	 * @param obj
+	 * @throws LoreStoreException
+	 */
+	@Override
+	protected void storeCreationDate(NamedGraphImpl obj) throws LoreStoreException {
+		Date now = new Date();
+        obj.setDate(now, DCTERMS_CREATED);
+        obj.setDate(now, DCTERMS_MODIFIED);
+        obj.setDate(now, OA_ANNOTATED_AT_PROPERTY);
+	}
+	
+	/**
+	 * @param obj
+	 * @throws LoreStoreException
+	 */
+	@Override
+	protected void storeUser(NamedGraphImpl obj) throws LoreStoreException {
+		OpenAnnotation anno = (OpenAnnotation)obj;
+		LoreStoreIdentityProvider identityProvider = occ.getIdentityProvider();
+		String userURI = identityProvider.obtainUserURI();
+		String userName = identityProvider.obtainUserName();
+		anno.setUser(userURI);
+		anno.setUserWithName(userURI, userName);
+	}
+	
 }

@@ -50,4 +50,24 @@ public class DefaultLoreStoreIdentityProvider implements LoreStoreIdentityProvid
 		Assert.notNull(authenticationContext, "authenticationContext not set");
 	}
 
+	@Override
+	public String obtainUserName() {
+        String userName = null;
+        Authentication auth = authenticationContext.getAuthentication(null);
+        if (auth != null) {
+            Object p = auth.getPrincipal();
+            
+            if (p instanceof EmmetUserWrapper) {
+                userName = ((EmmetUserWrapper) p).unwrap().getUserName();
+            } else if (p instanceof EmmetUser) {
+                userName = ((EmmetUser) p).getUserName();
+            } else if (p instanceof DrupalUser) {
+            	userName = ((DrupalUser) p).getUsername();
+            } else if (p instanceof String) {
+            	return (String)p;
+            }
+        }
+        return userName;
+	}
+
 }

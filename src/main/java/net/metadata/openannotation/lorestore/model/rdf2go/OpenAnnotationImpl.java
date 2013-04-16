@@ -1,12 +1,18 @@
 package net.metadata.openannotation.lorestore.model.rdf2go;
 
 import static net.metadata.openannotation.lorestore.common.LoreStoreConstants.DCTERMS_CREATOR;
+import static net.metadata.openannotation.lorestore.common.LoreStoreConstants.LORESTORE_USER;
 import static net.metadata.openannotation.lorestore.common.LoreStoreConstants.OAC_ANNOTATION_CLASS;
 import static net.metadata.openannotation.lorestore.common.LoreStoreConstants.OA_ANNOTATION_CLASS;
 import static net.metadata.openannotation.lorestore.common.LoreStoreConstants.OAC_TARGET_PROPERTY;
 import static net.metadata.openannotation.lorestore.common.LoreStoreConstants.OA_TARGET_PROPERTY;
+
+import java.util.Date;
+
+import net.metadata.openannotation.lorestore.common.LoreStoreConstants;
 import net.metadata.openannotation.lorestore.exceptions.LoreStoreException;
 import net.metadata.openannotation.lorestore.model.NamedGraph;
+import net.metadata.openannotation.lorestore.model.OpenAnnotation;
 
 import org.ontoware.aifbcommons.collection.ClosableIterator;
 import org.ontoware.rdf2go.model.Model;
@@ -14,6 +20,7 @@ import org.ontoware.rdf2go.model.QueryResultTable;
 import org.ontoware.rdf2go.model.QueryRow;
 import org.ontoware.rdf2go.model.Statement;
 import org.ontoware.rdf2go.model.node.Node;
+import org.ontoware.rdf2go.model.node.PlainLiteral;
 import org.ontoware.rdf2go.model.node.Resource;
 import org.ontoware.rdf2go.model.node.URI;
 import org.ontoware.rdf2go.model.node.Variable;
@@ -24,7 +31,7 @@ import org.openrdf.repository.sail.SailRepository;
 import org.openrdf.sail.inferencer.fc.ForwardChainingRDFSInferencer;
 import org.openrdf.sail.memory.MemoryStore;
 
-public class OpenAnnotationImpl extends NamedGraphImpl implements NamedGraph {
+public class OpenAnnotationImpl extends NamedGraphImpl implements OpenAnnotation {
 
     
     public OpenAnnotationImpl(Model model) {
@@ -105,4 +112,26 @@ public class OpenAnnotationImpl extends NamedGraphImpl implements NamedGraph {
         throw new LoreStoreException("Invalid Annotation");
     }
 
+
+	@Override
+	public void setUserWithName(String uri, String username) throws LoreStoreException {
+		URI rdfType = model.createURI(LoreStoreConstants.RDF_TYPE_PROPERTY);
+		URI foafPerson = model.createURI(LoreStoreConstants.FOAF_PERSON_CLASS);
+		URI foafName = model.createURI(LoreStoreConstants.FOAF_NAME_PROPERTY);
+		URI userURI = model.createURI(uri);
+		PlainLiteral name = model.createPlainLiteral(username);
+		URI annotatedBy = model.createURI(LoreStoreConstants.OA_ANNOTATED_BY_PROPERTY);
+		
+		Resource annotation = findObject();
+
+		ClosableIterator<Statement> userStatements = model.findStatements(
+				annotation, annotatedBy, Variable.ANY);
+		model.removeAll(userStatements);
+		if (userURI != null) {
+			model.addStatement(annotation, annotatedBy, userURI);
+			model.addStatement(userURI, rdfType, foafPerson);
+			model.addStatement(userURI, foafName, name);
+		} 
+		
+	}
 }

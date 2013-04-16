@@ -119,11 +119,8 @@ public abstract class AbstractRDF2GoUpdateHandler implements LoreStoreUpdateHand
         obj.assignURI(newUri.toString());
 
         // Update created and modified dates
-        String userURI = occ.getIdentityProvider().obtainUserURI();
-        obj.setUser(userURI);
-        Date now = new Date();
-        obj.setDate(now, DCTERMS_CREATED);
-        obj.setDate(now, DCTERMS_MODIFIED);
+        storeUser(obj);
+        storeCreationDate(obj);
 
         ModelSet ms = null;
         try {
@@ -156,6 +153,29 @@ public abstract class AbstractRDF2GoUpdateHandler implements LoreStoreUpdateHand
         response.setReturnStatus(201);
         return response;
     }
+
+	/**
+	 * @param obj
+	 * @throws LoreStoreException
+	 */
+	protected void storeUser(NamedGraphImpl obj) throws LoreStoreException {
+		String userURI = occ.getIdentityProvider().obtainUserURI();
+        obj.setUser(userURI);
+	}
+
+	/**
+	 * Store creation date in the Graph
+	 * 
+	 * Can be overridden in subclasses to store the creation date in a different form
+	 * 
+	 * @param obj the object
+	 * @throws LoreStoreException
+	 */
+	protected void storeCreationDate(NamedGraphImpl obj) throws LoreStoreException {
+		Date now = new Date();
+        obj.setDate(now, DCTERMS_CREATED);
+        obj.setDate(now, DCTERMS_MODIFIED);
+	}
     
     
     /* (non-Javadoc)

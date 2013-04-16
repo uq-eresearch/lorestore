@@ -17,6 +17,10 @@ public interface LoreStoreConstants {
 	
 	String OAC_TARGET_PROPERTY = OAC_SYNTAX_URL + "hasTarget";
 	String OA_TARGET_PROPERTY = OA_SYNTAX_URL + "hasTarget";
+
+	String OA_ANNOTATED_BY_PROPERTY = OA_SYNTAX_URL + "annotatedBy";
+	String OA_ANNOTATED_AT_PROPERTY = OA_SYNTAX_URL + "annotatedAt";
+	
 	
 	String ORE_DESCRIBES_PROPERTY = ORE_SYNTAX_URL + "describes";
 
@@ -30,6 +34,13 @@ public interface LoreStoreConstants {
 
     String RDF_TYPE_PROPERTY = RDF_SYNTAX_URL + "type";
     
+    
+    /*
+     * Properties defined by FOAF
+     */
+    String FOAF_NS_URL = "http://xmlns.com/foaf/0.1/";
+    String FOAF_PERSON_CLASS = FOAF_NS_URL + "Person";
+    String FOAF_NAME_PROPERTY = FOAF_NS_URL + "name";
     
     
     String DCTERMS_NS_URL = "http://purl.org/dc/terms/";
