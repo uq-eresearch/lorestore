@@ -2,6 +2,8 @@ package net.metadata.openannotation.lorestore.servlet;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertThat;
 
 import java.io.ByteArrayInputStream;
 
@@ -50,5 +52,21 @@ public class OpenAnnotationImplTest {
 		assertEquals(beforeSize, oa.getModel().size());
 	}
 
+	@Test
+	public void testAssignUser() throws LoreStoreException {
+		
+		String userUri = "http://localhost/user/1";
+		oa.setUser(userUri);
+		
+		String rdfxml = oa.getModelAsRDFXML();
+		assertTrue(rdfxml.contains(userUri));
+		
+		String userName = "Test User";
+		oa.setUserWithName(userUri, userName);
+		
+		rdfxml = oa.getModelAsRDFXML();
+		assertTrue(rdfxml.contains(userName));
+		assertTrue(rdfxml.contains("foaf/0.1/Person"));
+	}
 	
 }

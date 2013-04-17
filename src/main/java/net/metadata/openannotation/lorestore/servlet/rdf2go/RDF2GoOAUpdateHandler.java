@@ -37,6 +37,8 @@ public class RDF2GoOAUpdateHandler extends AbstractRDF2GoUpdateHandler {
 	}
 	
 	/**
+	 * Add oa:annotatedAt property along with dcterms:created and modified
+	 * 
 	 * @param obj
 	 * @throws LoreStoreException
 	 */
@@ -49,6 +51,8 @@ public class RDF2GoOAUpdateHandler extends AbstractRDF2GoUpdateHandler {
 	}
 	
 	/**
+	 * Add user uri and name to the annotation
+	 * 
 	 * @param obj
 	 * @throws LoreStoreException
 	 */
