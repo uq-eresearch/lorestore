@@ -322,6 +322,24 @@ Ext.Ajax.request({
                 </dl>
                 <p>The lorestore namespace is <code>http://auselit.metadata.net/lorestore/</code></p>
             </section>
+            <section id="client">
+                <h2>Client library</h2>
+                <hr>
+                
+                <p>A library providing a basic annotation client that uses the lorestore API is available at <code>https://github.com/uq-eresearch/annotator</code>.</p>
+                <p>The annotation client is implemented using CoffeeScript which can be compiled to JavaScript using the <code>redo</code> command line tool. To use the client library, include the generated scripts and then enable the AustESE plug-ins using jQuery as follows:</p>
+                <pre class="pre prettyprint">
+jQuery(el).annotator()
+  // optional plug-in to enable image annotations
+  .annotator('addPlugin','Image') 
+  // optional plug-in to enable attaching annotation motivations
+  .annotator('addPlugin', 'Motivations')
+  // optional plug-in to display provenance in annotation viewer 
+  .annotator('addPlugin', 'Prov') 
+  // plug-in required for compabitility with the lorestore API
+  .annotator('addPlugin','LoreStore'); 
+                </pre>
+            </section>
           </div>
           <div class="span2 sidebarmenu">
             <h2>Index</h2>
@@ -345,6 +363,7 @@ Ext.Ajax.request({
                 <li><a href="#sparql">SPARQL endpoint</a></li>
                 <li><a href="#user">User Management</a></li>
                 <li><a href="#content">Content formats</a></li>
+                <li><a href="#client">Client library</a></li>
             </ul>
           </div>
       </div>
