@@ -198,15 +198,14 @@ public class RDF2GoOAQueryHandler extends AbstractRDF2GoQueryHandler {
                 + escapedURL + " " + predicate + " ?v ."
                 +        filter
                 + "   } . "
-                + " OPTIONAL {?g <http://purl.org/dc/terms/creator> ?c . ?c <http://xmlns.com/foaf/0.1/name> ?a} . "
-                + " OPTIONAL {?g <http://purl.org/dc/terms/modified> ?m} . "
+                + " OPTIONAL {?g <http://www.w3.org/ns/oa#annotatedBy> ?c . ?c <http://xmlns.com/foaf/0.1/name> ?a} . "
+                + " OPTIONAL {?g <http://www.w3.org/ns/oa#annotatedAt> ?m} . "
                 + " OPTIONAL {?g <http://purl.org/dc/elements/1.1/title> ?t} . "
                 + " OPTIONAL {?g <" + LORESTORE_PRIVATE + "> ?priv}. "
                 + " OPTIONAL {?g <" + LORESTORE_USER + "> ?user}. "
                 + " FILTER (!bound(?priv) || (bound(?priv) && ?user = '" + userURI + "'))"
                 + "}";
         // @formatter:on
-        
         return queryString;
     }
 
