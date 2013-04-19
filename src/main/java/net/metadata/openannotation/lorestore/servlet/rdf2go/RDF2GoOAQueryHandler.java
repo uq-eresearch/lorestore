@@ -173,7 +173,7 @@ public class RDF2GoOAQueryHandler extends AbstractRDF2GoQueryHandler {
     
 
     protected String generateSearchQuery(String urlParam, String matchpred,
-            String matchval, boolean includeAbstract) {
+            String matchval, String orderBy, boolean includeAbstract) {
         String escapedURL = "?u";
         if (urlParam != null && !urlParam.isEmpty()) {
             escapedURL = "<" + urlParam + ">";
@@ -188,23 +188,27 @@ public class RDF2GoOAQueryHandler extends AbstractRDF2GoQueryHandler {
         if (matchval != null && !matchval.isEmpty()) {
             filter = makeFilter(matchval);
         }
-
+        String tempOrderBy = orderBy;
+        if (!(orderBy.equals("date") || orderBy.equals("creator") || orderBy.equals("title"))){
+            tempOrderBy = "date";
+        }
         String userURI = occ.getIdentityProvider().obtainUserURI();
         // @formatter:off
-        String queryString = "select distinct ?g ?a ?m ?t ?v ?priv"
+        String queryString = "select distinct ?g ?creator ?date ?title ?v ?priv"
                 + " where {"
                 + "   {?g a <" + OAC_ANNOTATION_CLASS + "> } UNION {?g a <" + OA_ANNOTATION_CLASS + ">} ."
                 + "   graph ?g {"
                 + escapedURL + " " + predicate + " ?v ."
                 +        filter
                 + "   } . "
-                + " OPTIONAL {?g <http://www.w3.org/ns/oa#annotatedBy> ?c . ?c <http://xmlns.com/foaf/0.1/name> ?a} . "
-                + " OPTIONAL {?g <http://www.w3.org/ns/oa#annotatedAt> ?m} . "
-                + " OPTIONAL {?g <http://purl.org/dc/elements/1.1/title> ?t} . "
+                + " OPTIONAL {?g <http://www.w3.org/ns/oa#annotatedBy> ?x . ?x <http://xmlns.com/foaf/0.1/name> ?creator} . "
+                + " OPTIONAL {?g <http://www.w3.org/ns/oa#annotatedAt> ?date} . "
+                + " OPTIONAL {?g <http://purl.org/dc/elements/1.1/title> ?title} . "
                 + " OPTIONAL {?g <" + LORESTORE_PRIVATE + "> ?priv}. "
                 + " OPTIONAL {?g <" + LORESTORE_USER + "> ?user}. "
                 + " FILTER (!bound(?priv) || (bound(?priv) && ?user = '" + userURI + "'))"
-                + "}";
+                + "} order by ?" + tempOrderBy ;
+                
         // @formatter:on
         return queryString;
     }

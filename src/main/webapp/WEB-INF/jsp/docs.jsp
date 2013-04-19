@@ -243,7 +243,8 @@ Ext.Ajax.request({
             <p>
             <code>GET ${secure}/ore/?matchval=Jane+Doe&matchpred=http%3A%2F%2Fpurl.org%2Fdc%2Felements%2F1.1%2Fcreator</code>
             </p>
-            
+            <h4>orderBy</h4>
+            <p>Either <code>date</code>, <code>creator</code> or <code>title</code>. Use in combination with matchpred or matchval to specify order or returned results.</p> 
             <h4>exploreFrom</h4>
             <p>Get related resources and resource maps (used by LORE explore view) for a given URI. 
                 For convenience, if the exploreFrom URI is a resource map, results are returned for both the resource map and its aggregation.</p>
@@ -282,11 +283,29 @@ Ext.Ajax.request({
             </pre>
             
             <h3 id="oac">Annotations</h3>
+            <p>Issue a GET request to <code>${secure}/oa</code> providing <code>annotates</code>, <code>matchval</code>, <code>matchpred</code>, <code>orderBy</code> or <code>asTriples</code> parameters.
+                Parameter values should be URL encoded. The parameters can be used in combination. You do not need to sign in to query public annotations. 
+                However, if you have signed in, private annotations that you have permission to view will be included in the results.</p> 
+            
             <h4>annotates</h4>
             <p>Fetch annotations that annotate a given web resource (also fetches replies if the queried resource is itself an annotation). Results are returned in TriX, TriG, RDF/XML or JSON-LD format, depending on the Accept header. 
                 Use TriX or TriG format if scoping of arbitrary RDF data stored with annotations is important, as these formats have Named Graph support. For RDF/XML the results are flattened into a single graph.</p>
             <p><code>GET ${secure}/oa/?annotates=http%3A%2F%2Fwww.example.org</code></p>
             
+            <h4>matchval</h4>
+            <p>Find annotations with predicate values containing the search term. When used without any other parameters, functions like a keyword search.</p>
+            <p>Example: match annotations where any value contains 'Lawson'</p>
+            <p>
+            <code>GET ${secure}/oa/?matchval=Lawson</code>
+            </p>
+            <h4>matchpred</h4>
+            <p>Returns annotations containing <code>matchpred</code>. When used with <code>matchval</code>, where the value of the specified predicate contains <code>matchval</code>.</p>
+            <p>Example: find annotations with any subject</p>
+            <p><code>GET ${secure}/oa/?&matchpred=http%3A%2F%2Fpurl.org%2Fdc%2Felements%2F1.1%2Fsubject</code></p>
+            <h4>orderBy</h4>
+            <p>Either <code>date</code>, <code>creator</code> or <code>title</code>. Use in combination with matchpred or matchval to specify order or returned results.</p> 
+            <h4>asTriples</h4>
+            <p>When true, results are returned in SPARQL/XML format. Otherwise, results are returned as annotations, in the format determined by the Accept header provided with the request.</p>
             </section>
             <section id="sparql">
             <h2>SPARQL endpoint</h2>

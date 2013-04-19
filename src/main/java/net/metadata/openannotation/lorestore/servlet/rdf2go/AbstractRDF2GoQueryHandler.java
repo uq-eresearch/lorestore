@@ -116,10 +116,10 @@ public abstract class AbstractRDF2GoQueryHandler implements LoreStoreQueryHandle
 	
 	@Override
 	public ModelAndView searchQuery(String urlParam,
-			String matchpred, String matchval, Boolean includeAbstract, Boolean asTriples) throws RepositoryException,
+			String matchpred, String matchval, String orderBy, Boolean includeAbstract, Boolean asTriples) throws RepositoryException,
 			MalformedQueryException, QueryEvaluationException,
 			TupleQueryResultHandlerException, InterruptedException, RDFHandlerException {
-		String queryString = generateSearchQuery(urlParam, matchpred, matchval, includeAbstract);
+		String queryString = generateSearchQuery(urlParam, matchpred, matchval, orderBy, includeAbstract);
 		if (asTriples){
 		    return runSparqlQueryIntoMAV(queryString);
 		} else {
@@ -312,7 +312,7 @@ public abstract class AbstractRDF2GoQueryHandler implements LoreStoreQueryHandle
 	}
 
 	protected String generateSearchQuery(String urlParam, String matchpred,
-			String matchval, boolean includeAbstract) {
+			String matchval, String orderBy, boolean includeAbstract) {
 		return null;
 	}
 

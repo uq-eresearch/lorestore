@@ -107,7 +107,7 @@ public class RDF2GoOREQueryHandler extends AbstractRDF2GoQueryHandler {
 	
 
 	protected String generateSearchQuery(String urlParam, String matchpred,
-			String matchval, boolean includeAbstract) {
+			String matchval, String orderBy, boolean includeAbstract) {
 		String escapedURL = "?u";
 		if (urlParam != null && !urlParam.isEmpty()) {
 			escapedURL = "<" + urlParam + ">";
@@ -122,24 +122,28 @@ public class RDF2GoOREQueryHandler extends AbstractRDF2GoQueryHandler {
 		if (matchval != null && !matchval.isEmpty()) {
 			filter = makeFilter(matchval);
 		}
-
+		String tempOrderBy = orderBy;
+		if (!(orderBy.equals("date") || orderBy.equals("creator") || orderBy.equals("title"))){
+	            tempOrderBy = "date";
+	        }
+		
 		String userURI = occ.getIdentityProvider().obtainUserURI();
 		// @formatter:off
-		String queryString = "select distinct ?g ?a ?m ?t ?v ?priv"
+		String queryString = "select distinct ?g ?creator ?date ?t ?v ?priv"
 				+ (includeAbstract ? "?ab" : "")
 				+ " where {"
 				+ "   graph ?g {?g a <" + ORE_RESOURCEMAP_CLASS + "> ."
 				+ escapedURL + " " + predicate + " ?v ."
 				+        filter
 				+ "   } ."
-				+   "OPTIONAL {?g <http://purl.org/dc/elements/1.1/creator> ?a} ."
-				+   "OPTIONAL {?g <http://purl.org/dc/terms/modified> ?m} ."
-				+   "OPTIONAL {?g <http://purl.org/dc/elements/1.1/title> ?t} ."
+				+   "OPTIONAL {?g <http://purl.org/dc/elements/1.1/creator> ?creator} ."
+				+   "OPTIONAL {?g <http://purl.org/dc/terms/modified> ?date} ."
+				+   "OPTIONAL {?g <http://purl.org/dc/elements/1.1/title> ?title} ."
 				+   (includeAbstract ? "OPTIONAL {?g <http://purl.org/dc/terms/abstract> ?ab}." : "") 
 				+ " OPTIONAL {?g <" + LORESTORE_PRIVATE + "> ?priv}."
 				+ " OPTIONAL {?g <" + LORESTORE_USER + "> ?user}."
 				+ " FILTER (!bound(?priv) || (bound(?priv) && ?user = '" + userURI + "'))"
-				+ "}";
+				+ "} order by ?" + tempOrderBy ;
 		// @formatter:on
 		
 		return queryString;
