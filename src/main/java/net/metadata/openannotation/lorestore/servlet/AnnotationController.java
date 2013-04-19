@@ -88,7 +88,17 @@ public class AnnotationController {
             return qh.searchQuery(urlParam, matchpred, matchval, includeAbstract, asTriples);
         
     }
-
+    @RequestMapping(value = "/", params = { "matchpred" }, method = RequestMethod.GET)
+    public ModelAndView searchPredQuery(
+            @RequestParam(value = "annotates", defaultValue = "") String urlParam,
+            @RequestParam(value = "matchval", defaultValue = "") String matchval,
+            @RequestParam("matchpred") String matchpred,
+            @RequestParam(value = "includeAbstract", defaultValue = "false") Boolean includeAbstract,
+            @RequestParam(value = "asTriples", defaultValue = "true") Boolean asTriples) throws Exception {
+        
+            return qh.searchQuery(urlParam, matchpred, matchval, includeAbstract, asTriples);
+        
+    }
     @RequestMapping(value = "/feed", params = "annotates", method = RequestMethod.GET)
     public ModelAndView atomRefersToQuery(
             @RequestParam("annotates") String urlParam) throws Exception {
