@@ -70,16 +70,16 @@ public class OAValidationHandler implements LoreStoreValidationHandler {
         try {
             model.open();
             //LOG.info(Syntax.Turtle.getMimeType() + " " + Syntax.Ntriples.getMimeType() + " " + Syntax.Nquads.getMimeType());
-            if (contentType.equals(Syntax.RdfXml.getMimeType())
-                    || contentType.equals(Syntax.Trix.getMimeType()) 
-                    || contentType.equals(Syntax.Turtle.getMimeType())
-                    || contentType.equals(Syntax.Ntriples.getMimeType())
+            if (contentType.contains(Syntax.RdfXml.getMimeType())
+                    || contentType.contains(Syntax.Trix.getMimeType()) 
+                    || contentType.contains(Syntax.Turtle.getMimeType())
+                    || contentType.contains(Syntax.Ntriples.getMimeType())
                     //|| contentType.equals(Syntax.Nquads.getMimeType())
-                    || contentType.equals(Syntax.Trig.getMimeType())){
+                    || contentType.contains(Syntax.Trig.getMimeType())){
                 //StringReader reader = new StringReader(inputRDF);
                 model.readFrom(inputRDF, Syntax.forMimeType(contentType), occ.getBaseUri());
             
-            } else if (contentType.equals("application/json")){
+            } else if (contentType.contains("application/json")){
                 //Object jsonObject = JSONUtils.fromString(inputRDF);
                 Object jsonObject = JSONUtils.fromInputStream(inputRDF);
                 // TODO if no @context, inject default context
