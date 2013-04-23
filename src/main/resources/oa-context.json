@@ -14,6 +14,7 @@
     "prov": "http://www.w3.org/ns/prov#",
     "trig": "http://www.w3.org/2004/03/trix/rdfg-1/",
     "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "austese": "http://austese.net/ns/oa/",
     "lorestore": "http://auselit.metadata.net/lorestore/",
     "hasBody" :      {"@type":"@id", "@id" : "oa:hasBody"},
     "hasTarget" :    {"@type":"@id", "@id" : "oa:hasTarget"},
