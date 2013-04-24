@@ -29,7 +29,7 @@ public class OAAtomFeedView extends AbstractAtomFeedView {
 	@Override
 	protected void buildFeedMetadata(Map<String, Object> model, Feed feed,
 			HttpServletRequest request) {
-		feed.setTitle("Annotations for " + (String) model.get("browseURL"));
+		feed.setTitle("Annotations for " + (String) model.get("feedTitle"));
 		
 	}
 
@@ -66,13 +66,21 @@ public class OAAtomFeedView extends AbstractAtomFeedView {
 		    Node m = anno.getModifiedDate();
 		   
 		    if (m != null){
-		    	Date modDate = DatatypeConverter.parseDateTime(m.asLiteral().getValue()).getTime();
-		    	entry.setModified(modDate);
+		        try {
+        		    	Date modDate = DatatypeConverter.parseDateTime(m.asLiteral().getValue()).getTime();
+        		    	entry.setModified(modDate);
+		        } catch (Exception e) {
+		            // unable to parse date time
+		        }
 		     }
 		    Node c = anno.getCreatedDate();
 		    if (c != null){
-		    	Date cDate = DatatypeConverter.parseDateTime(c.asLiteral().getValue()).getTime();
-		    	entry.setCreated(cDate);
+		        try {
+        		    	Date cDate = DatatypeConverter.parseDateTime(c.asLiteral().getValue()).getTime();
+        		    	entry.setCreated(cDate);
+		        } catch (Exception e){
+		            //unable to parse date time
+		        }
 		    }
 		     
 		     Node t = anno.lookupNode(annoModel.createURI(DC_TITLE));
