@@ -119,7 +119,7 @@ xhr.send(null);
             
             <h3 id="auth">Sign in</h3>
             <p>Some API operations require authentication.</p>
-            <p>lorestore uses Emmet to manage authentication, which supports a number of standard authentication schemes.
+            <p>lorestore can either be configured to defer to drupal for user authentication or to use Emmet to manage authentication, which supports a number of standard authentication schemes.
                 Refer to the <a href="http://metadata.net/sites/emmet-0.6-SNAPSHOT/">Emmet documentation</a> for further details of the schemes supported.
             </p>
             <p>Use <code>emmet.svc</code> with the <code>fetchEmmetUrls</code> action to get the configured login, logout and registration URLs.</p>
