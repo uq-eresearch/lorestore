@@ -306,6 +306,8 @@ Ext.Ajax.request({
             <p>Either <code>date</code>, <code>creator</code> or <code>title</code>. Use in combination with matchpred or matchval to specify order or returned results.</p> 
             <h4>asTriples</h4>
             <p>When true, results are returned in SPARQL/XML format. Otherwise, results are returned as annotations, in the format determined by the Accept header provided with the request.</p>
+            <h3 id="atom">Atom feeds</h3>
+            <p>Subscribe to annotations or resource maps matching a search at <code>${secure}/oa/feed/</code> or <code>${secure}/ore/feed/</code>, providing the same parameters as for search (e.g. <code>annotates</code>, <code>refersTo</code>).</p>
             </section>
             <section id="sparql">
             <h2>SPARQL endpoint</h2>
@@ -377,6 +379,7 @@ jQuery(el).annotator()
                     <ul>
                         <li><a href="#ore">Resource Maps</a></li>
                         <li><a href="#oac">Annotations</a></li>
+                        <li><a href="#atom">Atom feeds</a></li>
                     </ul>
                 </li>
                 <li><a href="#sparql">SPARQL endpoint</a></li>
