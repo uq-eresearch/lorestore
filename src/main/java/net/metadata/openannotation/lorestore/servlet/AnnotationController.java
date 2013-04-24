@@ -73,7 +73,6 @@ public class AnnotationController {
             throw new InvalidQueryParametersException(
                     "Missing or empty query parameters");
         }
-
         return qh.refersToQuery(urlParam);
     }
 
@@ -101,6 +100,20 @@ public class AnnotationController {
             return qh.searchQuery(urlParam, matchpred, matchval, orderBy, includeAbstract, asTriples);
         
     }
+    @RequestMapping(value = "/feed", params = "matchval", method = RequestMethod.GET)
+    public ModelAndView atomSearchQuery(
+            @RequestParam(value = "annotates", defaultValue = "") String urlParam,
+            @RequestParam(value = "matchpred", defaultValue = "") String matchpred,
+            @RequestParam("matchval") String matchval,
+            @RequestParam(value = "orderBy", defaultValue = "date") String orderBy,
+            @RequestParam(value = "includeAbstract", defaultValue = "false") Boolean includeAbstract,
+            @RequestParam(value = "asTriples", defaultValue = "true") Boolean asTriples) throws Exception {
+        if (matchval == null || matchval.isEmpty()) {
+            throw new InvalidQueryParametersException(
+                    "Missing or empty query parameters");
+        }
+        return qh.searchAtomQuery(urlParam, matchpred, matchval, orderBy, includeAbstract, asTriples);
+    }
     @RequestMapping(value = "/feed", params = "annotates", method = RequestMethod.GET)
     public ModelAndView atomRefersToQuery(
             @RequestParam("annotates") String urlParam) throws Exception {
@@ -108,10 +121,8 @@ public class AnnotationController {
             throw new InvalidQueryParametersException(
                     "Missing or empty query parameters");
         }
-
         return qh.browseAtomQuery(urlParam);
     }
-
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     public ResponseEntity<String> delete(@PathVariable("id") String oreId)
             throws NotFoundException, InterruptedException {

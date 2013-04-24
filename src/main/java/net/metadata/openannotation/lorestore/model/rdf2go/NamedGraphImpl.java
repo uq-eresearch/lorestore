@@ -4,6 +4,8 @@ package net.metadata.openannotation.lorestore.model.rdf2go;
 import static net.metadata.openannotation.lorestore.common.LoreStoreConstants.DCTERMS_CREATED;
 import static net.metadata.openannotation.lorestore.common.LoreStoreConstants.DCTERMS_MODIFIED;
 import static net.metadata.openannotation.lorestore.common.LoreStoreConstants.DC_CREATOR;
+import static net.metadata.openannotation.lorestore.common.LoreStoreConstants.OA_ANNOTATED_AT;
+import static net.metadata.openannotation.lorestore.common.LoreStoreConstants.OA_ANNOTATED_BY;
 import static net.metadata.openannotation.lorestore.common.LoreStoreConstants.LORESTORE_PRIVATE;
 import static net.metadata.openannotation.lorestore.common.LoreStoreConstants.LORESTORE_USER;
 
@@ -78,11 +80,19 @@ public abstract class NamedGraphImpl implements NamedGraph {
 	
 	public String getCreator() throws LoreStoreException {
 		Node c = lookupNode(model.createURI(DC_CREATOR));
+		/* FIXME: needs to look up foaf:name associated with user identified by annotatedBy
+		 * if (c == null) {
+			c = lookupNode(model.createURI(OA_ANNOTATED_BY));
+		}*/
 		return (c != null? c.toString(): null);
 	}
 
 	public Node getCreatedDate() throws LoreStoreException {
-		return lookupNode(model.createURI(DCTERMS_CREATED));
+		Node date = lookupNode(model.createURI(DCTERMS_CREATED));
+		if (date == null) {
+			date = lookupNode(model.createURI(OA_ANNOTATED_AT));
+		}
+		return date;
 	}
 
 	public Node getModifiedDate() throws LoreStoreException {

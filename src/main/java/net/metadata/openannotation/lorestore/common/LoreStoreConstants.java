@@ -47,6 +47,8 @@ public interface LoreStoreConstants {
     String DCTERMS_CREATED = DCTERMS_NS_URL + "created";
     String DCTERMS_MODIFIED = DCTERMS_NS_URL + "modified";
     String DCTERMS_CREATOR = DCTERMS_NS_URL + "creator";
+    String OA_ANNOTATED_AT = OA_SYNTAX_URL + "annotatedAt";
+    String OA_ANNOTATED_BY = OA_SYNTAX_URL + "annotatedBy";
     
     String DC_NS_URL = "http://purl.org/dc/elements/1.1/";
     String DC_CREATOR = DC_NS_URL + "creator";

@@ -28,6 +28,7 @@ import org.openrdf.query.QueryEvaluationException;
 import org.openrdf.query.TupleQueryResult;
 import org.openrdf.query.TupleQueryResultHandlerException;
 import org.openrdf.repository.RepositoryException;
+import org.openrdf.rio.RDFHandlerException;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -93,14 +94,52 @@ public class RDF2GoOAQueryHandler extends AbstractRDF2GoQueryHandler {
             annotation.close();
         }
     }
-
+    @Override
+    public ModelAndView searchAtomQuery(String urlParam,
+                    String matchpred, String matchval, String orderBy, Boolean includeAbstract, Boolean asTriples) throws RepositoryException,
+                    MalformedQueryException, QueryEvaluationException,
+                    TupleQueryResultHandlerException, InterruptedException, RDFHandlerException {
+        String queryString = generateSearchQuery(urlParam, matchpred, matchval, orderBy, includeAbstract);
+        ModelAndView mav = new ModelAndView("oaAtom");
+        mav.addObject("feedTitle","Annotations" 
+                + (!urlParam.equals("")? " targeting " + urlParam : "" )
+                + (!matchpred.equals("")? " containing " + matchval : "")
+                + (!matchval.equals("")? " matching " + matchval : "")
+                + (!orderBy.equals("")? " ordered by " + orderBy : ""));
+        TupleQueryResult queryResult = runSparqlQueryIntoQR(queryString);
+        try {
+            ModelSet container = cf.retrieveConnection();
+            ArrayList <Model> allAnnotations = new ArrayList<Model>();
+                Model model = null;
+                while (queryResult.hasNext()) {
+                    
+                    BindingSet bs = queryResult.next();
+                    String uri =  bs.getValue("g").stringValue();
+                    LOG.debug("URI is " + uri);
+                    if (uri != null){
+                        model = container.getModel(container.createURI(uri));
+                        if (model == null || model.isEmpty()) {
+                            if (model != null) {
+                                model.close();
+                            }
+                        }
+                    } 
+                    allAnnotations.add(model);
+                }
+                mav.addObject("annotationlist", allAnnotations);
+                LOG.debug("atom query found " + allAnnotations.size());
+        } catch (Exception e){
+            LOG.debug("Problem with atom view " + e.getMessage());
+        }
+        return mav;
+    }
     @Override
     public ModelAndView browseAtomQuery(String url) throws RepositoryException,
             MalformedQueryException, QueryEvaluationException,
             TupleQueryResultHandlerException, InterruptedException {
         String queryString = generateBrowseQuery(url);
         ModelAndView mav = new ModelAndView("oaAtom");
-        mav.addObject("browseURL", url);
+        mav.addObject("feedTitle", "Annotations targeting " + url);
 
         TupleQueryResult queryResult = runSparqlQueryIntoQR(queryString);
         try {

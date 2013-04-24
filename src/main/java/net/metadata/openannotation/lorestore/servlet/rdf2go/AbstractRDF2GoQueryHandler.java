@@ -152,6 +152,13 @@ public abstract class AbstractRDF2GoQueryHandler implements LoreStoreQueryHandle
 		return null;
 	}
 
+	@Override
+        public ModelAndView searchAtomQuery(String urlParam,
+                        String matchpred, String matchval, String orderBy, Boolean includeAbstract, Boolean asTriples) throws RepositoryException,
+                        MalformedQueryException, QueryEvaluationException,
+                        TupleQueryResultHandlerException, InterruptedException, RDFHandlerException {
+	       return null;
+	}
 	/**
 	 * Creates the correct headers for returning sparql results xml
 	 * 

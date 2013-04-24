@@ -32,7 +32,7 @@ public interface LoreStoreQueryHandler {
 
 
 	/**
-	 * Finds all compound objects referring to the supplied URL, returns a
+	 * Finds all objects referring to the supplied URL, returns a
 	 * response ready to be rendered as Atom.
 	 * 
 	 * @param url
@@ -43,6 +43,21 @@ public interface LoreStoreQueryHandler {
 			MalformedQueryException, QueryEvaluationException,
 			TupleQueryResultHandlerException, InterruptedException;
 
+	/**
+         * Find all objects matchign a search query and returns response ready to be 
+         * rendered as Atom.
+         * 
+         * @param urlParam A specific url that the compound object must reference
+         * @param matchpred A predicate to match the value against
+         * @param matchval a keyword string to either look for anywhere, or only 
+         * for the supplied matchpred
+         * @return atom model and view
+         */
+        public ModelAndView searchAtomQuery(String urlParam, String matchpred,
+                        String matchval, String orderBy, Boolean includeAbstract, Boolean asTriples)
+                        throws RepositoryException, MalformedQueryException,
+                        QueryEvaluationException, TupleQueryResultHandlerException,
+                        InterruptedException, RDFHandlerException;
 	/**
 	 * Handles a search query
 	 * 
