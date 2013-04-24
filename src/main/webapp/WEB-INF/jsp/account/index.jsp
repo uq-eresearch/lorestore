@@ -22,9 +22,11 @@
 		     </ul>
 		     <p>You are logged in as <security:authentication property="principal.username"/></p>
 		      <ul>
+                <c:if test="${sec != 'drupal' }">
 		        <li><a href="changeMyPassword.html">Change your password</a></li>
 		        <li><a href="${emmet}?action=showUserDetails">View your account details</a></li>
 		        <li><a href="editMyProfile.html">Edit profile properties</a></li>
+                </c:if>
 		        <li><a href="credentials.html">View technical acccount credentials</a></li>
 		      </ul>
 		</div>

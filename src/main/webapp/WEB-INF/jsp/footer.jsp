@@ -1,7 +1,7 @@
 <footer>
 <div class="container">
 <p class="pull-right">
-<a href="${secure}/resetMyPassword.html">Forgotten Your Password?</a>
+<c:if test="${sec != 'drupal'}"><a href="${secure}/resetMyPassword.html">Forgotten Your Password?</a></c:if>
 </p>
 </div>
 </footer>

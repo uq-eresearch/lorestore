@@ -32,7 +32,9 @@
                 <!-- This property gives the URL of the directory containing images. -->
                 <prop key="lorestore.images">/${lorestore.container}/images
                 </prop>      
-                
+                <!-- drupal or lorestore -->
+                <prop key="emmet.security">${emmet.security}</prop>
+                <prop key="lorestore.drupalhostname">${lorestore.drupalhostname}</prop>
                </props>
             </array>
         </property>

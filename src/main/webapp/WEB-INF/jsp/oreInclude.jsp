@@ -4,6 +4,8 @@
 <%@ taglib prefix="security" uri="http://www.springframework.org/security/tags" %>
 <%@ taglib prefix="chico" uri="http://metadata.net/tags/chico/chicoTags.tld"%>
 <c:set var="home" value='${props["emmet.home.url"]}'/>
+<c:set var="sec" value='${props["emmet.security"]}'/>
+<c:set var="drupal" value='${props["lorestore.drupalhostname"]}'/>
 <chico:setSecureUrl var="home" url="${props['lorestore.home.url']}"/>
 <chico:setSecureUrl var="secure" url="${props['lorestore.base.url']}"/>
 <chico:setSecureUrl var="emmet" url="${props['emmet.svc.url']}"/>
