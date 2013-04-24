@@ -9,6 +9,7 @@
                     <li><a href="${secure}/search.html">Search</a></li>
                     <li><a href="${secure}/acknowledgements.html">Acknowledgements</a></li>
                     <li><a href="${secure}/docs.html">Documentation</a></li>
+                    <li><a href="${secure}/validate.html">Validation</a></li>
                 </ul>
                 <c:choose>
                     <c:when test='${pageContext.request.userPrincipal == null}'>
