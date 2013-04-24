@@ -17,7 +17,7 @@
 	</context-param>
 	<context-param>
 		<param-name>contextConfigProperties</param-name>
-		<param-value>classpath:build.properties,classpath:default-emmet-substitution.properties,classpath:substitution.properties</param-value>
+		<param-value>classpath:build.properties,classpath:default-emmet-substitution.properties,classpath:substitution.properties,classpath:local-lorestore-substitution.properties</param-value>
 	</context-param>
 
 	<listener>
