@@ -303,7 +303,7 @@ Ext.Ajax.request({
             <p>Example: find annotations with any subject</p>
             <p><code>GET ${secure}/oa/?&matchpred=http%3A%2F%2Fpurl.org%2Fdc%2Felements%2F1.1%2Fsubject</code></p>
             <h4>orderBy</h4>
-            <p>Either <code>date</code>, <code>creator</code> or <code>title</code>. Use in combination with matchpred or matchval to specify order or returned results.</p> 
+            <p>Either <code>date</code>, <code>creator</code> or <code>title</code>. Use in combination with matchpred or matchval to specify order of returned results.</p> 
             <h4>asTriples</h4>
             <p>When true, results are returned in SPARQL/XML format. Otherwise, results are returned as annotations, in the format determined by the Accept header provided with the request.</p>
             <h3 id="atom">Atom feeds</h3>
