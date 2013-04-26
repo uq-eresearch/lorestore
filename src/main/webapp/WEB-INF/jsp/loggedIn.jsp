@@ -1,5 +1,5 @@
 <%@ include file="/WEB-INF/jsp/emmetInclude.jsp" %>
-<%@ include file="/WEB-INF/jsp/oreBasicInclude.jsp" %>
+<%@ include file="/WEB-INF/jsp/oreInclude.jsp" %>
 <%@ page import="au.edu.diasb.emmet.model.*" %>
 <%@ page import="au.edu.diasb.emmet.util.*" %>
 <%@ page import="org.springframework.security.core.*" %>

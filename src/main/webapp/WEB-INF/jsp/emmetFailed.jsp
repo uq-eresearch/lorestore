@@ -1,5 +1,5 @@
 <%@ include file="/WEB-INF/jsp/emmetInclude.jsp" %>
-<%@ include file="/WEB-INF/jsp/oreBasicInclude.jsp" %>
+<%@ include file="/WEB-INF/jsp/oreInclude.jsp" %>
 <%@ page contentType="text/html; charset=UTF-8" %>
 <!DOCTYPE html>
 <html lang="en">

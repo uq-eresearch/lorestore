@@ -24,7 +24,7 @@
 		     	 <li><a href="index.html">Account</a> <span class="divider">/</span></li>
 			 	 <li class="active">Credentials</li>
 		     </ul>
-            <h2 id="about">Hello <security:authentication property="name"/></h2>
+            <strong id="about">Hello <security:authentication property="name"/></strong>
             <c:choose>
         <c:when test="${ empty pageContext.request.userPrincipal }">
           <p>No authentication details are present.</p>

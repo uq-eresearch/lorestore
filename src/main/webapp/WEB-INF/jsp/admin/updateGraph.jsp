@@ -1,4 +1,5 @@
-<%@ include file="/WEB-INF/jsp/oreBasicInclude.jsp"%>
+<%@ include file="/WEB-INF/jsp/oreInclude.jsp"%>
+
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <!DOCTYPE html>

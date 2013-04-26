@@ -1,5 +1,5 @@
 <%@ include file="/WEB-INF/jsp/emmetUIInclude.jsp"%>
-<%@ include file="/WEB-INF/jsp/oreBasicInclude.jsp" %>
+<%@ include file="/WEB-INF/jsp/oreInclude.jsp" %>
 <%@ page contentType="text/html; charset=UTF-8" %>
 <c:set var="userName" value='${props["userName"]}' />
 <c:set var="activationCode" value='${props["activationCode"]}' />
