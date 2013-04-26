@@ -54,8 +54,13 @@
                                     (n.nodeType == "constraint"? "orange": 
                                         (n.nodeType == "user"? "green" : 
                                             "#eeeeee"))));
-                            frame = r.ellipse(0, 0, 30, 20);
-                            text = r.text(0, 30, n.label || n.id);
+                            
+                            var theText = n.label || n.id;
+                            if (theText &amp;&amp; theText.match("^urn:uuid")){
+                                theText = "(UUID)";
+                            }
+                            frame = r.ellipse(0, 0, theText.length * 3.5, 20);
+                            text = r.text(0, 0, theText);
                         }
                         
                         frame.attr({
@@ -164,9 +169,9 @@
                             <xsl:when test="starts-with($valref,'http://www.w3.org/ns/oa#')">oa:<xsl:value-of select="substring-after($valref,'http://www.w3.org/ns/oa#')"/></xsl:when>
                             <xsl:when test="starts-with($valref,'http://www.w3.org/2011/content#')">cnt:<xsl:value-of select="substring-after($valref,'http://www.w3.org/2011/content#')"/></xsl:when>
                             <xsl:when test="starts-with($valref,'http://xmlns.com/foaf/0.1/')">foaf:<xsl:value-of select="substring-after($valref,'http://xmlns.com/foaf/0.1/')"/></xsl:when>
-                            <xsl:when test="starts-with($valref,'urn') and local-name()='hasBody'">body</xsl:when>
+                            <xsl:when test="starts-with($valref,'urn') and local-name()='hasBody'"> body </xsl:when>
                             <xsl:when test="starts-with($valref,'urn') and local-name()='hasTarget'">target</xsl:when>
-                            <xsl:when test="starts-with($valref,'urn') and local-name()='constrainedBy'">constraint</xsl:when>
+                            <!--xsl:when test="starts-with($valref,'urn') and (local-name()='constrainedBy' or local-name()='hasSelector')">selector</xsl:when-->
                             <xsl:when test="starts-with($valref,'http') and string-length($valref) &gt; 25">...<xsl:value-of select="substring(substring-after($valref,'http://'),(string-length($valref)-25))"/></xsl:when>
                             <xsl:otherwise><xsl:value-of select="$valref"/></xsl:otherwise>
                         </xsl:choose>
@@ -175,7 +180,7 @@
                         <xsl:choose>
                             <xsl:when test="local-name()='hasBody'">body</xsl:when>
                             <xsl:when test="local-name()='hasTarget'">target</xsl:when>
-                            <xsl:when test="local-name()='constrainedBy'">constraint</xsl:when>
+                            <!--xsl:when test="local-name()='constrainedBy' or local-name()='hasSelector'">constraint</xsl:when-->
                             <xsl:when test="local-name()='type'">type</xsl:when>
                             <xsl:when test="local-name()='creator'">user</xsl:when>
                             <xsl:otherwise></xsl:otherwise>
