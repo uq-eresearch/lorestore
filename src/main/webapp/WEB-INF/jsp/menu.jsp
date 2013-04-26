@@ -36,7 +36,7 @@
                                         <li><a href="${secure}/account/index.html">My Account</a></li>
                                         <security:authorize ifAllGranted="ROLE_ADMIN">
                                             <li class="divider"></li>
-                                            <li><a href="${secure}/oreadmin/">Content Management</a></li>
+                                            <li><a href="${secure}/admin/">Content Management</a></li>
                                             <c:if test="${sec != 'drupal'}"><li><a href="${secure}/emmet/index.html">User Management</a></li></c:if>
                                         </security:authorize>
                                         <c:if test="${sec != 'drupal'}">

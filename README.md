@@ -65,7 +65,7 @@ Backup
 ------
 Use `mysqldump` to backup Emmet user data.
 
-Use lorestore's `oreadmin/export` page to export the RDF repository that stores OA annotations and Resource Maps to file. 
+Use lorestore's `admin/export` page to export the RDF repository that stores OA annotations and Resource Maps to file. 
 The file format supported for export and import is Trig; resource maps and annotations are stored as Named Graphs.
 
 History

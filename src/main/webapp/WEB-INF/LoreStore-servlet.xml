@@ -35,8 +35,13 @@
 	<bean name="ore" class="net.metadata.openannotation.lorestore.servlet.OREController">
 		<constructor-arg ref="oreControllerConfig"/>
 	</bean>
-	<bean name="oreAdmin" class="net.metadata.openannotation.lorestore.servlet.LoreStoreAdminController">
+	<bean name="admin" class="net.metadata.openannotation.lorestore.servlet.LoreStoreAdminController">
 		<constructor-arg ref="oreControllerConfig"/>
+		<property name="propertiesList">
+            <list>
+                <ref bean="lorestoreProps"/>
+            </list>
+        </property>
 	</bean>
 	<bean name="placeholders" class="net.metadata.openannotation.lorestore.servlet.PlaceholderController">
 		<constructor-arg ref="oreControllerConfig"/>
@@ -61,7 +66,7 @@
 	<bean class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
 		<property name="mappings">
 			<value>
-               /oreadmin/**=oreAdmin
+               /admin/**=admin
                /ore/**=ore
                /oa/**=oa
                /ids/**=placeholders

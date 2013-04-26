@@ -21,7 +21,7 @@
           <div class="span10">
           <ul class="breadcrumb">
 		     	 <li><a href="../index.html">Home</a> <span class="divider">/</span></li>
-				 <li><a href="../oreadmin/">Content management</a> <span class="divider">/</span></li>
+				 <li><a href="../admin/">Content management</a> <span class="divider">/</span></li>
 			 	 <li class="active">Update named graph</li>
 		     </ul>
             <div id="successMessage" style="display:none" class="alert alert-success">

@@ -23,6 +23,7 @@
 				<!-- Site specific rules -->
 				<sec:intercept-url pattern="/ore/**" access="IS_AUTHENTICATED_ANONYMOUSLY,ROLE_ANY" />
 				<sec:intercept-url pattern="/oa/**" access="IS_AUTHENTICATED_ANONYMOUSLY,ROLE_ANY" />
+                <!-- /admin/** web UI access is managed by LoreStoreAdminController -->
                 
 				<!-- Generic -->
 				<sec:intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY,ROLE_ANY" />

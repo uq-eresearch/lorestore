@@ -17,7 +17,7 @@
           <div class="span10">
           <ul class="breadcrumb">
 		     	 <li><a href="../index.html">Home</a> <span class="divider">/</span></li>				 
-				 <li><a href="../oreadmin/">Content management</a> <span class="divider">/</span></li>
+				 <li><a href="../admin/">Content management</a> <span class="divider">/</span></li>
 			 	 <li class="active">Stats</li>
 		     </ul>
 		     <table class="table">

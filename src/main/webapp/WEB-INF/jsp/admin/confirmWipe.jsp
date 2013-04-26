@@ -18,7 +18,7 @@
           <div class="span10">
           <ul class="breadcrumb">
 		     	 <li><a href="../index.html">Home</a> <span class="divider">/</span></li>
-				 <li><a href="../oreadmin/">Content management</a> <span class="divider">/</span></li>
+				 <li><a href="../admin/">Content management</a> <span class="divider">/</span></li>
 			 	 <li class="active">Clear repository</li>
 		     </ul>
 
@@ -33,7 +33,7 @@
             
             <p>
             	<button class="btn btn-danger" type="submit"><i class="icon-trash icon-white"></i> Clear Repository</button>
-                <a href="../oreadmin/"><button class="btn" type="button">Cancel</button></a>
+                <a href="../admin/"><button class="btn" type="button">Cancel</button></a>
             </p>
   		</fieldset>
   	</form>

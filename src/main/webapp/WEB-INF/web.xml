@@ -56,7 +56,7 @@
   
 	<servlet-mapping>
 		<servlet-name>LoreStore</servlet-name>
-		<url-pattern>/oreadmin/*</url-pattern>
+		<url-pattern>/admin/*</url-pattern>
 	</servlet-mapping>
 	
     <servlet-mapping>

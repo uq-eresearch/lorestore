@@ -14,8 +14,7 @@
     <bean name="lorestoreWebController" class="au.edu.diasb.chico.mvc.WebController">
         <property name="propertiesList">
             <list>
-                <ref bean="emmetProps"/>
-				<ref bean="lorestoreProps"/>
+                <ref bean="lorestoreProps"/>
                 <map>
                     <entry key="domainRegistry" value-ref="domainRegistry"/>
                     <entry key="profileSchema" value-ref="profileSchema"/>

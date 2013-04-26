@@ -25,7 +25,7 @@
                                 <span class="divider">/</span>
                             </li>
                             <li>
-                                <a href="../oreadmin/">Content management</a>
+                                <a href="../admin/">Content management</a>
                                 <span class="divider">/</span>
                             </li>
                             <li class="active">SPARQL Query</li>

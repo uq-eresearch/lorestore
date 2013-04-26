@@ -313,10 +313,10 @@ Ext.Ajax.request({
             <h2>SPARQL endpoint</h2>
             <hr>
             <p>The SPARQL endpoint allows authenticated users with administrator privileges to issue custom queries over the underlying RDF triplestore.</p> 
-            <p>Issue a GET request to <code>${secure}/oreadmin/sparql</code>, providing the escaped SPARQL query as the value of the <code>sparql</code> parameter. All matching results (regardless of privacy flags) are returned in SPARQL XML format.</p>
+            <p>Issue a GET request to <code>${secure}/admin/sparql</code>, providing the escaped SPARQL query as the value of the <code>sparql</code> parameter. All matching results (regardless of privacy flags) are returned in SPARQL XML format.</p>
             <p>Example query returns the identifier for all annotations:</p>
-            <p><code>${secure}/oreadmin/sparql?sparql=SELECT+*+WHERE+%7B%3Fa+a+%3Chttp%3A%2F%2Fwww.openannotation.org%2Fns%2FAnnotation%3E%7D</code></p>
-            <p>Administrators can also use the <a href="${secure}/oreadmin/sparqlPage.html">SPARQL Query UI</a> to develop queries.</p>
+            <p><code>${secure}/admin/sparql?sparql=SELECT+*+WHERE+%7B%3Fa+a+%3Chttp%3A%2F%2Fwww.openannotation.org%2Fns%2FAnnotation%3E%7D</code></p>
+            <p>Administrators can also use the <a href="${secure}/admin/sparqlPage.html">SPARQL Query UI</a> to develop queries.</p>
             
             </section>
             <section id="user">

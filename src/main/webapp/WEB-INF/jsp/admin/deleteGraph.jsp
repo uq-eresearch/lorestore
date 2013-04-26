@@ -20,7 +20,7 @@
           <div class="span10">
           <ul class="breadcrumb">
 		     	 <li><a href="../index.html">Home</a> <span class="divider">/</span></li>
-				 <li><a href="../oreadmin/">Content management</a> <span class="divider">/</span></li>
+				 <li><a href="../admin/">Content management</a> <span class="divider">/</span></li>
 			 	 <li class="active">Delete named graph</li>
 		     </ul>
              <div id="emptyURIMessage" style="display:none" class="alert">
@@ -43,7 +43,7 @@
                 <tr>
                     <td colspan="2" class="bt0">
                     <button class="btn btn-danger" onclick="deleteGraph()"><i class="icon-trash icon-white"></i> Delete</button>
-                    <a href="../oreadmin/"><button class="btn" type="button">Cancel</button></a>
+                    <a href="../admin/"><button class="btn" type="button">Cancel</button></a>
                     </td>
                 </tr>
             </table>
