@@ -2,6 +2,9 @@ package net.metadata.openannotation.lorestore.servlet;
 
 import java.io.InputStream;
 import java.io.Writer;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -33,7 +36,8 @@ import au.edu.diasb.chico.mvc.RequestFailureException;
 @Controller
 public class LoreStoreAdminController {
 	private final Logger LOG = Logger.getLogger(LoreStoreAdminController.class);
-
+	private Map<String, Object> propsMap;
+	
 	private final LoreStoreControllerConfig occ;
 	private LoreStoreUpdateHandler uh;
 	private LoreStoreQueryHandler qh;
@@ -49,9 +53,19 @@ public class LoreStoreAdminController {
 		this.ap = occ.getAccessPolicy();
 	}
 
+	public final void setPropertiesList(List<Map<?, ?>> props) {
+	        propsMap = new HashMap<String, Object>();
+	        for (Map<?,?> p : props) {
+	            for (Object k : p.keySet()) {
+	                propsMap.put((String) k, p.get(k));
+	            }
+	        }
+	    }
+	
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String index(Model model) {
 		ap.checkAdmin();
+		model.addAttribute("props",propsMap);
 		return "admin/index";
 	}
 	
@@ -59,6 +73,7 @@ public class LoreStoreAdminController {
 	public String importData(Model model) {
 		ap.checkAdmin();
 		model.addAttribute(new UploadItem());
+		model.addAttribute("props",propsMap);
 		return "admin/importForm";
 	}
 	
@@ -66,13 +81,14 @@ public class LoreStoreAdminController {
 	public ModelAndView bulkImport(UploadItem uploadItem, BindingResult result) throws Exception {
 		ap.checkAdmin();
 		if (result.hasErrors()) {
-			ModelAndView redirectView = new ModelAndView(new RedirectView("oreadmin/importForm",false ,true, true));
+			ModelAndView redirectView = new ModelAndView(new RedirectView("admin/importForm",false ,true, true));
 			String errorMessage = "";
 			for (ObjectError error : result.getAllErrors()) {
 				LOG.error("Error: " + error.getCode() +   " - " + error.getDefaultMessage());
 				errorMessage += error.getDefaultMessage() + "<br/>";				
 			}
 			redirectView.getModel().put("message", "Error: " + errorMessage);
+			redirectView.addObject("props",propsMap);
 			return redirectView;
 		}
 		String message = "";
@@ -81,15 +97,16 @@ public class LoreStoreAdminController {
 			InputStream fileData = uploadItem.getFileData().getInputStream();
 			String originalFilename = uploadItem.getFileData().getOriginalFilename();
 			int delta = uh.bulkImport(fileData, originalFilename);
-			rView = new RedirectView("oreadmin",false ,true, true);
+			rView = new RedirectView("admin",false ,true, true);
 			rView.getAttributesMap().put("delta", delta);
 			message = "Successfully imported data";
 		} catch (Exception e){
-			rView = new RedirectView("oreadmin/importForm",false ,true, true);
+			rView = new RedirectView("admin/importForm",false ,true, true);
 			message = "Error importing data: " + e.getMessage();
 		}
 		rView.getAttributesMap().put("message", message);
 		ModelAndView redirectView = new ModelAndView(rView);
+		redirectView.addObject("props",propsMap);
 		return redirectView;
 	}
 	
@@ -99,24 +116,28 @@ public class LoreStoreAdminController {
 		model.addAttribute("numTriples",qh.getNumberTriples());
 		model.addAttribute("numResourceMaps",qh.getNumberNamedGraphs());
 		model.addAttribute("numAnnotations", oqh.getNumberNamedGraphs());
+		model.addAttribute("props",propsMap);
 		return "admin/stats";
 	}
 	
 	@RequestMapping(value = "/wipeDatabase.html", method = RequestMethod.GET)
-	public String confirmWipe() throws RequestFailureException {
+	public String confirmWipe(Model model) throws RequestFailureException {
 		ap.checkAdmin();
+		model.addAttribute("props",propsMap);
 		return "admin/confirmWipe";
 	}
 	
 	@RequestMapping(value = "/deleteGraph.html", method = RequestMethod.GET)
-	public String deleteGraph() throws RequestFailureException {
+	public String deleteGraph(Model model) throws RequestFailureException {
 		ap.checkAdmin();
+		model.addAttribute("props",propsMap);
 		return "admin/deleteGraph";
 	}
 	
 	@RequestMapping(value = "/updateGraph.html", method = RequestMethod.GET)
-	public String updateGraph() throws RequestFailureException {
+	public String updateGraph(Model model) throws RequestFailureException {
 		ap.checkAdmin();
+		model.addAttribute("props",propsMap);
 		return "admin/updateGraph";
 	}
 	
@@ -124,7 +145,7 @@ public class LoreStoreAdminController {
 	public String wipeDatabase() throws InterruptedException, RequestFailureException {
 		ap.checkAdmin();
 		uh.wipeDatabase();
-		return "redirect:/oreadmin/";
+		return "redirect:/admin/";
 	}
 
 	@RequestMapping(value = "/export")
@@ -137,8 +158,9 @@ public class LoreStoreAdminController {
 	}
 
 	@RequestMapping(value = "/sparqlPage.html")
-	public String sparqlPage() {
+	public String sparqlPage(Model model) {
 		ap.checkAdmin();
+		model.addAttribute("props",propsMap);
 		return "admin/sparqlPage";
 	}
 
