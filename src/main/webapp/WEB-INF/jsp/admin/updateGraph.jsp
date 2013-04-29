@@ -83,6 +83,9 @@
 	            jQuery.ajax({
 	                url: uri,
 	                type: 'PUT',
+	                headers: {
+	                    'Content-Type': 'application/rdf+xml'
+	                },
 	                data: lorestore.cm.getValue(),
 	                context: document.body,
 	                success: function(data, status, xhr){
