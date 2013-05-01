@@ -120,7 +120,7 @@
              processData: false,
              data: data.toString(),
              success: function(d){
-                 console.log("got data", d);
+                 
                  jQuery('#result').append("<h2>Validation Results</h2>");
                  jQuery('#result').append(Mustache.render(summaryTemplate,d));
                  var result = "";
