@@ -84,18 +84,18 @@ public class OANamedGraphsView extends BaseView {
                 if (annotations != null) {
                     logger.info("setting content type to  " + acceptableContentType);
                     response.setContentType(acceptableContentType);
-                    if (acceptableContentType.equals(Syntax.RdfXml.getMimeType()) || acceptableContentType.equals(MimeTypes.XML_MIMETYPE)) {    
+                    if (acceptableContentType.contains(Syntax.RdfXml.getMimeType()) || acceptableContentType.contains(MimeTypes.XML_MIMETYPE)) {    
                         stylesheetURI = (stylesheetParam == null || stylesheetParam.length() == 0) ?
                                 "/lorestore/stylesheets/OA.xsl" : stylesheetParam;
                         response.setCharacterEncoding("UTF-8");
                         os = outputRDF(response, annotations, stylesheetURI, Syntax.RdfXml);
-                    } else if (acceptableContentType.equals(Syntax.Trix.getMimeType())) {
+                    } else if (acceptableContentType.contains(Syntax.Trix.getMimeType())) {
                         // TODO: add default stylesheet for TriX
                         response.setCharacterEncoding("UTF-8");
                         os = outputRDF(response, annotations, stylesheetURI, Syntax.Trix);
-                    } else if (acceptableContentType.equals(Syntax.Trig.getMimeType())){
+                    } else if (acceptableContentType.contains(Syntax.Trig.getMimeType())){
                         os = outputRDF(response, annotations, null, Syntax.Trig);
-                    } else if (acceptableContentType.equals("application/json")){
+                    } else if (acceptableContentType.contains("application/json")){
                         os = outputJSON(response, annotations);
                     }
                     

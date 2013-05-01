@@ -77,16 +77,16 @@ public class OREResponseView extends BaseView {
                         "Request response only available in RDF+XML, JSON-LD, TriG or TriX formats");
             }
             if (model != null) {
-                if (acceptableContentType.equals(Syntax.RdfXml.getMimeType()) || acceptableContentType.equals(MimeTypes.XML_MIMETYPE)){
+                if (acceptableContentType.contains(Syntax.RdfXml.getMimeType()) || acceptableContentType.contains(MimeTypes.XML_MIMETYPE)){
                     response.setCharacterEncoding("UTF-8");
                     os = outputRDF(response, model, stylesheetURI, Syntax.RdfXml);
-                } else if (acceptableContentType.equals(Syntax.Trix.getMimeType())) {
+                } else if (acceptableContentType.contains(Syntax.Trix.getMimeType())) {
                     // TODO: add default stylesheet for TriX
                     response.setCharacterEncoding("UTF-8");
                     os = outputRDF(response, model, stylesheetURI, Syntax.Trix);
-                } else if (acceptableContentType.equals(Syntax.Trig.getMimeType())){
+                } else if (acceptableContentType.contains(Syntax.Trig.getMimeType())){
                     os = outputRDF(response, model, null, Syntax.Trig);
-                } else if (acceptableContentType.equals("application/json")){
+                } else if (acceptableContentType.contains("application/json")){
                     os = outputJSON(response, model); 
                 } 
                 response.setContentType(acceptableContentType);

@@ -79,9 +79,13 @@ public abstract class AbstractRDF2GoUpdateHandler implements LoreStoreUpdateHand
         try {
             model.open();
             if (contentType.contains(Syntax.RdfXml.getMimeType())
-                    || contentType.equals(Syntax.Trix.getMimeType()) 
-                    || contentType.equals(Syntax.Trig.getMimeType())){
-                model.readFrom(inputRDF, Syntax.forMimeType(contentType), occ.getBaseUri());
+                    || contentType.contains(Syntax.Trix.getMimeType()) 
+                    || contentType.contains(Syntax.Trig.getMimeType())){
+                String bareContentType = contentType;
+                if (contentType.contains(";")) {
+                    bareContentType = contentType.substring(0,contentType.indexOf(';'));
+                }
+                model.readFrom(inputRDF, Syntax.forMimeType(bareContentType), occ.getBaseUri());
             
             } else if (contentType.contains("application/json")){
                 Object jsonObject = JSONUtils.fromInputStream(inputRDF);
@@ -227,12 +231,16 @@ public abstract class AbstractRDF2GoUpdateHandler implements LoreStoreUpdateHand
             newModel = mf.createModel(objURI);
             newModel.open();
             try {
-                    if (contentType.equals(Syntax.RdfXml.getMimeType()) 
-                                    || contentType.equals(Syntax.Trix.getMimeType()) 
-                                    || contentType.equals(Syntax.Trig.getMimeType())){
-                                newModel.readFrom(inputRDF, Syntax.forMimeType(contentType), occ.getBaseUri());
+                    if (contentType.contains(Syntax.RdfXml.getMimeType()) 
+                                    || contentType.contains(Syntax.Trix.getMimeType()) 
+                                    || contentType.contains(Syntax.Trig.getMimeType())){
+                                String bareContentType = contentType;
+                                if (contentType.contains(";")) {
+                                    bareContentType = contentType.substring(0,contentType.indexOf(';'));
+                                }
+                                newModel.readFrom(inputRDF, Syntax.forMimeType(bareContentType), occ.getBaseUri());
                             
-                            } else if (contentType.equals("application/json")){
+                            } else if (contentType.contains("application/json")){
                                 Object jsonObject = JSONUtils.fromInputStream(inputRDF);
                                 OATripleCallback callback = new OATripleCallback();
                                 callback.setModel(newModel);

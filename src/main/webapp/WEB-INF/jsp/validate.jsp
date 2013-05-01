@@ -117,6 +117,7 @@
                  'Accept': 'application/json',
                  'Content-Type': contentType
              },
+             processData: false,
              data: data.toString(),
              success: function(d){
                  console.log("got data", d);

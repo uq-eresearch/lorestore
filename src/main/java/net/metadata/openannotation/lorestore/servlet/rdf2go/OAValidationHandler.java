@@ -75,7 +75,11 @@ public class OAValidationHandler implements LoreStoreValidationHandler {
                     || contentType.contains(Syntax.Ntriples.getMimeType())
                     || contentType.contains(Syntax.Trig.getMimeType())){
                 //StringReader reader = new StringReader(inputRDF);
-                model.readFrom(inputRDF, Syntax.forMimeType(contentType), occ.getBaseUri());
+                String bareContentType = contentType;
+                if (contentType.contains(";")) {
+                    bareContentType = contentType.substring(0,contentType.indexOf(';'));
+                }
+                model.readFrom(inputRDF, Syntax.forMimeType(bareContentType), occ.getBaseUri());
             
             } else if (contentType.contains("application/json")){
                 //Object jsonObject = JSONUtils.fromString(inputRDF);
