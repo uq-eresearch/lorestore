@@ -134,6 +134,7 @@
                         <p><a class="btn btn-mini" target="_blank" href="../oa/?annotates={@rdf:about}">Find replies</a>&#160;&#160;<a class="btn btn-mini" target="_blank" href="#" onclick="downloadTrig('{@rdf:about}')">Get TriG</a>
                         &#160;&#160;<a class="btn btn-mini" target="_blank" href="#" onclick="downloadTrix('{@rdf:about}')">Get TriX</a>
                         &#160;&#160;<a class="btn btn-mini" target="_blank" href="#" onclick="downloadRdfXml('{@rdf:about}')">Get RDF/XML</a>
+                        &#160;&#160;<a class="btn btn-mini" target="_blank" href="#" onclick="downloadJson('{@rdf:about}')">Get JSON-LD</a>
                         &#160;&#160;<a class="btn btn-mini" target="_blank" href="{@rdf:about}?stylesheet=../stylesheets/OAgraph.xsl">Visualize</a>
                         </p>
                         
@@ -176,6 +177,17 @@
                             },
                             success: function(data, status, jqXHR){
                                 window.location.href='data:application/rdf+xml,' + encodeURIComponent(jqXHR.responseText);
+                            }
+                        });
+                    }
+                    function downloadJson(annoID) {
+                        jQuery.ajax({
+                            url: annoID,
+                            headers: { 
+                                Accept : "application/json"
+                            },
+                            success: function(data, status, jqXHR){
+                                window.location.href='data:application/ld+json,' + encodeURIComponent(jqXHR.responseText);
                             }
                         });
                     }
