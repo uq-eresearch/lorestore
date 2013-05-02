@@ -320,7 +320,7 @@ public class RDF2GoOAQueryHandler extends AbstractRDF2GoQueryHandler {
                             model.close();
                         }
                     } else {
-                            result.add(model);
+                            result.addModel(model);
                         model.close();
                     }
                 }
@@ -328,7 +328,7 @@ public class RDF2GoOAQueryHandler extends AbstractRDF2GoQueryHandler {
                 resultCounter = resultCounter + 1;
             }
             
-            mav.addObject(LorestoreResponse.LIST_KEY, result);
+            mav.addObject(LorestoreResponse.MODELSET_KEY, result);
             LOG.debug ("found " + result.size() + " annotations");
             
         } catch (Exception ex) {
