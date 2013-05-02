@@ -51,9 +51,6 @@ public class OATripleCallback extends JSONLDTripleCallback {
         if (s == null || p == null || o == null) {
             return;
         }
-        // subject, predicate, object will always be URIs
-        LOG.info("create triple: " +  s + " " + p + " " + o);
-       
         model.addStatement(createNode(s), model.createURI(p), createNode(o));
     }
     
@@ -70,10 +67,8 @@ public class OATripleCallback extends JSONLDTripleCallback {
     public void triple(String s, String p, String value, String datatype,
             String language, String graph) {
         if (s == null || p == null || value == null) {
-            // TODO: I don't know what to do here!!!
             return;
         }
-        LOG.info("create triple val datatype: " +  s + " " + p + " " + value);
         URI subject = model.createURI(s);
         URI predicate = model.createURI(p);
     
