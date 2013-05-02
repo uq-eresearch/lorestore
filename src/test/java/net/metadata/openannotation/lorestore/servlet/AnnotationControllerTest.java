@@ -198,7 +198,7 @@ public class AnnotationControllerTest extends AnnotationControllerTestsBase {
 
 	@Test
 	public void keywordSearch() throws Exception {
-		String body = (String) controller.searchQuery("", "", "test", "date", false, true).getModel().get("sparqlxml");
+		String body = (String) controller.searchQuery("", "", "test", "date", 0, -1, false, true).getModel().get("sparqlxml");
 
 		assertNotNull(body);
 	}

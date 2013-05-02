@@ -99,7 +99,7 @@ public class RDF2GoOAQueryHandler extends AbstractRDF2GoQueryHandler {
                     String matchpred, String matchval, String orderBy, Boolean includeAbstract, Boolean asTriples) throws RepositoryException,
                     MalformedQueryException, QueryEvaluationException,
                     TupleQueryResultHandlerException, InterruptedException, RDFHandlerException {
-        String queryString = generateSearchQuery(urlParam, matchpred, matchval, orderBy, includeAbstract);
+        String queryString = generateSearchQuery(urlParam, matchpred, matchval, orderBy, 0, -1, includeAbstract, asTriples);
         ModelAndView mav = new ModelAndView("oaAtom");
         mav.addObject("feedTitle","Annotations" 
                 + (!urlParam.equals("")? " targeting " + urlParam : "" )
@@ -212,7 +212,7 @@ public class RDF2GoOAQueryHandler extends AbstractRDF2GoQueryHandler {
     
 
     protected String generateSearchQuery(String urlParam, String matchpred,
-            String matchval, String orderBy, boolean includeAbstract) {
+            String matchval, String orderBy, int offset, int limit, boolean includeAbstract, boolean asTriples) {
         String escapedURL = "?u";
         if (urlParam != null && !urlParam.isEmpty()) {
             escapedURL = "<" + urlParam + ">";
@@ -233,21 +233,27 @@ public class RDF2GoOAQueryHandler extends AbstractRDF2GoQueryHandler {
         }
         String userURI = occ.getIdentityProvider().obtainUserURI();
         // @formatter:off
-        String queryString = "select distinct ?g ?creator ?date ?title ?v ?priv"
+        String queryString = "SELECT DISTINCT ?g " + (asTriples? "?creator ?date ?title ?v ?priv": "")
                 + " where {"
                 + "   {?g a <" + OAC_ANNOTATION_CLASS + "> } UNION {?g a <" + OA_ANNOTATION_CLASS + ">} ."
                 + "   graph ?g {"
                 + escapedURL + " " + predicate + " ?v ."
                 +        filter
-                + "   } . "
-                + " OPTIONAL {?g <http://www.w3.org/ns/oa#annotatedBy> ?x . ?x <http://xmlns.com/foaf/0.1/name> ?creator} . "
                 + " OPTIONAL {?g <http://www.w3.org/ns/oa#annotatedAt> ?date} . "
-                + " OPTIONAL {?g <http://purl.org/dc/elements/1.1/title> ?title} . "
-                + " OPTIONAL {?g <" + LORESTORE_PRIVATE + "> ?priv}. "
+                + " OPTIONAL {?g <http://www.w3.org/ns/oa#annotatedBy> ?x . ?x <http://xmlns.com/foaf/0.1/name> ?creator} . ";
+       if (asTriples) {
+                queryString += " OPTIONAL {?g <http://purl.org/dc/elements/1.1/title> ?title} . ";
+       }
+       queryString +=  "}. OPTIONAL {?g <" + LORESTORE_PRIVATE + "> ?priv}. "
                 + " OPTIONAL {?g <" + LORESTORE_USER + "> ?user}. "
                 + " FILTER (!bound(?priv) || (bound(?priv) && ?user = '" + userURI + "'))"
-                + "} order by ?" + tempOrderBy ;
-                
+                + "}" 
+                + " ORDER BY ?" + tempOrderBy;
+        if (asTriples){
+             queryString += (offset == 0? "" : " OFFSET " + offset)
+                + (limit == -1? "" : " LIMIT " + limit);
+        }
+        LOG.info(queryString);
         // @formatter:on
         return queryString;
     }
@@ -286,7 +292,7 @@ public class RDF2GoOAQueryHandler extends AbstractRDF2GoQueryHandler {
     }
 
     @Override
-    protected ModelAndView runSparqlQueryIntoGraphsMAV(String queryString) throws RepositoryException, MalformedQueryException, QueryEvaluationException, TupleQueryResultHandlerException, InterruptedException {
+    protected ModelAndView runSparqlQueryIntoGraphsMAV(String queryString, int offset, int limit) throws RepositoryException, MalformedQueryException, QueryEvaluationException, TupleQueryResultHandlerException, InterruptedException {
         ModelAndView mav = new ModelAndView("oa");
         TupleQueryResult queryResult = runSparqlQueryIntoQR(queryString);
         ModelSet container = cf.retrieveConnection();
@@ -301,8 +307,11 @@ public class RDF2GoOAQueryHandler extends AbstractRDF2GoQueryHandler {
         Model model = null;
         
         try{
-            while (queryResult.hasNext()) {
+            int resultCounter = 0;
+            while (queryResult.hasNext() && (limit == -1 || resultCounter < (offset + limit))) {
                 BindingSet bs = queryResult.next();
+                //LOG.debug("processing " + foo + " " + bs.getValue("g").stringValue());
+                if (resultCounter >= offset){
                 String uri =  bs.getValue("g").stringValue();
                 if (uri != null){
                     model = container.getModel(container.createURI(uri));
