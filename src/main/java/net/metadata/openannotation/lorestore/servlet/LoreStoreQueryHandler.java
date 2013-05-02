@@ -68,7 +68,7 @@ public interface LoreStoreQueryHandler {
 	 * @return a http response containing results in sparqlXML format
 	 */
 	public ModelAndView searchQuery(String urlParam, String matchpred,
-			String matchval, String orderBy, Boolean includeAbstract, Boolean asTriples)
+			String matchval, String orderBy, int offset, int limit, Boolean includeAbstract, Boolean asTriples)
 			throws RepositoryException, MalformedQueryException,
 			QueryEvaluationException, TupleQueryResultHandlerException,
 			InterruptedException, RDFHandlerException;

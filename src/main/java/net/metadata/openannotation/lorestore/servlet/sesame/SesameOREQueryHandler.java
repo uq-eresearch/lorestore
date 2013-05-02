@@ -72,7 +72,7 @@ public class SesameOREQueryHandler implements LoreStoreQueryHandler {
 	
 	@Override
 	public ModelAndView searchQuery(String urlParam,
-			String matchpred, String matchval, String orderBy, Boolean includeAbstract, Boolean asTriples) throws RepositoryException,
+			String matchpred, String matchval, String orderBy, int offset, int limit, Boolean includeAbstract, Boolean asTriples) throws RepositoryException,
 			MalformedQueryException, QueryEvaluationException,
 			TupleQueryResultHandlerException, InterruptedException {
 		return null;

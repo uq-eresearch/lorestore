@@ -107,7 +107,7 @@ public class RDF2GoOREQueryHandler extends AbstractRDF2GoQueryHandler {
 	
 
 	protected String generateSearchQuery(String urlParam, String matchpred,
-			String matchval, String orderBy, boolean includeAbstract) {
+			String matchval, String orderBy, int offset, int limit, boolean includeAbstract, boolean asTriples) {
 		String escapedURL = "?u";
 		if (urlParam != null && !urlParam.isEmpty()) {
 			escapedURL = "<" + urlParam + ">";

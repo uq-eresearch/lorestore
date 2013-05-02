@@ -59,6 +59,7 @@ public class OAValidationHandler implements LoreStoreValidationHandler {
         this.ap = occ.getAccessPolicy();
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public ModelAndView validate(InputStream inputRDF, String contentType)
             throws RequestFailureException, IOException, LoreStoreException,
@@ -82,9 +83,16 @@ public class OAValidationHandler implements LoreStoreValidationHandler {
                 model.readFrom(inputRDF, Syntax.forMimeType(bareContentType), occ.getBaseUri());
             
             } else if (contentType.contains("application/json")){
-                //Object jsonObject = JSONUtils.fromString(inputRDF);
-                Object jsonObject = JSONUtils.fromInputStream(inputRDF);
-                // TODO if no @context, inject default context
+                HashMap<String,Object> jsonObject = (HashMap<String,Object>) JSONUtils.fromInputStream(inputRDF);
+                
+                // if no @context, inject default context
+                if (!jsonObject.containsKey("@context")){
+                    ClassLoader cl = this.getClass().getClassLoader();
+                    java.io.InputStream in = cl.getResourceAsStream("oa-context.json");
+                    Object jsonContext = JSONUtils.fromInputStream(in);
+                    jsonObject.put("@context", jsonContext);
+                }
+                // TODO handle no '@graph'
                 // TODO if no @id, inject dummy identifier (will be replaced)
                 OATripleCallback callback = new OATripleCallback();
                 callback.setModel(model);
