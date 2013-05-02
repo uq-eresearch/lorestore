@@ -97,8 +97,15 @@
                         </xsl:variable>
                         <a target="_blank" title="{$annoUri}" href="{$annoUri}"><xsl:value-of select="$annotype" /></a>
                         <xsl:text> created </xsl:text>
-                            <xsl:value-of select="substring-before(dcterms:created, 'T')" />
-                            <xsl:value-of select="substring-before(oa:annotatedAt, 'T')" />
+                            <xsl:choose>
+                                <xsl:when test="oa:annotatedAt">
+                                    <xsl:value-of select="substring-before(oa:annotatedAt, 'T')" />
+                                    
+                                </xsl:when>
+                                <xsl:when test="dcterms:created">
+                                    <xsl:value-of select="substring-before(dcterms:created, 'T')" />
+                                </xsl:when>
+                            </xsl:choose>
                             <xsl:if test="dcterms:modified">
                                 <xsl:text>,  Last modified </xsl:text>
                                 <xsl:value-of select="substring-before(dcterms:modified, 'T')" />
