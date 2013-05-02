@@ -81,11 +81,13 @@ public class OREController {
             @RequestParam(value = "matchpred", defaultValue = "") String matchpred,
             @RequestParam("matchval") String matchval,
             @RequestParam(value = "orderBy", defaultValue = "date") String orderBy,
+            @RequestParam(value = "offset", defaultValue = "0") int offset,
+            @RequestParam(value = "limit", defaultValue = "-1") int limit,
             @RequestParam(value = "includeAbstract", defaultValue = "false") Boolean includeAbstract,
             @RequestParam(value = "asTriples", defaultValue = "true") Boolean asTriples) throws Exception {
         LOG.info("searchQuery " + urlParam + " " + matchval + " " + matchpred + " " + includeAbstract);
         
-        return oreqh.searchQuery(urlParam, matchpred, matchval, orderBy, includeAbstract, asTriples);
+        return oreqh.searchQuery(urlParam, matchpred, matchval, orderBy, offset, limit, includeAbstract, asTriples);
         
     }
 
@@ -95,10 +97,12 @@ public class OREController {
             @RequestParam("matchpred") String matchpred,
             @RequestParam(value = "matchval", defaultValue = "") String matchval,
             @RequestParam(value = "orderBy", defaultValue = "date") String orderBy,
+            @RequestParam(value = "offset", defaultValue = "0") int offset,
+            @RequestParam(value = "limit", defaultValue = "-1") int limit,
             @RequestParam(value = "includeAbstract", defaultValue = "false") Boolean includeAbstract,
             @RequestParam(value = "asTriples", defaultValue = "true") Boolean asTriples) throws Exception {
        
-        return oreqh.searchQuery(urlParam, matchpred, matchval, orderBy, includeAbstract, asTriples);
+        return oreqh.searchQuery(urlParam, matchpred, matchval, orderBy, offset, limit, includeAbstract, asTriples);
         
     }
     

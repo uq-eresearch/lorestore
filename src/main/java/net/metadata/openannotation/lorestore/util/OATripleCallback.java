@@ -5,6 +5,7 @@ import org.apache.log4j.Logger;
 import org.ontoware.rdf2go.RDF2Go;
 import org.ontoware.rdf2go.model.Model;
 import org.ontoware.rdf2go.model.node.Node;
+import org.ontoware.rdf2go.model.node.Resource;
 import org.ontoware.rdf2go.model.node.URI;
 /* 
  * Based on 
@@ -48,23 +49,26 @@ public class OATripleCallback extends JSONLDTripleCallback {
     @Override
     public void triple(String s, String p, String o, String graph) {
         if (s == null || p == null || o == null) {
-            // TODO: I don't know what to do here!!!
             return;
         }
-        // subject, predicate, object will always be URIs
-        LOG.info("create triple: " +  s + " " + p + " " + o);
-        
-        model.addStatement(model.createURI(s), model.createURI(p), model.createURI(o));
+        model.addStatement(createNode(s), model.createURI(p), createNode(o));
     }
-
+    
+    private Resource createNode(String thing) {
+        if (thing.startsWith("http") || thing.startsWith("urn")){
+            return model.createURI(thing);
+        } else if (thing.startsWith("_")){
+            return model.createBlankNode(thing);
+        }
+        return null;
+    }
+    
     @Override
     public void triple(String s, String p, String value, String datatype,
             String language, String graph) {
         if (s == null || p == null || value == null) {
-            // TODO: I don't know what to do here!!!
             return;
         }
-        LOG.info("create triple val datatype: " +  s + " " + p + " " + value);
         URI subject = model.createURI(s);
         URI predicate = model.createURI(p);
     

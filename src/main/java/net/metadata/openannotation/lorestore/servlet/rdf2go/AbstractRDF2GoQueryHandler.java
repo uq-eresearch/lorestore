@@ -111,19 +111,20 @@ public abstract class AbstractRDF2GoQueryHandler implements LoreStoreQueryHandle
 			QueryEvaluationException, TupleQueryResultHandlerException,
 			InterruptedException, InvalidQueryParametersException, RDFHandlerException {
 	        String queryString = generateBrowseQuery(urlParam);
-	        return runSparqlQueryIntoGraphsMAV(queryString);
+	        return runSparqlQueryIntoGraphsMAV(queryString, 0, -1);
 	}
 	
 	@Override
 	public ModelAndView searchQuery(String urlParam,
-			String matchpred, String matchval, String orderBy, Boolean includeAbstract, Boolean asTriples) throws RepositoryException,
+			String matchpred, String matchval, String orderBy, int offset, int limit, Boolean includeAbstract, Boolean asTriples) throws RepositoryException,
 			MalformedQueryException, QueryEvaluationException,
 			TupleQueryResultHandlerException, InterruptedException, RDFHandlerException {
-		String queryString = generateSearchQuery(urlParam, matchpred, matchval, orderBy, includeAbstract);
+		String queryString = generateSearchQuery(urlParam, matchpred, matchval, orderBy, offset, limit, includeAbstract, asTriples);
 		if (asTriples){
 		    return runSparqlQueryIntoMAV(queryString);
 		} else {
-		    return runSparqlQueryIntoGraphsMAV(queryString);
+		    // offset and limit apply to number of graphs in this case - can't use SPARQL offset and limit
+		    return runSparqlQueryIntoGraphsMAV(queryString, offset, limit);
 		}
 	}
 
@@ -191,7 +192,7 @@ public abstract class AbstractRDF2GoQueryHandler implements LoreStoreQueryHandle
 	 * @throws TupleQueryResultHandlerException
 	 * @throws InterruptedException
 	 */
-	protected ModelAndView runSparqlQueryIntoGraphsMAV(String queryString) throws RepositoryException, MalformedQueryException, QueryEvaluationException, TupleQueryResultHandlerException, InterruptedException {
+	protected ModelAndView runSparqlQueryIntoGraphsMAV(String queryString, int offset, int limit) throws RepositoryException, MalformedQueryException, QueryEvaluationException, TupleQueryResultHandlerException, InterruptedException {
 	    // implemented in subclasses
 	    return null;
 	}
@@ -319,7 +320,7 @@ public abstract class AbstractRDF2GoQueryHandler implements LoreStoreQueryHandle
 	}
 
 	protected String generateSearchQuery(String urlParam, String matchpred,
-			String matchval, String orderBy, boolean includeAbstract) {
+			String matchval, String orderBy, int offset, int limit, boolean includeAbstract, boolean asTriples) {
 		return null;
 	}
 
