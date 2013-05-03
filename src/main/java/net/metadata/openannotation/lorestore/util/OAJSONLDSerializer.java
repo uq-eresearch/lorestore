@@ -10,8 +10,7 @@ import org.ontoware.rdf2go.model.node.Literal;
 import org.ontoware.rdf2go.model.node.Resource;
 import org.ontoware.rdf2go.model.node.URI;
 import org.ontoware.rdf2go.model.node.Variable;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.log4j.Logger;
 import de.dfki.km.json.jsonld.JSONLDProcessingError;
 /* 
  * Based on 
@@ -41,23 +40,29 @@ import de.dfki.km.json.jsonld.JSONLDProcessingError;
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 public class OAJSONLDSerializer extends de.dfki.km.json.jsonld.JSONLDSerializer {
-
+    protected final Logger LOG = Logger.getLogger(OAJSONLDSerializer.class);
         public void importModel(Model model) {
             ClosableIterator<Statement> statements = model.iterator();
             while (statements.hasNext()) {
-                handleStatement(statements.next());
+                Statement statement = statements.next();
+                handleStatement(statement);
             }
             statements.close();
         }
 
         public void importModelSet(ModelSet modelSet) {
-            ClosableIterator<Statement> statements = null;
-            
-            statements = modelSet.findStatements(Variable.ANY, Variable.ANY, Variable.ANY, Variable.ANY);
-            while (statements.hasNext()) {
-                handleStatement(statements.next());
+            ClosableIterator<Model> models = null;
+            models = modelSet.getModels();
+            while(models.hasNext()){
+                Model model = models.next();
+                ClosableIterator<Statement> statements = modelSet.findStatements(model.getContextURI(), Variable.ANY, Variable.ANY, Variable.ANY);
+                while (statements.hasNext()) {
+                    handleStatement(statements.next());
+                }
+                statements.close();
+                
             }
-            statements.close();
+            models.close();
         }
 
         public void handleStatement(Statement nextStatement) {
@@ -72,6 +77,7 @@ public class OAJSONLDSerializer extends de.dfki.km.json.jsonld.JSONLDSerializer 
                 subjString.startsWith("http://www.w3.org/1999/02/22-rdf-syntax-ns") ||
                 subjString.startsWith("http://www.openannotation.org/ns/") ||
                 subjString.startsWith("http://purl.org/dc/terms/") ||
+                predString.startsWith("http://www.w3.org/2000/01/rdf-schema#subClassOf") ||
                 predString.startsWith("http://www.w3.org/2000/01/rdf-schema#subPropertyOf") ||
                 objString.startsWith("http://www.w3.org/2000/01/rdf-schema#Property") ||
                 objString.startsWith("http://www.w3.org/2000/01/rdf-schema#Resource") ||
