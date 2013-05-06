@@ -55,7 +55,7 @@ public class OATripleCallback extends JSONLDTripleCallback {
     }
     
     private Resource createNode(String thing) {
-        if (thing.startsWith("http") || thing.startsWith("urn")){
+        if (thing.startsWith("http") || thing.startsWith("urn") || thing.startsWith("mailto")){
             return model.createURI(thing);
         } else if (thing.startsWith("_")){
             return model.createBlankNode(thing);
