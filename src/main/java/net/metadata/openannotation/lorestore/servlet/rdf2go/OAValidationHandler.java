@@ -83,20 +83,41 @@ public class OAValidationHandler implements LoreStoreValidationHandler {
                 model.readFrom(inputRDF, Syntax.forMimeType(bareContentType), occ.getBaseUri());
             
             } else if (contentType.contains("application/json")){
-                HashMap<String,Object> jsonObject = (HashMap<String,Object>) JSONUtils.fromInputStream(inputRDF);
                 
-                // if no @context, inject default context
-                if (!jsonObject.containsKey("@context")){
-                    ClassLoader cl = this.getClass().getClassLoader();
-                    java.io.InputStream in = cl.getResourceAsStream("oa-context.json");
-                    Object jsonContext = JSONUtils.fromInputStream(in);
-                    jsonObject.put("@context", jsonContext);
+                
+                try {
+                    HashMap<String,Object> jsonObject =  (HashMap<String,Object>) JSONUtils.fromInputStream(inputRDF);
+                    
+                    // if no @context, inject default context
+                    if (!jsonObject.containsKey("@context") || jsonObject.get("@context").equals("http://www.w3.org/ns/oa-context-20130208.json")){
+                        ClassLoader cl = this.getClass().getClassLoader();
+                        java.io.InputStream in = cl.getResourceAsStream("oa-context.json");
+                        HashMap<String,Object> jsonContext = (HashMap<String,Object>)JSONUtils.fromInputStream(in);
+                        jsonObject.putAll(jsonContext);
+                    }
+                    // handle no '@graph'
+                    if (!jsonObject.containsKey("@graph")){
+                        HashMap<String,Object> graph = new HashMap<String,Object>();
+                        for (String key : jsonObject.keySet()) {
+                            if (!key.equals("@context")){
+                                graph.put(key, jsonObject.get(key));
+                                //jsonObject.remove(key);
+                            }
+                        }
+                        // construct fake graph array containing single graph
+                        ArrayList<HashMap<String,Object>> graphList = new ArrayList<HashMap<String,Object>>();
+                        graphList.add(graph);
+                        jsonObject.put("@graph", graphList);
+                    }
+                    // TODO if no @id, inject dummy identifier (will be replaced)
+                    OATripleCallback callback = new OATripleCallback();
+                    callback.setModel(model);
+                    JSONLD.toRDF(jsonObject, callback);
+                } catch (ClassCastException e){
+                   
+                   throw new RequestFailureException(HttpServletResponse.SC_BAD_REQUEST,"Invalid JSON-LD");
+                    
                 }
-                // TODO handle no '@graph'
-                // TODO if no @id, inject dummy identifier (will be replaced)
-                OATripleCallback callback = new OATripleCallback();
-                callback.setModel(model);
-                JSONLD.toRDF(jsonObject, callback);
             } else {
                 throw new RequestFailureException(HttpServletResponse.SC_BAD_REQUEST, "Acceptable content types are RDF/XML, TriX, Turtle, Ntriples, Nquads, TriG or JSON-LD");
             }
