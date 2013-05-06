@@ -20,15 +20,46 @@
         </div>
           
           <textarea class="input-block-level span10" rows="15" name="data" id="data">
-@prefix oa: &lt;http://www.w3.org/ns/oa#&gt; .
-&lt;http://localhost:8080/lorestore/oa/sopabasic&gt; {
-    &lt;http://localhost:8080/lorestore/oa/sopabasic&gt; a oa:Annotation ;
-    oa:hasBody &lt;http://www.youtube.com/watch?v=uPh81LIe7B8&gt; ;
-    oa:hasTarget &lt;http://en.wikipedia.org/&gt; .
+{
+    "@context": "http://www.w3.org/ns/oa-context-20130208.json", 
+    "@id": "http://www.example.org/annotations/anno1", 
+    "@type": "oa:Annotation",
+
+    "annotatedAt": "2012-11-10T09:08:07Z", 
+    "annotatedBy": {
+        "@id": "http://www.example.org/people/person1", 
+        "@type": "foaf:Person", 
+        "mbox": {
+            "@id": "mailto:person1@example.org"
+        }, 
+        "name": "Person One"
+    },
+
+    "hasBody": {
+        "@id": "urn:uuid:1d823e02-60a1-47ae-ae7f-a02f2ac348f8", 
+        "@type": ["cnt:ContentAsText", "dctypes:Text"], 
+        "chars": "This is part of our logo",
+        "cnt:characterEncoding": "UTF-8"
+    }, 
+    "hasTarget": {
+        "@id": "urn:uuid:cc2c8f08-3597-4d73-a529-1c5fed58268b", 
+        "@type": "oa:SpecificResource", 
+        "hasSelector": {
+            "@id": "urn:uuid:7978fa7b-3e03-47e2-89d8-fa39d1280765", 
+            "@type": "oa:FragmentSelector", 
+            "conformsTo": "http://www.w3.org/TR/media-frags/", 
+            "value": "xywh=10,10,5,5"
+        }, 
+        "hasSource": {
+            "@id": "http://www.example.org/images/logo.jpg", 
+            "@type": "dctypes:Image"
+        }
+    },
+    "motivatedBy": "oa:commenting"
 }
           </textarea>
           <label class="radio">
-            <input type="radio" name="contentType" value="application/json"> JSON-LD
+            <input type="radio" name="contentType" value="application/json" checked> JSON-LD
           </label>
           <label class="radio">
             <input type="radio" name="contentType" value="application/rdf+xml"> RDF/XML
@@ -40,7 +71,7 @@
             <input type="radio" name="contentType" value="application/x-turtle"> Turtle
           </label>
           <label class="radio">
-            <input type="radio" name="contentType" value="application/x-trig" checked> TriG
+            <input type="radio" name="contentType" value="application/x-trig"> TriG
           </label>
           <div class="form-actions">
           <button id="validate" class="btn">Validate</button>
