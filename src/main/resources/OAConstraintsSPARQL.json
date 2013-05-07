@@ -167,11 +167,11 @@
       {
           "ref": "2.2.1. (1) Agents",
           "url": "http://www.openannotation.org/spec/core/core.html#ProvAgents",
-          "description": "It is RECOMMENDED to use foaf:Person as the class of the object of oa:annotatedBy.",
+          "description": "It is RECOMMENDED to use foaf:Person, foaf:Organization or prov:SoftwareAgent as the class of the object of oa:annotatedBy.",
           "severity": "warn",
           "preconditionMessage": "oa:annotatedBy property not present",
           "precondition": "PREFIX oa: <http://www.w3.org/ns/oa#> ASK WHERE {  ?annotation oa:annotatedBy ?agent}",
-          "query": "PREFIX oa: <http://www.w3.org/ns/oa#> PREFIX foaf: <http://xmlns.com/foaf/0.1/> SELECT ?annotation WHERE { ?annotation oa:annotatedBy ?person . FILTER (NOT EXISTS{?person a foaf:Person})}"
+          "query": "PREFIX oa: <http://www.w3.org/ns/oa#> PREFIX foaf: <http://xmlns.com/foaf/0.1/> PREFIX prov: <http://www.w3.org/ns/prov#> SELECT ?annotation WHERE { ?annotation oa:annotatedBy ?person . FILTER (NOT EXISTS{{?person a foaf:Person} UNION {?person a foaf:Organization} UNION {?person a prov:SoftwareAgent}})}"
       },
       {
        
