@@ -8,7 +8,7 @@ The Open Annotation lorestore Web Application was developed at the UQ ITEE eRese
 
 The webapp provides services for storing Open Annotation (OA) annotations and ORE Resource Map bodies and targets.
 We use the web app for our Open Annotation service at 
-[http://openannotation.metadata.net/lorestore/](http://austese.net/lorestore/)
+[http://austese.net/lorestore/](http://austese.net/lorestore/)
 
 The source code for the lorestore webapp is available from [GitHub](https://github.com/uq-eresearch/lorestore/)
 
