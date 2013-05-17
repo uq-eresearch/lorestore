@@ -51,18 +51,11 @@ public class OAJSONLDSerializer extends de.dfki.km.json.jsonld.JSONLDSerializer 
         }
 
         public void importModelSet(ModelSet modelSet) {
-            ClosableIterator<Model> models = null;
-            models = modelSet.getModels();
-            while(models.hasNext()){
-                Model model = models.next();
-                ClosableIterator<Statement> statements = modelSet.findStatements(model.getContextURI(), Variable.ANY, Variable.ANY, Variable.ANY);
-                while (statements.hasNext()) {
+            ClosableIterator<Statement> statements = modelSet.findStatements(Variable.ANY, Variable.ANY, Variable.ANY, Variable.ANY);
+            while (statements.hasNext()) {
                     handleStatement(statements.next());
-                }
-                statements.close();
-                
             }
-            models.close();
+            statements.close();
         }
 
         public void handleStatement(Statement nextStatement) {
