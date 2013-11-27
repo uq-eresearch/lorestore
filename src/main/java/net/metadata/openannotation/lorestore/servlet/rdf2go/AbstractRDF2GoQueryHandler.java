@@ -330,18 +330,18 @@ public abstract class AbstractRDF2GoQueryHandler implements LoreStoreQueryHandle
 	 * @param matchVal
 	 * @return
 	 */
-	protected String makeFilter(String matchVal) {
+	protected String makeFilter(String matchVal, String var) {
 		// implicit and, use quotes for phrase search
 		String fExpr = "";
 		if (matchVal.startsWith("\"") && matchVal.endsWith("\"")) {
 			String temp = matchVal.substring(1, matchVal.length() - 1);
-			fExpr = "FILTER regex(str(?v?, \"" + temp + "\", \"i\")";
+			fExpr = "FILTER regex(str(" + var + "?, \"" + temp + "\", \"i\"). ";
 		} else if (matchVal.contains(" ")) {
 			for (String term : matchVal.split(" ")) {
-				fExpr += "FILTER regex(str(?v), \"" + term + "\", \"i\"). ";
+				fExpr += "FILTER regex(str(" + var + "), \"" + term + "\", \"i\"). ";
 			}
 		} else {
-			fExpr = "FILTER regex(str(?v), \"" + matchVal + "\", \"i\")";
+			fExpr = "FILTER regex(str(" + var + "), \"" + matchVal + "\", \"i\"). ";
 		}
 		return fExpr;
 	}

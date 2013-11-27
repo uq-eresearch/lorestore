@@ -214,31 +214,54 @@ public class RDF2GoOAQueryHandler extends AbstractRDF2GoQueryHandler {
     protected String generateSearchQuery(String urlParam, String matchpred,
             String matchval, String orderBy, int offset, int limit, boolean includeAbstract, boolean asTriples) {
         String escapedURL = "?u";
+        
         if (urlParam != null && !urlParam.isEmpty()) {
             escapedURL = "<" + urlParam + ">";
         }
-
-        String predicate = "?p";
-        if (matchpred != null && !matchpred.isEmpty()) {
-            predicate = "<" + matchpred + ">";
-        }
-
-        String filter = "";
+        
+        String matchConditions = "";
+        ArrayList<String> filters = new ArrayList<String>();
+        
         if (matchval != null && !matchval.isEmpty()) {
-            filter = makeFilter(matchval);
+            String [] matchvals = matchval.split(";");
+            for (int i = 0; i < matchvals.length; i++){
+              filters.add(makeFilter(matchvals[i], "?v" + i));
+            }
         }
+        
+        if (matchpred != null && !matchpred.isEmpty()) {
+            String [] matchpreds = matchpred.split(";");
+            
+            for (int i = 0; i <matchpreds.length; i++){
+                String filter = null;
+                if (filters.size() > i) {
+                  filter = filters.get(i);
+                }
+                matchConditions += escapedURL + " <" + matchpred + "> ?v" + i + ". " + (filter!=null? filter : "");
+            }
+        } else {
+            String filter = null;
+            if (filters.size() > 0) {
+              filter = filters.get(0);
+            }
+            matchConditions = escapedURL + " ?p ?v0. " + (filter != null? filter : "");
+        }
+
+
+        
         String tempOrderBy = orderBy;
         if (!(orderBy.equals("date") || orderBy.equals("creator") || orderBy.equals("title"))){
             tempOrderBy = "date";
         }
+
+        LOG.info("condition is " + matchConditions);
         String userURI = occ.getIdentityProvider().obtainUserURI();
         // @formatter:off
         String queryString = "SELECT DISTINCT ?g " + (asTriples? "?creator ?date ?title ?v ?priv": "")
                 + " where {"
                 + "   {?g a <" + OAC_ANNOTATION_CLASS + "> } UNION {?g a <" + OA_ANNOTATION_CLASS + ">} ."
                 + "   graph ?g {"
-                + escapedURL + " " + predicate + " ?v ."
-                +        filter
+                + matchConditions
                 + " OPTIONAL {?g <http://www.w3.org/ns/oa#annotatedAt> ?date} . "
                 + " OPTIONAL {?g <http://www.w3.org/ns/oa#annotatedBy> ?x . ?x <http://xmlns.com/foaf/0.1/name> ?creator} . ";
        if (asTriples) {

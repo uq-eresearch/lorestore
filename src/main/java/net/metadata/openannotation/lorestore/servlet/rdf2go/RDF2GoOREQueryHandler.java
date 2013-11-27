@@ -120,7 +120,7 @@ public class RDF2GoOREQueryHandler extends AbstractRDF2GoQueryHandler {
 
 		String filter = "";
 		if (matchval != null && !matchval.isEmpty()) {
-			filter = makeFilter(matchval);
+			filter = makeFilter(matchval, "?v");
 		}
 		String tempOrderBy = orderBy;
 		if (!(orderBy.equals("date") || orderBy.equals("creator") || orderBy.equals("title"))){
