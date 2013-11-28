@@ -237,7 +237,7 @@ public class RDF2GoOAQueryHandler extends AbstractRDF2GoQueryHandler {
                 if (filters.size() > i) {
                   filter = filters.get(i);
                 }
-                matchConditions += escapedURL + " <" + matchpred + "> ?v" + i + ". " + (filter!=null? filter : "");
+                matchConditions += escapedURL + (escapedURL.equals("?u")? i : "" )+ " <" + matchpreds[i] + "> ?v" + i + ". " + (filter!=null? filter : "");
             }
         } else {
             String filter = null;
