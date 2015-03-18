@@ -140,20 +140,20 @@
       {
           "ref": "2.2.0. (4) Annotation Provenance",
           "url": "http://www.openannotation.org/spec/core/core.html#Provenance",
-          "description": "The datetime for oa:annotatedAt and oa:serializedAt MUST be expressed in the xsd:dateTime (ISO 8601) format.",
+          "description": "The datetime for oa:annotatedAt and oa:serializedAt MUST be expressed in the xsd:dateTime (ISO 8601) format: YYYY-MM-DDThh:mm:ss[.s][Z or -hh:mm or +hh:mm]",
           "severity": "error",
           "preconditionMessage": "oa:annotatedAt or oa:serializedAt property not present",
           "precondition": "PREFIX oa: <http://www.w3.org/ns/oa#> ASK WHERE {  {?annotation oa:annotatedAt ?time} UNION {?annotation oa:serializedAt ?time}}",
-          "query": "PREFIX oa: <http://www.w3.org/ns/oa#> SELECT ?annotation ?time WHERE { {?annotation oa:annotatedAt ?time} UNION {?annotation oa:serializedAt ?time} MINUS { {?annotation oa:annotatedAt ?time} UNION {?annotation oa:serializedAt ?time} . FILTER regex(str(?time), \"[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]\")}}"
+          "query": "PREFIX oa: <http://www.w3.org/ns/oa#> SELECT ?annotation ?time WHERE { {?annotation oa:annotatedAt ?time} UNION {?annotation oa:serializedAt ?time} MINUS { {?annotation oa:annotatedAt ?time} UNION {?annotation oa:serializedAt ?time} . FILTER regex(str(?time), \"-?([1-9][0-9]{3,}|0[0-9]{3})-((0[13578]|1[02])-((0[1-9])|1[0-9]|2[0-9]|3[01])|(0[469]|11)-((0[1-9])|1[0-9]|2[0-9]|30)|(02)-((0[1-9])|1[0-9]|2[0-9]))T(([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\\\\.[0-9]+)?|(24:00:00(\\\\.0+)?))(Z|(\\\\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00))?\")}}"
       },
       {
           "ref": "2.2.0. (5) Annotation Provenance",
           "url": "http://www.openannotation.org/spec/core/core.html#Provenance",
-          "description": "The datetime for oa:annotatedAt and oa:serializedAt SHOULD have a timezone specified, in the format YYYY-MM-DDThh:mm:ss[Z or -hh:mm:ss or +hh:mm:ss]",
+          "description": "The datetime for oa:annotatedAt and oa:serializedAt SHOULD have a timezone specified, in the format YYYY-MM-DDThh:mm:ss[.s][Z or -hh:mm or +hh:mm]",
           "severity": "warn",
           "preconditionMessage": "oa:annotatedAt or oa:serializedAt property not present",
           "precondition": "PREFIX oa: <http://www.w3.org/ns/oa#> ASK WHERE {  {?annotation oa:annotatedAt ?time} UNION {?annotation oa:serializedAt ?time}}",
-          "query": "PREFIX oa: <http://www.w3.org/ns/oa#> SELECT ?annotation ?time WHERE {{?annotation oa:annotatedAt ?time} UNION {?annotation oa:serializedAt ?time}  MINUS { {?annotation oa:annotatedAt ?time} UNION {?annotation oa:serializedAt ?time} . FILTER regex(str(?time), \"[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]T[0-9][0-9]:[0-9][0-9]:[0-9][0-9](\\\\+[0-9][0-9]:[0-9][0-9]|-[0-9][0-9]:[0-9][0-9]|Z)\")}}"
+          "query": "PREFIX oa: <http://www.w3.org/ns/oa#> SELECT ?annotation ?time WHERE {{?annotation oa:annotatedAt ?time} UNION {?annotation oa:serializedAt ?time}  MINUS { {?annotation oa:annotatedAt ?time} UNION {?annotation oa:serializedAt ?time} . FILTER regex(str(?time), \"-?([1-9][0-9]{3,}|0[0-9]{3})-((0[13578]|1[02])-((0[1-9])|1[0-9]|2[0-9]|3[01])|(0[469]|11)-((0[1-9])|1[0-9]|2[0-9]|30)|(02)-((0[1-9])|1[0-9]|2[0-9]))T(([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\\\\.[0-9]+)?|(24:00:00(\\\\.0+)?))(Z|(\\\\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00))\")}}"
       },
       {
           "ref": "2.2.0. (6) Annotation Provenance",
@@ -371,20 +371,20 @@
       {
           "ref": "3.3.1. (1) Time State",
           "url": "http://www.openannotation.org/spec/core/specific.html#TimeState",
-          "description": "The timestamp for oa:when MUST be expressed in the xsd:dateTime (ISO 8601) format.",
+          "description": "The timestamp for oa:when MUST be expressed in the xsd:dateTime (ISO 8601) format: YYYY-MM-DDThh:mm:ss[.s][Z or -hh:mm or +hh:mm]",
           "severity": "error",
           "preconditionMessage": "oa:when property not present",
           "precondition": "PREFIX oa: <http://www.w3.org/ns/oa#> ASK WHERE { ?timestate oa:when ?when }",
-          "query": "PREFIX oa: <http://www.w3.org/ns/oa#> SELECT * WHERE { ?timestate oa:when ?when . MINUS { ?timestate oa:when ?when .  FILTER regex(str(?when), \"[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]\")}}"
+          "query": "PREFIX oa: <http://www.w3.org/ns/oa#> SELECT * WHERE { ?timestate oa:when ?when . MINUS { ?timestate oa:when ?when .  FILTER regex(str(?when), \"-?([1-9][0-9]{3,}|0[0-9]{3})-((0[13578]|1[02])-((0[1-9])|1[0-9]|2[0-9]|3[01])|(0[469]|11)-((0[1-9])|1[0-9]|2[0-9]|30)|(02)-((0[1-9])|1[0-9]|2[0-9]))T(([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\\\\.[0-9]+)?|(24:00:00(\\\\.0+)?))(Z|(\\\\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00))?\")}}"
       },
       {
           "ref": "3.3.1. (2) Time State",
           "url": "http://www.openannotation.org/spec/core/specific.html#TimeState",
-          "description": "The timestamp for oa:when SHOULD have a timezone specified, in the format YYYY-MM-DDThh:mm:ss[Z or -hh:mm:ss or +hh:mm:ss].",
+          "description": "The timestamp for oa:when SHOULD have a timezone specified, in the format YYYY-MM-DDThh:mm:ss[.s][Z or -hh:mm or +hh:mm].",
           "severity": "warn",
           "preconditionMessage": "oa:when property not present",
           "precondition": "PREFIX oa: <http://www.w3.org/ns/oa#> ASK WHERE { ?timestate oa:when ?when}",
-          "query": "PREFIX oa: <http://www.w3.org/ns/oa#> SELECT * WHERE { ?timestate oa:when ?when . MINUS { ?timestate oa:when ?when . FILTER regex(str(?when), \"[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]T[0-9][0-9]:[0-9][0-9]:[0-9][0-9](\\\\+[0-9][0-9]:[0-9][0-9]|-[0-9][0-9]:[0-9][0-9]|Z)\")}}"
+          "query": "PREFIX oa: <http://www.w3.org/ns/oa#> SELECT * WHERE { ?timestate oa:when ?when . MINUS { ?timestate oa:when ?when . FILTER regex(str(?when), \"-?([1-9][0-9]{3,}|0[0-9]{3})-((0[13578]|1[02])-((0[1-9])|1[0-9]|2[0-9]|3[01])|(0[469]|11)-((0[1-9])|1[0-9]|2[0-9]|30)|(02)-((0[1-9])|1[0-9]|2[0-9]))T(([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\\\\.[0-9]+)?|(24:00:00(\\\\.0+)?))(Z|(\\\\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00))\")}}"
       },
       {
           "ref": "3.3.1. (3) Time State",
